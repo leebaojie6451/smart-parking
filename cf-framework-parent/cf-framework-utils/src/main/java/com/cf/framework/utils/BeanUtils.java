@@ -33,14 +33,14 @@ public class BeanUtils {
      * @throws InvocationTargetException 对象转换异常
      */
     public static <T> T deepMapToBean(Class<T> type, Map map) throws IntrospectionException, IllegalAccessException, InstantiationException, InvocationTargetException {
-        if(map==null){
+        if (map == null) {
             return null;
         }
         BeanInfo beanInfo = Introspector.getBeanInfo(type); // 获取类属性
         T bean = null;
-        if(type.getName().equals("java.util.Map")){
-            return (T)map;
-        }else{
+        if (type.getName().equals("java.util.Map")) {
+            return (T) map;
+        } else {
             bean = type.newInstance(); // 创建 JavaBean 对象
         }
 
@@ -50,15 +50,15 @@ public class BeanUtils {
             PropertyDescriptor descriptor = propertyDescriptors[i];
             String propertyName = descriptor.getName();
             if (map.containsKey(propertyName) || map.containsKey(upperFirst(propertyName))) {
-                if(map.containsKey(upperFirst(propertyName))){
+                if (map.containsKey(upperFirst(propertyName))) {
                     descriptor.setName(upperFirst(propertyName));
                 }
                 Object value = map.get(descriptor.getName());
-                if(value instanceof String || value instanceof Integer || value instanceof Long || value instanceof Byte || value instanceof Short || value instanceof Boolean){
+                if (value instanceof String || value instanceof Integer || value instanceof Long || value instanceof Byte || value instanceof Short || value instanceof Boolean) {
                     Object[] args = new Object[1];
                     args[0] = value;
                     descriptor.getWriteMethod().invoke(bean, args);
-                }else {
+                } else {
                     Class<?> propertyType = descriptor.getPropertyType();
                     Object o = BeanUtils.deepMapToBean(propertyType, (Map) value);
                     Object[] args = new Object[1];
@@ -71,9 +71,9 @@ public class BeanUtils {
         return bean;
     }
 
-    public static String upperFirst(String oldStr){
+    public static String upperFirst(String oldStr) {
 
-        char[]chars = oldStr.toCharArray();
+        char[] chars = oldStr.toCharArray();
 
         chars[0] -= 32;
 
@@ -83,6 +83,7 @@ public class BeanUtils {
 
     /**
      * 对象转为Map
+     *
      * @param obj
      * @return
      * @throws Exception

@@ -32,7 +32,7 @@ public class TestController {
     private CfLogisticsStorehousePlatformService cfLogisticsStorehousePlatformService;
 
     @RequestMapping(value = "testSendMessage", method = RequestMethod.GET)
-    public ResponseResult testSendMessage(String value)throws Exception{
+    public ResponseResult testSendMessage(String value) throws Exception {
 //        CfUserMessage cfUserMessage = new CfUserMessage();
 //        cfUserMessage.setFromUid("0");
 //        cfUserMessage.setToUid("123456789");
@@ -93,7 +93,7 @@ public class TestController {
 //        cfWeiXinSubscribeToNotificationsService.sendMessage("1482720659499106304", CfWeiXinSubscribeToNotificationsType.LOGISTICS_LOADING_AND_UNLOADING,
 //                contents,"wx440ab62a02fc51bc");
 
-        return new ResponseResult(CommonCode.SUCCESS,new BCryptPasswordEncoder().encode(value));
+        return new ResponseResult(CommonCode.SUCCESS, new BCryptPasswordEncoder().encode(value));
     }
 
     public static List<String> permutation(List<String> list, int length) {
@@ -104,34 +104,34 @@ public class TestController {
         return stream.collect(Collectors.toList());
     }
 
-    public void writeFile(String content, String fileName){
-        File file =new File(fileName);
+    public void writeFile(String content, String fileName) {
+        File file = new File(fileName);
         FileOutputStream fos = null;
         OutputStreamWriter osw = null;
-        try{
-            if(!file.exists()){
+        try {
+            if (!file.exists()) {
                 boolean hasFile = file.createNewFile();
-                if(hasFile){
+                if (hasFile) {
                     System.out.println("file not exists, create new file");
                 }
-                fos =new FileOutputStream(file);
-            }else{
-                fos =new FileOutputStream(file,true);
+                fos = new FileOutputStream(file);
+            } else {
+                fos = new FileOutputStream(file, true);
             }
-            osw =new OutputStreamWriter(fos,"utf-8");
+            osw = new OutputStreamWriter(fos, "utf-8");
             osw.write(content);
             osw.write("\r\n");
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println("写⼊⽂件发⽣异常");
-        }finally{
-            try{
-                if(osw != null){
+        } finally {
+            try {
+                if (osw != null) {
                     osw.close();
                 }
-                if(fos != null){
+                if (fos != null) {
                     fos.close();
                 }
-            }catch(IOException e){
+            } catch (IOException e) {
                 System.out.println("关闭流异常");
             }
         }

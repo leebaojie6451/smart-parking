@@ -26,6 +26,7 @@ public interface CfDailyIncomeStatisticsService {
 
     /**
      * 统计
+     *
      * @param dateStr
      * @param startTime
      * @param endTime

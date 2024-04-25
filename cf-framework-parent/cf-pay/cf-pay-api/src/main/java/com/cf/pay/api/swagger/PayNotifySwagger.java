@@ -14,24 +14,28 @@ public interface PayNotifySwagger {
 
     /**
      * 支付宝支付结果通知
+     *
      * @param httpServletRequest
      */
     public String AliPayNotify(HttpServletRequest httpServletRequest) throws Exception;
 
     /**
      * 微信支付结果通知
+     *
      * @param httpServletRequest
      */
     public String WxinPayNotify(HttpServletRequest httpServletRequest) throws Exception;
 
     /**
      * 易生支付结果通知
+     *
      * @param httpServletRequest
      */
     public String yiShengPayNotify(HttpServletRequest httpServletRequest) throws Exception;
 
     /**
      * 光大银行哆啦宝支付结果通知
+     *
      * @param httpServletRequest
      */
     public String duoLaBaoPayNotify(HttpServletRequest httpServletRequest) throws Exception;

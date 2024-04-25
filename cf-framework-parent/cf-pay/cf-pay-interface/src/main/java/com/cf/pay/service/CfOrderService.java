@@ -24,6 +24,7 @@ public interface CfOrderService {
 
     /**
      * 新增订单记录
+     *
      * @param cfOrder
      * @return
      */
@@ -31,6 +32,7 @@ public interface CfOrderService {
 
     /**
      * 更新订单记录
+     *
      * @param cfOrder
      * @return
      */
@@ -38,6 +40,7 @@ public interface CfOrderService {
 
     /**
      * 只更新部分字段
+     *
      * @param cfOrder
      * @return
      */
@@ -45,6 +48,7 @@ public interface CfOrderService {
 
     /**
      * 根据id获取一条订单数据
+     *
      * @param id
      * @return
      */
@@ -52,8 +56,9 @@ public interface CfOrderService {
 
     /**
      * 根据id获取一条订单数据
+     *
      * @param id
-     * @param expectEmpty   是否期望为空
+     * @param expectEmpty 是否期望为空
      * @return
      */
     public CfOrder findById(String id, Boolean expectEmpty);
@@ -62,15 +67,17 @@ public interface CfOrderService {
 
     /**
      * 根据查询条件获取订单数据列表
+     *
      * @return
      */
     public List<CfOrder> getListByQuery(CfOrderQuery cfOrderQuery);
 
     /**
      * 根据条件查询订单数据列表
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public List<CfOrder> selectListByCondition(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);
@@ -83,45 +90,51 @@ public interface CfOrderService {
 
     /**
      * 结束子订单
+     *
      * @param cfOrder
      */
     void overChildrenOrder(CfOrder cfOrder);
 
     /**
      * 根据条件查询订单数据列表数
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public Integer selectListByConditionCounts(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);
 
     /**
      * 为指定的订单进行支付
+     *
      * @param cfOrder
      * @param cfUserPaymentAgencyId
-     * @param ip    客户端ip地址
+     * @param ip                    客户端ip地址
      * @return
      */
-    public ResultMap payForOrder(CfOrder cfOrder, String cfUserPaymentAgencyId, String ip) throws Exception ;
+    public ResultMap payForOrder(CfOrder cfOrder, String cfUserPaymentAgencyId, String ip) throws Exception;
 
     /**
      * 根据不同的支付机构获取对应的预支付订单数据
+     *
      * @param cfUserPaymentAgency
      * @param cfOrder
      * @param ip
      * @return
      */
-    public ResultMap getUnifiedOrderByPaymentAgency(CfUserPaymentAgency cfUserPaymentAgency, CfOrder cfOrder, String ip) throws Exception ;
+    public ResultMap getUnifiedOrderByPaymentAgency(CfUserPaymentAgency cfUserPaymentAgency, CfOrder cfOrder, String ip) throws Exception;
 
     /**
      * 处理支付成功的订单
+     *
      * @param cfOrder
      */
     public void handlePaySuccessfulOrder(CfOrder cfOrder);
 
     /**
      * 统计前N天每天的停车记录数(支持传入地区或停车场)
+     *
      * @param cfCountFinanceQuery
      * @return
      */
@@ -129,6 +142,7 @@ public interface CfOrderService {
 
     /**
      * 统计前N天每天的支付金额(支持传入地区或停车场)
+     *
      * @param cfCountFinanceQuery
      * @return
      */
@@ -136,6 +150,7 @@ public interface CfOrderService {
 
     /**
      * 获取某个年份某个月数的停车数(支持传入地区或停车场)
+     *
      * @param cfCountFinanceQuery
      * @return
      */
@@ -143,6 +158,7 @@ public interface CfOrderService {
 
     /**
      * 获取某个年份每个月份的停车数
+     *
      * @param cfCountFinanceQuery
      * @return
      */
@@ -150,6 +166,7 @@ public interface CfOrderService {
 
     /**
      * 刷新订单id
+     *
      * @param newOrderId
      * @param oldOrderId
      * @return
@@ -158,6 +175,7 @@ public interface CfOrderService {
 
     /**
      * 支付成功后处理
+     *
      * @param cfOrder
      * @param paiedTotalFee
      */
@@ -165,6 +183,7 @@ public interface CfOrderService {
 
     /**
      * 查询第三方支付订单
+     *
      * @param platform
      * @param orderId
      * @return

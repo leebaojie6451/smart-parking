@@ -49,9 +49,9 @@ public class CfCarParkCheckpointServiceImpl implements CfCarParkCheckpointServic
     @Override
     public CfCarParkCheckpoint findById(String id, Boolean expectEmpty) {
         CfCarParkCheckpoint cfCarParkCheckpoint = findById(id);
-        if(expectEmpty && cfCarParkCheckpoint!=null){
+        if (expectEmpty && cfCarParkCheckpoint != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
-        }else if(!expectEmpty && cfCarParkCheckpoint==null){
+        } else if (!expectEmpty && cfCarParkCheckpoint == null) {
             ExceptionCast.cast(CarParkCode.CHECKPOINT_DOES_NOT_EXIST);
         }
         return cfCarParkCheckpoint;
@@ -66,43 +66,43 @@ public class CfCarParkCheckpointServiceImpl implements CfCarParkCheckpointServic
     public CfCarParkCheckpointExample getExampleByQuery(CfCarParkCheckpointQuery cfCarParkCheckpointQuery) {
         CfCarParkCheckpointExample cfCarParkCheckpointExample = new CfCarParkCheckpointExample();
         CfCarParkCheckpointExample.Criteria criteria = cfCarParkCheckpointExample.createCriteria();
-        if(StringUtils.isNotEmpty(cfCarParkCheckpointQuery.getId())){
+        if (StringUtils.isNotEmpty(cfCarParkCheckpointQuery.getId())) {
             criteria.andIdEqualTo(cfCarParkCheckpointQuery.getId());
         }
-        if(cfCarParkCheckpointQuery.getIds()!=null && cfCarParkCheckpointQuery.getIds().size()>0){
+        if (cfCarParkCheckpointQuery.getIds() != null && cfCarParkCheckpointQuery.getIds().size() > 0) {
             criteria.andIdIn(cfCarParkCheckpointQuery.getIds());
         }
-        if(StringUtils.isNotEmpty(cfCarParkCheckpointQuery.getName())){
-            criteria.andNameLike("%"+cfCarParkCheckpointQuery.getName()+"%");
+        if (StringUtils.isNotEmpty(cfCarParkCheckpointQuery.getName())) {
+            criteria.andNameLike("%" + cfCarParkCheckpointQuery.getName() + "%");
         }
-        if(StringUtils.isNotEmpty(cfCarParkCheckpointQuery.getCarParkId())){
+        if (StringUtils.isNotEmpty(cfCarParkCheckpointQuery.getCarParkId())) {
             criteria.andCarParkIdEqualTo(cfCarParkCheckpointQuery.getCarParkId());
         }
-        if(cfCarParkCheckpointQuery.getDutyUid()!=null){
+        if (cfCarParkCheckpointQuery.getDutyUid() != null) {
             criteria.andDutyUidEqualTo(cfCarParkCheckpointQuery.getDutyUid());
         }
-        if(StringUtils.isNotEmpty(cfCarParkCheckpointQuery.getDirection())){
+        if (StringUtils.isNotEmpty(cfCarParkCheckpointQuery.getDirection())) {
             criteria.andDirectionEqualTo(cfCarParkCheckpointQuery.getDirection());
         }
-        if(cfCarParkCheckpointQuery.getFloor()!=null){
+        if (cfCarParkCheckpointQuery.getFloor() != null) {
             criteria.andFloorEqualTo(cfCarParkCheckpointQuery.getFloor());
         }
-        if(cfCarParkCheckpointQuery.getMode()!=null){
+        if (cfCarParkCheckpointQuery.getMode() != null) {
             criteria.andModeEqualTo(cfCarParkCheckpointQuery.getMode());
         }
-        if(cfCarParkCheckpointQuery.getStatus()!=null){
+        if (cfCarParkCheckpointQuery.getStatus() != null) {
             criteria.andStatusEqualTo(cfCarParkCheckpointQuery.getStatus());
         }
-        if(cfCarParkCheckpointQuery.getAllowTemporaryCar()!=null){
+        if (cfCarParkCheckpointQuery.getAllowTemporaryCar() != null) {
             criteria.andAllowTemporaryCarEqualTo(cfCarParkCheckpointQuery.getAllowTemporaryCar());
         }
-        if(cfCarParkCheckpointQuery.getAllowUnconditionalOpen()!=null){
+        if (cfCarParkCheckpointQuery.getAllowUnconditionalOpen() != null) {
             criteria.andAllowUnconditionalOpenEqualTo(cfCarParkCheckpointQuery.getAllowUnconditionalOpen());
         }
-        if(StringUtils.isNotEmpty(cfCarParkCheckpointQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfCarParkCheckpointQuery.getOrderBy())) {
             cfCarParkCheckpointExample.setOrderByClause(cfCarParkCheckpointQuery.getOrderBy());
         }
-        if(cfCarParkCheckpointQuery.getPage()!=null && cfCarParkCheckpointQuery.getSize()!=null){
+        if (cfCarParkCheckpointQuery.getPage() != null && cfCarParkCheckpointQuery.getSize() != null) {
             PageHelper.startPage(cfCarParkCheckpointQuery.getPage(), cfCarParkCheckpointQuery.getSize());
         }
         return cfCarParkCheckpointExample;
@@ -145,11 +145,11 @@ public class CfCarParkCheckpointServiceImpl implements CfCarParkCheckpointServic
 
     @Override
     public List<CfCarParkCheckpoint> selectNearbyCheckPoint(CfCarParkCheckpointQuery cfCarParkCheckpointQuery) {
-        if(cfCarParkCheckpointQuery.getDistance()==null && StringUtils.isEmpty(cfCarParkCheckpointQuery.getCarParkId())){
-            ExceptionCast.cast(CommonCode.INVALID_PARAM,"carparkId and distance provide at least one parameter");
+        if (cfCarParkCheckpointQuery.getDistance() == null && StringUtils.isEmpty(cfCarParkCheckpointQuery.getCarParkId())) {
+            ExceptionCast.cast(CommonCode.INVALID_PARAM, "carparkId and distance provide at least one parameter");
         }
         Integer page = cfCarParkCheckpointQuery.getPage();
-        cfCarParkCheckpointQuery.setPage((page-1)*cfCarParkCheckpointQuery.getSize());
+        cfCarParkCheckpointQuery.setPage((page - 1) * cfCarParkCheckpointQuery.getSize());
         return cfCarParkCheckpointMapper.selectNearbyCheckPoint(cfCarParkCheckpointQuery);
     }
 
@@ -169,24 +169,24 @@ public class CfCarParkCheckpointServiceImpl implements CfCarParkCheckpointServic
         CfCarParkCheckpoint cfCarParkCheckpoint = findById(checkPointId, false);
 
         //判断是否为超级管理员
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")>=0){
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") >= 0) {
             return cfCarParkCheckpoint;
         }
 
         //判断是否为物业管理员
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "property_admin")>=0){
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "property_admin") >= 0) {
             //判断该管理员是否有管理该停车场
             CfCarParkLinkUserQuery cfCarParkLinkUserQuery = new CfCarParkLinkUserQuery();
             cfCarParkLinkUserQuery.setUid(userBasicInfo.getId());
             cfCarParkLinkUserQuery.setCarParkId(cfCarParkCheckpoint.getCarParkId());
             Integer integer = cfCarParkLinkUserService.countByQuery(cfCarParkLinkUserQuery);
-            if(integer>0){
+            if (integer > 0) {
                 return cfCarParkCheckpoint;
             }
         }
 
         //其它人员只能在值班时开闸
-        if(cfCarParkCheckpoint.getDutyUid().equals(userBasicInfo.getId())){
+        if (cfCarParkCheckpoint.getDutyUid().equals(userBasicInfo.getId())) {
             return cfCarParkCheckpoint;
         }
 

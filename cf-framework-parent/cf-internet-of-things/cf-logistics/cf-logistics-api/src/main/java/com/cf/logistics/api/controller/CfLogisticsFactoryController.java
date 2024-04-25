@@ -38,14 +38,14 @@ public class CfLogisticsFactoryController implements CfLogisticsFactorySwagger {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         //检查用户合法性
         CfUser cfUser = cfUserService.getUserByUid(userBasicInfo.getId(), false);
-        if(cfUser.getDriverLicenseStatus().byteValue()!=( byte)2){
-            return new ResponseResult(CommonCode.FAIL,null, "您的驾驶证未上传或者未通过审核，请联系管理员处理");
+        if (cfUser.getDriverLicenseStatus().byteValue() != (byte) 2) {
+            return new ResponseResult(CommonCode.FAIL, null, "您的驾驶证未上传或者未通过审核，请联系管理员处理");
         }
         CfLogisticsFactoryQuery search = new CfLogisticsFactoryQuery();
         search.setPositionX(cfLogisticsFactoryQuery.getPositionX());
         search.setPositionY(cfLogisticsFactoryQuery.getPositionY());
         List<CfLogisticsFactory> cfLogisticsFactorys = cfLogisticsFactoryService.selectNearLogisticsFactory(search);
-        if(cfLogisticsFactorys==null || cfLogisticsFactorys.size()==0){
+        if (cfLogisticsFactorys == null || cfLogisticsFactorys.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsFactorys, cfLogisticsFactorys.size());

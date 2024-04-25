@@ -33,7 +33,7 @@ public class CfLogisticsStorehouseCargoTypeController implements CfLogisticsStor
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseResult add(@Validated @RequestBody CfLogisticsStorehouseCargoTypeForm cfLogisticsStorehouseCargoTypeForm) throws Exception {
         CfLogisticsStorehouseCargoType cfLogisticsStorehouseCargoType = new CfLogisticsStorehouseCargoType();
-        BeanUtils.copyProperties(cfLogisticsStorehouseCargoTypeForm,cfLogisticsStorehouseCargoType);
+        BeanUtils.copyProperties(cfLogisticsStorehouseCargoTypeForm, cfLogisticsStorehouseCargoType);
         CfLogisticsStorehouseCargoType lastCfLogisticsStorehouseCargoType = cfLogisticsStorehouseCargoTypeService.add(cfLogisticsStorehouseCargoType);
         return new ResponseResult(CommonCode.SUCCESS, lastCfLogisticsStorehouseCargoType);
     }
@@ -43,7 +43,7 @@ public class CfLogisticsStorehouseCargoTypeController implements CfLogisticsStor
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public ResponseResult update(@Validated @RequestBody CfLogisticsStorehouseCargoTypeForm cfLogisticsStorehouseCargoTypeForm) {
         CfLogisticsStorehouseCargoType cfLogisticsStorehouseCargoType = new CfLogisticsStorehouseCargoType();
-        BeanUtils.copyProperties(cfLogisticsStorehouseCargoTypeForm,cfLogisticsStorehouseCargoType);
+        BeanUtils.copyProperties(cfLogisticsStorehouseCargoTypeForm, cfLogisticsStorehouseCargoType);
         CfLogisticsStorehouseCargoType update = cfLogisticsStorehouseCargoTypeService.update(cfLogisticsStorehouseCargoType);
         return new ResponseResult(CommonCode.SUCCESS, update);
     }
@@ -53,7 +53,7 @@ public class CfLogisticsStorehouseCargoTypeController implements CfLogisticsStor
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(Long id) {
         Integer delete = cfLogisticsStorehouseCargoTypeService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS, delete):new ResponseResult(CommonCode.FAIL, null);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS, delete) : new ResponseResult(CommonCode.FAIL, null);
     }
 
     @PreAuthorize("hasAuthority('logistics-CfLogisticsStorehouseCargoTypeController-getListByQuery')")
@@ -62,7 +62,7 @@ public class CfLogisticsStorehouseCargoTypeController implements CfLogisticsStor
     public ResponseResult getListByQuery(CfLogisticsStorehouseCargoTypeQuery cfLogisticsStorehouseCargoTypeQuery) throws Exception {
         List<CfLogisticsStorehouseCargoType> cfLogisticsStorehouseCargoTypes = cfLogisticsStorehouseCargoTypeService.getListByQuery(cfLogisticsStorehouseCargoTypeQuery);
         Integer countByQuery = cfLogisticsStorehouseCargoTypeService.countByQuery(cfLogisticsStorehouseCargoTypeQuery);
-        if(cfLogisticsStorehouseCargoTypes==null || cfLogisticsStorehouseCargoTypes.size()==0){
+        if (cfLogisticsStorehouseCargoTypes == null || cfLogisticsStorehouseCargoTypes.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsStorehouseCargoTypes, countByQuery);

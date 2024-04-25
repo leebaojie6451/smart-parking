@@ -31,12 +31,12 @@ public class CfLogisticsStorehousePlatformController implements CfLogisticsStore
     @Override
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(CfLogisticsStorehousePlatformQuery cfLogisticsStorehousePlatformQuery) throws Exception {
-        if(cfLogisticsStorehousePlatformQuery.getStorehouseId()==null){
+        if (cfLogisticsStorehousePlatformQuery.getStorehouseId() == null) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null, "请提供仓库id");
         }
         List<CfLogisticsStorehousePlatform> cfLogisticsStorehousePlatforms = cfLogisticsStorehousePlatformService.getListByQuery(cfLogisticsStorehousePlatformQuery);
         Integer countByQuery = cfLogisticsStorehousePlatformService.countByQuery(cfLogisticsStorehousePlatformQuery);
-        if(cfLogisticsStorehousePlatforms==null || cfLogisticsStorehousePlatforms.size()==0){
+        if (cfLogisticsStorehousePlatforms == null || cfLogisticsStorehousePlatforms.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsStorehousePlatforms, countByQuery);

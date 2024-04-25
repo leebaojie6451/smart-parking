@@ -47,7 +47,7 @@ public class CfCarParkPaymentAgencyServiceImpl implements CfCarParkPaymentAgency
         CfCarParkPaymentAgencyExample.Criteria criteria = cfCarParkPaymentAgencyExample.createCriteria();
         CfCarParkPaymentAgencyExample.Criteria criteria1 = criteria.andCarParkIdEqualTo(carParkId).andUserPaymentAgencyEqualTo(userPaymentAgencyId);
         List<CfCarParkPaymentAgency> cfCarParkPaymentAgencies = cfCarParkPaymentAgencyMapper.selectByExample(cfCarParkPaymentAgencyExample);
-        if(cfCarParkPaymentAgencies==null || cfCarParkPaymentAgencies.size()==0){
+        if (cfCarParkPaymentAgencies == null || cfCarParkPaymentAgencies.size() == 0) {
             ExceptionCast.cast(PayCode.NO_PARKING_PAYMENT_CONFIGURATION_FOUND);
         }
         return cfCarParkPaymentAgencies.get(0);
@@ -82,19 +82,19 @@ public class CfCarParkPaymentAgencyServiceImpl implements CfCarParkPaymentAgency
     public CfCarParkPaymentAgencyExample getExampleByQuery(CfCarParkPaymentAgencyQuery cfCarParkPaymentAgencyQuery) {
         CfCarParkPaymentAgencyExample cfCarParkPaymentAgencyExample = new CfCarParkPaymentAgencyExample();
         CfCarParkPaymentAgencyExample.Criteria criteria = cfCarParkPaymentAgencyExample.createCriteria();
-        if(StringUtils.isNotEmpty(cfCarParkPaymentAgencyQuery.getCarParkId())){
+        if (StringUtils.isNotEmpty(cfCarParkPaymentAgencyQuery.getCarParkId())) {
             criteria.andCarParkIdEqualTo(cfCarParkPaymentAgencyQuery.getCarParkId());
         }
-        if(cfCarParkPaymentAgencyQuery.getCarParkIdList()!=null && cfCarParkPaymentAgencyQuery.getCarParkIdList().size()>0){
+        if (cfCarParkPaymentAgencyQuery.getCarParkIdList() != null && cfCarParkPaymentAgencyQuery.getCarParkIdList().size() > 0) {
             criteria.andCarParkIdIn(cfCarParkPaymentAgencyQuery.getCarParkIdList());
         }
-        if(StringUtils.isNotEmpty(cfCarParkPaymentAgencyQuery.getUserPaymentAgency())){
+        if (StringUtils.isNotEmpty(cfCarParkPaymentAgencyQuery.getUserPaymentAgency())) {
             criteria.andUserPaymentAgencyEqualTo(cfCarParkPaymentAgencyQuery.getUserPaymentAgency());
         }
-        if(StringUtils.isNotEmpty(cfCarParkPaymentAgencyQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfCarParkPaymentAgencyQuery.getOrderBy())) {
             cfCarParkPaymentAgencyExample.setOrderByClause(cfCarParkPaymentAgencyQuery.getOrderBy());
         }
-        if(cfCarParkPaymentAgencyQuery.getPage()!=null && cfCarParkPaymentAgencyQuery.getSize()!=null){
+        if (cfCarParkPaymentAgencyQuery.getPage() != null && cfCarParkPaymentAgencyQuery.getSize() != null) {
             PageHelper.startPage(cfCarParkPaymentAgencyQuery.getPage(), cfCarParkPaymentAgencyQuery.getSize());
         }
         return cfCarParkPaymentAgencyExample;
@@ -119,10 +119,10 @@ public class CfCarParkPaymentAgencyServiceImpl implements CfCarParkPaymentAgency
     @Override
     public CfCarParkPaymentAgency findById(String id, boolean expectEmpty) {
         CfCarParkPaymentAgency cfCarParkPaymentAgency = findById(id);
-        if(expectEmpty && cfCarParkPaymentAgency!=null){
+        if (expectEmpty && cfCarParkPaymentAgency != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpty && cfCarParkPaymentAgency==null){
+        if (!expectEmpty && cfCarParkPaymentAgency == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfCarParkPaymentAgency;
@@ -136,7 +136,7 @@ public class CfCarParkPaymentAgencyServiceImpl implements CfCarParkPaymentAgency
     @Override
     public CfUserPaymentAgency getUserPaymentAgencyByCarParkIdAndShortName(String carParkId, String paymentAgency) {
         List<CfUserPaymentAgency> cfUserPaymentAgencies = cfUserPaymentAgencyService.selectListByCarParkIdAndPaymentAgencyShortName(carParkId, paymentAgency);
-        if(cfUserPaymentAgencies==null || cfUserPaymentAgencies.size()==0){
+        if (cfUserPaymentAgencies == null || cfUserPaymentAgencies.size() == 0) {
             ExceptionCast.cast(PayCode.PAYMENT_INSTITUTION_DOES_NOT_EXIST);
         }
         return cfUserPaymentAgencies.get(0);
@@ -150,8 +150,8 @@ public class CfCarParkPaymentAgencyServiceImpl implements CfCarParkPaymentAgency
         cfCarParkPaymentAgencyQuery.setPage(1);
         cfCarParkPaymentAgencyQuery.setSize(1);
         List<CfCarParkPaymentAgency> cfCarParkPaymentAgencies = getListByQuery(cfCarParkPaymentAgencyQuery);
-        if(cfCarParkPaymentAgencies!=null && cfCarParkPaymentAgencies.size()>0){
-            if((StringUtils.isNotEmpty(cfCarParkPaymentAgency.getId()) && !cfCarParkPaymentAgencies.get(0).getId().equals(cfCarParkPaymentAgency.getId())) || StringUtils.isEmpty(cfCarParkPaymentAgency.getId())){
+        if (cfCarParkPaymentAgencies != null && cfCarParkPaymentAgencies.size() > 0) {
+            if ((StringUtils.isNotEmpty(cfCarParkPaymentAgency.getId()) && !cfCarParkPaymentAgencies.get(0).getId().equals(cfCarParkPaymentAgency.getId())) || StringUtils.isEmpty(cfCarParkPaymentAgency.getId())) {
                 ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
             }
         }

@@ -34,6 +34,7 @@ public interface CfCarParkPackageMapper {
 
     /**
      * 根据条件查询车场套餐数据列表
+     *
      * @param conditions
      * @return
      */
@@ -41,6 +42,7 @@ public interface CfCarParkPackageMapper {
 
     /**
      * 根据条件查询车场套餐数据列表数
+     *
      * @param conditions
      * @return
      */
@@ -48,7 +50,7 @@ public interface CfCarParkPackageMapper {
 
     Integer batchAdd(String batchAddSQL);
 
-    Integer batchBindUserByPhone(@Param("uid") String uid,@Param("phone") String phone);
+    Integer batchBindUserByPhone(@Param("uid") String uid, @Param("phone") String phone);
 
     List<CfCarParkPackage> selectByQuery(CfCarParkPackageQuery cfCarParkPackageQuery);
 }

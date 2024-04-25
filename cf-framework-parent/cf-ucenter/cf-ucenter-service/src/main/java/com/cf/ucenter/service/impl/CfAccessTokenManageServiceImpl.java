@@ -63,10 +63,10 @@ public class CfAccessTokenManageServiceImpl implements CfAccessTokenManageServic
     @Override
     public CfAccessTokenManage findById(Long id, boolean expectEmpty) {
         CfAccessTokenManage cfAccessTokenManage = findById(id);
-        if(expectEmpty && cfAccessTokenManage!=null){
+        if (expectEmpty && cfAccessTokenManage != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpty && cfAccessTokenManage==null){
+        if (!expectEmpty && cfAccessTokenManage == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfAccessTokenManage;
@@ -87,16 +87,16 @@ public class CfAccessTokenManageServiceImpl implements CfAccessTokenManageServic
     public CfAccessTokenManageExample getExampleByQuery(CfAccessTokenManageQuery cfAccessTokenManageQuery) {
         CfAccessTokenManageExample cfAccessTokenManageExample = new CfAccessTokenManageExample();
         CfAccessTokenManageExample.Criteria criteria = cfAccessTokenManageExample.createCriteria();
-        if(cfAccessTokenManageQuery.getAppid()!=null){
+        if (cfAccessTokenManageQuery.getAppid() != null) {
             criteria.andAppidEqualTo(cfAccessTokenManageQuery.getAppid());
         }
-        if(cfAccessTokenManageQuery.getApplicationScenes()!=null){
+        if (cfAccessTokenManageQuery.getApplicationScenes() != null) {
             criteria.andApplicationScenesEqualTo(cfAccessTokenManageQuery.getApplicationScenes());
         }
-        if(StringUtils.isNotEmpty(cfAccessTokenManageQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfAccessTokenManageQuery.getOrderBy())) {
             cfAccessTokenManageExample.setOrderByClause(cfAccessTokenManageQuery.getOrderBy());
         }
-        if(cfAccessTokenManageQuery.getPage()!=null && cfAccessTokenManageQuery.getSize()!=null){
+        if (cfAccessTokenManageQuery.getPage() != null && cfAccessTokenManageQuery.getSize() != null) {
             PageHelper.startPage(cfAccessTokenManageQuery.getPage(), cfAccessTokenManageQuery.getSize());
         }
         return cfAccessTokenManageExample;
@@ -119,10 +119,10 @@ public class CfAccessTokenManageServiceImpl implements CfAccessTokenManageServic
         CfThirdPartyPlatformApplication cfThirdPartyPlatformApplication = cfThirdPartyPlatformApplicationService.findByAppId(weixinAppId, false);
 
         String accessToken = null;
-        if(cfAccessTokenManageList==null || cfAccessTokenManageList.size()==0){
+        if (cfAccessTokenManageList == null || cfAccessTokenManageList.size() == 0) {
             accessToken = cfWeixinConfigService.httpAccessToken(weixinAppId, cfThirdPartyPlatformApplication.getPublicKey());
             CfAccessTokenManage cfAccessTokenManage = new CfAccessTokenManage();
-            switch (applicationScenes){
+            switch (applicationScenes) {
                 case ThirdPartyPlatformType.WX_WB:
                     cfAccessTokenManage.setTokenNotes("微信公众号accessToken");
                     break;
@@ -138,14 +138,14 @@ public class CfAccessTokenManageServiceImpl implements CfAccessTokenManageServic
             cfAccessTokenManage.setAppid(weixinAppId);
             cfAccessTokenManage.setApplicationScenes(applicationScenes);
             cfAccessTokenManage.setTokenValue(accessToken);
-            cfAccessTokenManage.setExpiredTime(System.currentTimeMillis()+7200000);
+            cfAccessTokenManage.setExpiredTime(System.currentTimeMillis() + 7200000);
             add(cfAccessTokenManage);
-        }else if(cfAccessTokenManageList.get(0).getExpiredTime()+300000<System.currentTimeMillis()){
+        } else if (cfAccessTokenManageList.get(0).getExpiredTime() + 300000 < System.currentTimeMillis()) {
             accessToken = cfWeixinConfigService.httpAccessToken(weixinAppId, cfThirdPartyPlatformApplication.getPublicKey());
             cfAccessTokenManageList.get(0).setTokenValue(accessToken);
-            cfAccessTokenManageList.get(0).setExpiredTime(System.currentTimeMillis()+7200000);
+            cfAccessTokenManageList.get(0).setExpiredTime(System.currentTimeMillis() + 7200000);
             update(cfAccessTokenManageList.get(0));
-        }else{
+        } else {
             accessToken = cfAccessTokenManageList.get(0).getTokenValue();
         }
         cfThirdPartyPlatformApplication.setTokenValue(accessToken);

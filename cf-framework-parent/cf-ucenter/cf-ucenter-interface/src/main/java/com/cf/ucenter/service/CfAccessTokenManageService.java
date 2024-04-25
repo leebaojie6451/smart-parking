@@ -27,6 +27,7 @@ public interface CfAccessTokenManageService {
 
     /**
      * 获取微信AccessToken
+     *
      * @param applicationScenes 应用场景请传(wx_web-微信公众号/wx_mp-微信小程序/wx_app-微信app)
      * @param weixinAppId
      * @return
@@ -35,6 +36,7 @@ public interface CfAccessTokenManageService {
 
     /**
      * 维护微信AccessToken
+     *
      * @param applicationScenes 应用场景请传(wx_web-微信公众号/wx_mp-微信小程序/wx_app-微信app)
      * @param weixinAppId
      * @return

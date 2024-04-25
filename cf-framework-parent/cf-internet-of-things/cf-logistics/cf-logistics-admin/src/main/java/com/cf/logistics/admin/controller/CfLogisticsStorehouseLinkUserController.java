@@ -33,7 +33,7 @@ public class CfLogisticsStorehouseLinkUserController implements CfLogisticsStore
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseResult add(@Validated @RequestBody CfLogisticsStorehouseLinkUserForm cfLogisticsStorehouseLinkUserForm) throws Exception {
         CfLogisticsStorehouseLinkUser cfLogisticsStorehouseLinkUser = new CfLogisticsStorehouseLinkUser();
-        BeanUtils.copyProperties(cfLogisticsStorehouseLinkUserForm,cfLogisticsStorehouseLinkUser);
+        BeanUtils.copyProperties(cfLogisticsStorehouseLinkUserForm, cfLogisticsStorehouseLinkUser);
         CfLogisticsStorehouseLinkUser lastCfLogisticsStorehouseLinkUser = cfLogisticsStorehouseLinkUserService.add(cfLogisticsStorehouseLinkUser);
         return new ResponseResult(CommonCode.SUCCESS, lastCfLogisticsStorehouseLinkUser);
     }
@@ -43,7 +43,7 @@ public class CfLogisticsStorehouseLinkUserController implements CfLogisticsStore
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public ResponseResult update(@Validated @RequestBody CfLogisticsStorehouseLinkUserForm cfLogisticsStorehouseLinkUserForm) {
         CfLogisticsStorehouseLinkUser cfLogisticsStorehouseLinkUser = new CfLogisticsStorehouseLinkUser();
-        BeanUtils.copyProperties(cfLogisticsStorehouseLinkUserForm,cfLogisticsStorehouseLinkUser);
+        BeanUtils.copyProperties(cfLogisticsStorehouseLinkUserForm, cfLogisticsStorehouseLinkUser);
         CfLogisticsStorehouseLinkUser update = cfLogisticsStorehouseLinkUserService.update(cfLogisticsStorehouseLinkUser);
         return new ResponseResult(CommonCode.SUCCESS, update);
     }
@@ -53,7 +53,7 @@ public class CfLogisticsStorehouseLinkUserController implements CfLogisticsStore
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(Long id) {
         Integer delete = cfLogisticsStorehouseLinkUserService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS, delete):new ResponseResult(CommonCode.FAIL, null);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS, delete) : new ResponseResult(CommonCode.FAIL, null);
     }
 
     @PreAuthorize("hasAuthority('logistics-CfLogisticsStorehouseLinkUserController-selectListByQuery')")
@@ -62,7 +62,7 @@ public class CfLogisticsStorehouseLinkUserController implements CfLogisticsStore
     public ResponseResult selectListByQuery(CfLogisticsStorehouseLinkUserQuery cfLogisticsStorehouseLinkUserQuery) throws Exception {
         List<CfLogisticsStorehouseLinkUser> cfLogisticsStorehouseLinkUsers = cfLogisticsStorehouseLinkUserService.selectListByQuery(cfLogisticsStorehouseLinkUserQuery);
         Integer countByQuery = cfLogisticsStorehouseLinkUserService.countByQuery(cfLogisticsStorehouseLinkUserQuery);
-        if(cfLogisticsStorehouseLinkUsers==null || cfLogisticsStorehouseLinkUsers.size()==0){
+        if (cfLogisticsStorehouseLinkUsers == null || cfLogisticsStorehouseLinkUsers.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsStorehouseLinkUsers, countByQuery);

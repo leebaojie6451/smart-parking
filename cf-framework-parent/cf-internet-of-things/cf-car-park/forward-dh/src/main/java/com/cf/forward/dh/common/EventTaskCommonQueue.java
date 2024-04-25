@@ -1,4 +1,5 @@
 package com.cf.forward.dh.common;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -61,7 +62,8 @@ public class EventTaskCommonQueue {
     public void activeService() {
         running = true;
         if (eventQueueService.isShutdown()) {
-            eventQueueService = Executors.newFixedThreadPool(MAX_THREAD_COUNT);;
+            eventQueueService = Executors.newFixedThreadPool(MAX_THREAD_COUNT);
+            ;
             init();
             System.out.println("线程池已关闭，重新初始化线程池及任务");
         }

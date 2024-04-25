@@ -27,6 +27,6 @@ public interface CfLogisticsVehicleService {
     /**
      * 同步TMS物流系统车辆信息
      */
-    List<CfLogisticsVehicle> synchronizeTmsVehicle()throws Exception;
+    List<CfLogisticsVehicle> synchronizeTmsVehicle() throws Exception;
 
 }

@@ -21,6 +21,7 @@ public interface AuthService {
 
     /**
      * 使用手机和短信验证码进行登录
+     *
      * @param phone
      * @param smsCode
      * @param clientId
@@ -33,12 +34,14 @@ public interface AuthService {
 
     /**
      * 退出登录
+     *
      * @param tokenString
      */
     public void logout(String tokenString);
 
     /**
      * 获取Token
+     *
      * @param token
      * @return
      */
@@ -46,6 +49,7 @@ public interface AuthService {
 
     /**
      * 创建jwt令牌
+     *
      * @param userBasicInfo
      * @return
      */
@@ -53,6 +57,7 @@ public interface AuthService {
 
     /**
      * 校验jwt令牌是否合法
+     *
      * @param jwtString
      * @return
      */
@@ -60,6 +65,7 @@ public interface AuthService {
 
     /**
      * 递归查询
+     *
      * @param authLevel
      * @param whereVal
      * @return
@@ -68,6 +74,7 @@ public interface AuthService {
 
     /**
      * 获取所有权限列表数据，同时标识指定用户拥有的权限
+     *
      * @param uid
      * @return
      */
@@ -95,6 +102,7 @@ public interface AuthService {
 
     /**
      * 根据数据制作权限层级
+     *
      * @param cfAuth
      * @return
      */
@@ -102,12 +110,14 @@ public interface AuthService {
 
     /**
      * 检查是否存在下级
+     *
      * @param cfAuth
      */
     public Boolean checkIsExistSubordinate(CfAuth cfAuth);
 
     /**
      * 添加用户权限
+     *
      * @param cfUserAuths
      * @return
      */
@@ -115,6 +125,7 @@ public interface AuthService {
 
     /**
      * 删除用户权限
+     *
      * @param uid
      * @return
      */
@@ -122,18 +133,21 @@ public interface AuthService {
 
     /**
      * 刷新用户权限
+     *
      * @param cfUserAuths
      */
     public void flushUserAuths(List<CfUserAuth> cfUserAuths);
 
     /**
      * 值岗人员下班时直接解除其值班通道
+     *
      * @param uid
      */
     void removeCheckPointDutyByUid(String uid);
 
     /**
      * 根据角色id获取获取角色权限路径
+     *
      * @param roleId
      * @return
      */
@@ -145,6 +159,7 @@ public interface AuthService {
 
     /**
      * 根据角色id获取权限列表，同时返回子级权限
+     *
      * @param roleId
      * @return
      */

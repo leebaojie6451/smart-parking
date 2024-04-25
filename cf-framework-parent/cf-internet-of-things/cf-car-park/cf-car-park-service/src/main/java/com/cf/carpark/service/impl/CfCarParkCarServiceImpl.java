@@ -48,10 +48,10 @@ public class CfCarParkCarServiceImpl implements com.cf.carpark.service.CfCarPark
         cfCarParkCarQuery.setUid(cfCarParkCar.getUid());
         cfCarParkCarQuery.setNumberPlate(cfCarParkCar.getNumberPlate());
         List<CfCarParkCar> cfCarParkCars = mapperSelectByQuery(cfCarParkCarQuery);
-        if(cfCarParkCars!=null && cfCarParkCars.size()>0){
+        if (cfCarParkCars != null && cfCarParkCars.size() > 0) {
             cfCarParkCar.setId(cfCarParkCars.get(0).getId());
             cfCarParkCarMapper.updateByPrimaryKey(cfCarParkCar);
-        }else{
+        } else {
             cfCarParkCar.setCreateTime(System.currentTimeMillis());
             cfCarParkCarMapper.insert(cfCarParkCar);
         }
@@ -65,11 +65,11 @@ public class CfCarParkCarServiceImpl implements com.cf.carpark.service.CfCarPark
         cfCarParkCarQuery.setUid(cfCarParkCar.getUid());
         cfCarParkCarQuery.setNumberPlate(cfCarParkCar.getNumberPlate());
         List<CfCarParkCar> myCarsByCondition = getMyCarsByCondition(cfCarParkCarQuery);
-        if(myCarsByCondition!=null && myCarsByCondition.size()>0){
+        if (myCarsByCondition != null && myCarsByCondition.size() > 0) {
             ExceptionCast.cast(CarParkCode.BIND_LICENSE_PLATES_REPEATEDLY);
         }
         Integer countsByUid = cfCarParkCarMapper.getCountsByUid(cfCarParkCar.getUid());
-        if(countsByUid>=300){
+        if (countsByUid >= 300) {
             ExceptionCast.cast(CarParkCode.BIND_CAR_REACHED_THE_UPPER_LIMIT);
         }
         return add(cfCarParkCar);
@@ -121,22 +121,22 @@ public class CfCarParkCarServiceImpl implements com.cf.carpark.service.CfCarPark
     public List<CfCarParkCar> getMyCarsByCondition(CfCarParkCarQuery cfCarParkCarQuery) {
         CfCarParkCarExample cfCarParkCarExample = new CfCarParkCarExample();
         CfCarParkCarExample.Criteria criteria = cfCarParkCarExample.createCriteria();
-        if(cfCarParkCarQuery.getUid()!=null){
+        if (cfCarParkCarQuery.getUid() != null) {
             criteria.andUidEqualTo(cfCarParkCarQuery.getUid());
         }
-        if(cfCarParkCarQuery.getNumberPlate()!=null){
+        if (cfCarParkCarQuery.getNumberPlate() != null) {
             criteria.andNumberPlateEqualTo(cfCarParkCarQuery.getNumberPlate());
         }
-        if(cfCarParkCarQuery.getStatus()!=null){
+        if (cfCarParkCarQuery.getStatus() != null) {
             criteria.andStatusEqualTo(cfCarParkCarQuery.getStatus());
         }
-        if(cfCarParkCarQuery.getCarTypeKey()!=null){
+        if (cfCarParkCarQuery.getCarTypeKey() != null) {
             criteria.andCarTypeKeyEqualTo(cfCarParkCarQuery.getCarTypeKey());
         }
-        if(StringUtils.isNotEmpty(cfCarParkCarQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfCarParkCarQuery.getOrderBy())) {
             cfCarParkCarExample.setOrderByClause(cfCarParkCarQuery.getOrderBy());
         }
-        if(cfCarParkCarQuery.getPage()!=null && cfCarParkCarQuery.getSize()!=null){
+        if (cfCarParkCarQuery.getPage() != null && cfCarParkCarQuery.getSize() != null) {
             PageHelper.startPage(cfCarParkCarQuery.getPage(), cfCarParkCarQuery.getSize());
         }
         return cfCarParkCarMapper.selectByExample(cfCarParkCarExample);
@@ -147,30 +147,29 @@ public class CfCarParkCarServiceImpl implements com.cf.carpark.service.CfCarPark
         return cfCarParkCarMapper.selectByQuery(cfCarParkCarQuery);
     }
 
-    public CfCarParkCar handleCfCarParkCarDefaultValue(CfCarParkCar cfCarParkCar)
-    {
-        if(StringUtils.isEmpty(cfCarParkCar.getImage())){
+    public CfCarParkCar handleCfCarParkCarDefaultValue(CfCarParkCar cfCarParkCar) {
+        if (StringUtils.isEmpty(cfCarParkCar.getImage())) {
             cfCarParkCar.setImage("");
         }
-        if(StringUtils.isEmpty(cfCarParkCar.getBrand())){
+        if (StringUtils.isEmpty(cfCarParkCar.getBrand())) {
             cfCarParkCar.setBrand("");
         }
-        if(StringUtils.isEmpty(cfCarParkCar.getModel())){
+        if (StringUtils.isEmpty(cfCarParkCar.getModel())) {
             cfCarParkCar.setModel("");
         }
-        if(StringUtils.isEmpty(cfCarParkCar.getUid())){
+        if (StringUtils.isEmpty(cfCarParkCar.getUid())) {
             cfCarParkCar.setUid("");
         }
-        if(cfCarParkCar.getPurchaseTime()==null){
+        if (cfCarParkCar.getPurchaseTime() == null) {
             cfCarParkCar.setPurchaseTime(0L);
         }
-        if(cfCarParkCar.getPrice()==null){
+        if (cfCarParkCar.getPrice() == null) {
             cfCarParkCar.setPrice(new BigDecimal("0.00"));
         }
-        if(StringUtils.isEmpty(cfCarParkCar.getIdentityNumber())){
+        if (StringUtils.isEmpty(cfCarParkCar.getIdentityNumber())) {
             cfCarParkCar.setIdentityNumber("");
         }
-        if(StringUtils.isEmpty(cfCarParkCar.getIdentityImage())){
+        if (StringUtils.isEmpty(cfCarParkCar.getIdentityImage())) {
             cfCarParkCar.setIdentityImage("");
         }
         return cfCarParkCar;
@@ -180,22 +179,22 @@ public class CfCarParkCarServiceImpl implements com.cf.carpark.service.CfCarPark
     public CfCarParkCarExample getExampleByQuery(CfCarParkCarQuery cfCarParkCarQuery) {
         CfCarParkCarExample cfCarParkCarExample = new CfCarParkCarExample();
         CfCarParkCarExample.Criteria criteria = cfCarParkCarExample.createCriteria();
-        if(cfCarParkCarQuery.getId()!=null){
+        if (cfCarParkCarQuery.getId() != null) {
             criteria.andIdEqualTo(cfCarParkCarQuery.getId());
         }
-        if(cfCarParkCarQuery.getUid()!=null){
+        if (cfCarParkCarQuery.getUid() != null) {
             criteria.andUidEqualTo(cfCarParkCarQuery.getUid());
         }
-        if(cfCarParkCarQuery.getNumberPlate()!=null){
+        if (cfCarParkCarQuery.getNumberPlate() != null) {
             criteria.andNumberPlateEqualTo(cfCarParkCarQuery.getNumberPlate());
         }
-        if(cfCarParkCarQuery.getStatus()!=null){
+        if (cfCarParkCarQuery.getStatus() != null) {
             criteria.andStatusEqualTo(cfCarParkCarQuery.getStatus());
         }
-        if(StringUtils.isNotEmpty(cfCarParkCarQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfCarParkCarQuery.getOrderBy())) {
             cfCarParkCarExample.setOrderByClause(cfCarParkCarQuery.getOrderBy());
         }
-        if(cfCarParkCarQuery.getPage()!=null && cfCarParkCarQuery.getSize()!=null){
+        if (cfCarParkCarQuery.getPage() != null && cfCarParkCarQuery.getSize() != null) {
             PageHelper.startPage(cfCarParkCarQuery.getPage(), cfCarParkCarQuery.getSize());
         }
         return cfCarParkCarExample;

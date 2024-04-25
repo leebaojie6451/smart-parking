@@ -42,28 +42,28 @@ public class CfUserFriendController implements CfUserFriendSwagger {
 
     @Override
     @RequestMapping(value = "applyAddFriend", method = RequestMethod.POST)
-    public ResponseResult applyAddFriend(@RequestParam("uid") String uid, @RequestParam(value = "remark",defaultValue = "",required = false) String remark) throws Exception {
+    public ResponseResult applyAddFriend(@RequestParam("uid") String uid, @RequestParam(value = "remark", defaultValue = "", required = false) String remark) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        return cfUserFriendAddLogService.applyAddFriend(userBasicInfo.getId(),uid,remark);
+        return cfUserFriendAddLogService.applyAddFriend(userBasicInfo.getId(), uid, remark);
     }
 
     @Override
     @RequestMapping(value = "applyAddGroup", method = RequestMethod.POST)
-    public ResponseResult applyAddGroup(@RequestParam("group_id") String groupId, @RequestParam(value = "remark",defaultValue = "",required = false) String remark) throws Exception {
+    public ResponseResult applyAddGroup(@RequestParam("group_id") String groupId, @RequestParam(value = "remark", defaultValue = "", required = false) String remark) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        return cfUserFriendAddLogService.applyAddGroup(userBasicInfo.getId(),groupId,remark);
+        return cfUserFriendAddLogService.applyAddGroup(userBasicInfo.getId(), groupId, remark);
     }
 
     @Override
     @RequestMapping(value = "getMyFriendRequests", method = RequestMethod.GET)
     public ResponseResult getMyFriendRequests(
-            @RequestParam(value="page",defaultValue="1",required=false)
-            @Min(value = 1,message = "页码最小值1")
-                    Integer page,
-            @RequestParam(value="limit",defaultValue="10",required=false)
-            @Min(value = 3,message = "每页获取条数最小值3")
-            @Max(value = 50,message = "每页获取条数最大值50")
-                    Integer limit) throws Exception {
+            @RequestParam(value = "page", defaultValue = "1", required = false)
+            @Min(value = 1, message = "页码最小值1")
+            Integer page,
+            @RequestParam(value = "limit", defaultValue = "10", required = false)
+            @Min(value = 3, message = "每页获取条数最小值3")
+            @Max(value = 50, message = "每页获取条数最大值50")
+            Integer limit) throws Exception {
         //取到jwt令牌
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         return cfUserFriendAddLogService.getFriendRequestsByUid(userBasicInfo.getId(), page, limit);
@@ -72,21 +72,21 @@ public class CfUserFriendController implements CfUserFriendSwagger {
     @Override
     @RequestMapping(value = "handleFriendsRequests", method = RequestMethod.PUT)
     public ResponseResult handleFriendsRequests(
-            @RequestParam(value="id")
+            @RequestParam(value = "id")
             @NotEmpty(message = "请提供好友申请记录id") String id,
-            @RequestParam(value="status")
-            @Min(value = 0,message = "状态值最小值0")
-            @Max(value = 3,message = "状态值最大值3") Integer status) throws Exception {
+            @RequestParam(value = "status")
+            @Min(value = 0, message = "状态值最小值0")
+            @Max(value = 3, message = "状态值最大值3") Integer status) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        return cfUserFriendAddLogService.handleFriendsRequests(id,userBasicInfo.getId(),status);
+        return cfUserFriendAddLogService.handleFriendsRequests(id, userBasicInfo.getId(), status);
     }
 
     @Override
     @RequestMapping(value = "getMyFriends", method = RequestMethod.GET)
     public ResponseResult getMyFriends(
-            @RequestParam(value="page",defaultValue="1",required=false)
+            @RequestParam(value = "page", defaultValue = "1", required = false)
             @Min(value = 1, message = "页码最小值1") Integer page,
-            @RequestParam(value="limit",defaultValue="10",required=false)
+            @RequestParam(value = "limit", defaultValue = "10", required = false)
             @Min(value = 3, message = "每页获取条数最小值3")
             @Max(value = 50, message = "每页获取条数最大值50") Integer limit) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));

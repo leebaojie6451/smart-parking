@@ -55,9 +55,9 @@ public class DEV_EVENT_TUMBLE_DETECTION_INFO extends NetSDKLib.SdkStructure {
     public int nObjectID;
 
     /**
-     *  物体类型,支持以下:"Unknown", "Human", "Vehicle", "Fire", "Smoke", "Plate", "HumanFace",
-     * 	"Container", "Animal", "TrafficLight", "PastePaper", "HumanHead", "BulletHole", "Entity"
-     *  #define DH_COMMON_STRING_16  16  // 通用字符串长度16
+     * 物体类型,支持以下:"Unknown", "Human", "Vehicle", "Fire", "Smoke", "Plate", "HumanFace",
+     * "Container", "Animal", "TrafficLight", "PastePaper", "HumanHead", "BulletHole", "Entity"
+     * #define DH_COMMON_STRING_16  16  // 通用字符串长度16
      */
     public byte[] szObjectType = new byte[16];
 
@@ -66,7 +66,7 @@ public class DEV_EVENT_TUMBLE_DETECTION_INFO extends NetSDKLib.SdkStructure {
      * 有效数据位21位，包含’\0’
      * 前2位%d%d:01-视频片段, 02-图片, 03-文件, 99-其他
      * 中间14位YYYYMMDDhhmmss:年月日时分秒
-     * 	后5位%u%u%u%u%u：物体ID，如00001
+     * 后5位%u%u%u%u%u：物体ID，如00001
      */
     public NetSDKLib.NET_RECT stuBoundingBox;
 

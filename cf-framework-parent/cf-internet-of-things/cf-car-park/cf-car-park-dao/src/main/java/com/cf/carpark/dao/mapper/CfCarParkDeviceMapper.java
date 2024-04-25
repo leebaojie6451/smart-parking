@@ -31,6 +31,7 @@ public interface CfCarParkDeviceMapper {
 
     /**
      * 根据条件查询停车场硬件数据列表
+     *
      * @param conditions
      * @return
      */
@@ -38,6 +39,7 @@ public interface CfCarParkDeviceMapper {
 
     /**
      * 根据条件查询停车场硬件数据列表数
+     *
      * @param conditions
      * @return
      */

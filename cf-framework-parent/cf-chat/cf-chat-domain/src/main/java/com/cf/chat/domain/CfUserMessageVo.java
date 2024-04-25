@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 
@@ -37,7 +36,6 @@ public class CfUserMessageVo implements Serializable {
     private Integer receiveTime;
     private Integer page;
     private Integer limit;
-
 
 
 }

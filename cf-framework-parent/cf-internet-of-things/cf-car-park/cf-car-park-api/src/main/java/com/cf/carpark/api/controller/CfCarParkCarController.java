@@ -40,7 +40,7 @@ public class CfCarParkCarController implements CfCarParkCarSwagger {
         cfCarParkCar.setNumberPlate(cfCarParkCarForm.getNumberPlate());
         cfCarParkCar.setCreateTime(System.currentTimeMillis());
         cfCarParkCar.setUpdateTime(System.currentTimeMillis());
-        cfCarParkCar.setStatus((byte)1);
+        cfCarParkCar.setStatus((byte) 1);
         cfCarParkCar.setCarTypeKey("temporary_car");
         cfCarParkCar.setCarTypeStartTime(System.currentTimeMillis());
         cfCarParkCar.setCarTypeEndTime(System.currentTimeMillis());
@@ -51,7 +51,7 @@ public class CfCarParkCarController implements CfCarParkCarSwagger {
     @Override
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(String id) throws Exception {
-        if(StringUtils.isEmpty(id)){
+        if (StringUtils.isEmpty(id)) {
             return new ResponseResult(CommonCode.INVALID_PARAM, null, "miss id");
         }
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
@@ -59,7 +59,7 @@ public class CfCarParkCarController implements CfCarParkCarSwagger {
         cfCarParkCarQuery.setId(id);
         cfCarParkCarQuery.setUid(userBasicInfo.getId());
         Integer integer = cfCarParkCarService.deleteByQuery(cfCarParkCarQuery);
-        return integer>0?new ResponseResult(CommonCode.SUCCESS):new ResponseResult(CommonCode.FAIL);
+        return integer > 0 ? new ResponseResult(CommonCode.SUCCESS) : new ResponseResult(CommonCode.FAIL);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class CfCarParkCarController implements CfCarParkCarSwagger {
         cfCarParkCarQuery.setUid(userBasicInfo.getId());
         cfCarParkCarQuery.setOrderBy("cpc.update_time DESC");
         List<CfCarParkCar> cfCarParkCars = cfCarParkCarService.selectByQuery(cfCarParkCarQuery);
-        if(cfCarParkCars!=null && cfCarParkCars.size()>0){
+        if (cfCarParkCars != null && cfCarParkCars.size() > 0) {
             return new ResponseResult(CommonCode.SUCCESS, cfCarParkCars);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);

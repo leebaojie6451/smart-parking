@@ -5,15 +5,15 @@ public enum EM_DRIVING_DIRECTION {
     /**
      * 未知
      */
-    EM_DRIVING_DIRECTION_UNKNOWN(0,"未知"),
+    EM_DRIVING_DIRECTION_UNKNOWN(0, "未知"),
     /**
      * 驶入
      */
-    EM_DRIVING_DIRECTION_IN(1,"驶入"),
+    EM_DRIVING_DIRECTION_IN(1, "驶入"),
     /**
      * 驶出
      */
-    EM_DRIVING_DIRECTION_OUT(2,"驶出");
+    EM_DRIVING_DIRECTION_OUT(2, "驶出");
 
     private int value;
     private String note;
@@ -42,7 +42,7 @@ public enum EM_DRIVING_DIRECTION {
 
     public static int getValueByNote(String givenNote) {
         for (EM_DRIVING_DIRECTION enumType : EM_DRIVING_DIRECTION.values()) {
-            if (givenNote.equals(enumType.getNote()) ) {
+            if (givenNote.equals(enumType.getNote())) {
                 return enumType.getValue();
             }
         }

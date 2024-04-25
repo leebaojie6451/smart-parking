@@ -24,6 +24,7 @@ public interface CfUserIdCardService {
 
     /**
      * 通过证件号排查该证件是否已经被绑定过
+     *
      * @param cfUserIdCard
      */
     void checkRepeatByLicenseNumber(CfUserIdCard cfUserIdCard);

@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @Version 1.0
  **/
 @EnableAutoConfiguration()
-@ComponentScan(basePackages = {"com.cf.sms.service","com.cf.sms.dao","com.cf.framework"})
+@ComponentScan(basePackages = {"com.cf.sms.service", "com.cf.sms.dao", "com.cf.framework"})
 @MapperScan("com.cf.sms.dao.mapper")
 public class SmsApplication {
     public static void main(String[] args) {

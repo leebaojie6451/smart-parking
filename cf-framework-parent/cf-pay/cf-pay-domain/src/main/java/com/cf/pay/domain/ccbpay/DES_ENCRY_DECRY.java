@@ -43,7 +43,7 @@ class DES_ENCRY_DECRY {
             this.keySpec = new SecretKeySpec(this.tdesKey.getBytes(), this.algorithm);
             this.cipher = Cipher.getInstance(this.mode);
             this.cipher.init(2, this.keySpec);
-            byte[] plainBytes = (byte[])null;
+            byte[] plainBytes = (byte[]) null;
             plainBytes = this.cipher.doFinal(cipherBytes);
             String plainText = new String(plainBytes);
             return plainText;

@@ -62,18 +62,18 @@ public class CfLogisticsTaskController implements CfLogisticsTaskSwagger {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         //检查用户合法性
         CfUser cfUser = cfUserService.getUserByUid(userBasicInfo.getId(), false);
-        if(cfUser.getDriverLicenseStatus().byteValue()!=( byte)2){
-            return new ResponseResult(CommonCode.FAIL,null, "您的驾驶证未上传或者未通过审核，请联系管理员处理");
+        if (cfUser.getDriverLicenseStatus().byteValue() != (byte) 2) {
+            return new ResponseResult(CommonCode.FAIL, null, "您的驾驶证未上传或者未通过审核，请联系管理员处理");
         }
         List<CfLogisticsTask> cfLogisticsTasks = cfLogisticsTaskService.selectListByQuery(cfLogisticsTaskQuery);
-        if(cfLogisticsTaskQuery.getPage()==null || cfLogisticsTaskQuery.getSize()==null){
-            return new ResponseResult(CommonCode.NO_MORE_DATAS,null, "请提供页码和每次请求数量");
+        if (cfLogisticsTaskQuery.getPage() == null || cfLogisticsTaskQuery.getSize() == null) {
+            return new ResponseResult(CommonCode.NO_MORE_DATAS, null, "请提供页码和每次请求数量");
         }
-        if(cfLogisticsTaskQuery.getPage()>5 || cfLogisticsTaskQuery.getSize()>20){
-            return new ResponseResult(CommonCode.NO_MORE_DATAS,null, "您请求的数据量已经超限");
+        if (cfLogisticsTaskQuery.getPage() > 5 || cfLogisticsTaskQuery.getSize() > 20) {
+            return new ResponseResult(CommonCode.NO_MORE_DATAS, null, "您请求的数据量已经超限");
         }
         Integer countByQuery = cfLogisticsTaskService.countByQuery(cfLogisticsTaskQuery);
-        if(cfLogisticsTasks==null || cfLogisticsTasks.size()==0){
+        if (cfLogisticsTasks == null || cfLogisticsTasks.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsTasks, countByQuery);
@@ -83,12 +83,12 @@ public class CfLogisticsTaskController implements CfLogisticsTaskSwagger {
     @RequestMapping(value = "driverCreateTask", method = RequestMethod.POST)
     public ResponseResult driverCreateTask(@RequestBody CfLogisticsTaskForm cfLogisticsTaskForm) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        if(StringUtils.isEmpty(cfLogisticsTaskForm.getVehicleName())){
-            return new ResponseResult(CommonCode.FAIL,null, "请您提供车牌号");
+        if (StringUtils.isEmpty(cfLogisticsTaskForm.getVehicleName())) {
+            return new ResponseResult(CommonCode.FAIL, null, "请您提供车牌号");
         }
         //检查用户合法性
         CfUser cfUser = cfUserService.getUserByUid(userBasicInfo.getId(), false);
-        if(StringUtils.isEmpty(cfUser.getTrueName())){
+        if (StringUtils.isEmpty(cfUser.getTrueName())) {
             CfUser updateUser = new CfUser();
             updateUser.setId(userBasicInfo.getId());
             updateUser.setTrueName(cfUser.getPhone());
@@ -100,52 +100,52 @@ public class CfLogisticsTaskController implements CfLogisticsTaskSwagger {
             cfUserDriverLicenseQuery.setUid(userBasicInfo.getId());
             cfUserDriverLicenseService.updateByQUery(cfUserDriverLicense, cfUserDriverLicenseQuery);
         }
-        if(cfUser.getDriverLicenseStatus().byteValue()!=( byte)2){
-            return new ResponseResult(CommonCode.FAIL,null, "您的驾驶证未上传或者未通过审核，请联系管理员处理");
+        if (cfUser.getDriverLicenseStatus().byteValue() != (byte) 2) {
+            return new ResponseResult(CommonCode.FAIL, null, "您的驾驶证未上传或者未通过审核，请联系管理员处理");
         }
-        if(cfLogisticsTaskForm.getFactoryId()==null){
-            return new ResponseResult(CommonCode.FAIL,null, "请提仓库(id)");
+        if (cfLogisticsTaskForm.getFactoryId() == null) {
+            return new ResponseResult(CommonCode.FAIL, null, "请提仓库(id)");
         }
         CfLogisticsFactory cfLogisticsFactory = cfLogisticsFactoryService.findById(cfLogisticsTaskForm.getFactoryId());
-        if(cfLogisticsFactory==null){
-            return new ResponseResult(CommonCode.FAIL,null, "指定的工厂不存在");
+        if (cfLogisticsFactory == null) {
+            return new ResponseResult(CommonCode.FAIL, null, "指定的工厂不存在");
         }
-        if(StringUtils.isEmpty(cfLogisticsTaskForm.getCargoType())){
-            return new ResponseResult(CommonCode.FAIL,null, "请提供货物类型");
+        if (StringUtils.isEmpty(cfLogisticsTaskForm.getCargoType())) {
+            return new ResponseResult(CommonCode.FAIL, null, "请提供货物类型");
         }
         CfLogisticsStorehousePlatformCargoTypeQuery cfLogisticsStorehousePlatformCargoTypeQuery = new CfLogisticsStorehousePlatformCargoTypeQuery();
         cfLogisticsStorehousePlatformCargoTypeQuery.setFactoryId(cfLogisticsTaskForm.getFactoryId());
         cfLogisticsStorehousePlatformCargoTypeQuery.setCargoType(cfLogisticsTaskForm.getCargoType());
         List<CfLogisticsStorehousePlatformCargoType> cfLogisticsStorehousePlatformCargoTypes = cfLogisticsStorehousePlatformCargoTypeService.getListByQuery(cfLogisticsStorehousePlatformCargoTypeQuery);
-        if(cfLogisticsStorehousePlatformCargoTypes==null || cfLogisticsStorehousePlatformCargoTypes.size()==0){
-            return new ResponseResult(CommonCode.FAIL,null, "指定的货物类型不存在");
+        if (cfLogisticsStorehousePlatformCargoTypes == null || cfLogisticsStorehousePlatformCargoTypes.size() == 0) {
+            return new ResponseResult(CommonCode.FAIL, null, "指定的货物类型不存在");
         }
-        if(cfLogisticsTaskForm.getTaskType()==null || (cfLogisticsTaskForm.getTaskType().byteValue()!=(byte)0 && cfLogisticsTaskForm.getTaskType().byteValue()!=(byte)1)){
-            return new ResponseResult(CommonCode.FAIL,null, "请告知您是装货(0)还是卸货(1)");
+        if (cfLogisticsTaskForm.getTaskType() == null || (cfLogisticsTaskForm.getTaskType().byteValue() != (byte) 0 && cfLogisticsTaskForm.getTaskType().byteValue() != (byte) 1)) {
+            return new ResponseResult(CommonCode.FAIL, null, "请告知您是装货(0)还是卸货(1)");
         }
-        if(StringUtils.isEmpty(cfLogisticsTaskForm.getWaybillNumber())){
-            return new ResponseResult(CommonCode.FAIL,null, "请您提供物流单号");
+        if (StringUtils.isEmpty(cfLogisticsTaskForm.getWaybillNumber())) {
+            return new ResponseResult(CommonCode.FAIL, null, "请您提供物流单号");
         }
 
         CfLogisticsTask cfLogisticsTask = new CfLogisticsTask();
-        cfLogisticsTask.setTaskTitle( cfUser.getTrueName()+"-"+cfLogisticsTaskForm.getCargoType()+"-"+ DateUtil.stampToDate(System.currentTimeMillis(),"yyyy-MM-dd") );
+        cfLogisticsTask.setTaskTitle(cfUser.getTrueName() + "-" + cfLogisticsTaskForm.getCargoType() + "-" + DateUtil.stampToDate(System.currentTimeMillis(), "yyyy-MM-dd"));
         cfLogisticsTask.setEditerUid(userBasicInfo.getId());
         cfLogisticsTask.setStartTime(System.currentTimeMillis());
-        cfLogisticsTask.setEndTime(cfLogisticsTask.getStartTime()+86400000l);
+        cfLogisticsTask.setEndTime(cfLogisticsTask.getStartTime() + 86400000l);
         cfLogisticsTask.setOrigin(cfLogisticsTaskForm.getOrigin());
         cfLogisticsTask.setDestination(cfLogisticsTaskForm.getDestination());
         cfLogisticsTask.setCargoType(cfLogisticsTaskForm.getCargoType());
         cfLogisticsTask.setCarType(cfLogisticsTaskForm.getCarType());
-        cfLogisticsTask.setVehiclesRequired((short)1);
-        cfLogisticsTask.setVehiclesRequired((short)0);
+        cfLogisticsTask.setVehiclesRequired((short) 1);
+        cfLogisticsTask.setVehiclesRequired((short) 0);
         cfLogisticsTask.setResEach(cfLogisticsTaskForm.getResEach());
         cfLogisticsTask.setWeight(cfLogisticsTaskForm.getWeight());
-        cfLogisticsTask.setTaskStatus((byte)0);
+        cfLogisticsTask.setTaskStatus((byte) 0);
         cfLogisticsTask.setTaskType(cfLogisticsTaskForm.getTaskType());
         cfLogisticsTask.setFactoryId(cfLogisticsTaskForm.getFactoryId());
         cfLogisticsTask.setSupplier(cfLogisticsTaskForm.getSupplier());
         cfLogisticsTask.setWaybillNumber(cfLogisticsTaskForm.getWaybillNumber());
-        cfLogisticsTask.setEmergencyLevel((byte)0);
+        cfLogisticsTask.setEmergencyLevel((byte) 0);
 
         //让其能自动预约
         cfLogisticsTask.setDriverName(cfUser.getTrueName());
@@ -153,6 +153,6 @@ public class CfLogisticsTaskController implements CfLogisticsTaskSwagger {
         cfLogisticsTask.setVehicleName(cfLogisticsTaskForm.getVehicleName());
 
         CfLogisticsTask logisticsTask = cfLogisticsTaskService.add(cfLogisticsTask);
-        return new ResponseResult(CommonCode.SUCCESS,logisticsTask);
+        return new ResponseResult(CommonCode.SUCCESS, logisticsTask);
     }
 }

@@ -17,13 +17,14 @@ public class SpringContextUtil implements ApplicationContextAware {
 
     /**
      * 获取容器中的实例
+     *
      * @param clazz 根据class获取Spring容器中对应的Bean类
      */
-    public static <T> T getBean( Class<T> clazz){
+    public static <T> T getBean(Class<T> clazz) {
         return context.getBean(clazz);
     }
 
-    public static ApplicationContext getContext(){
+    public static ApplicationContext getContext() {
         return context;
     }
 }

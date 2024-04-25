@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.cf.chat.dao.repository.CfUserGroupMessageRepository;
 import com.cf.chat.domain.CfUserGroupMessage;
 import com.cf.chat.domain.CfUserMessage;
-import com.cf.chat.domain.CfUserMessageVo;
 import com.cf.chat.domain.Message;
 import com.cf.chat.netty.UserChannelMap;
 import com.cf.chat.service.CfUserGroupMessageService;
@@ -53,22 +52,22 @@ public class CfUserGroupMessageServiceImpl implements CfUserGroupMessageService 
     @Override
     public void sendGroupMessageByChannel(CfUserMessage cfUserMessage) {
         List<CfUserGroupMember> cfUserGroupMembers = cfUserGroupService.getUserGroupMemberByGroupId(cfUserMessage.getGroupId());
-        if(cfUserGroupMembers!=null && cfUserGroupMembers.size()>0){
-            for (CfUserGroupMember cfUserGroupMember: cfUserGroupMembers){
+        if (cfUserGroupMembers != null && cfUserGroupMembers.size() > 0) {
+            for (CfUserGroupMember cfUserGroupMember : cfUserGroupMembers) {
                 cfUserMessage.setToUid(cfUserGroupMember.getUid());
-                if(cfUserGroupMember.getUid().equals(cfUserMessage.getFromUid())){
+                if (cfUserGroupMember.getUid().equals(cfUserMessage.getFromUid())) {
                     continue;   //跳过发送者自己
                 }
                 Channel channel = UserChannelMap.get(cfUserGroupMember.getUid());
-                if(channel != null) {
+                if (channel != null) {
                     Message message = new Message();
                     message.setType("chat_message");
                     message.setCfUserMessage(cfUserMessage);
                     channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(message)));
-                }else{
+                } else {
                     //记录群成员的离线消息
-                    cfUserGroupMessageRepository.insert(new CfUserGroupMessage(idWorker.nextId(),cfUserGroupMember.getUid(),
-                        cfUserMessage.getGroupId(),cfUserMessage.getId(),0,System.currentTimeMillis()));
+                    cfUserGroupMessageRepository.insert(new CfUserGroupMessage(idWorker.nextId(), cfUserGroupMember.getUid(),
+                            cfUserMessage.getGroupId(), cfUserMessage.getId(), 0, System.currentTimeMillis()));
                 }
             }
         }
@@ -77,12 +76,12 @@ public class CfUserGroupMessageServiceImpl implements CfUserGroupMessageService 
     @Override
     public void batchUpdateStatusByIds(List<CfUserGroupMessage> cfUserGroupMessages) {
         Update update = new Update();
-        update.set("status",1);
+        update.set("status", 1);
         Query query = new Query();
         List<String> list = new ArrayList<>();
-        cfUserGroupMessages.forEach(item->list.add(item.getId()));
+        cfUserGroupMessages.forEach(item -> list.add(item.getId()));
         query.addCriteria(Criteria.where("_id").in(list));
-        mongoTemplate.updateMulti(query,update,CfUserGroupMessage.class);
+        mongoTemplate.updateMulti(query, update, CfUserGroupMessage.class);
     }
 
     @Override

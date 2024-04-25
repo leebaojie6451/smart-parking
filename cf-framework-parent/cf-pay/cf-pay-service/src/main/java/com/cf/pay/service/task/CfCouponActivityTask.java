@@ -37,38 +37,39 @@ public class CfCouponActivityTask {
      * 0 15 10 ? * MON-FRI 每月的周一到周五10点 15分执行
      * 0 15 10 ? * MON,FRI 每月的周一和周五10点 15分执行
      */
-    @Scheduled(cron="0 0/10 * * * *")
+    @Scheduled(cron = "0 0/10 * * * *")
 //    @Scheduled(cron="0/10 * * * * *")
-    public void handleCfCouponActivityTask() throws Exception{
+    public void handleCfCouponActivityTask() throws Exception {
         cfCouponActivityService.handleAutoGiveAway();
     }
 
     /**
      * 统计昨日和对应月份财务数据
+     *
      * @throws Exception
      */
-    @Scheduled(cron="0 30 02 * * *")
-    public void statisticsIncomeDataTask() throws Exception{
+    @Scheduled(cron = "0 30 02 * * *")
+    public void statisticsIncomeDataTask() throws Exception {
         String key = "statisticsIncomeDataTask";
         boolean action = false;
         String hostAddress = InetAddress.getLocalHost().getHostAddress();
         String actionHost = stringRedisTemplate.boundValueOps(key).get();
-        if(StringUtils.isNotEmpty(actionHost) && hostAddress.equals(actionHost)){
+        if (StringUtils.isNotEmpty(actionHost) && hostAddress.equals(actionHost)) {
             action = true;
         }
 
-        if(action){
+        if (action) {
             Long current = System.currentTimeMillis();
-            String dateStr = DateUtil.stampToDate(DateUtil.minMillisecondBaseOnTheDayToTimestamp(current)-2000l,"yyyy-MM-dd");
-            Long startTime = DateUtil.minMillisecondBaseOnTheDayToTimestamp(DateUtil.minMillisecondBaseOnTheDayToTimestamp(current)-2000l);
-            Long endTime = DateUtil.maxMillisecondBaseOnTheDayToTimestamp(DateUtil.minMillisecondBaseOnTheDayToTimestamp(current)-2000l);
+            String dateStr = DateUtil.stampToDate(DateUtil.minMillisecondBaseOnTheDayToTimestamp(current) - 2000l, "yyyy-MM-dd");
+            Long startTime = DateUtil.minMillisecondBaseOnTheDayToTimestamp(DateUtil.minMillisecondBaseOnTheDayToTimestamp(current) - 2000l);
+            Long endTime = DateUtil.maxMillisecondBaseOnTheDayToTimestamp(DateUtil.minMillisecondBaseOnTheDayToTimestamp(current) - 2000l);
             Thread thread = new Thread(new Runnable() {
                 @SneakyThrows
                 @Override
                 public void run() {
                     //异步统计
                     //统计昨天的数据
-                    cfDailyIncomeStatisticsService.statisticsDatas(dateStr,startTime,endTime, CountModel.COUNT_MODEL_DAY);
+                    cfDailyIncomeStatisticsService.statisticsDatas(dateStr, startTime, endTime, CountModel.COUNT_MODEL_DAY);
                 }
             });
             thread.start();
@@ -78,18 +79,19 @@ public class CfCouponActivityTask {
 
     /**
      * 统计今日财务数据
+     *
      * @throws Exception
      */
-    @Scheduled(cron="0 0/60 * * * *")
-    public void statisticsTodayIncomeDataTask() throws Exception{
+    @Scheduled(cron = "0 0/60 * * * *")
+    public void statisticsTodayIncomeDataTask() throws Exception {
         String key = "statisticsTodayIncomeDataTask";
         boolean action = false;
         String hostAddress = InetAddress.getLocalHost().getHostAddress();
         String actionHost = stringRedisTemplate.boundValueOps(key).get();
-        if(StringUtils.isNotEmpty(actionHost) && hostAddress.equals(actionHost)){
+        if (StringUtils.isNotEmpty(actionHost) && hostAddress.equals(actionHost)) {
             action = true;
         }
-        if(action){
+        if (action) {
             String dateStr = DateUtil.stampToDate(System.currentTimeMillis(), "yyyy-MM-dd");
             Long startTime = DateUtil.minMillisecondBaseOnTheDayToTimestamp(System.currentTimeMillis());
             Long endTime = System.currentTimeMillis();
@@ -109,7 +111,7 @@ public class CfCouponActivityTask {
                 public void run() {
                     //异步统计
                     //统计对应月份的数据
-                    cfDailyIncomeStatisticsService.statisticsDatas(dateStr,DateUtil.getMonthStartTime(startTime,"GMT+8:00"),DateUtil.getMonthEndTime(endTime,"GMT+8:00"),CountModel.COUNT_MODEL_MONTH);
+                    cfDailyIncomeStatisticsService.statisticsDatas(dateStr, DateUtil.getMonthStartTime(startTime, "GMT+8:00"), DateUtil.getMonthEndTime(endTime, "GMT+8:00"), CountModel.COUNT_MODEL_MONTH);
                 }
             });
             thread2.start();
@@ -119,7 +121,7 @@ public class CfCouponActivityTask {
                 public void run() {
                     //异步统计
                     //统计对应年份的数据
-                    cfDailyIncomeStatisticsService.statisticsDatas(dateStr,DateUtil.getYearStartTime(startTime,"GMT+8:00"),DateUtil.getYearEndTime(endTime,"GMT+8:00"),CountModel.COUNT_MODEL_YEAR);
+                    cfDailyIncomeStatisticsService.statisticsDatas(dateStr, DateUtil.getYearStartTime(startTime, "GMT+8:00"), DateUtil.getYearEndTime(endTime, "GMT+8:00"), CountModel.COUNT_MODEL_YEAR);
                 }
             });
             thread3.start();

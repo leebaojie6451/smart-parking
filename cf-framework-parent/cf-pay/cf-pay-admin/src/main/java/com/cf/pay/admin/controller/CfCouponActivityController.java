@@ -5,19 +5,35 @@ import com.cf.framework.domain.pay.PayCode;
 import com.cf.framework.domain.response.CommonCode;
 import com.cf.framework.domain.response.ResponseResult;
 import com.cf.framework.domain.ucenter.ext.UserBasicInfo;
-import com.cf.framework.domain.ucenter.response.UcenterCode;
 import com.cf.framework.exception.ExceptionCast;
-import com.cf.framework.utils.*;
+import com.cf.framework.utils.DateUtil;
+import com.cf.framework.utils.FileUtils;
+import com.cf.framework.utils.HttpClient;
+import com.cf.framework.utils.HttpHearderUtils;
+import com.cf.framework.utils.StringTools;
 import com.cf.pay.admin.config.AuthenticationInterceptor;
 import com.cf.pay.admin.swagger.CfCouponActivitySwagger;
-import com.cf.pay.domain.*;
-import com.cf.pay.domain.request.*;
+import com.cf.pay.domain.CfCouponActivity;
+import com.cf.pay.domain.CfCouponActivityCouponType;
+import com.cf.pay.domain.CfCouponActivityLinkShop;
+import com.cf.pay.domain.CfQrCode;
+import com.cf.pay.domain.CfStaffCouponLog;
+import com.cf.pay.domain.CfStaffCouponSetting;
+import com.cf.pay.domain.request.CfCouponActivityCouponTypeForm;
+import com.cf.pay.domain.request.CfCouponActivityCouponTypeQuery;
+import com.cf.pay.domain.request.CfCouponActivityForm;
+import com.cf.pay.domain.request.CfCouponActivityLinkShopForm;
+import com.cf.pay.domain.request.CfQrCodeForm;
+import com.cf.pay.domain.request.CfStaffCouponLogQuery;
+import com.cf.pay.domain.request.CfStaffCouponSettingQuery;
 import com.cf.pay.domain.response.ResultMap;
 import com.cf.pay.domain.type.CouponType;
-import com.cf.pay.service.*;
-import com.cf.ucenter.domain.CfStaff;
-import com.cf.ucenter.domain.CfUser;
-import com.cf.ucenter.request.CfStaffQuery;
+import com.cf.pay.service.CfCouponActivityCouponTypeService;
+import com.cf.pay.service.CfCouponActivityLinkShopService;
+import com.cf.pay.service.CfCouponActivityService;
+import com.cf.pay.service.CfQrCodeService;
+import com.cf.pay.service.CfStaffCouponLogService;
+import com.cf.pay.service.CfStaffCouponSettingService;
 import com.cf.ucenter.service.CfStaffService;
 import com.cf.ucenter.service.CfSystemConfigService;
 import com.cf.ucenter.service.CfUserService;
@@ -95,41 +111,41 @@ public class CfCouponActivityController implements CfCouponActivitySwagger {
         allowFileds.add("order");
         allowFileds.add("limit");
         Map<String, String> allowFiledsMap = new HashMap<String, String>();
-        allowFiledsMap.put("id","cpa");
-        allowFiledsMap.put("title","cpa");
-        allowFiledsMap.put("type","cpa");
-        allowFiledsMap.put("start_time","cpa");
-        allowFiledsMap.put("end_time","cpa");
-        allowFiledsMap.put("main_body_id","cpa");
-        allowFiledsMap.put("creater_id","cpa");
-        allowFiledsMap.put("goods_id","cpa");
-        allowFiledsMap.put("status","cpa");
-        allowFiledsMap.put("create_time","cpa");
-        allowFiledsMap.put("phone","cpa");
-        allowFiledsMap.put("recharge_ratio","cpa");
-        allowFiledsMap.put("shopkeeper_name","cpa");
-        allowFiledsMap.put("project_name","cpa");
-        allowFiledsMap.put("trade_type","cpa");
-        allowFiledsMap.put("coupon_type","cpa");
-        allowFiledsMap.put("auto_give_away","cpa");
-        allowFiledsMap.put("auto_cleared","cpa");
-        allowFiledsMap.put("auto_give_away_date","cpa");
-        allowFiledsMap.put("like","");
-        allowFiledsMap.put("group","");
-        allowFiledsMap.put("order","");
-        allowFiledsMap.put("limit","");
+        allowFiledsMap.put("id", "cpa");
+        allowFiledsMap.put("title", "cpa");
+        allowFiledsMap.put("type", "cpa");
+        allowFiledsMap.put("start_time", "cpa");
+        allowFiledsMap.put("end_time", "cpa");
+        allowFiledsMap.put("main_body_id", "cpa");
+        allowFiledsMap.put("creater_id", "cpa");
+        allowFiledsMap.put("goods_id", "cpa");
+        allowFiledsMap.put("status", "cpa");
+        allowFiledsMap.put("create_time", "cpa");
+        allowFiledsMap.put("phone", "cpa");
+        allowFiledsMap.put("recharge_ratio", "cpa");
+        allowFiledsMap.put("shopkeeper_name", "cpa");
+        allowFiledsMap.put("project_name", "cpa");
+        allowFiledsMap.put("trade_type", "cpa");
+        allowFiledsMap.put("coupon_type", "cpa");
+        allowFiledsMap.put("auto_give_away", "cpa");
+        allowFiledsMap.put("auto_cleared", "cpa");
+        allowFiledsMap.put("auto_give_away_date", "cpa");
+        allowFiledsMap.put("like", "");
+        allowFiledsMap.put("group", "");
+        allowFiledsMap.put("order", "");
+        allowFiledsMap.put("limit", "");
 
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0){
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0) {
             HashMap<String, String> valueMap = new HashMap<>();
-            valueMap.put("operator","=");
-            valueMap.put("value",userBasicInfo.getId());
+            valueMap.put("operator", "=");
+            valueMap.put("value", userBasicInfo.getId());
             conditionsMap.put("main_body_id", valueMap);
         }
 
         List<CfCouponActivity> cfCouponActivities = cfCouponActivityService.selectListByCondition(conditionsMap, allowFiledsMap, allowFileds);
         Integer counts = cfCouponActivityService.selectListByConditionCounts(conditionsMap, allowFiledsMap, allowFileds);
-        if(cfCouponActivities!=null && cfCouponActivities.size()>0){
+        if (cfCouponActivities != null && cfCouponActivities.size() > 0) {
             return new ResponseResult(CommonCode.SUCCESS, cfCouponActivities, null, counts);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);
@@ -148,10 +164,10 @@ public class CfCouponActivityController implements CfCouponActivitySwagger {
         cfStaffCouponLogQuery.setCouponActivityId(activityId);
         //判断是员工还是商户
         List<String> roles = userBasicInfo.getRoles();
-        if(roles!=null && roles.contains("merchant")){
+        if (roles != null && roles.contains("merchant")) {
             //获取商户今日的总发券量
             cfCouponActivity.setTodayIssued(cfStaffCouponLogService.countDenominationByQuery(cfStaffCouponLogQuery));
-        }else if(roles!=null && roles.contains("staff")){
+        } else if (roles != null && roles.contains("staff")) {
             //获取员工今日的总发券量
             cfStaffCouponLogQuery.setStaffId(userBasicInfo.getId());
             cfCouponActivity.setTodayIssued(cfStaffCouponLogService.countDenominationByQuery(cfStaffCouponLogQuery));
@@ -160,12 +176,12 @@ public class CfCouponActivityController implements CfCouponActivitySwagger {
             cfStaffCouponSettingQuery.setStaffId(userBasicInfo.getId());
             cfStaffCouponSettingQuery.setCouponActivityId(activityId);
             List<CfStaffCouponSetting> staffCouponSettings = cfStaffCouponSettingService.getListByQuery(cfStaffCouponSettingQuery);
-            if(staffCouponSettings!=null && staffCouponSettings.size()>0){
+            if (staffCouponSettings != null && staffCouponSettings.size() > 0) {
                 cfCouponActivity.setTodayQuota(staffCouponSettings.get(0).getSameDayQuota());
-            }else{
+            } else {
                 cfCouponActivity.setTodayQuota(new BigDecimal("0.00"));
             }
-        }else{
+        } else {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfCouponActivity);
@@ -196,7 +212,7 @@ public class CfCouponActivityController implements CfCouponActivitySwagger {
     @RequestMapping(value = "deleteCouponActivityCouponType", method = RequestMethod.DELETE)
     public ResponseResult deleteCouponActivityCouponType(@Validated String couponActivityCouponTypeId) throws Exception {
         Integer delete = cfCouponActivityCouponTypeService.delete(couponActivityCouponTypeId);
-        if(delete>0){
+        if (delete > 0) {
             return new ResponseResult(CommonCode.SUCCESS);
         }
         return new ResponseResult(CommonCode.FAIL);
@@ -206,11 +222,11 @@ public class CfCouponActivityController implements CfCouponActivitySwagger {
     @PreAuthorize("hasAuthority('pay-CfCouponActivityController-getCouponActivityCouponTypeListByQuery')")
     @RequestMapping(value = "getCouponActivityCouponTypeListByQuery", method = RequestMethod.GET)
     public ResponseResult getCouponActivityCouponTypeListByQuery(CfCouponActivityCouponTypeQuery cfCouponActivityCouponTypeQuery) throws Exception {
-        if(StringUtils.isEmpty(cfCouponActivityCouponTypeQuery.getCouponActivityId())){
+        if (StringUtils.isEmpty(cfCouponActivityCouponTypeQuery.getCouponActivityId())) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         List<CfCouponActivityCouponType> cfCouponActivityCouponTypes = cfCouponActivityCouponTypeService.getListByQuery(cfCouponActivityCouponTypeQuery);
-        if(cfCouponActivityCouponTypes==null || cfCouponActivityCouponTypes.size()==0){
+        if (cfCouponActivityCouponTypes == null || cfCouponActivityCouponTypes.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfCouponActivityCouponTypes);
@@ -221,30 +237,30 @@ public class CfCouponActivityController implements CfCouponActivitySwagger {
     @RequestMapping(value = "getCouponActivityCouponLogList", method = RequestMethod.GET)
     public ResponseResult getCouponActivityCouponLogList(CfStaffCouponLogQuery cfStaffCouponLogQuery) throws Exception {
 
-        if(StringUtils.isEmpty(cfStaffCouponLogQuery.getCouponActivityId())){
+        if (StringUtils.isEmpty(cfStaffCouponLogQuery.getCouponActivityId())) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         List<String> roles = userBasicInfo.getRoles();
-        if(roles!=null && roles.contains("merchant")){
+        if (roles != null && roles.contains("merchant")) {
             cfCouponActivityService.checkActivityAscription(userBasicInfo.getId(), cfStaffCouponLogQuery.getCouponActivityId());
-        }else if(roles!=null && roles.contains("staff")){
+        } else if (roles != null && roles.contains("staff")) {
             cfStaffCouponLogQuery.setStaffId(userBasicInfo.getId());
         }
 
-        if(cfStaffCouponLogQuery.getMinCreateTime()==null){
+        if (cfStaffCouponLogQuery.getMinCreateTime() == null) {
             cfStaffCouponLogQuery.setMinCreateTime(DateUtil.getSameDayMinOrMaxTimestamp("min"));
         }
-        if(cfStaffCouponLogQuery.getMaxCreateTime()==null){
+        if (cfStaffCouponLogQuery.getMaxCreateTime() == null) {
             cfStaffCouponLogQuery.setMaxCreateTime(DateUtil.getSameDayMinOrMaxTimestamp("max"));
         }
         List<CfStaffCouponLog> staffCouponLogServiceListByQuery = cfStaffCouponLogService.selectByQuery(cfStaffCouponLogQuery);
-        if(staffCouponLogServiceListByQuery==null || staffCouponLogServiceListByQuery.size()==0){
+        if (staffCouponLogServiceListByQuery == null || staffCouponLogServiceListByQuery.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         Integer integer = cfStaffCouponLogService.countByQuery(cfStaffCouponLogQuery);
         String fileSourceAddress = cfSystemConfigService.getValueByKey("file_source_address", "http://file.cfeng.wang/");
-        for (CfStaffCouponLog cfStaffCouponLog: staffCouponLogServiceListByQuery){
+        for (CfStaffCouponLog cfStaffCouponLog : staffCouponLogServiceListByQuery) {
             FileUtils.handleFileSourcePrefix(cfStaffCouponLog, fileSourceAddress, "staffAvatar");
             FileUtils.handleFileSourcePrefix(cfStaffCouponLog, fileSourceAddress, "toUidAvatar");
         }
@@ -257,9 +273,9 @@ public class CfCouponActivityController implements CfCouponActivitySwagger {
     public ResponseResult staffCreateCouponQrCode(@RequestBody CfQrCodeForm cfQrCodeForm) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         //查询优惠券活动类型面额
-        if(StringUtils.isEmpty(cfQrCodeForm.getCouponActivityTypeId())){
+        if (StringUtils.isEmpty(cfQrCodeForm.getCouponActivityTypeId())) {
             CfCouponActivityCouponType cfCouponActivityCouponType = cfCouponActivityCouponTypeService.findById(cfQrCodeForm.getCouponActivityTypeId(), true);
-            if(cfCouponActivityCouponType.getCouponActivityId().equals(cfQrCodeForm.getSourceId())){
+            if (cfCouponActivityCouponType.getCouponActivityId().equals(cfQrCodeForm.getSourceId())) {
                 cfQrCodeForm.setQuantity(cfCouponActivityCouponType.getDenomination().longValue());
             }
         }
@@ -274,10 +290,10 @@ public class CfCouponActivityController implements CfCouponActivitySwagger {
     @PreAuthorize("hasAuthority('pay-CfCouponActivityController-rechargeToCouponActivity')")
     @RequestMapping(value = "rechargeToCouponActivity", method = RequestMethod.POST)
     public ResponseResult rechargeToCouponActivity(HttpServletRequest httpServletRequest, String couponActivityId, BigDecimal amountOfMoney, String useScenes, Byte couponType) throws Exception {
-        if(amountOfMoney.compareTo(new BigDecimal(0.00))<=0){
+        if (amountOfMoney.compareTo(new BigDecimal(0.00)) <= 0) {
             ExceptionCast.cast(PayCode.NO_NEED_TO_PAY);
         }
-        if(couponType==null){
+        if (couponType == null) {
             couponType = CouponType.AMOUNT_COUPON;
         }
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
@@ -312,7 +328,7 @@ public class CfCouponActivityController implements CfCouponActivitySwagger {
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(String id) throws Exception {
         Integer delete = cfCouponActivityService.delete(id);
-        return delete>0 ? new ResponseResult(CommonCode.SUCCESS) : new ResponseResult(CommonCode.FAIL);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS) : new ResponseResult(CommonCode.FAIL);
     }
 
     @Override
@@ -320,7 +336,7 @@ public class CfCouponActivityController implements CfCouponActivitySwagger {
     @RequestMapping(value = "getCouponActivityLinkShops", method = RequestMethod.GET)
     public ResponseResult getCouponActivityLinkShops(byte couponActivityType, String couponActivityId) throws Exception {
         List<CfCouponActivityLinkShop> couponActivityLinkShops = cfCouponActivityService.getCouponActivityLinkShops(couponActivityType, couponActivityId);
-        if(couponActivityLinkShops==null || couponActivityLinkShops.size()==0){
+        if (couponActivityLinkShops == null || couponActivityLinkShops.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, couponActivityLinkShops);
@@ -351,7 +367,7 @@ public class CfCouponActivityController implements CfCouponActivitySwagger {
     @RequestMapping(value = "deleteActivityLinkShop", method = RequestMethod.DELETE)
     public ResponseResult deleteActivityLinkShop(String cfCouponActivityLinkShopId) throws Exception {
         Integer delete = cfCouponActivityLinkShopService.delete(cfCouponActivityLinkShopId);
-        if(delete>0){
+        if (delete > 0) {
             return new ResponseResult(CommonCode.SUCCESS);
         }
         return new ResponseResult(CommonCode.FAIL);

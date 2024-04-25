@@ -18,7 +18,8 @@ public interface CfAppVersionLogService {
 
     /**
      * 版本检查
-     * @param platform 应用平台(操作系统)
+     *
+     * @param platform      应用平台(操作系统)
      * @param versionNumber 需传入自己当前正在使用的版本号
      * @return
      */
@@ -32,6 +33,7 @@ public interface CfAppVersionLogService {
 
     /**
      * 根据query查询实体条件获取数据列表
+     *
      * @param cfAppVersionLogQuery
      * @return
      */
@@ -39,6 +41,7 @@ public interface CfAppVersionLogService {
 
     /**
      * 根据query查询实体条件获数据条目数
+     *
      * @param cfAppVersionLogQuery
      * @return
      */
@@ -46,6 +49,7 @@ public interface CfAppVersionLogService {
 
     /**
      * 根据query实体获取mybatis的Example
+     *
      * @param cfAppVersionLogQuery
      * @return
      */

@@ -72,7 +72,7 @@ public class CfCarParkPaymentAgencyController implements CfCarParkPaymentAgencyS
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         cfCarParkLinkUserService.checkHostOrAdminer(userBasicInfo, cfCarParkPaymentAgency.getCarParkId());
         Integer delete = cfCarParkPaymentAgencyService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS):new ResponseResult(CommonCode.FAIL);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS) : new ResponseResult(CommonCode.FAIL);
     }
 
     @PreAuthorize("hasAuthority('carpark-CfCarParkPaymentAgencyController-selectByQuery')")
@@ -80,16 +80,16 @@ public class CfCarParkPaymentAgencyController implements CfCarParkPaymentAgencyS
     @RequestMapping(value = "selectByQuery", method = RequestMethod.GET)
     public ResponseResult selectByQuery(CfCarParkPaymentAgencyQuery cfCarParkPaymentAgencyQuery) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0 && StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "finance")<0){
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0 && StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "finance") < 0) {
             CfCarParkLinkUserQuery cfCarParkLinkUserQuery = new CfCarParkLinkUserQuery();
             cfCarParkLinkUserQuery.setUid(userBasicInfo.getId());
             List<CfCarParkLinkUser> cfCarParkLinkUsers = cfCarParkLinkUserService.getListByQuery(cfCarParkLinkUserQuery);
-            if(cfCarParkLinkUsers==null || cfCarParkLinkUsers.size()==0){
+            if (cfCarParkLinkUsers == null || cfCarParkLinkUsers.size() == 0) {
                 return new ResponseResult(CommonCode.NO_MORE_DATAS);
             }
             String carParkIds = "";
-            for (CfCarParkLinkUser cfCarParkLinkUser: cfCarParkLinkUsers){
-                carParkIds += ",'"+cfCarParkLinkUser.getCarParkId()+"'";
+            for (CfCarParkLinkUser cfCarParkLinkUser : cfCarParkLinkUsers) {
+                carParkIds += ",'" + cfCarParkLinkUser.getCarParkId() + "'";
                 cfCarParkPaymentAgencyQuery.getCarParkIdList().add(cfCarParkLinkUser.getCarParkId());
             }
             cfCarParkPaymentAgencyQuery.setCarParkIds(carParkIds.substring(1));
@@ -97,11 +97,11 @@ public class CfCarParkPaymentAgencyController implements CfCarParkPaymentAgencyS
         }
         List<CfCarParkPaymentAgency> cfCarParkPaymentAgencies = cfCarParkPaymentAgencyService.selectByQuery(cfCarParkPaymentAgencyQuery);
         Integer total = 0;
-        if(cfCarParkPaymentAgencyQuery.getPage()==1){
+        if (cfCarParkPaymentAgencyQuery.getPage() == 1) {
             total = cfCarParkPaymentAgencyService.countByQuery(cfCarParkPaymentAgencyQuery);
         }
 
-        if(cfCarParkPaymentAgencies==null || cfCarParkPaymentAgencies.size()==0){
+        if (cfCarParkPaymentAgencies == null || cfCarParkPaymentAgencies.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfCarParkPaymentAgencies, total);

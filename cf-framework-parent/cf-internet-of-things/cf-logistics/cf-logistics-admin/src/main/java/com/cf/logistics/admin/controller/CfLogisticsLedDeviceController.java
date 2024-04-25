@@ -40,7 +40,7 @@ public class CfLogisticsLedDeviceController implements CfLogisticsLedDeviceSwagg
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseResult add(@Validated @RequestBody CfLogisticsLedDeviceForm cfLogisticsLedDeviceForm) throws Exception {
         CfLogisticsLedDevice cfLogisticsLedDevice = new CfLogisticsLedDevice();
-        BeanUtils.copyProperties(cfLogisticsLedDeviceForm,cfLogisticsLedDevice);
+        BeanUtils.copyProperties(cfLogisticsLedDeviceForm, cfLogisticsLedDevice);
         CfLogisticsLedDevice lastCfLogisticsLedDevice = cfLogisticsLedDeviceService.add(cfLogisticsLedDevice);
         return new ResponseResult(CommonCode.SUCCESS, lastCfLogisticsLedDevice);
     }
@@ -50,7 +50,7 @@ public class CfLogisticsLedDeviceController implements CfLogisticsLedDeviceSwagg
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public ResponseResult update(@Validated @RequestBody CfLogisticsLedDeviceForm cfLogisticsLedDeviceForm) {
         CfLogisticsLedDevice cfLogisticsLedDevice = new CfLogisticsLedDevice();
-        BeanUtils.copyProperties(cfLogisticsLedDeviceForm,cfLogisticsLedDevice);
+        BeanUtils.copyProperties(cfLogisticsLedDeviceForm, cfLogisticsLedDevice);
         CfLogisticsLedDevice update = cfLogisticsLedDeviceService.update(cfLogisticsLedDevice);
         return new ResponseResult(CommonCode.SUCCESS, update);
     }
@@ -60,7 +60,7 @@ public class CfLogisticsLedDeviceController implements CfLogisticsLedDeviceSwagg
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(Long id) {
         Integer delete = cfLogisticsLedDeviceService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS, delete):new ResponseResult(CommonCode.FAIL, null);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS, delete) : new ResponseResult(CommonCode.FAIL, null);
     }
 
     @PreAuthorize("hasAuthority('logistics-CfLogisticsLedDeviceController-getListByQuery')")
@@ -69,7 +69,7 @@ public class CfLogisticsLedDeviceController implements CfLogisticsLedDeviceSwagg
     public ResponseResult getListByQuery(CfLogisticsLedDeviceQuery cfLogisticsLedDeviceQuery) throws Exception {
         List<CfLogisticsLedDevice> cfLogisticsLedDevices = cfLogisticsLedDeviceService.getListByQuery(cfLogisticsLedDeviceQuery);
         Integer countByQuery = cfLogisticsLedDeviceService.countByQuery(cfLogisticsLedDeviceQuery);
-        if(cfLogisticsLedDevices==null || cfLogisticsLedDevices.size()==0){
+        if (cfLogisticsLedDevices == null || cfLogisticsLedDevices.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsLedDevices, countByQuery);

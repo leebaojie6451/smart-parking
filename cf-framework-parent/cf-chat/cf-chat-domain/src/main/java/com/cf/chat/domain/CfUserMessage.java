@@ -41,5 +41,4 @@ public class CfUserMessage implements Serializable {
     private Long receiveTime;
 
 
-
 }

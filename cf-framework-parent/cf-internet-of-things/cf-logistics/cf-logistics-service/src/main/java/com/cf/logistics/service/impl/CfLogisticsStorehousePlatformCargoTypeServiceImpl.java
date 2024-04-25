@@ -44,9 +44,10 @@ public class CfLogisticsStorehousePlatformCargoTypeServiceImpl implements CfLogi
 
     /**
      * 绑定工厂id
+     *
      * @param cfLogisticsStorehousePlatformCargoType
      */
-    private void bindFactoryId(CfLogisticsStorehousePlatformCargoType cfLogisticsStorehousePlatformCargoType){
+    private void bindFactoryId(CfLogisticsStorehousePlatformCargoType cfLogisticsStorehousePlatformCargoType) {
         cfLogisticsStorehousePlatformCargoType.setFactoryId(cfLogisticsStorehouseService.findById(cfLogisticsStorehousePlatformCargoType.getLogisticsStorehouseId(), false).getFactoryId());
     }
 
@@ -76,25 +77,25 @@ public class CfLogisticsStorehousePlatformCargoTypeServiceImpl implements CfLogi
     public CfLogisticsStorehousePlatformCargoTypeExample getExampleByQuery(CfLogisticsStorehousePlatformCargoTypeQuery cfLogisticsStorehousePlatformCargoTypeQuery) {
         CfLogisticsStorehousePlatformCargoTypeExample cfLogisticsStorehousePlatformCargoTypeExample = new CfLogisticsStorehousePlatformCargoTypeExample();
         CfLogisticsStorehousePlatformCargoTypeExample.Criteria criteria = cfLogisticsStorehousePlatformCargoTypeExample.createCriteria();
-        if(cfLogisticsStorehousePlatformCargoTypeQuery.getLogisticsStorehouseId()!=null){
+        if (cfLogisticsStorehousePlatformCargoTypeQuery.getLogisticsStorehouseId() != null) {
             criteria.andLogisticsStorehouseIdEqualTo(cfLogisticsStorehousePlatformCargoTypeQuery.getLogisticsStorehouseId());
         }
-        if(cfLogisticsStorehousePlatformCargoTypeQuery.getLogisticsStorehousePlatformId()!=null){
+        if (cfLogisticsStorehousePlatformCargoTypeQuery.getLogisticsStorehousePlatformId() != null) {
             criteria.andLogisticsStorehousePlatformIdEqualTo(cfLogisticsStorehousePlatformCargoTypeQuery.getLogisticsStorehousePlatformId());
         }
-        if(cfLogisticsStorehousePlatformCargoTypeQuery.getLogisticsStorehousePlatformIds()!=null && cfLogisticsStorehousePlatformCargoTypeQuery.getLogisticsStorehousePlatformIds().size()>0){
+        if (cfLogisticsStorehousePlatformCargoTypeQuery.getLogisticsStorehousePlatformIds() != null && cfLogisticsStorehousePlatformCargoTypeQuery.getLogisticsStorehousePlatformIds().size() > 0) {
             criteria.andLogisticsStorehousePlatformIdIn(cfLogisticsStorehousePlatformCargoTypeQuery.getLogisticsStorehousePlatformIds());
         }
-        if(cfLogisticsStorehousePlatformCargoTypeQuery.getFactoryId()!=null){
+        if (cfLogisticsStorehousePlatformCargoTypeQuery.getFactoryId() != null) {
             criteria.andFactoryIdEqualTo(cfLogisticsStorehousePlatformCargoTypeQuery.getFactoryId());
         }
-        if(cfLogisticsStorehousePlatformCargoTypeQuery.getCargoType()!=null){
+        if (cfLogisticsStorehousePlatformCargoTypeQuery.getCargoType() != null) {
             criteria.andCargoTypeEqualTo(cfLogisticsStorehousePlatformCargoTypeQuery.getCargoType());
         }
-        if(StringUtils.isNotEmpty(cfLogisticsStorehousePlatformCargoTypeQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfLogisticsStorehousePlatformCargoTypeQuery.getOrderBy())) {
             cfLogisticsStorehousePlatformCargoTypeExample.setOrderByClause(cfLogisticsStorehousePlatformCargoTypeQuery.getOrderBy());
         }
-        if(cfLogisticsStorehousePlatformCargoTypeQuery.getPage()!=null && cfLogisticsStorehousePlatformCargoTypeQuery.getSize()!=null){
+        if (cfLogisticsStorehousePlatformCargoTypeQuery.getPage() != null && cfLogisticsStorehousePlatformCargoTypeQuery.getSize() != null) {
             PageHelper.startPage(cfLogisticsStorehousePlatformCargoTypeQuery.getPage(), cfLogisticsStorehousePlatformCargoTypeQuery.getSize());
         }
         return cfLogisticsStorehousePlatformCargoTypeExample;

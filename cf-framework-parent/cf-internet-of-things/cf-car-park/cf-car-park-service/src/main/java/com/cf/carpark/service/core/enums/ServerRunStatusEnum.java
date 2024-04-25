@@ -2,10 +2,11 @@ package com.cf.carpark.service.core.enums;
 
 /**
  * 服务运行状态
+ *
  * @author gebilaowang
  * @date 2021/3/11 11:03
  */
-public enum  ServerRunStatusEnum {
+public enum ServerRunStatusEnum {
     // 已关闭
     CLOSE(0),
     // 运行中

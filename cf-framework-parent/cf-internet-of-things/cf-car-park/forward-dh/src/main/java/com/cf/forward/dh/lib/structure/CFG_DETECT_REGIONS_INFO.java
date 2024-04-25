@@ -9,6 +9,6 @@ import com.cf.forward.dh.lib.NetSDKLib;
  * @date 2021/2/22
  */
 public class CFG_DETECT_REGIONS_INFO extends NetSDKLib.SdkStructure {
-  /** 检测区域使能字段不存在时默认为TRUE */
-  public boolean bEnable;
+    /** 检测区域使能字段不存在时默认为TRUE */
+    public boolean bEnable;
 }

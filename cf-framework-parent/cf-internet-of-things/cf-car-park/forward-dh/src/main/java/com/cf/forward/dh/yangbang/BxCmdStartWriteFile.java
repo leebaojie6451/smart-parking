@@ -29,8 +29,8 @@ public class BxCmdStartWriteFile extends BxCmd {
 
         //
         // r0, r1
-        array.add((byte)0x00);
-        array.add((byte)0x00);
+        array.add((byte) 0x00);
+        array.add((byte) 0x00);
 
         //
         // overwrite
@@ -39,7 +39,7 @@ public class BxCmdStartWriteFile extends BxCmd {
         // 发该文件，返回 ERR_FILE_EXIST 状态。
         // 0x01——若文件系统中已经存在该文件，则直接覆
         // 盖该文件。
-        array.add((byte)0x01);
+        array.add((byte) 0x01);
 
         //
         // 文件名

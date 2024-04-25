@@ -10,15 +10,15 @@ public enum EM_VIRTUAL_COIL_OCCUPANCY_STATUS {
     /**
      * 未知
      */
-    EM_VIRTUAL_COIL_OCCUPANCY_STATUS_UNKNOWN(-1,"未知"),
+    EM_VIRTUAL_COIL_OCCUPANCY_STATUS_UNKNOWN(-1, "未知"),
     /**
      * 未占用
      */
-    EM_VIRTUAL_COIL_OCCUPANCY_STATUS_UNOCCUPY(0,"未占用"),
+    EM_VIRTUAL_COIL_OCCUPANCY_STATUS_UNOCCUPY(0, "未占用"),
     /**
      * 占用
      */
-    EM_VIRTUAL_COIL_OCCUPANCY_STATUS_OCCUPY(1,"占用");
+    EM_VIRTUAL_COIL_OCCUPANCY_STATUS_OCCUPY(1, "占用");
 
     private final int value;
     private final String note;

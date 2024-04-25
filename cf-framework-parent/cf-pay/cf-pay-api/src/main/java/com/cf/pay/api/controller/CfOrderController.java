@@ -36,11 +36,11 @@ public class CfOrderController implements CfOrderSwagger {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         cfOrderQuery.setUid(userBasicInfo.getId());
         //如果未指定排序，排序按更新时间进行倒叙
-        if(StringUtils.isEmpty(cfOrderQuery.getOrderBy())){
+        if (StringUtils.isEmpty(cfOrderQuery.getOrderBy())) {
             cfOrderQuery.setOrderBy("update_time desc");
         }
         List<CfOrder> cfOrders = cfOrderService.getListByQuery(cfOrderQuery);
-        if(cfOrders==null || cfOrders.size()==0){
+        if (cfOrders == null || cfOrders.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfOrders);

@@ -32,6 +32,7 @@ public interface CfAdMapper {
 
     /**
      * 广告统计
+     *
      * @param adCounts
      * @return
      */

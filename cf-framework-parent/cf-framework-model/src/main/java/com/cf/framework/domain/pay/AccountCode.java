@@ -12,10 +12,10 @@ import com.cf.framework.domain.response.ResultCode;
  **/
 public enum AccountCode implements ResultCode {
 
-    ACCOUNT_NOT_EXIST(false,13000,"指定的资金账户不存在！"),
-    ACCOUNT_INSUFFICIENT_BALANCE(false,13001,"资金账户余额不足！"),
-    MISS_SOCRE_TYPE_OR_UID(false,13002,"未指定资金账户积分类型或用户！"),
-    SCORE_TYPE_NOT_EXIST(false,13003,"指定的积分类型不存在！"),
+    ACCOUNT_NOT_EXIST(false, 13000, "指定的资金账户不存在！"),
+    ACCOUNT_INSUFFICIENT_BALANCE(false, 13001, "资金账户余额不足！"),
+    MISS_SOCRE_TYPE_OR_UID(false, 13002, "未指定资金账户积分类型或用户！"),
+    SCORE_TYPE_NOT_EXIST(false, 13003, "指定的积分类型不存在！"),
     ;
     //操作代码
     boolean success;
@@ -23,7 +23,8 @@ public enum AccountCode implements ResultCode {
     int code;
     //提示信息
     String message;
-    private AccountCode(boolean success, int code, String message){
+
+    private AccountCode(boolean success, int code, String message) {
         this.success = success;
         this.code = code;
         this.message = message;
@@ -50,6 +51,7 @@ public enum AccountCode implements ResultCode {
     }
 
     String mixMessage;
+
     @Override
     public String mixMessage() {
         return mixMessage;

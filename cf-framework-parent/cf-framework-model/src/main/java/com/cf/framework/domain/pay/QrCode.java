@@ -12,16 +12,16 @@ import com.cf.framework.domain.response.ResultCode;
  **/
 public enum QrCode implements ResultCode {
 
-    QR_CODE_NOT_EXIST(false,28000,"指定的二维码不存在！"),
-    QR_CODE_INVALID(false,28001,"指定的二维码已失效！")
-    ;
+    QR_CODE_NOT_EXIST(false, 28000, "指定的二维码不存在！"),
+    QR_CODE_INVALID(false, 28001, "指定的二维码已失效！");
     //操作代码
     boolean success;
     //操作代码
     int code;
     //提示信息
     String message;
-    private QrCode(boolean success, int code, String message){
+
+    private QrCode(boolean success, int code, String message) {
         this.success = success;
         this.code = code;
         this.message = message;
@@ -48,6 +48,7 @@ public enum QrCode implements ResultCode {
     }
 
     String mixMessage;
+
     @Override
     public String mixMessage() {
         return mixMessage;

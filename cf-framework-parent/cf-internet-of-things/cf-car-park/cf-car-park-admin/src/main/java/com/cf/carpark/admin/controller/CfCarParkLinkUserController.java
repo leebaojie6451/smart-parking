@@ -42,14 +42,14 @@ public class CfCarParkLinkUserController implements CfCarParkLinkUserSwagger {
     @PreAuthorize("hasAuthority('carpark-CfCarParkLinkUserController-add')")
     @Override
     @RequestMapping(value = "add", method = RequestMethod.POST)
-    public ResponseResult add(@Validated @RequestBody CfCarParkLinkUserForm cfCarParkLinkUserForm) throws Exception{
+    public ResponseResult add(@Validated @RequestBody CfCarParkLinkUserForm cfCarParkLinkUserForm) throws Exception {
         UserBasicInfo userBasicInfo = checkAuth(cfCarParkLinkUserForm.getCarParkId());
         CfCarParkLinkUser cfCarParkLinkUser = new CfCarParkLinkUser();
-        BeanUtils.copyProperties(cfCarParkLinkUserForm,cfCarParkLinkUser);
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0){
-            cfCarParkLinkUser.setCreater((byte)0);
+        BeanUtils.copyProperties(cfCarParkLinkUserForm, cfCarParkLinkUser);
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0) {
+            cfCarParkLinkUser.setCreater((byte) 0);
         }
-        if(cfCarParkLinkUser.getStartDutyTime()==null){
+        if (cfCarParkLinkUser.getStartDutyTime() == null) {
             cfCarParkLinkUser.setStartDutyTime(0l);
         }
         CfCarParkLinkUser carParkLinkUser = cfCarParkLinkUserService.add(cfCarParkLinkUser);
@@ -62,13 +62,13 @@ public class CfCarParkLinkUserController implements CfCarParkLinkUserSwagger {
     public ResponseResult update(@RequestBody CfCarParkLinkUserForm cfCarParkLinkUserForm) throws Exception {
         UserBasicInfo userBasicInfo = checkAuth(cfCarParkLinkUserForm.getCarParkId());
         CfCarParkLinkUser cfCarParkLinkUser = new CfCarParkLinkUser();
-        BeanUtils.copyProperties(cfCarParkLinkUserForm,cfCarParkLinkUser);
+        BeanUtils.copyProperties(cfCarParkLinkUserForm, cfCarParkLinkUser);
 //        cfCarParkLinkUser.setUid(userBasicInfo.getId());
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0){
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0) {
             CfCarParkLinkUser parkLinkUser = cfCarParkLinkUserService.findById(cfCarParkLinkUserForm.getId(), false);
             cfCarParkLinkUser.setCreater(parkLinkUser.getCreater());
         }
-        if(cfCarParkLinkUser.getStartDutyTime()==null){
+        if (cfCarParkLinkUser.getStartDutyTime() == null) {
             cfCarParkLinkUser.setStartDutyTime(0l);
         }
         CfCarParkLinkUser carParkLinkUser = cfCarParkLinkUserService.update(cfCarParkLinkUser);
@@ -81,12 +81,12 @@ public class CfCarParkLinkUserController implements CfCarParkLinkUserSwagger {
     public ResponseResult delete(String id) throws Exception {
         CfCarParkLinkUser cfCarParkLinkUser = cfCarParkLinkUserService.findById(id, false);
         UserBasicInfo userBasicInfo = checkAuth(cfCarParkLinkUser.getCarParkId());
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0 && cfCarParkLinkUser.getCreater()==(byte)1){
-            return new ResponseResult(CommonCode.FAIL,null,"无权操作");
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0 && cfCarParkLinkUser.getCreater() == (byte) 1) {
+            return new ResponseResult(CommonCode.FAIL, null, "无权操作");
         }
         checkAuth(cfCarParkLinkUser.getCarParkId());
         Integer delete = cfCarParkLinkUserService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS):new ResponseResult(CommonCode.FAIL);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS) : new ResponseResult(CommonCode.FAIL);
     }
 
     @PreAuthorize("hasAuthority('carpark-CfCarParkLinkUserController-getCarParkLinkUserListByQuery')")
@@ -94,24 +94,24 @@ public class CfCarParkLinkUserController implements CfCarParkLinkUserSwagger {
     @RequestMapping(value = "getCarParkLinkUserListByQuery", method = RequestMethod.GET)
     public ResponseResult getCarParkLinkUserListByQuery(CfCarParkLinkUserQuery cfCarParkLinkUserQuery) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0){
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0) {
             cfCarParkLinkUserQuery.setUid(userBasicInfo.getId());
         }
         List<CfCarParkLinkUser> cfCarParkLinkUsers = cfCarParkLinkUserService.selectByQueryLeftJoinUser(cfCarParkLinkUserQuery);
         Integer total = 0;
-        if(cfCarParkLinkUserQuery.getPage()==1){
+        if (cfCarParkLinkUserQuery.getPage() == 1) {
             total = cfCarParkLinkUserService.countByQuery(cfCarParkLinkUserQuery);
         }
-        if(cfCarParkLinkUsers==null || cfCarParkLinkUsers.size()==0){
+        if (cfCarParkLinkUsers == null || cfCarParkLinkUsers.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfCarParkLinkUsers, total);
     }
 
-    private UserBasicInfo checkAuth(String carParkId) throws Exception{
+    private UserBasicInfo checkAuth(String carParkId) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         boolean checkSaasAction = cfCarParkLinkUserService.checkSaasAction(userBasicInfo, carParkId, "");
-        if(!checkSaasAction){
+        if (!checkSaasAction) {
             ExceptionCast.cast(CarParkCode.NO_PERMISSION);
         }
         return userBasicInfo;
@@ -119,12 +119,12 @@ public class CfCarParkLinkUserController implements CfCarParkLinkUserSwagger {
 
     List<CfCarParkLinkUser> getCarParkLinkUser(UserBasicInfo userBasicInfo, CfCarParkLinkUserService _cfCarParkLinkUserService) throws Exception {
         CfCarParkLinkUserQuery cfCarParkLinkUserQuery = new CfCarParkLinkUserQuery();
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0){
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0) {
             cfCarParkLinkUserQuery.setUid(userBasicInfo.getId());
         }
         List<CfCarParkLinkUser> cfCarParkLinkUsers = _cfCarParkLinkUserService.selectByQueryLeftJoinUser(cfCarParkLinkUserQuery);
 
-        if(cfCarParkLinkUsers==null || cfCarParkLinkUsers.size()==0){
+        if (cfCarParkLinkUsers == null || cfCarParkLinkUsers.size() == 0) {
             return null;
         }
         return cfCarParkLinkUsers;

@@ -40,51 +40,51 @@ public class CfCouponServiceImpl implements CfCouponService {
     public CfCouponExample getExampleByQuery(CfCouponQuery cfCouponQuery) {
         CfCouponExample cfCouponExample = new CfCouponExample();
         CfCouponExample.Criteria criteria = cfCouponExample.createCriteria();
-        if(StringUtils.isNotEmpty(cfCouponQuery.getId())){
+        if (StringUtils.isNotEmpty(cfCouponQuery.getId())) {
             criteria.andIdEqualTo(cfCouponQuery.getId());
         }
-        if(cfCouponQuery.getToUid()!=null){
+        if (cfCouponQuery.getToUid() != null) {
             criteria.andToUidEqualTo(cfCouponQuery.getToUid());
         }
-        if(cfCouponQuery.getScenes()!=null){
+        if (cfCouponQuery.getScenes() != null) {
             criteria.andScenesEqualTo(cfCouponQuery.getScenes());
         }
-        if(cfCouponQuery.getShopId()!=null){
+        if (cfCouponQuery.getShopId() != null) {
             criteria.andShopIdEqualTo(cfCouponQuery.getShopId());
         }
-        if(cfCouponQuery.getDenomination()!=null){
+        if (cfCouponQuery.getDenomination() != null) {
             criteria.andDenominationEqualTo(cfCouponQuery.getDenomination());
         }
-        if(cfCouponQuery.getMinDenomination()!=null){
+        if (cfCouponQuery.getMinDenomination() != null) {
             criteria.andDenominationGreaterThanOrEqualTo(cfCouponQuery.getMinDenomination());
         }
-        if(cfCouponQuery.getMaxDenomination()!=null){
+        if (cfCouponQuery.getMaxDenomination() != null) {
             criteria.andDenominationLessThanOrEqualTo(cfCouponQuery.getMaxDenomination());
         }
-        if(cfCouponQuery.getMinEffectiveTime()!=null){
+        if (cfCouponQuery.getMinEffectiveTime() != null) {
             criteria.andEffectiveTimeGreaterThanOrEqualTo(cfCouponQuery.getMinEffectiveTime());
         }
-        if(cfCouponQuery.getMaxEffectiveTime()!=null){
+        if (cfCouponQuery.getMaxEffectiveTime() != null) {
             criteria.andEffectiveTimeLessThanOrEqualTo(cfCouponQuery.getMaxEffectiveTime());
         }
-        if(cfCouponQuery.getMinExpireTime()!=null){
+        if (cfCouponQuery.getMinExpireTime() != null) {
             criteria.andExpireTimeGreaterThanOrEqualTo(cfCouponQuery.getMinExpireTime());
         }
-        if(cfCouponQuery.getMaxExpireTime()!=null){
+        if (cfCouponQuery.getMaxExpireTime() != null) {
             criteria.andExpireTimeLessThanOrEqualTo(cfCouponQuery.getMaxExpireTime());
         }
-        if(cfCouponQuery.getStatus()!=null){
+        if (cfCouponQuery.getStatus() != null) {
             criteria.andStatusEqualTo(cfCouponQuery.getStatus());
         }
-        if(cfCouponQuery.getGoodsId()!=null){
+        if (cfCouponQuery.getGoodsId() != null) {
             criteria.andGoodsIdEqualTo(cfCouponQuery.getGoodsId());
         }
 
-        if(StringUtils.isNotEmpty(cfCouponQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfCouponQuery.getOrderBy())) {
             cfCouponExample.setOrderByClause(cfCouponQuery.getOrderBy());
         }
 
-        if(cfCouponQuery.getPage()!=null && cfCouponQuery.getSize()!=null){
+        if (cfCouponQuery.getPage() != null && cfCouponQuery.getSize() != null) {
             PageHelper.startPage(cfCouponQuery.getPage(), cfCouponQuery.getSize());
         }
 
@@ -99,9 +99,9 @@ public class CfCouponServiceImpl implements CfCouponService {
     @Override
     public CfCoupon findById(String id, boolean expectEmpty) {
         CfCoupon cfCoupon = findById(id);
-        if(expectEmpty && cfCoupon!=null){
+        if (expectEmpty && cfCoupon != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
-        }else if(!expectEmpty && cfCoupon==null){
+        } else if (!expectEmpty && cfCoupon == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfCoupon;
@@ -155,13 +155,13 @@ public class CfCouponServiceImpl implements CfCouponService {
     @Override
     public CfCoupon addCouponAndLinkshops(CfCoupon cfCoupon, String shopIds, String scene) {
         CfCoupon coupon = add(cfCoupon);
-        if(StringUtils.isNotEmpty(shopIds)){
+        if (StringUtils.isNotEmpty(shopIds)) {
             String batchAddLinkShopsSQL = "insert into cf_coupon_link_shop (id, coupon_id, shop_id, scene) values ";
             String[] shopIdArray = shopIds.split(",");
-            for(String shopId: shopIdArray){
-                batchAddLinkShopsSQL += "('"+idWorker.nextId()+"','"+coupon.getId()+"','"+shopId+"','"+scene+"'),";
+            for (String shopId : shopIdArray) {
+                batchAddLinkShopsSQL += "('" + idWorker.nextId() + "','" + coupon.getId() + "','" + shopId + "','" + scene + "'),";
             }
-            batchAddLinkShopsSQL = batchAddLinkShopsSQL.substring(0, batchAddLinkShopsSQL.length()-1);
+            batchAddLinkShopsSQL = batchAddLinkShopsSQL.substring(0, batchAddLinkShopsSQL.length() - 1);
             cfCouponLinkShopMapper.batchAdd(batchAddLinkShopsSQL);
         }
         return coupon;
@@ -171,11 +171,11 @@ public class CfCouponServiceImpl implements CfCouponService {
     public List<CfCoupon> getAvailableByShopIdAndScenes(Long nowTime, String shopId, Byte scenes, String goodsId, String uid) {
 
         List<CfCoupon> availableByShopIdAndScenes = null;
-        if(StringUtils.isNotEmpty(goodsId)){
+        if (StringUtils.isNotEmpty(goodsId)) {
             uid = null;
             availableByShopIdAndScenes = cfCouponMapper.getAvailableByShopIdAndScenesAndUidOrGoodsId(nowTime, shopId, scenes, null, goodsId);
         }
-        if((availableByShopIdAndScenes==null || availableByShopIdAndScenes.size()==0) && StringUtils.isNotEmpty(uid)){
+        if ((availableByShopIdAndScenes == null || availableByShopIdAndScenes.size() == 0) && StringUtils.isNotEmpty(uid)) {
             availableByShopIdAndScenes = cfCouponMapper.getAvailableByShopIdAndScenesAndUidOrGoodsId(nowTime, shopId, scenes, uid, "");
         }
         return availableByShopIdAndScenes;

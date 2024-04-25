@@ -14,6 +14,7 @@ public interface CfCouponActivityService {
 
     /**
      * 根据条件查询优惠券活动那个列表
+     *
      * @param cfCouponActivityQuery
      * @return
      */
@@ -33,6 +34,7 @@ public interface CfCouponActivityService {
 
     /**
      * 根据id更新赋值的字段
+     *
      * @param cfCouponActivity
      * @return
      */
@@ -40,35 +42,38 @@ public interface CfCouponActivityService {
 
     /**
      * 通过手机号将活动绑定到指定的用户
+     *
      * @param cfCouponActivity
      * @return
      */
     CfCouponActivity linkUserByPhone(CfCouponActivity cfCouponActivity);
 
 
-
     public Integer delete(String id);
 
     /**
      * 根据条件查询优惠券活动数据列表
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public List<CfCouponActivity> selectListByCondition(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);
 
     /**
      * 根据条件查询优惠券数据列表数
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public Integer selectListByConditionCounts(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);
 
     /**
-     *  根据店主id和优惠活动id查询数据
+     * 根据店主id和优惠活动id查询数据
+     *
      * @param mainBodyId
      * @param activityId
      * @return
@@ -77,6 +82,7 @@ public interface CfCouponActivityService {
 
     /**
      * 员工或者店主直接给车辆赠送优惠券
+     *
      * @param uid
      * @param toUid
      * @param numberPlate
@@ -90,38 +96,43 @@ public interface CfCouponActivityService {
 
     /**
      * 更新优惠券活动的已发行量
+     *
      * @param id
-     * @param changeValue   变化的值
+     * @param changeValue 变化的值
      * @return
      */
     Integer updateIssuedQuotaById(String id, BigDecimal changeValue);
 
     /**
      * 更新自动发送余额
+     *
      * @param id
-     * @param changeValue   变化的值
+     * @param changeValue 变化的值
      * @return
      */
     Integer updateAutoGiveAwayOverageQuotaById(String id, BigDecimal changeValue);
 
     /**
      * 更新次数券余额
+     *
      * @param id
-     * @param changeValue   变化的值
+     * @param changeValue 变化的值
      * @return
      */
     Integer updateRemainingTimesById(String id, BigDecimal changeValue);
 
     /**
      * 更新时长券余额
+     *
      * @param id
-     * @param changeValue   变化的值
+     * @param changeValue 变化的值
      * @return
      */
     Integer updateRemainingTimeById(String id, BigDecimal changeValue);
 
     /**
      * 通过二维码领取优惠券
+     *
      * @param uid
      * @param qrCodeId
      * @param numberPlate
@@ -132,6 +143,7 @@ public interface CfCouponActivityService {
 
     /**
      * 检查车辆是否还在停车场中
+     *
      * @param numberPlate
      * @param carParkIds
      * @return
@@ -140,6 +152,7 @@ public interface CfCouponActivityService {
 
     /**
      * 检查多个车辆是否还在停车场中
+     *
      * @param numberPlates
      * @param carParkIds
      * @return 返回在停车场内的车牌号
@@ -148,11 +161,12 @@ public interface CfCouponActivityService {
 
     /**
      * 给优惠券活动充值
+     *
      * @param uid
      * @param couponActivityId
-     * @param amountOfMoney 充值金额
-     * @param useScenes 使用场景
-     * @param couponType 优惠券类型
+     * @param amountOfMoney    充值金额
+     * @param useScenes        使用场景
+     * @param couponType       优惠券类型
      * @param ip
      * @return
      */
@@ -160,6 +174,7 @@ public interface CfCouponActivityService {
 
     /**
      * 获取优惠券活动主店铺id
+     *
      * @param couponActivityType
      * @param couponActivityId
      * @return
@@ -168,6 +183,7 @@ public interface CfCouponActivityService {
 
     /**
      * 获取活动关联的店铺
+     *
      * @param couponActivityType
      * @param couponActivityId
      * @return

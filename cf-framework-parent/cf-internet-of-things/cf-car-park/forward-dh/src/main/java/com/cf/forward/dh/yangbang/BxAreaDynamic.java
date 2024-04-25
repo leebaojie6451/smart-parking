@@ -5,7 +5,7 @@ public class BxAreaDynamic extends BxArea {
     private static final byte TYPE = 0x00;
 
     private boolean is5K = false;
-    
+
     //
     // id
     // 动态区域编号
@@ -105,13 +105,14 @@ public class BxAreaDynamic extends BxArea {
 
     /**
      * 动态区
-     * @param id	动态区ID
-     * @param x		动态区x坐标
-     * @param y		动态区y坐标
-     * @param w		动态区宽度
-     * @param h		动态区高度
-     * @param data	需要显示的数据
-     * @param is5K	是否是5K系列的字库卡
+     *
+     * @param id   动态区ID
+     * @param x    动态区x坐标
+     * @param y    动态区y坐标
+     * @param w    动态区宽度
+     * @param h    动态区高度
+     * @param data 需要显示的数据
+     * @param is5K 是否是5K系列的字库卡
      */
     public BxAreaDynamic(byte id, short x, short y, short w, short h, byte[] data, boolean is5K) {
         super(TYPE, x, y, w, h);
@@ -130,8 +131,8 @@ public class BxAreaDynamic extends BxArea {
         array.add(TYPE);
 
         // x, y, w, h
-        short x8 = is5K ? (short)(getX() / 8) : getX(); 
-        short w8 = is5K ? (short)(getW() / 8) : getW();
+        short x8 = is5K ? (short) (getX() / 8) : getX();
+        short w8 = is5K ? (short) (getW() / 8) : getW();
         array.add(x8);
         array.add(getY());
         array.add(w8);
@@ -162,7 +163,7 @@ public class BxAreaDynamic extends BxArea {
         // 0x00 - 表示不使能语音
         // 0x01 - 表示播放下文中 Data 部分内容
         // 0x02 - 表示播放下文中 SoundData 部分内容
-        if((soundMode == 0x01) || (soundMode == 0x02)) {
+        if ((soundMode == 0x01) || (soundMode == 0x02)) {
             //
             // person/repeat times
             byte pr = (byte) (((soundRepeat << 4) & 0xf0) | (soundPerson & 0x0f));
@@ -178,7 +179,7 @@ public class BxAreaDynamic extends BxArea {
 
         //
         // sound data
-        if(soundMode == 0x02) {
+        if (soundMode == 0x02) {
             // sound data length
             int soundDataLen = soundData.length;
             array.add(soundDataLen);
@@ -216,7 +217,8 @@ public class BxAreaDynamic extends BxArea {
 
         //
         int dataLen = data.length;
-        array.add(dataLen);;
+        array.add(dataLen);
+        ;
 
         //
         array.add(data);
@@ -261,7 +263,7 @@ public class BxAreaDynamic extends BxArea {
     }
 
     public void setSoundMode(byte soundMode) {
-        if(soundMode > 2)
+        if (soundMode > 2)
             this.soundMode = 0x02;
         else
             this.soundMode = soundMode;
@@ -348,13 +350,12 @@ public class BxAreaDynamic extends BxArea {
     }
 
 
-
     public byte getSoundPerson() {
         return soundPerson;
     }
 
     public void setSoundPerson(byte soundPerson) {
-        if(soundPerson > 5)
+        if (soundPerson > 5)
             this.soundPerson = 0;
         else
             this.soundPerson = soundPerson;
@@ -365,7 +366,7 @@ public class BxAreaDynamic extends BxArea {
     }
 
     public void setSoundRepeat(byte soundRepeat) {
-        if(soundRepeat > 15)
+        if (soundRepeat > 15)
             this.soundRepeat = 15;
         else
             this.soundRepeat = soundRepeat;
@@ -376,7 +377,7 @@ public class BxAreaDynamic extends BxArea {
     }
 
     public void setSoundVolume(byte soundVolume) {
-        if(soundVolume > 10)
+        if (soundVolume > 10)
             this.soundVolume = 10;
         else
             this.soundVolume = soundVolume;
@@ -387,9 +388,9 @@ public class BxAreaDynamic extends BxArea {
     }
 
     public void setSoundSpeed(byte soundSpeed) {
-        if(soundSpeed < 1)
+        if (soundSpeed < 1)
             this.soundSpeed = 1;
-        else if(soundSpeed > 10)
+        else if (soundSpeed > 10)
             this.soundSpeed = 10;
         else
             this.soundSpeed = soundSpeed;

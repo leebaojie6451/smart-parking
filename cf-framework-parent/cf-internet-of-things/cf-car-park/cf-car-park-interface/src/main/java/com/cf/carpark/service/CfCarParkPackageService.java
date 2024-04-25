@@ -25,6 +25,7 @@ public interface CfCarParkPackageService {
 
     /**
      * 纯更新不做任何其它业务操作
+     *
      * @param cfCarParkPackage
      * @return
      */
@@ -36,6 +37,7 @@ public interface CfCarParkPackageService {
 
     /**
      * 如果没有提供用户id，只提供手机号，自动关联对应的用户
+     *
      * @param cfCarParkPackage
      * @return
      */
@@ -51,6 +53,7 @@ public interface CfCarParkPackageService {
 
     /**
      * 根据条件批量更新
+     *
      * @param cfCarParkPackageQuery
      * @param cfCarParkPackage
      * @return
@@ -63,6 +66,7 @@ public interface CfCarParkPackageService {
 
     /**
      * 获取根据条件匹配的数据条数
+     *
      * @param cfCarParkPackageQuery
      * @return
      */
@@ -74,6 +78,7 @@ public interface CfCarParkPackageService {
 
     /**
      * 存在则更新，否则添加
+     *
      * @param cfCarParkPackage
      * @return
      */
@@ -81,24 +86,27 @@ public interface CfCarParkPackageService {
 
     /**
      * 根据条件查询车场套餐数据列表
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public List<CfCarParkPackage> selectListByCondition(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);
 
     /**
      * 根据条件查询车场套餐数据列表数
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public Integer selectListByConditionCounts(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);
 
     /**
      * 判断某个车牌号在指定停车场套餐是否有效
+     *
      * @param numberPlate
      * @param carParkId
      * @param uid
@@ -108,6 +116,7 @@ public interface CfCarParkPackageService {
 
     /**
      * 根据query条件更新
+     *
      * @param cfCarParkPackage
      * @param cfCarParkPackageQuery
      * @return
@@ -116,6 +125,7 @@ public interface CfCarParkPackageService {
 
     /**
      * 根据手机号批量绑定用户
+     *
      * @param uid
      * @param phone
      * @return
@@ -124,6 +134,7 @@ public interface CfCarParkPackageService {
 
     /**
      * 更新家庭组套餐起止时间
+     *
      * @param cfCarParkPackage
      * @return
      */
@@ -131,7 +142,8 @@ public interface CfCarParkPackageService {
 
     /**
      * 同步车牌套餐到相机设备
-     * @param operateType 0-添加白名单/1-删除白名单
+     *
+     * @param operateType       0-添加白名单/1-删除白名单
      * @param cfCarParkPackages
      * @throws Exception
      */

@@ -28,6 +28,7 @@ public interface CfLogisticsTaskLogService {
 
     /**
      * 获取query条件查询任务预约，会联表查询仓库
+     *
      * @param cfLogisticsTaskLogQuery
      * @return
      */
@@ -35,6 +36,7 @@ public interface CfLogisticsTaskLogService {
 
     /**
      * 获取query条件查询任务预约，会联表查询驾驶证
+     *
      * @param cfLogisticsTaskLogQuery
      * @return
      */
@@ -46,18 +48,21 @@ public interface CfLogisticsTaskLogService {
 
     /**
      * 检查用户的身份证和驾驶证是否已经上传并审核通过，如果正常会返回驾驶证和身份证数据
+     *
      * @param uid
      */
     Map<String, Object> checkUserDocumentsStatus(String uid) throws Exception;
 
     /**
      * 通过手机号检查用户的身份证和驾驶证是否已经上传并审核通过，如果正常会返回驾驶证和身份证数据
+     *
      * @param phone
      */
     Map<String, Object> checkUserDocumentsStatusByPhone(String phone) throws Exception;
 
     /**
      * 预约任务
+     *
      * @param uid
      * @param taskId
      * @param numberPlate
@@ -70,6 +75,7 @@ public interface CfLogisticsTaskLogService {
 
     /**
      * 取消预约
+     *
      * @param cfLogisticsTaskLog
      * @return
      * @throws Exception
@@ -78,6 +84,7 @@ public interface CfLogisticsTaskLogService {
 
     /**
      * 预约签到
+     *
      * @param uid
      * @param taskLogId
      * @return
@@ -87,6 +94,7 @@ public interface CfLogisticsTaskLogService {
 
     /**
      * 通知车主排队
+     *
      * @param cfLogisticsTaskLog
      * @param numberOfQueuedVehicles
      */
@@ -94,12 +102,14 @@ public interface CfLogisticsTaskLogService {
 
     /**
      * 通知车主装卸货
+     *
      * @param cfLogisticsTaskLog
      */
     void noticeDriverLoadingOrUnloading(CfLogisticsTaskLog cfLogisticsTaskLog) throws Exception;
 
     /**
      * 确认核验预约记录
+     *
      * @param cfLogisticsTaskLog
      * @throws Exception
      */
@@ -107,14 +117,16 @@ public interface CfLogisticsTaskLogService {
 
     /**
      * 通知司机排队或装卸货
+     *
      * @param cfLogisticsTaskLog
-     * @param orderBy 排队  asc-插入到最前面，desc排到最后面
+     * @param orderBy            排队  asc-插入到最前面，desc排到最后面
      * @throws Exception
      */
     public void noticeDirverQueueOrDriverLoadingOrUnloading(CfLogisticsTaskLog cfLogisticsTaskLog, String orderBy) throws Exception;
 
     /**
      * 根据预约找到合适的月台
+     *
      * @param cfLogisticsTaskLog
      * @return
      */
@@ -122,6 +134,7 @@ public interface CfLogisticsTaskLogService {
 
     /**
      * 取消预约后通知司机
+     *
      * @param cfLogisticsTaskLog
      * @throws Exception
      */
@@ -129,6 +142,7 @@ public interface CfLogisticsTaskLogService {
 
     /**
      * 排队过号后通知司机
+     *
      * @param cfLogisticsTaskLog
      * @throws Exception
      */
@@ -136,27 +150,31 @@ public interface CfLogisticsTaskLogService {
 
     /**
      * 记录置顶
+     *
      * @param id 记录id
      */
     void logisticsTaskLogTop(Long id) throws Exception;
 
     /**
      * 更换排队区域
-     * @param id 记录id
+     *
+     * @param id            记录id
      * @param queuingAreaId 排队区域(队列)id，要换到哪个区域就传哪个区域的id
      */
     CfLogisticsTaskLog changeQueuingArea(Long id, Long queuingAreaId) throws Exception;
 
     /**
      * 过号处理
+     *
      * @param cfLogisticsTaskLog
-     * @param wXinNotice    是否要进行微信服务通知
+     * @param wXinNotice         是否要进行微信服务通知
      * @throws Exception
      */
     void numberOver(CfLogisticsTaskLog cfLogisticsTaskLog, boolean wXinNotice) throws Exception;
 
     /**
      * 刷新led大屏数据
+     *
      * @param queuingAreaId
      */
     String flushLesScreenData(Long queuingAreaId) throws Exception;

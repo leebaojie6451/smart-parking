@@ -51,20 +51,20 @@ public class CfChargingStationDeviceLinkUserServiceImpl implements CfChargingSta
         CfChargingStationDeviceLinkUserExample cfChargingStationDeviceLinkUserExample = new CfChargingStationDeviceLinkUserExample();
         CfChargingStationDeviceLinkUserExample.Criteria criteria = cfChargingStationDeviceLinkUserExample.createCriteria();
 
-        if(cfChargingStationDeviceLinkUserQuery.getChargingStationId()!=null){
+        if (cfChargingStationDeviceLinkUserQuery.getChargingStationId() != null) {
             criteria.andChargingStationIdEqualTo(cfChargingStationDeviceLinkUserQuery.getChargingStationId());
         }
-        if(cfChargingStationDeviceLinkUserQuery.getUid()!=null){
+        if (cfChargingStationDeviceLinkUserQuery.getUid() != null) {
             criteria.andUidEqualTo(cfChargingStationDeviceLinkUserQuery.getUid());
         }
-        if(cfChargingStationDeviceLinkUserQuery.getDeviceId()!=null){
+        if (cfChargingStationDeviceLinkUserQuery.getDeviceId() != null) {
             criteria.andDeviceIdEqualTo(cfChargingStationDeviceLinkUserQuery.getDeviceId());
         }
 
-        if(StringUtils.isNotEmpty(cfChargingStationDeviceLinkUserQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfChargingStationDeviceLinkUserQuery.getOrderBy())) {
             cfChargingStationDeviceLinkUserExample.setOrderByClause(cfChargingStationDeviceLinkUserQuery.getOrderBy());
         }
-        if(cfChargingStationDeviceLinkUserQuery.getPage()!=null && cfChargingStationDeviceLinkUserQuery.getSize()!=null){
+        if (cfChargingStationDeviceLinkUserQuery.getPage() != null && cfChargingStationDeviceLinkUserQuery.getSize() != null) {
             PageHelper.startPage(cfChargingStationDeviceLinkUserQuery.getPage(), cfChargingStationDeviceLinkUserQuery.getSize());
         }
         return cfChargingStationDeviceLinkUserExample;
@@ -89,10 +89,10 @@ public class CfChargingStationDeviceLinkUserServiceImpl implements CfChargingSta
     @Override
     public Integer batchAdd(List<CfChargingStationDeviceLinkUser> cfChargingStationDeviceLinkUserList) {
         String batchAddLinkSQL = "insert into cf_charging_station_device_link_user (id, device_id, uid, charging_station_id) values ";
-        for(CfChargingStationDeviceLinkUser cfChargingStationDeviceLinkUser: cfChargingStationDeviceLinkUserList){
-            batchAddLinkSQL += "('"+idWorker.nextId()+"','"+cfChargingStationDeviceLinkUser.getDeviceId()+"','"+cfChargingStationDeviceLinkUser.getUid()+"','"+cfChargingStationDeviceLinkUser.getChargingStationId()+"'),";
+        for (CfChargingStationDeviceLinkUser cfChargingStationDeviceLinkUser : cfChargingStationDeviceLinkUserList) {
+            batchAddLinkSQL += "('" + idWorker.nextId() + "','" + cfChargingStationDeviceLinkUser.getDeviceId() + "','" + cfChargingStationDeviceLinkUser.getUid() + "','" + cfChargingStationDeviceLinkUser.getChargingStationId() + "'),";
         }
-        batchAddLinkSQL = batchAddLinkSQL.substring(0, batchAddLinkSQL.length()-1);
+        batchAddLinkSQL = batchAddLinkSQL.substring(0, batchAddLinkSQL.length() - 1);
         return cfChargingStationDeviceLinkUserMapper.batchAdd(batchAddLinkSQL);
     }
 }

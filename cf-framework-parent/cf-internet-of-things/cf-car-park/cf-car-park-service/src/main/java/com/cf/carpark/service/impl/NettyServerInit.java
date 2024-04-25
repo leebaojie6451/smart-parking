@@ -8,6 +8,7 @@ import com.cf.carpark.service.IMqttDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import javax.annotation.PostConstruct;
 
 /**
@@ -24,7 +25,7 @@ public class NettyServerInit {
 //    private WebSocketDataServiceImpl webSocketDataService;
 
     @PostConstruct
-    public IServer init(){
+    public IServer init() {
         // 创建mqtt服务
         //请自己创建mqtt服务，如果不会去，去gitee复制一个
         return null;

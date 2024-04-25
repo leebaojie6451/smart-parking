@@ -32,6 +32,7 @@ public interface CfLogisticsFactoryMapper {
 
     /**
      * 获取附近的物流工厂
+     *
      * @param cfLogisticsFactoryQuery
      * @return
      */

@@ -56,7 +56,7 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
         cfLogisticsTaskLogQuery.setDeliverUid(userBasicInfo.getId());
         List<CfLogisticsTaskLog> cfLogisticsTaskLogs = cfLogisticsTaskLogService.selectListByQuery(cfLogisticsTaskLogQuery);
         Integer countByQuery = cfLogisticsTaskLogService.countByQuery(cfLogisticsTaskLogQuery);
-        if(cfLogisticsTaskLogs==null || cfLogisticsTaskLogs.size()==0){
+        if (cfLogisticsTaskLogs == null || cfLogisticsTaskLogs.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsTaskLogs, countByQuery);
@@ -67,31 +67,32 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
     public ResponseResult findById(Long taskLogId) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         CfLogisticsTaskLog cfLogisticsTaskLog = cfLogisticsTaskLogService.findById(taskLogId, false);
-        if(!cfLogisticsTaskLog.getDeliverUid().equals(userBasicInfo.getId())){
+        if (!cfLogisticsTaskLog.getDeliverUid().equals(userBasicInfo.getId())) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null, "该预约数据不属于您");
         }
         //查询月台
-        cfLogisticsTaskLog.setCfLogisticsQueuingArea(cfLogisticsQueuingAreaService.findById(cfLogisticsTaskLog.getQueuingAreaId(), false));;
+        cfLogisticsTaskLog.setCfLogisticsQueuingArea(cfLogisticsQueuingAreaService.findById(cfLogisticsTaskLog.getQueuingAreaId(), false));
+        ;
 
         //查询其前面有几个人在排队
         CfLogisticsTaskLogQuery cfLogisticsTaskLogQuery = new CfLogisticsTaskLogQuery();
         cfLogisticsTaskLogQuery.setQueuingAreaId(cfLogisticsTaskLog.getQueuingAreaId());
-        if(cfLogisticsTaskLog.getTaskLogStatus()==(byte)2){
-            cfLogisticsTaskLogQuery.setMaxQueueIndex(new Integer(cfLogisticsTaskLog.getQueueIndex()-1).shortValue());
+        if (cfLogisticsTaskLog.getTaskLogStatus() == (byte) 2) {
+            cfLogisticsTaskLogQuery.setMaxQueueIndex(new Integer(cfLogisticsTaskLog.getQueueIndex() - 1).shortValue());
         }
-        cfLogisticsTaskLogQuery.setTaskLogStatus((byte)2);
+        cfLogisticsTaskLogQuery.setTaskLogStatus((byte) 2);
         //赋值排队人数
         cfLogisticsTaskLog.setNumberOfPeopleInLine(cfLogisticsTaskLogService.countByQuery(cfLogisticsTaskLogQuery));
         //查询当前用户是否进行预约过该任务
         cfLogisticsTaskLogQuery.setLogisticsPlatformId(null);
         cfLogisticsTaskLogQuery.setMaxQueueIndex(null);
-        cfLogisticsTaskLogQuery.setMaxTaskLogStatus((byte)5);
+        cfLogisticsTaskLogQuery.setMaxTaskLogStatus((byte) 5);
         cfLogisticsTaskLogQuery.setDeliverUid(userBasicInfo.getId());
         Integer reservedCounts = cfLogisticsTaskLogService.countByQuery(cfLogisticsTaskLogQuery);
-        if(reservedCounts.intValue()>0){
-            cfLogisticsTaskLog.setReserved((byte)1);
-        }else{
-            cfLogisticsTaskLog.setReserved((byte)0);
+        if (reservedCounts.intValue() > 0) {
+            cfLogisticsTaskLog.setReserved((byte) 1);
+        } else {
+            cfLogisticsTaskLog.setReserved((byte) 0);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsTaskLog);
 
@@ -108,14 +109,14 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
     @Override
     @RequestMapping(value = "reserveSignIn", method = RequestMethod.PUT)
     public ResponseResult reserveSignIn(@RequestBody ReserveParams reserveParams) throws Exception {
-        if(reserveParams.getPositionX()==null || reserveParams.getPositionY()==null){
+        if (reserveParams.getPositionX() == null || reserveParams.getPositionY() == null) {
             return new ResponseResult(CommonCode.INVALID_PARAM, null, "请提供经纬度");
         }
         CfLogisticsFactoryQuery cfLogisticsFactoryQuery = new CfLogisticsFactoryQuery();
         cfLogisticsFactoryQuery.setPositionX(reserveParams.getPositionX());
         cfLogisticsFactoryQuery.setPositionY(reserveParams.getPositionY());
         List<CfLogisticsFactory> cfLogisticsFactoryList = cfLogisticsFactoryService.selectNearLogisticsFactory(cfLogisticsFactoryQuery);
-        if(cfLogisticsFactoryList==null || cfLogisticsFactoryList.size()==0){
+        if (cfLogisticsFactoryList == null || cfLogisticsFactoryList.size() == 0) {
             return new ResponseResult(CommonCode.FAIL, null, "附近暂时无可签到点");
         }
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
@@ -128,11 +129,11 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
     public ResponseResult cancelAppointment(Long taskLogId) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         CfLogisticsTaskLog cfLogisticsTaskLog = cfLogisticsTaskLogService.findById(taskLogId, false);
-        if(!cfLogisticsTaskLog.getDeliverUid().equals(userBasicInfo.getId())){
+        if (!cfLogisticsTaskLog.getDeliverUid().equals(userBasicInfo.getId())) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null, "该预约数据不属于您");
         }
-        if(cfLogisticsTaskLog.getTaskLogStatus().byteValue()>=(byte)2){
-            return new ResponseResult(CommonCode.FAIL,null,"您不能操作取消排队操作，请联系管理员协助");
+        if (cfLogisticsTaskLog.getTaskLogStatus().byteValue() >= (byte) 2) {
+            return new ResponseResult(CommonCode.FAIL, null, "您不能操作取消排队操作，请联系管理员协助");
         }
         CfLogisticsTaskLog logisticsTaskLog = cfLogisticsTaskLogService.cancelAppointment(cfLogisticsTaskLog);
         return new ResponseResult(CommonCode.SUCCESS, logisticsTaskLog);

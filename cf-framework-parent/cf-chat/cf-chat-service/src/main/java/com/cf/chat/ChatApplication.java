@@ -19,13 +19,13 @@ import org.springframework.context.annotation.ComponentScan;
  * @Version 1.0
  **/
 @EnableAutoConfiguration()
-@ComponentScan(basePackages = {"com.cf.chat.service","com.cf.chat.netty","com.cf.chat.socket","com.cf.chat.dao","com.cf.framework"})
+@ComponentScan(basePackages = {"com.cf.chat.service", "com.cf.chat.netty", "com.cf.chat.socket", "com.cf.chat.dao", "com.cf.framework"})
 @MapperScan("com.cf.chat.dao.mapper")
 public class ChatApplication implements CommandLineRunner {
 
     //将springutils交由spring进行管理
     @Bean
-    public SpringUtil getSpringUtil(){
+    public SpringUtil getSpringUtil() {
         return new SpringUtil();
     }
 

@@ -63,10 +63,10 @@ public class CfLogisticsVehicleServiceImpl implements CfLogisticsVehicleService 
     @Override
     public CfLogisticsVehicle findById(Long id, boolean expect) {
         CfLogisticsVehicle cfLogisticsVehicle = findById(id);
-        if(expect && cfLogisticsVehicle!=null){
+        if (expect && cfLogisticsVehicle != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expect && cfLogisticsVehicle==null){
+        if (!expect && cfLogisticsVehicle == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfLogisticsVehicle;
@@ -76,25 +76,25 @@ public class CfLogisticsVehicleServiceImpl implements CfLogisticsVehicleService 
     public CfLogisticsVehicleExample getExampleByQuer(CfLogisticsVehicleQuery cfLogisticsVehicleQuery) {
         CfLogisticsVehicleExample cfLogisticsVehicleExample = new CfLogisticsVehicleExample();
         CfLogisticsVehicleExample.Criteria criteria = cfLogisticsVehicleExample.createCriteria();
-        if(cfLogisticsVehicleQuery.getUid()!=null){
+        if (cfLogisticsVehicleQuery.getUid() != null) {
             criteria.andUidEqualTo(cfLogisticsVehicleQuery.getUid());
         }
-        if(cfLogisticsVehicleQuery.getVehicleVin()!=null){
+        if (cfLogisticsVehicleQuery.getVehicleVin() != null) {
             criteria.andVehicleVinEqualTo(cfLogisticsVehicleQuery.getVehicleVin());
         }
-        if(cfLogisticsVehicleQuery.getNumberPlate()!=null){
+        if (cfLogisticsVehicleQuery.getNumberPlate() != null) {
             criteria.andNumberPlateEqualTo(cfLogisticsVehicleQuery.getNumberPlate());
         }
-        if(cfLogisticsVehicleQuery.getVehicleOwner()!=null){
+        if (cfLogisticsVehicleQuery.getVehicleOwner() != null) {
             criteria.andVehicleOwnerEqualTo(cfLogisticsVehicleQuery.getVehicleOwner());
         }
-        if(cfLogisticsVehicleQuery.getVehicleType()!=null){
+        if (cfLogisticsVehicleQuery.getVehicleType() != null) {
             criteria.andVehicleTypeEqualTo(cfLogisticsVehicleQuery.getVehicleType());
         }
-        if(StringUtils.isNotEmpty(cfLogisticsVehicleQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfLogisticsVehicleQuery.getOrderBy())) {
             cfLogisticsVehicleExample.setOrderByClause(cfLogisticsVehicleQuery.getOrderBy());
         }
-        if(cfLogisticsVehicleQuery.getPage()!=null && cfLogisticsVehicleQuery.getSize()!=null){
+        if (cfLogisticsVehicleQuery.getPage() != null && cfLogisticsVehicleQuery.getSize() != null) {
             PageHelper.startPage(cfLogisticsVehicleQuery.getPage(), cfLogisticsVehicleQuery.getSize());
         }
         return cfLogisticsVehicleExample;
@@ -114,21 +114,21 @@ public class CfLogisticsVehicleServiceImpl implements CfLogisticsVehicleService 
 
     @Override
     public List<CfLogisticsVehicle> synchronizeTmsVehicle() throws Exception {
-        if(StringUtils.isEmpty(tmsUrl)){
+        if (StringUtils.isEmpty(tmsUrl)) {
             return null;
         }
         List<CfLogisticsVehicle> cfLogisticsVehicleList = new ArrayList<>();
-        JSONObject vehicleList = HttpClient.doGet(tmsUrl+"/interface/adapter/interface_paidui_truck");
-        if(vehicleList!=null && vehicleList.containsKey("messageType") && vehicleList.get("data")!=null){
+        JSONObject vehicleList = HttpClient.doGet(tmsUrl + "/interface/adapter/interface_paidui_truck");
+        if (vehicleList != null && vehicleList.containsKey("messageType") && vehicleList.get("data") != null) {
             Object[] data = ((JSONArray) vehicleList.get("data")).stream().toArray();
             List<JSONObject> dataList = new ArrayList<>();
             HashMap<String, String> requestHeaders = new HashMap<>();
-            requestHeaders.put("Content-Type","application/json;charset=UTF-8");
+            requestHeaders.put("Content-Type", "application/json;charset=UTF-8");
             CfLogisticsVehicleQuery cfLogisticsVehicleQuery = new CfLogisticsVehicleQuery();
 
-            for(int i=0; i<data.length; i++){
+            for (int i = 0; i < data.length; i++) {
                 //限制单次同步数据为30条
-                if(i>30){
+                if (i > 30) {
                     break;
                 }
                 CfLogisticsVehicle cfLogisticsVehicle = new CfLogisticsVehicle();
@@ -136,35 +136,35 @@ public class CfLogisticsVehicleServiceImpl implements CfLogisticsVehicleService 
                 JSONObject jsonObject = (JSONObject) data[i];
                 cfLogisticsVehicle.setNumberPlate(jsonObject.getString("vehicleName"));
                 String owner = jsonObject.getString("owner");
-                if(owner!=null && owner.length()>20){
+                if (owner != null && owner.length() > 20) {
                     owner = owner.substring(0, 20);
-                }else{
+                } else {
                     owner = "";
                 }
                 cfLogisticsVehicle.setVehicleOwner(owner);
                 cfLogisticsVehicle.setVehicleType(jsonObject.getString("truckType"));
                 cfLogisticsVehicle.setVehicleVin(jsonObject.getString("vin"));
                 cfLogisticsVehicle.setVehicleSize(jsonObject.getString("size"));
-                cfLogisticsVehicle.setApprovedLoad(new Double((new Double(jsonObject.getString("loadWeight"))).doubleValue()*1000000).intValue());
+                cfLogisticsVehicle.setApprovedLoad(new Double((new Double(jsonObject.getString("loadWeight"))).doubleValue() * 1000000).intValue());
                 String truckPlateColour = jsonObject.getString("truckPlateColour");
-                switch (truckPlateColour){
+                switch (truckPlateColour) {
                     case "蓝色":
-                        cfLogisticsVehicle.setNumberPlateColor((byte)1);
+                        cfLogisticsVehicle.setNumberPlateColor((byte) 1);
                         break;
                     case "黄色":
-                        cfLogisticsVehicle.setNumberPlateColor((byte)2);
+                        cfLogisticsVehicle.setNumberPlateColor((byte) 2);
                         break;
                     case "白色":
-                        cfLogisticsVehicle.setNumberPlateColor((byte)3);
+                        cfLogisticsVehicle.setNumberPlateColor((byte) 3);
                         break;
                     case "黑色":
-                        cfLogisticsVehicle.setNumberPlateColor((byte)4);
+                        cfLogisticsVehicle.setNumberPlateColor((byte) 4);
                         break;
                     case "绿色":
-                        cfLogisticsVehicle.setNumberPlateColor((byte)5);
+                        cfLogisticsVehicle.setNumberPlateColor((byte) 5);
                         break;
                     default:
-                        cfLogisticsVehicle.setNumberPlateColor((byte)0);
+                        cfLogisticsVehicle.setNumberPlateColor((byte) 0);
                 }
                 cfLogisticsVehicle.setRoadTransportCertificateNumber(jsonObject.getString("roadTransportCertificate"));
                 cfLogisticsVehicle.setOperatingLicenseNumber(jsonObject.getString("certificate"));
@@ -172,26 +172,26 @@ public class CfLogisticsVehicleServiceImpl implements CfLogisticsVehicleService 
                 //判断是否存在重复的车牌号
                 cfLogisticsVehicleQuery.setNumberPlate(cfLogisticsVehicle.getNumberPlate());
                 Integer integer = countByQuery(cfLogisticsVehicleQuery);
-                if(integer>0){
+                if (integer > 0) {
                     update(cfLogisticsVehicle);
-                }else{
+                } else {
                     add(cfLogisticsVehicle);
                 }
                 cfLogisticsVehicleList.add(cfLogisticsVehicle);
 
-                params.put("vehicleName",cfLogisticsVehicle.getNumberPlate());
-                params.put("success","true");
+                params.put("vehicleName", cfLogisticsVehicle.getNumberPlate());
+                params.put("success", "true");
                 dataList.add(params);
             }
-            if(dataList.size()>0){
+            if (dataList.size() > 0) {
                 JSONObject[] paramsList = new JSONObject[dataList.size()];
                 int i = 0;
-                for(JSONObject params: dataList){
+                for (JSONObject params : dataList) {
                     paramsList[i] = params;
                     i++;
                 }
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("data",paramsList);
+                jsonObject.put("data", paramsList);
                 updateTMSData(jsonObject, requestHeaders);
             }
         }
@@ -201,10 +201,12 @@ public class CfLogisticsVehicleServiceImpl implements CfLogisticsVehicleService 
     /**
      * 告诉TMS系统指定数据已更新
      */
-    private void updateTMSData(JSONObject paramsObject, HashMap<String, String> requestHeaders) throws Exception{
-        if(StringUtils.isEmpty(tmsUrl)){
+    private void updateTMSData(JSONObject paramsObject, HashMap<String, String> requestHeaders) throws Exception {
+        if (StringUtils.isEmpty(tmsUrl)) {
             return;
         }
-        JSONObject updateResult = (JSONObject)HttpClient.doPostByString(paramsObject.toJSONString(),tmsUrl+"/interface/adapter/paidui_update_truck",requestHeaders, true);
-    };
+        JSONObject updateResult = (JSONObject) HttpClient.doPostByString(paramsObject.toJSONString(), tmsUrl + "/interface/adapter/paidui_update_truck", requestHeaders, true);
+    }
+
+    ;
 }

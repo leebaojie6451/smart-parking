@@ -43,16 +43,16 @@ public class CfUserIdCardController implements CfUserIdCardSwagger {
         CfUserIdCardQuery cfUserIdCardQuery = new CfUserIdCardQuery();
         cfUserIdCardQuery.setUid(userBasicInfo.getId());
         Integer countByQuery = cfUserIdCardService.countByQuery(cfUserIdCardQuery);
-        if(countByQuery>0){
+        if (countByQuery > 0) {
             return new ResponseResult(CommonCode.DUPLICATE_DATA, cfUserIdCardForm, "已经上传过身份证信息了");
         }
         CfUserIdCard cfUserIdCard = new CfUserIdCard();
         BeanUtils.copyProperties(cfUserIdCardForm, cfUserIdCard);
         cfUserIdCard.setUid(userBasicInfo.getId());
-        cfUserIdCard.setCheckStatus((byte)0);
+        cfUserIdCard.setCheckStatus((byte) 0);
         CfUserIdCard userIdCard = cfUserIdCardService.add(cfUserIdCard);
         //处理身份证照片
-        if(StringUtils.isNotEmpty(cfUserIdCard.getImages())){
+        if (StringUtils.isNotEmpty(cfUserIdCard.getImages())) {
             FileUtils.handleFileSourcePrefix(cfUserIdCard, "", "images");
         }
         return new ResponseResult(CommonCode.SUCCESS, userIdCard);
@@ -63,15 +63,15 @@ public class CfUserIdCardController implements CfUserIdCardSwagger {
     public ResponseResult update(@RequestBody @Validated CfUserIdCardForm cfUserIdCardForm) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         CfUserIdCard idCard = cfUserIdCardService.findById(cfUserIdCardForm.getId(), false);
-        if(!idCard.getUid().equals(userBasicInfo.getId())){
+        if (!idCard.getUid().equals(userBasicInfo.getId())) {
             return new ResponseResult(CommonCode.FAIL, cfUserIdCardForm, "该身份证资料不属于您");
         }
         CfUserIdCard cfUserIdCard = new CfUserIdCard();
         BeanUtils.copyProperties(cfUserIdCardForm, cfUserIdCard);
-        cfUserIdCard.setCheckStatus((byte)0);
+        cfUserIdCard.setCheckStatus((byte) 0);
         CfUserIdCard userIdCard = cfUserIdCardService.update(cfUserIdCard);
         //处理身份证照片
-        if(StringUtils.isNotEmpty(cfUserIdCard.getImages())){
+        if (StringUtils.isNotEmpty(cfUserIdCard.getImages())) {
             FileUtils.handleFileSourcePrefix(cfUserIdCard, "", "images");
         }
         return new ResponseResult(CommonCode.SUCCESS, userIdCard);
@@ -82,11 +82,11 @@ public class CfUserIdCardController implements CfUserIdCardSwagger {
     public ResponseResult delete(Long id) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         CfUserIdCard idCard = cfUserIdCardService.findById(id, false);
-        if(!idCard.getUid().equals(userBasicInfo.getId())){
+        if (!idCard.getUid().equals(userBasicInfo.getId())) {
             return new ResponseResult(CommonCode.FAIL, id, "该身份证资料不属于您");
         }
         Integer delete = cfUserIdCardService.delete(id);
-        return delete>0 ? new ResponseResult(CommonCode.SUCCESS) : new ResponseResult(CommonCode.FAIL);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS) : new ResponseResult(CommonCode.FAIL);
     }
 
     @Override
@@ -96,11 +96,11 @@ public class CfUserIdCardController implements CfUserIdCardSwagger {
         CfUserIdCardQuery cfUserIdCardQuery = new CfUserIdCardQuery();
         cfUserIdCardQuery.setUid(userBasicInfo.getId());
         List<CfUserIdCard> cfUserIdCardList = cfUserIdCardService.getListByQuery(cfUserIdCardQuery);
-        if(cfUserIdCardList==null || cfUserIdCardList.size()==0){
+        if (cfUserIdCardList == null || cfUserIdCardList.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null, "您还未上传身份证信息");
         }
         //处理身份证照片
-        if(StringUtils.isNotEmpty(cfUserIdCardList.get(0).getImages())){
+        if (StringUtils.isNotEmpty(cfUserIdCardList.get(0).getImages())) {
             FileUtils.handleFileSourcePrefix(cfUserIdCardList.get(0), "", "images");
         }
         return new ResponseResult(CommonCode.SUCCESS, cfUserIdCardList.get(0));

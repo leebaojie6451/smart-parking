@@ -10,6 +10,7 @@ import java.lang.reflect.UndeclaredThrowableException;
 
 /**
  * 全局异常处理配置
+ *
  * @author EternalRay
  */
 @ControllerAdvice
@@ -19,16 +20,17 @@ public class GlobalExceptionHandleConf {
 
     /**
      * 顶级异常处理
+     *
      * @param e
      * @return
      */
     @ExceptionHandler(Exception.class)
-    public void handlerException(Exception e){
+    public void handlerException(Exception e) {
         //annotation抛出的异常
-        if(e instanceof UndeclaredThrowableException) {
-            e = (Exception) ((UndeclaredThrowableException)e).getUndeclaredThrowable();
+        if (e instanceof UndeclaredThrowableException) {
+            e = (Exception) ((UndeclaredThrowableException) e).getUndeclaredThrowable();
         }
-        log.error("[handleException]: ",e);
+        log.error("[handleException]: ", e);
         System.out.println(e.getMessage());
     }
 }

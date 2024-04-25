@@ -88,131 +88,131 @@ public class CfOrderController implements CfOrderSwagger {
         allowFileds.add("order");
         allowFileds.add("limit");
         Map<String, String> allowFiledsMap = new HashMap<String, String>();
-        allowFiledsMap.put("id","ord");
-        allowFiledsMap.put("uid","ord");
-        allowFiledsMap.put("goods_name","ord");
-        allowFiledsMap.put("goods_id","ord");
-        allowFiledsMap.put("goods_type","ord");
-        allowFiledsMap.put("amounts_payable","ord");
-        allowFiledsMap.put("amount_actually_paid","ord");
-        allowFiledsMap.put("refund_amount","ord");
-        allowFiledsMap.put("coupon_id","ord");
-        allowFiledsMap.put("shop_id","ord");
-        allowFiledsMap.put("shop_id$in","ord");
-        allowFiledsMap.put("status","ord");
-        allowFiledsMap.put("create_time","ord");
-        allowFiledsMap.put("pay_time","ord");
-        allowFiledsMap.put("refund_time","ord");
-        allowFiledsMap.put("cancel_time","ord");
-        allowFiledsMap.put("payment_agency_short_name","ord");
-        allowFiledsMap.put("third_party_order_id","ord");
-        allowFiledsMap.put("effect_object","ord");
-        allowFiledsMap.put("handle_uid","ord");
-        allowFiledsMap.put("like","");
-        allowFiledsMap.put("group","");
-        allowFiledsMap.put("order","");
-        allowFiledsMap.put("limit","");
+        allowFiledsMap.put("id", "ord");
+        allowFiledsMap.put("uid", "ord");
+        allowFiledsMap.put("goods_name", "ord");
+        allowFiledsMap.put("goods_id", "ord");
+        allowFiledsMap.put("goods_type", "ord");
+        allowFiledsMap.put("amounts_payable", "ord");
+        allowFiledsMap.put("amount_actually_paid", "ord");
+        allowFiledsMap.put("refund_amount", "ord");
+        allowFiledsMap.put("coupon_id", "ord");
+        allowFiledsMap.put("shop_id", "ord");
+        allowFiledsMap.put("shop_id$in", "ord");
+        allowFiledsMap.put("status", "ord");
+        allowFiledsMap.put("create_time", "ord");
+        allowFiledsMap.put("pay_time", "ord");
+        allowFiledsMap.put("refund_time", "ord");
+        allowFiledsMap.put("cancel_time", "ord");
+        allowFiledsMap.put("payment_agency_short_name", "ord");
+        allowFiledsMap.put("third_party_order_id", "ord");
+        allowFiledsMap.put("effect_object", "ord");
+        allowFiledsMap.put("handle_uid", "ord");
+        allowFiledsMap.put("like", "");
+        allowFiledsMap.put("group", "");
+        allowFiledsMap.put("order", "");
+        allowFiledsMap.put("limit", "");
 
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0 && StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "finance")<0){
-            if(StringUtils.isEmpty(scenes)){
-                return new ResponseResult(CommonCode.INVALID_PARAM,null,"请提供场景");
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0 && StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "finance") < 0) {
+            if (StringUtils.isEmpty(scenes)) {
+                return new ResponseResult(CommonCode.INVALID_PARAM, null, "请提供场景");
             }
-            switch (scenes){
+            switch (scenes) {
                 case PayScenes.PARKING:
                     CfCarParkLinkUserQuery cfCarParkLinkUserQuery = new CfCarParkLinkUserQuery();
                     cfCarParkLinkUserQuery.setUid(userBasicInfo.getId());
                     List<CfCarParkLinkUser> cfCarParkLinkUsers = cfCarParkLinkUserService.getListByQuery(cfCarParkLinkUserQuery);
-                    if(cfCarParkLinkUsers==null || cfCarParkLinkUsers.size()==0){
+                    if (cfCarParkLinkUsers == null || cfCarParkLinkUsers.size() == 0) {
                         return new ResponseResult(CommonCode.NO_MORE_DATAS);
                     }
                     String carParkIds = "";
                     String shopId = "";
-                    if(conditionsMap.containsKey("shop_id")){
+                    if (conditionsMap.containsKey("shop_id")) {
                         Map<String, String> shopIdMap = (Map<String, String>) conditionsMap.get("shop_id");
-                        if(StringUtils.isNotEmpty(shopIdMap.get("value"))){
+                        if (StringUtils.isNotEmpty(shopIdMap.get("value"))) {
                             shopId = shopIdMap.get("value");
                         }
                     }
-                    for (CfCarParkLinkUser cfCarParkLinkUser: cfCarParkLinkUsers){
-                        if(StringUtils.isEmpty(cfCarParkLinkUser.getCarParkId())){
+                    for (CfCarParkLinkUser cfCarParkLinkUser : cfCarParkLinkUsers) {
+                        if (StringUtils.isEmpty(cfCarParkLinkUser.getCarParkId())) {
                             continue;
                         }
-                        if(shopId.equals(cfCarParkLinkUser.getCarParkId())){
+                        if (shopId.equals(cfCarParkLinkUser.getCarParkId())) {
                             carParkIds = "";
                             break;
                         }
-                        carParkIds += ",'"+cfCarParkLinkUser.getCarParkId()+"'";
+                        carParkIds += ",'" + cfCarParkLinkUser.getCarParkId() + "'";
                     }
 
-                    if(StringUtils.isNotEmpty(shopId) && StringUtils.isNotEmpty(carParkIds)){
+                    if (StringUtils.isNotEmpty(shopId) && StringUtils.isNotEmpty(carParkIds)) {
                         //说明传入的店铺id不在当前用户的运营范围内
                         return new ResponseResult(CommonCode.NO_MORE_DATAS);
                     }
 
-                    if(StringUtils.isNotEmpty(carParkIds)){
+                    if (StringUtils.isNotEmpty(carParkIds)) {
                         carParkIds = carParkIds.substring(1);
                     }
 
-                    if(StringUtils.isNotEmpty(carParkIds)){
+                    if (StringUtils.isNotEmpty(carParkIds)) {
                         HashMap<String, String> valueMap = new HashMap<>();
-                        valueMap.put("operator","in");
-                        valueMap.put("value",carParkIds);
+                        valueMap.put("operator", "in");
+                        valueMap.put("value", carParkIds);
                         conditionsMap.put("shop_id$in", valueMap);
-                    }else if(StringUtils.isEmpty(shopId)){
+                    } else if (StringUtils.isEmpty(shopId)) {
                         return new ResponseResult(CommonCode.NO_MORE_DATAS);
                     }
                     break;
                 case PayScenes.CHARGING:
-                    if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0 && StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "finance")<0){
+                    if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0 && StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "finance") < 0) {
                         CfChargingStationLinkUserQuery cfChargingStationLinkUserQuery = new CfChargingStationLinkUserQuery();
                         cfChargingStationLinkUserQuery.setUid(userBasicInfo.getId());
                         List<CfChargingStationLinkUser> cfChargingStationLinkUsers = cfChargingStationLinkUserService.getListByQuery(cfChargingStationLinkUserQuery);
-                        if(cfChargingStationLinkUsers==null || cfChargingStationLinkUsers.size()==0){
+                        if (cfChargingStationLinkUsers == null || cfChargingStationLinkUsers.size() == 0) {
                             return new ResponseResult(CommonCode.NO_MORE_DATAS);
                         }
                         String chargingStationIds = "";
                         shopId = "";
-                        if(conditionsMap.containsKey("shop_id")){
+                        if (conditionsMap.containsKey("shop_id")) {
                             Map<String, String> shopIdMap = (Map<String, String>) conditionsMap.get("shop_id");
-                            if(StringUtils.isNotEmpty(shopIdMap.get("value"))){
+                            if (StringUtils.isNotEmpty(shopIdMap.get("value"))) {
                                 shopId = shopIdMap.get("value");
                             }
                         }
-                        for (CfChargingStationLinkUser cfChargingStationLinkUser: cfChargingStationLinkUsers){
-                            if(StringUtils.isEmpty(cfChargingStationLinkUser.getChargingStationId())){
+                        for (CfChargingStationLinkUser cfChargingStationLinkUser : cfChargingStationLinkUsers) {
+                            if (StringUtils.isEmpty(cfChargingStationLinkUser.getChargingStationId())) {
                                 continue;
                             }
-                            if(shopId.equals(cfChargingStationLinkUser.getChargingStationId())){
+                            if (shopId.equals(cfChargingStationLinkUser.getChargingStationId())) {
                                 chargingStationIds = "";
                                 break;
                             }
-                            chargingStationIds += ",'"+cfChargingStationLinkUser.getChargingStationId()+"'";
+                            chargingStationIds += ",'" + cfChargingStationLinkUser.getChargingStationId() + "'";
                         }
-                        if(StringUtils.isNotEmpty(shopId) && StringUtils.isNotEmpty(chargingStationIds)){
+                        if (StringUtils.isNotEmpty(shopId) && StringUtils.isNotEmpty(chargingStationIds)) {
                             //说明传入的店铺id不在当前用户的运营范围内
                             return new ResponseResult(CommonCode.NO_MORE_DATAS);
                         }
 
-                        if(StringUtils.isNotEmpty(chargingStationIds)){
+                        if (StringUtils.isNotEmpty(chargingStationIds)) {
                             HashMap<String, String> valueMap = new HashMap<>();
-                            valueMap.put("operator","in");
-                            valueMap.put("value",chargingStationIds.substring(1));
+                            valueMap.put("operator", "in");
+                            valueMap.put("value", chargingStationIds.substring(1));
                             conditionsMap.put("shop_id$in", valueMap);
-                        }else if(StringUtils.isEmpty(shopId)){
+                        } else if (StringUtils.isEmpty(shopId)) {
                             return new ResponseResult(CommonCode.NO_MORE_DATAS);
                         }
                     }
                     break;
                 default:
-                    return new ResponseResult(CommonCode.INVALID_PARAM,null,"不支持的场景");
+                    return new ResponseResult(CommonCode.INVALID_PARAM, null, "不支持的场景");
             }
 
         }
 
         List<CfOrder> cfOrders = cfOrderService.selectListByCondition(conditionsMap, allowFiledsMap, allowFileds);
         Integer counts = cfOrderService.selectListByConditionCounts(conditionsMap, allowFiledsMap, allowFileds);
-        if(cfOrders!=null && cfOrders.size()>0){
+        if (cfOrders != null && cfOrders.size() > 0) {
             return new ResponseResult(CommonCode.SUCCESS, cfOrders, null, counts);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);
@@ -255,24 +255,24 @@ public class CfOrderController implements CfOrderSwagger {
     @RequestMapping(value = "countFinance", method = RequestMethod.GET)
     public ResponseResult countFinance(CfCountFinanceQuery cfCountFinanceQuery) {
         cfCountFinanceQuery.setCountAll(false);
-        if(cfCountFinanceQuery.getDate()==null || StringUtils.isEmpty(cfCountFinanceQuery.getDate()) || cfCountFinanceQuery.getDate().equals("null")){
+        if (cfCountFinanceQuery.getDate() == null || StringUtils.isEmpty(cfCountFinanceQuery.getDate()) || cfCountFinanceQuery.getDate().equals("null")) {
             cfCountFinanceQuery.setDate(null);
         }
-        if(cfCountFinanceQuery.getEndDate()==null || StringUtils.isEmpty(cfCountFinanceQuery.getEndDate()) || cfCountFinanceQuery.getEndDate().equals("null")){
+        if (cfCountFinanceQuery.getEndDate() == null || StringUtils.isEmpty(cfCountFinanceQuery.getEndDate()) || cfCountFinanceQuery.getEndDate().equals("null")) {
             cfCountFinanceQuery.setEndDate(null);
         }
-        if(cfCountFinanceQuery.getPaymentAgencyShortName()==null || StringUtils.isEmpty(cfCountFinanceQuery.getPaymentAgencyShortName())|| cfCountFinanceQuery.getPaymentAgencyShortName().equals("null")){
+        if (cfCountFinanceQuery.getPaymentAgencyShortName() == null || StringUtils.isEmpty(cfCountFinanceQuery.getPaymentAgencyShortName()) || cfCountFinanceQuery.getPaymentAgencyShortName().equals("null")) {
             cfCountFinanceQuery.setPaymentAgencyShortName(null);
         }
 
         List<CountByDay> list = null;
         BigDecimal total = new BigDecimal("0");
-        switch (cfCountFinanceQuery.getCountType()){
+        switch (cfCountFinanceQuery.getCountType()) {
             case "before_day_count_by_day":
                 list = cfOrderService.limitDaysCountByDay(cfCountFinanceQuery);
                 cfCountFinanceQuery.setCountAll(true);
                 List<CountByDay> countDay = cfOrderService.limitDaysCountByDay(cfCountFinanceQuery);
-                if(countDay.get(0)!=null){
+                if (countDay.get(0) != null) {
                     total = countDay.get(0).getCount();
                 }
                 break;
@@ -290,7 +290,7 @@ public class CfOrderController implements CfOrderSwagger {
                 break;
         }
 
-        if(list==null || list.size()==0){
+        if (list == null || list.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, list, total);
@@ -302,7 +302,7 @@ public class CfOrderController implements CfOrderSwagger {
     public ResponseResult historyOrder(CfHistoryOrderQuery cfHistoryOrderQuery) {
         List<CfHistoryOrder> cfHistoryOrderList = cfHistoryOrderService.getListByQuery(cfHistoryOrderQuery);
         Integer counts = cfHistoryOrderService.countByQuery(cfHistoryOrderQuery);
-        if(cfHistoryOrderList!=null && cfHistoryOrderList.size()>0){
+        if (cfHistoryOrderList != null && cfHistoryOrderList.size() > 0) {
             return new ResponseResult(CommonCode.SUCCESS, cfHistoryOrderList, null, counts);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);

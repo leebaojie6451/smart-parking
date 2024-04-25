@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * 服务初始参数
+ *
  * @author gebilaowang
  * @date 2021/3/9 11:47
  */
@@ -23,11 +24,11 @@ public class InitParamDTO {
     // 子线程
     private Integer workTread = 1;
     // 账号
-    private String name="cf_365_zh_3255_MQTT";
+    private String name = "cf_365_zh_3255_MQTT";
     // 密码
-    private String password="1AbW2BuyToIjePmJhV7XeK3WOfixa8";
+    private String password = "1AbW2BuyToIjePmJhV7XeK3WOfixa8";
     // 客户端id
-    private List<String> clientIds= Arrays.asList(new String[]{"c1","c2","c3"});
+    private List<String> clientIds = Arrays.asList(new String[]{"c1", "c2", "c3"});
     // qos类型
     private MqttQoS checkQos = MqttQoS.AT_LEAST_ONCE;
     // 登录权限开关（默认关闭）
@@ -45,19 +46,20 @@ public class InitParamDTO {
 
     public InitParamDTO() {
     }
-    public static InitParamDTO base(Integer port){
-        return base(port,1,1);
+
+    public static InitParamDTO base(Integer port) {
+        return base(port, 1, 1);
     }
 
-    public static InitParamDTO base(Integer port, IMqttDataService dataService){
-        return base(port,1,1,dataService,null);
+    public static InitParamDTO base(Integer port, IMqttDataService dataService) {
+        return base(port, 1, 1, dataService, null);
     }
 
-    public static InitParamDTO base(Integer port, Integer boosTread, Integer workTread){
-        return base(port,boosTread,workTread,null,null);
+    public static InitParamDTO base(Integer port, Integer boosTread, Integer workTread) {
+        return base(port, boosTread, workTread, null, null);
     }
 
-    public static InitParamDTO base(Integer port, Integer boosTread, Integer workTread, IMqttDataService dataService, IClientCache clientCache){
+    public static InitParamDTO base(Integer port, Integer boosTread, Integer workTread, IMqttDataService dataService, IClientCache clientCache) {
         InitParamDTO initParamDTO = new InitParamDTO();
         initParamDTO.setPort(port);
         initParamDTO.setWorkTread(workTread);

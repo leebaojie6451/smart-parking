@@ -28,17 +28,17 @@ public class WebSocketMqttDataServiceImplMatt implements IWebsocketDataService {
 
     @Override
     public void pushTopic(Channel channel, String message, String topic) throws Exception {
-        try{
-            IServerListCache.getServer(ServerTypeEnum.MQTT).send(channel, topic,message, 0);
-        }catch (Exception e){
+        try {
+            IServerListCache.getServer(ServerTypeEnum.MQTT).send(channel, topic, message, 0);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void pushTopicAll(String message,String... topics ) throws Exception {
-        for (String topic: topics) {
-            IServerListCache.getServer(ServerTypeEnum.MQTT).sendAll(topic,message);
+    public void pushTopicAll(String message, String... topics) throws Exception {
+        for (String topic : topics) {
+            IServerListCache.getServer(ServerTypeEnum.MQTT).sendAll(topic, message);
         }
     }
 
@@ -50,7 +50,7 @@ public class WebSocketMqttDataServiceImplMatt implements IWebsocketDataService {
 
     @Override
     public String inputListening(Channel channel, String topic, String inputMessage) {
-        log.info("ws来货啦+====》{}",inputMessage);
+        log.info("ws来货啦+====》{}", inputMessage);
         IServer iServer = IServerListCache.SERVER_LIST_MAP.get(ServerTypeEnum.WS.TYPE);
         Collection<ClientDTO> clientAllList = iServer.getClientAllList();
         if (!CollectionUtils.isEmpty(clientAllList)) {

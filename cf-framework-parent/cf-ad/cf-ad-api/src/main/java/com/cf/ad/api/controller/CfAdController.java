@@ -7,7 +7,6 @@ import com.cf.ad.service.CfAdService;
 import com.cf.framework.domain.response.CommonCode;
 import com.cf.framework.domain.response.ResponseResult;
 import com.cf.framework.utils.Snowflake;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.List;
 
 /**
- *
  * @ClassName CfCarParkUseLogController
  * @Author 隔壁小王子 981011512@qq.com
  * @Date 2020/4/28/028 8:55
@@ -41,13 +39,13 @@ public class CfAdController implements CfAdSwagger {
     @Override
     @RequestMapping(value = "findById", method = RequestMethod.GET)
     public ResponseResult findById(String id) throws Exception {
-        if(id!=null){
+        if (id != null) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         CfAdQuery cfAdQuery = new CfAdQuery();
         cfAdQuery.setId(id);
         List<CfAd> cfAdList = cfAdService.getListByQuery(cfAdQuery);
-        if(cfAdList==null || cfAdList.size()==0){
+        if (cfAdList == null || cfAdList.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfAdList.get(0));

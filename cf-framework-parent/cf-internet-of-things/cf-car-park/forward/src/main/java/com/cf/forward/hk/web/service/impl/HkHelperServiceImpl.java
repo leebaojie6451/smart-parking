@@ -16,9 +16,8 @@ public class HkHelperServiceImpl implements HkHelperService {
     private HkHelper hkHelper;
 
 
-
     @Override
     public Boolean openAndClose(boolean isOpen) {
-        return  hkHelper.openAndClose(isOpen);
+        return hkHelper.openAndClose(isOpen);
     }
 }

@@ -53,10 +53,10 @@ public class CfLogisticsQueuingAreaServiceImpl implements CfLogisticsQueuingArea
     @Override
     public CfLogisticsQueuingArea findById(Long id, boolean expectEmpty) {
         CfLogisticsQueuingArea cfLogisticsQueuingArea = findById(id);
-        if(expectEmpty && cfLogisticsQueuingArea!=null){
+        if (expectEmpty && cfLogisticsQueuingArea != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpty && cfLogisticsQueuingArea==null){
+        if (!expectEmpty && cfLogisticsQueuingArea == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfLogisticsQueuingArea;
@@ -66,20 +66,20 @@ public class CfLogisticsQueuingAreaServiceImpl implements CfLogisticsQueuingArea
     public CfLogisticsQueuingAreaExample getExampleByQuery(CfLogisticsQueuingAreaQuery cfLogisticsQueuingAreaQuery) {
         CfLogisticsQueuingAreaExample cfLogisticsQueuingAreaExample = new CfLogisticsQueuingAreaExample();
         CfLogisticsQueuingAreaExample.Criteria criteria = cfLogisticsQueuingAreaExample.createCriteria();
-        if(cfLogisticsQueuingAreaQuery.getIds()!=null && cfLogisticsQueuingAreaQuery.getIds().size()>0){
+        if (cfLogisticsQueuingAreaQuery.getIds() != null && cfLogisticsQueuingAreaQuery.getIds().size() > 0) {
             criteria.andIdIn(cfLogisticsQueuingAreaQuery.getIds());
         }
-        if(StringUtils.isNotEmpty(cfLogisticsQueuingAreaQuery.getAreaName())){
-            criteria.andAreaNameLike("%"+cfLogisticsQueuingAreaQuery.getAreaName()+"%");
+        if (StringUtils.isNotEmpty(cfLogisticsQueuingAreaQuery.getAreaName())) {
+            criteria.andAreaNameLike("%" + cfLogisticsQueuingAreaQuery.getAreaName() + "%");
         }
-        if(cfLogisticsQueuingAreaQuery.getGroupFlag()!=null){
+        if (cfLogisticsQueuingAreaQuery.getGroupFlag() != null) {
             criteria.andGroupFlagEqualTo(cfLogisticsQueuingAreaQuery.getGroupFlag());
         }
 
-        if(StringUtils.isNotEmpty(cfLogisticsQueuingAreaQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfLogisticsQueuingAreaQuery.getOrderBy())) {
             cfLogisticsQueuingAreaExample.setOrderByClause(cfLogisticsQueuingAreaQuery.getOrderBy());
         }
-        if(cfLogisticsQueuingAreaQuery.getPage()!=null && cfLogisticsQueuingAreaQuery.getSize()!=null){
+        if (cfLogisticsQueuingAreaQuery.getPage() != null && cfLogisticsQueuingAreaQuery.getSize() != null) {
             PageHelper.startPage(cfLogisticsQueuingAreaQuery.getPage(), cfLogisticsQueuingAreaQuery.getSize());
         }
         return cfLogisticsQueuingAreaExample;
@@ -95,7 +95,7 @@ public class CfLogisticsQueuingAreaServiceImpl implements CfLogisticsQueuingArea
         ArrayList<String> allowOrderBy = new ArrayList<>();
         allowOrderBy.add("lgqa.used_queue_capacity asc");
         allowOrderBy.add("lgqa.used_queue_capacity desc");
-        cfLogisticsQueuingAreaQuery.setOrderBy(DbUtils.makeAllowOrderBy(allowOrderBy,cfLogisticsQueuingAreaQuery.getOrderBy()));
+        cfLogisticsQueuingAreaQuery.setOrderBy(DbUtils.makeAllowOrderBy(allowOrderBy, cfLogisticsQueuingAreaQuery.getOrderBy()));
         return cfLogisticsQueuingAreaMapper.selectListByQuery(cfLogisticsQueuingAreaQuery);
     }
 

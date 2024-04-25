@@ -19,13 +19,13 @@ import org.springframework.context.annotation.ComponentScan;
  * @Version 1.0
  **/
 @EnableAutoConfiguration()
-@ComponentScan(basePackages = {"com.cf.charging.service","com.cf.charging.dao","com.cf.framework"})
+@ComponentScan(basePackages = {"com.cf.charging.service", "com.cf.charging.dao", "com.cf.framework"})
 @MapperScan("com.cf.charging.dao.mapper")
 public class ChargingApplication implements CommandLineRunner {
 
     //将springutils交由spring进行管理
     @Bean
-    public SpringUtil getSpringUtil(){
+    public SpringUtil getSpringUtil() {
         return new SpringUtil();
     }
 

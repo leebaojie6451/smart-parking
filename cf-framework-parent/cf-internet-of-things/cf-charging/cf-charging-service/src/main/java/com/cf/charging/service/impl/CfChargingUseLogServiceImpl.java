@@ -68,7 +68,7 @@ public class CfChargingUseLogServiceImpl implements CfChargingUseLogService {
     @Override
     public Integer delete(String id) {
         int i = cfChargingUseLogMapper.deleteByPrimaryKey(id);
-        if(i>0){
+        if (i > 0) {
             //同时删除账单
             CfOrderQuery cfOrderQuery = new CfOrderQuery();
             cfOrderQuery.setGoodsId(id);
@@ -83,49 +83,49 @@ public class CfChargingUseLogServiceImpl implements CfChargingUseLogService {
         CfChargingUseLogExample cfChargingUseLogExample = new CfChargingUseLogExample();
         CfChargingUseLogExample.Criteria criteria = cfChargingUseLogExample.createCriteria();
 
-        if(cfChargingUseLogQuery.getId()!=null){
+        if (cfChargingUseLogQuery.getId() != null) {
             criteria.andIdEqualTo(cfChargingUseLogQuery.getId());
         }
-        if(cfChargingUseLogQuery.getChargingStationId()!=null){
+        if (cfChargingUseLogQuery.getChargingStationId() != null) {
             criteria.andChargingStationIdEqualTo(cfChargingUseLogQuery.getChargingStationId());
         }
-        if(cfChargingUseLogQuery.getChargingDeviceId()!=null){
+        if (cfChargingUseLogQuery.getChargingDeviceId() != null) {
             criteria.andChargingDeviceIdEqualTo(cfChargingUseLogQuery.getChargingDeviceId());
         }
-        if(cfChargingUseLogQuery.getChargingPort()!=null){
+        if (cfChargingUseLogQuery.getChargingPort() != null) {
             criteria.andChargingPortEqualTo(cfChargingUseLogQuery.getChargingPort());
         }
-        if(cfChargingUseLogQuery.getUid()!=null){
+        if (cfChargingUseLogQuery.getUid() != null) {
             criteria.andUidEqualTo(cfChargingUseLogQuery.getUid());
         }
-        if(cfChargingUseLogQuery.getStartTime()!=null){
+        if (cfChargingUseLogQuery.getStartTime() != null) {
             criteria.andStartTimeEqualTo(cfChargingUseLogQuery.getStartTime());
         }
-        if(cfChargingUseLogQuery.getEndTime()!=null){
+        if (cfChargingUseLogQuery.getEndTime() != null) {
             criteria.andEndTimeEqualTo(cfChargingUseLogQuery.getEndTime());
         }
-        if(cfChargingUseLogQuery.getMinStartTime()!=null){
+        if (cfChargingUseLogQuery.getMinStartTime() != null) {
             criteria.andStartTimeGreaterThanOrEqualTo(cfChargingUseLogQuery.getStartTime());
         }
-        if(cfChargingUseLogQuery.getMaxStartTime()!=null){
+        if (cfChargingUseLogQuery.getMaxStartTime() != null) {
             criteria.andStartTimeLessThanOrEqualTo(cfChargingUseLogQuery.getMaxStartTime());
         }
-        if(cfChargingUseLogQuery.getMinEndTime()!=null){
+        if (cfChargingUseLogQuery.getMinEndTime() != null) {
             criteria.andEndTimeGreaterThanOrEqualTo(cfChargingUseLogQuery.getEndTime());
         }
-        if(cfChargingUseLogQuery.getMaxEndTime()!=null){
+        if (cfChargingUseLogQuery.getMaxEndTime() != null) {
             criteria.andEndTimeLessThanOrEqualTo(cfChargingUseLogQuery.getMaxEndTime());
         }
-        if(cfChargingUseLogQuery.getChargingStatus()!=null){
+        if (cfChargingUseLogQuery.getChargingStatus() != null) {
             criteria.andChargingStatusEqualTo(cfChargingUseLogQuery.getChargingStatus());
         }
-        if(cfChargingUseLogQuery.getChargingType()!=null){
+        if (cfChargingUseLogQuery.getChargingType() != null) {
             criteria.andChargingTypeEqualTo(cfChargingUseLogQuery.getChargingType());
         }
-        if(StringUtils.isNotEmpty(cfChargingUseLogQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfChargingUseLogQuery.getOrderBy())) {
             cfChargingUseLogExample.setOrderByClause(cfChargingUseLogQuery.getOrderBy());
         }
-        if(cfChargingUseLogQuery.getPage()!=null && cfChargingUseLogQuery.getSize()!=null){
+        if (cfChargingUseLogQuery.getPage() != null && cfChargingUseLogQuery.getSize() != null) {
             PageHelper.startPage(cfChargingUseLogQuery.getPage(), cfChargingUseLogQuery.getSize());
         }
         return cfChargingUseLogExample;
@@ -149,10 +149,10 @@ public class CfChargingUseLogServiceImpl implements CfChargingUseLogService {
     @Override
     public CfChargingUseLog findById(String id, boolean expectEmpty) {
         CfChargingUseLog cfChargingUseLog = findById(id);
-        if(expectEmpty && cfChargingUseLog!=null){
+        if (expectEmpty && cfChargingUseLog != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpty && cfChargingUseLog==null){
+        if (!expectEmpty && cfChargingUseLog == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfChargingUseLog;
@@ -168,7 +168,7 @@ public class CfChargingUseLogServiceImpl implements CfChargingUseLogService {
     public List<CfChargingUseLog> selectListByCondition(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds) throws Exception {
         String sql = "SELECT cstul.*,cs.id cs_id,cs.station_name cs_station_name,csd.alias_name as csd_alias_name " +
                 "FROM cf_charging_use_log cstul " +
-                "LEFT JOIN cf_charging_station_device csd ON(cstul.charging_device_id=csd.id) "+
+                "LEFT JOIN cf_charging_station_device csd ON(cstul.charging_device_id=csd.id) " +
                 "LEFT JOIN cf_charging_station cs ON(cstul.charging_station_id=cs.id) ";
         sql = DbUtils.makeQuery(conditions, allowFiledsMap, allowFileds, sql, false);
         List<CfChargingUseLog> cfChargingUseLogList = cfChargingUseLogMapper.selectListByCondition(sql);
@@ -185,15 +185,15 @@ public class CfChargingUseLogServiceImpl implements CfChargingUseLogService {
 
     @Override
     public CfChargingUseLog getCharingUseLogByDevcieSerialNumber(String serialNumber, String port) {
-        if(StringUtils.isEmpty(serialNumber) || StringUtils.isEmpty(port)){
+        if (StringUtils.isEmpty(serialNumber) || StringUtils.isEmpty(port)) {
             return null;
         }
         CfChargingStationDeviceQuery cfChargingStationDeviceQuery = new CfChargingStationDeviceQuery();
-        cfChargingStationDeviceQuery.setType((byte)1);
+        cfChargingStationDeviceQuery.setType((byte) 1);
         cfChargingStationDeviceQuery.setBarCode(serialNumber);
         cfChargingStationDeviceQuery.setBrand("lv_chong_chong");
         List<CfChargingStationDevice> cfChargingStationDevices = cfChargingStationDeviceService.getListByQuery(cfChargingStationDeviceQuery);
-        if(cfChargingStationDevices==null || cfChargingStationDevices.size()==0){
+        if (cfChargingStationDevices == null || cfChargingStationDevices.size() == 0) {
             return null;
         }
         CfChargingUseLogQuery cfChargingUseLogQuery = new CfChargingUseLogQuery();
@@ -203,7 +203,7 @@ public class CfChargingUseLogServiceImpl implements CfChargingUseLogService {
         cfChargingUseLogQuery.setPage(1);
         cfChargingUseLogQuery.setSize(1);
         List<CfChargingUseLog> cfChargingUseLogs = getListByQuery(cfChargingUseLogQuery);
-        if(cfChargingUseLogs!=null && cfChargingUseLogs.size()>0 && cfChargingUseLogs.get(0).getEndTime()==0){
+        if (cfChargingUseLogs != null && cfChargingUseLogs.size() > 0 && cfChargingUseLogs.get(0).getEndTime() == 0) {
             return cfChargingUseLogs.get(0);
         }
         return null;

@@ -4,6 +4,7 @@ import lombok.Data;
 
 /**
  * 道闸停车信息
+ *
  * @author why
  */
 @Data

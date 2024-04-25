@@ -65,16 +65,16 @@ public class CfCarParkOrderController implements CfCarParkOrderSwagger {
     @Override
     @RequestMapping(value = "queryOrderByUseId", method = RequestMethod.GET)
     public ResponseResult queryOrderByUseId(String id, String couponId, String useCoupon) throws Exception {
-        if(StringUtils.isEmpty(useCoupon)){
+        if (StringUtils.isEmpty(useCoupon)) {
             useCoupon = "yes";
         }
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         CfCarParkOrder cfCarParkOrder = cfCarParkChargingRulesService.calculateTheAmounPayable(id, "", FeeQueryMode.QUERY_MODE_QUERY_ONLY);
         CfOrder cfOrder = cfCarParkOrder.getCfOrder();
-        if(System.currentTimeMillis()-cfOrder.getManualOfferSetTime()<=900000){
+        if (System.currentTimeMillis() - cfOrder.getManualOfferSetTime() <= 900000) {
             BigDecimal amountsPayable = cfOrder.getAmountsPayable();
             cfOrder.setAmountsPayable(amountsPayable.subtract(cfOrder.getManualOffer()));
-        }else{
+        } else {
             cfOrder.setAmountsPayable(cfCarParkOrder.getCfOrder().getAmountsPayable());
         }
 //        //更新应付金额
@@ -85,73 +85,73 @@ public class CfCarParkOrderController implements CfCarParkOrderSwagger {
 //            cfOrderService.updateByPrimaryKeySelective(order);
 //        }
         cfCarParkOrder.setCfOrder(cfOrder);
-        if(useCoupon.equals("yes")){
-            cfCarParkOrder.setCfCouponList(cfCouponService.getAvailableByShopIdAndScenes(System.currentTimeMillis(), cfCarParkOrder.getCfOrder().getShopId(), CouponScenes.CARPARK, cfCarParkOrder.getCfOrder().getEffectObject(),userBasicInfo.getId()));
-            if(StringUtils.isEmpty(couponId) && cfCarParkOrder.getCfCouponList()!=null && cfCarParkOrder.getCfCouponList().size()>0){
+        if (useCoupon.equals("yes")) {
+            cfCarParkOrder.setCfCouponList(cfCouponService.getAvailableByShopIdAndScenes(System.currentTimeMillis(), cfCarParkOrder.getCfOrder().getShopId(), CouponScenes.CARPARK, cfCarParkOrder.getCfOrder().getEffectObject(), userBasicInfo.getId()));
+            if (StringUtils.isEmpty(couponId) && cfCarParkOrder.getCfCouponList() != null && cfCarParkOrder.getCfCouponList().size() > 0) {
                 couponId = cfCarParkOrder.getCfCouponList().get(0).getId();
             }
-            if(StringUtils.isNotEmpty(couponId)){
+            if (StringUtils.isNotEmpty(couponId)) {
                 CfCoupon cfCoupon = cfCouponService.findById(couponId, false);
-                if(cfCoupon.getCouponType()==(byte)3 && cfCoupon.getDenomination().longValue()+cfCarParkOrder.getCfCarParkUseLog().getInTime()<cfCarParkOrder.getCfCarParkUseLog().getOutTime()){
+                if (cfCoupon.getCouponType() == (byte) 3 && cfCoupon.getDenomination().longValue() + cfCarParkOrder.getCfCarParkUseLog().getInTime() < cfCarParkOrder.getCfCarParkUseLog().getOutTime()) {
                     long inTime = cfCoupon.getDenomination().longValue() + cfCarParkOrder.getCfCarParkUseLog().getInTime();
                     cfCarParkOrder.getCfCarParkUseLog().setInTime(inTime);
                 }
-                if(cfCarParkOrder.getCfOrder().getStatus()!=0){
+                if (cfCarParkOrder.getCfOrder().getStatus() != 0) {
                     ExceptionCast.cast(PayCode.NO_NEED_TO_PAY);
                 }
 
                 //如果人工设置了优惠金额，电子优惠券不再使用
                 boolean usedCoupon = true;
-                if(cfCarParkOrder.getCfOrder().getManualOfferSetTime()==0 || (System.currentTimeMillis()-cfCarParkOrder.getCfOrder().getManualOfferSetTime()>=900000)){
-                    if(System.currentTimeMillis()<cfCoupon.getEffectiveTime() || System.currentTimeMillis()>cfCoupon.getExpireTime() || cfCoupon.getStatus()!=1){
+                if (cfCarParkOrder.getCfOrder().getManualOfferSetTime() == 0 || (System.currentTimeMillis() - cfCarParkOrder.getCfOrder().getManualOfferSetTime() >= 900000)) {
+                    if (System.currentTimeMillis() < cfCoupon.getEffectiveTime() || System.currentTimeMillis() > cfCoupon.getExpireTime() || cfCoupon.getStatus() != 1) {
                         usedCoupon = false;
                     }
 
-                    if(StringUtils.isNotEmpty(cfCoupon.getGoodsId()) && !cfCoupon.getGoodsId().equals(cfCarParkOrder.getCfCarParkUseLog().getNumberPlate())){
+                    if (StringUtils.isNotEmpty(cfCoupon.getGoodsId()) && !cfCoupon.getGoodsId().equals(cfCarParkOrder.getCfCarParkUseLog().getNumberPlate())) {
                         usedCoupon = false;
-                    }else if(StringUtils.isEmpty(cfCoupon.getGoodsId()) && StringUtils.isNotEmpty(cfCoupon.getToUid()) && !cfCoupon.getToUid().equals(userBasicInfo.getId())){
+                    } else if (StringUtils.isEmpty(cfCoupon.getGoodsId()) && StringUtils.isNotEmpty(cfCoupon.getToUid()) && !cfCoupon.getToUid().equals(userBasicInfo.getId())) {
                         usedCoupon = false;
                     }
 
-                    if(cfCoupon.getScenes()!=0 && cfCoupon.getScenes()!=1){
+                    if (cfCoupon.getScenes() != 0 && cfCoupon.getScenes() != 1) {
                         usedCoupon = false;
                     }
-                    if(StringUtils.isNotEmpty(cfCoupon.getGoodsId()) && !cfCoupon.getGoodsId().equals(cfCarParkOrder.getCfCarParkUseLog().getNumberPlate())){
+                    if (StringUtils.isNotEmpty(cfCoupon.getGoodsId()) && !cfCoupon.getGoodsId().equals(cfCarParkOrder.getCfCarParkUseLog().getNumberPlate())) {
                         usedCoupon = false;
                     }
-                    if(cfCoupon.getCouponType()==(byte)1 ||
-                            (cfCoupon.getCouponType()==(byte)2 && cfCoupon.getDenomination().doubleValue()>=cfCarParkOrder.getCfOrder().getAmountsPayable().doubleValue()) ||
-                            (cfCoupon.getCouponType()==(byte)3 && cfCoupon.getDenomination().longValue()+cfCarParkOrder.getCfCarParkUseLog().getInTime()>=cfCarParkOrder.getCfCarParkUseLog().getOutTime())
-                    ){
+                    if (cfCoupon.getCouponType() == (byte) 1 ||
+                            (cfCoupon.getCouponType() == (byte) 2 && cfCoupon.getDenomination().doubleValue() >= cfCarParkOrder.getCfOrder().getAmountsPayable().doubleValue()) ||
+                            (cfCoupon.getCouponType() == (byte) 3 && cfCoupon.getDenomination().longValue() + cfCarParkOrder.getCfCarParkUseLog().getInTime() >= cfCarParkOrder.getCfCarParkUseLog().getOutTime())
+                    ) {
                         //禁止手动优惠券全额支付
                         ExceptionCast.cast(PayCode.NO_NEED_TO_PAY);
-                    }else if(usedCoupon){
-                        if(cfCoupon.getCouponType()==(byte)2){
+                    } else if (usedCoupon) {
+                        if (cfCoupon.getCouponType() == (byte) 2) {
                             cfCarParkOrder.getCfOrder().setAmountsPayable(
                                     cfCarParkOrder.getCfOrder().getAmountsPayable().subtract(cfCoupon.getDenomination())
                             );
                         }
                     }
                 }
-                if(cfCarParkOrder.getCfOrder().getStatus()!=0){
+                if (cfCarParkOrder.getCfOrder().getStatus() != 0) {
                     ExceptionCast.cast(PayCode.NO_NEED_TO_PAY);
                 }
             }
         }
 
         //模糊掉返回停车数据
-        if(cfCarParkOrder.getCfCarPark()!=null){
-            cfCarParkOrder.getCfCarPark().setName(StringTools.vaguePartString(cfCarParkOrder.getCfCarPark().getName(),3,2));
+        if (cfCarParkOrder.getCfCarPark() != null) {
+            cfCarParkOrder.getCfCarPark().setName(StringTools.vaguePartString(cfCarParkOrder.getCfCarPark().getName(), 3, 2));
             cfCarParkOrder.getCfCarPark().setPositionX(null);
             cfCarParkOrder.getCfCarPark().setPositionY(null);
         }
-        if(cfCarParkOrder.getInCheckpoint()!=null){
-            cfCarParkOrder.getInCheckpoint().setName(StringTools.vaguePartString(cfCarParkOrder.getInCheckpoint().getName(),3,2));
+        if (cfCarParkOrder.getInCheckpoint() != null) {
+            cfCarParkOrder.getInCheckpoint().setName(StringTools.vaguePartString(cfCarParkOrder.getInCheckpoint().getName(), 3, 2));
             cfCarParkOrder.getInCheckpoint().setPositionX(null);
             cfCarParkOrder.getInCheckpoint().setPositionY(null);
         }
-        if(cfCarParkOrder.getOutCheckpoint()!=null){
-            cfCarParkOrder.getOutCheckpoint().setName(StringTools.vaguePartString(cfCarParkOrder.getOutCheckpoint().getName(),3,2));
+        if (cfCarParkOrder.getOutCheckpoint() != null) {
+            cfCarParkOrder.getOutCheckpoint().setName(StringTools.vaguePartString(cfCarParkOrder.getOutCheckpoint().getName(), 3, 2));
             cfCarParkOrder.getOutCheckpoint().setPositionX(null);
             cfCarParkOrder.getOutCheckpoint().setPositionY(null);
         }
@@ -173,7 +173,7 @@ public class CfCarParkOrderController implements CfCarParkOrderSwagger {
         cfOrderQuery.setGoodsType(GoodsType.CARPARK_PAYMENT);
         cfOrderQuery.setGoodsId(carParkUseLogId);
         List<CfOrder> listByCondition = cfOrderService.getListByQuery(cfOrderQuery);
-        if(listByCondition==null || listByCondition.size()==0){
+        if (listByCondition == null || listByCondition.size() == 0) {
             ExceptionCast.cast(PayCode.ORDER_DOES_NOT_EXIST);
         }
         return listByCondition.get(0);

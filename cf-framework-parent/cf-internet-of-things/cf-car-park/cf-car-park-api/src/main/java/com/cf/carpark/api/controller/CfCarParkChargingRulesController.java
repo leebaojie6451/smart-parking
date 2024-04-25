@@ -27,12 +27,12 @@ public class CfCarParkChargingRulesController implements CfCarParkChargingRulesS
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(CfCarParkChargingRulesQuery cfCarParkChargingRulesQuery) throws Exception {
         List<CfCarParkChargingRules> cfCarParkChargingRules = cfCarParkChargingRulesService.getListByCondition(cfCarParkChargingRulesQuery);
-        if(cfCarParkChargingRules==null || cfCarParkChargingRules.size()==0){
+        if (cfCarParkChargingRules == null || cfCarParkChargingRules.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
-        for(CfCarParkChargingRules chargingRules: cfCarParkChargingRules){
-            chargingRules.setStartTime(DateUtil.minMillisecondBaseOnTheDayToTimestamp(System.currentTimeMillis())+chargingRules.getStartTime());
-            chargingRules.setEndTime(DateUtil.minMillisecondBaseOnTheDayToTimestamp(System.currentTimeMillis())+chargingRules.getEndTime());
+        for (CfCarParkChargingRules chargingRules : cfCarParkChargingRules) {
+            chargingRules.setStartTime(DateUtil.minMillisecondBaseOnTheDayToTimestamp(System.currentTimeMillis()) + chargingRules.getStartTime());
+            chargingRules.setEndTime(DateUtil.minMillisecondBaseOnTheDayToTimestamp(System.currentTimeMillis()) + chargingRules.getEndTime());
         }
         return new ResponseResult(CommonCode.SUCCESS, cfCarParkChargingRules);
     }

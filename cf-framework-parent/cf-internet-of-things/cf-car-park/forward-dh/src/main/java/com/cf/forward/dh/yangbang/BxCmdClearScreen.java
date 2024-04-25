@@ -26,8 +26,8 @@ public class BxCmdClearScreen extends BxCmd {
         //
         // 2 bytes reserved data
         // r0, r1
-        array.add((byte)0x00);
-        array.add((byte)0x00);
+        array.add((byte) 0x00);
+        array.add((byte) 0x00);
 
         //
         return array.build();

@@ -62,10 +62,10 @@ public class CarParkController implements CfCarParkSwagger {
     @PreAuthorize("hasAuthority('carpark-CarParkController-add')")
     @Override
     @RequestMapping(value = "add", method = RequestMethod.POST)
-    public ResponseResult add(@Validated @RequestBody CfCarParkForm cfCarParkForm) throws Exception{
+    public ResponseResult add(@Validated @RequestBody CfCarParkForm cfCarParkForm) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         CfCarPark cfCarPark = new CfCarPark();
-        BeanUtils.copyProperties(cfCarParkForm,cfCarPark);
+        BeanUtils.copyProperties(cfCarParkForm, cfCarPark);
         cfCarPark.setCreaterId(userBasicInfo.getId());
         CfCarPark lastCfCarPark = cfCarParkService.add(cfCarPark);
         return new ResponseResult(CommonCode.SUCCESS, lastCfCarPark);
@@ -76,7 +76,7 @@ public class CarParkController implements CfCarParkSwagger {
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(String id) throws Exception {
         Integer delete = cfCarParkService.delete(id);
-        return delete>0 ? new ResponseResult(CommonCode.SUCCESS) : new ResponseResult(CommonCode.FAIL);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS) : new ResponseResult(CommonCode.FAIL);
     }
 
     @PreAuthorize("hasAuthority('carpark-CarParkController-addChargingRules')")
@@ -84,7 +84,7 @@ public class CarParkController implements CfCarParkSwagger {
     @RequestMapping(value = "addChargingRules", method = RequestMethod.POST)
     public ResponseResult addChargingRules(@RequestBody CfCarParkChargingRulesForm cfCarParkChargingRulesForm) throws Exception {
         CfCarParkChargingRules cfCarParkChargingRules = new CfCarParkChargingRules();
-        BeanUtils.copyProperties(cfCarParkChargingRulesForm,cfCarParkChargingRules);
+        BeanUtils.copyProperties(cfCarParkChargingRulesForm, cfCarParkChargingRules);
         CfCarParkChargingRules lastCfCarParkChargingRules = cfCarParkChargingRulesService.add(cfCarParkChargingRules);
         return new ResponseResult(CommonCode.SUCCESS, lastCfCarParkChargingRules);
     }
@@ -94,7 +94,7 @@ public class CarParkController implements CfCarParkSwagger {
     @RequestMapping(value = "updateChargingRules", method = RequestMethod.PUT)
     public ResponseResult updateChargingRules(@RequestBody CfCarParkChargingRulesForm cfCarParkChargingRulesForm) throws Exception {
         CfCarParkChargingRules cfCarParkChargingRules = new CfCarParkChargingRules();
-        BeanUtils.copyProperties(cfCarParkChargingRulesForm,cfCarParkChargingRules);
+        BeanUtils.copyProperties(cfCarParkChargingRulesForm, cfCarParkChargingRules);
         CfCarParkChargingRules lastCfCarParkChargingRules = cfCarParkChargingRulesService.update(cfCarParkChargingRules);
         return new ResponseResult(CommonCode.SUCCESS, lastCfCarParkChargingRules);
     }
@@ -104,7 +104,7 @@ public class CarParkController implements CfCarParkSwagger {
     @RequestMapping(value = "deleteChargingRules", method = RequestMethod.DELETE)
     public ResponseResult deleteChargingRules(String cfCarParkChargingRulesId) {
         Integer integer = cfCarParkChargingRulesService.delete(cfCarParkChargingRulesId);
-        if(integer==0){
+        if (integer == 0) {
             return new ResponseResult(CommonCode.FAIL);
         }
         return new ResponseResult(CommonCode.SUCCESS);
@@ -115,7 +115,7 @@ public class CarParkController implements CfCarParkSwagger {
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public ResponseResult update(@Validated @RequestBody CfCarParkForm cfCarParkForm) {
         CfCarPark cfCarPark = new CfCarPark();
-        BeanUtils.copyProperties(cfCarParkForm,cfCarPark);
+        BeanUtils.copyProperties(cfCarParkForm, cfCarPark);
         CfCarPark lastCfCarPark = cfCarParkService.update(cfCarPark);
         return new ResponseResult(CommonCode.SUCCESS, lastCfCarPark);
     }
@@ -144,51 +144,51 @@ public class CarParkController implements CfCarParkSwagger {
         allowFileds.add("order");
         allowFileds.add("limit");
         Map<String, String> allowFiledsMap = new HashMap<String, String>();
-        allowFiledsMap.put("id","cp");
-        allowFiledsMap.put("name","cp");
-        allowFiledsMap.put("status","cp");
-        allowFiledsMap.put("country_id","cp");
-        allowFiledsMap.put("province_id","cp");
-        allowFiledsMap.put("state_or_city_id","cp");
-        allowFiledsMap.put("zone_or_county_id","cp");
-        allowFiledsMap.put("creater_id","cp");
-        allowFiledsMap.put("phone","cp");
-        allowFiledsMap.put("id$in","cp");
-        allowFiledsMap.put("like","");
-        allowFiledsMap.put("group","");
-        allowFiledsMap.put("order","");
-        allowFiledsMap.put("limit","");
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0 && StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "finance")<0){
+        allowFiledsMap.put("id", "cp");
+        allowFiledsMap.put("name", "cp");
+        allowFiledsMap.put("status", "cp");
+        allowFiledsMap.put("country_id", "cp");
+        allowFiledsMap.put("province_id", "cp");
+        allowFiledsMap.put("state_or_city_id", "cp");
+        allowFiledsMap.put("zone_or_county_id", "cp");
+        allowFiledsMap.put("creater_id", "cp");
+        allowFiledsMap.put("phone", "cp");
+        allowFiledsMap.put("id$in", "cp");
+        allowFiledsMap.put("like", "");
+        allowFiledsMap.put("group", "");
+        allowFiledsMap.put("order", "");
+        allowFiledsMap.put("limit", "");
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0 && StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "finance") < 0) {
             CfCarParkLinkUserQuery cfCarParkLinkUserQuery = new CfCarParkLinkUserQuery();
             cfCarParkLinkUserQuery.setUid(userBasicInfo.getId());
             List<CfCarParkLinkUser> cfCarParkLinkUsers = cfCarParkLinkUserService.getListByQuery(cfCarParkLinkUserQuery);
-            if(cfCarParkLinkUsers==null || cfCarParkLinkUsers.size()==0){
+            if (cfCarParkLinkUsers == null || cfCarParkLinkUsers.size() == 0) {
                 return new ResponseResult(CommonCode.NO_MORE_DATAS);
             }
             String carParkIds = "";
-            for (CfCarParkLinkUser cfCarParkLinkUser: cfCarParkLinkUsers){
-                if(StringUtils.isEmpty(cfCarParkLinkUser.getCarParkId())){
+            for (CfCarParkLinkUser cfCarParkLinkUser : cfCarParkLinkUsers) {
+                if (StringUtils.isEmpty(cfCarParkLinkUser.getCarParkId())) {
                     continue;
                 }
-                carParkIds += ",'"+cfCarParkLinkUser.getCarParkId()+"'";
+                carParkIds += ",'" + cfCarParkLinkUser.getCarParkId() + "'";
             }
 
-            if(StringUtils.isNotEmpty(carParkIds)){
+            if (StringUtils.isNotEmpty(carParkIds)) {
                 carParkIds = carParkIds.substring(1);
             }
 
-            if(StringUtils.isNotEmpty(carParkIds)){
+            if (StringUtils.isNotEmpty(carParkIds)) {
                 HashMap<String, String> valueMap = new HashMap<>();
-                valueMap.put("operator","in");
-                valueMap.put("value",carParkIds);
+                valueMap.put("operator", "in");
+                valueMap.put("value", carParkIds);
                 conditionsMap.put("id$in", valueMap);
-            }else{
+            } else {
                 return new ResponseResult(CommonCode.NO_MORE_DATAS);
             }
         }
-        List<CfCarPark> cfCarParks = cfCarParkService.selectListByCondition(conditionsMap, allowFiledsMap,allowFileds);
+        List<CfCarPark> cfCarParks = cfCarParkService.selectListByCondition(conditionsMap, allowFiledsMap, allowFileds);
         Integer counts = cfCarParkService.selectListByConditionCounts(conditionsMap, allowFiledsMap, allowFileds);
-        if(cfCarParks!=null && cfCarParks.size()>0){
+        if (cfCarParks != null && cfCarParks.size() > 0) {
             return new ResponseResult(CommonCode.SUCCESS, cfCarParks, null, counts);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);
@@ -201,17 +201,17 @@ public class CarParkController implements CfCarParkSwagger {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         List<CfCarParkLinkUser> linkUsers = getLinkUsersAndCheck(userBasicInfo);
 
-        if(linkUsers!=null && linkUsers.size()>0){
-            if(cfCarParkQuery.getIds()==null){
+        if (linkUsers != null && linkUsers.size() > 0) {
+            if (cfCarParkQuery.getIds() == null) {
                 cfCarParkQuery.setIds(new ArrayList<>());
             }
-            for(CfCarParkLinkUser cfCarParkLinkUser: linkUsers){
+            for (CfCarParkLinkUser cfCarParkLinkUser : linkUsers) {
                 cfCarParkQuery.getIds().add(cfCarParkLinkUser.getCarParkId());
             }
         }
 
         List<CfCarPark> carParks = cfCarParkService.getListByQuery(cfCarParkQuery);
-        if(carParks==null || carParks.size()==0){
+        if (carParks == null || carParks.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, carParks);
@@ -221,32 +221,32 @@ public class CarParkController implements CfCarParkSwagger {
     @PreAuthorize("hasAuthority('carpark-CarParkController-deBugCalculateTheAmounPayable')")
     @RequestMapping(value = "deBugCalculateTheAmounPayable", method = RequestMethod.GET)
     public BigDecimal deBugCalculateTheAmounPayable(CfCarParkUseLog cfCarParkUseLog) throws Exception {
-        cfCarParkUseLog.setCountFeeStatus((byte)1);
+        cfCarParkUseLog.setCountFeeStatus((byte) 1);
         CfCarParkOrder cfCarParkOrder = cfCarParkChargingRulesService.deBugCalculateTheAmounPayable(cfCarParkUseLog);
         return cfCarParkOrder.getCfOrder().getAmountsPayable();
     }
 
     @Override
     @RequestMapping(value = "getMyCarParks", method = RequestMethod.GET)
-    public ResponseResult getMyCarParks()throws Exception {
+    public ResponseResult getMyCarParks() throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         //获取我关联的停车场数据cfCarParkLinkUserService
         CfCarParkLinkUserQuery cfCarParkLinkUserQuery = new CfCarParkLinkUserQuery();
         cfCarParkLinkUserQuery.setUid(userBasicInfo.getId());
         List<CfCarParkLinkUser> cfCarParkLinkUsers = cfCarParkLinkUserService.getListByQuery(cfCarParkLinkUserQuery);
-        if(cfCarParkLinkUsers==null || cfCarParkLinkUsers.size()==0){
+        if (cfCarParkLinkUsers == null || cfCarParkLinkUsers.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null, "please bind carPark");
         }
 
 
         List<String> carParkIds = new ArrayList<>();
-        for (CfCarParkLinkUser cfCarParkLinkUser: cfCarParkLinkUsers){
+        for (CfCarParkLinkUser cfCarParkLinkUser : cfCarParkLinkUsers) {
             carParkIds.add(cfCarParkLinkUser.getCarParkId());
         }
         CfCarParkQuery cfCarParkQuery = new CfCarParkQuery();
         cfCarParkQuery.setIds(carParkIds);
         List<CfCarPark> carParks = cfCarParkService.getListByQuery(cfCarParkQuery);
-        if(carParks==null || carParks.size()==0){
+        if (carParks == null || carParks.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, carParks);
@@ -256,13 +256,13 @@ public class CarParkController implements CfCarParkSwagger {
     @PreAuthorize("hasAuthority('carpark-CarParkController-getCarParkFinanceReportList')")
     @RequestMapping(value = "getCarParkFinanceReportList", method = RequestMethod.GET)
     public ResponseResult getCarParkFinanceReportList(CfOrderQuery cfOrderQuery) throws Exception {
-        if(cfOrderQuery.getYearReportTime()!=null){
+        if (cfOrderQuery.getYearReportTime() != null) {
             cfOrderQuery.setMinPayTime(cfOrderQuery.getYearReportTime());
             cfOrderQuery.setMaxPayTime(DateUtil.getYearEndTime(cfOrderQuery.getYearReportTime(), "GMT+8:00"));
-        }else if(cfOrderQuery.getMonthReportTime()!=null){
+        } else if (cfOrderQuery.getMonthReportTime() != null) {
             cfOrderQuery.setMinPayTime(cfOrderQuery.getMonthReportTime());
             cfOrderQuery.setMaxPayTime(DateUtil.getMonthEndTime(cfOrderQuery.getMonthReportTime(), "GMT+8:00"));
-        }else if(cfOrderQuery.getDayReportTime()!=null){
+        } else if (cfOrderQuery.getDayReportTime() != null) {
             cfOrderQuery.setMinPayTime(cfOrderQuery.getDayReportTime());
             cfOrderQuery.setMaxPayTime(DateUtil.maxMillisecondBaseOnTheDayToTimestamp(cfOrderQuery.getDayReportTime()));
         }
@@ -277,9 +277,9 @@ public class CarParkController implements CfCarParkSwagger {
     public ResponseResult getCarParkTotalFinanceReport(CfOrderQuery cfOrderQuery) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         List<CfCarParkLinkUser> linkUsers = getLinkUsersAndCheck(userBasicInfo);
-        if(linkUsers!=null && linkUsers.size()>0){
+        if (linkUsers != null && linkUsers.size() > 0) {
             cfOrderQuery.setShopIds(new ArrayList<>());
-            for (CfCarParkLinkUser cfCarParkLinkUser: linkUsers){
+            for (CfCarParkLinkUser cfCarParkLinkUser : linkUsers) {
                 cfOrderQuery.getShopIds().add(cfCarParkLinkUser.getCarParkId());
             }
         }
@@ -292,7 +292,7 @@ public class CarParkController implements CfCarParkSwagger {
     @RequestMapping(value = "getChargingRulesByCarParkId", method = RequestMethod.GET)
     public ResponseResult getChargingRulesByCarParkId(CfCarParkChargingRulesQuery cfCarParkChargingRulesQuery) throws Exception {
         List<CfCarParkChargingRules> cfCarParkChargingRules = cfCarParkChargingRulesService.getListByCondition(cfCarParkChargingRulesQuery);
-        if(cfCarParkChargingRules==null || cfCarParkChargingRules.size()==0){
+        if (cfCarParkChargingRules == null || cfCarParkChargingRules.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfCarParkChargingRules);
@@ -304,7 +304,7 @@ public class CarParkController implements CfCarParkSwagger {
     public ResponseResult getListByLinkerUser(Integer page, Integer size) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         List<CfCarPark> cfCarParks = cfCarParkService.getListByLinkerUser(userBasicInfo.getId(), page, size);
-        if(cfCarParks==null || cfCarParks.size()==0){
+        if (cfCarParks == null || cfCarParks.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfCarParks);
@@ -315,7 +315,7 @@ public class CarParkController implements CfCarParkSwagger {
     @RequestMapping(value = "getStatisticsDatas", method = RequestMethod.GET)
     public ResponseResult getStatisticsDatas(CfDailyParkingStatistcsQuery cfDailyParkingStatistcsQuery) throws Exception {
         List<CfDailyParkingStatistcs> cfDailyParkingStatistcsList = cfDailyParkingStatistcsService.getListByQuery(cfDailyParkingStatistcsQuery);
-        if(cfDailyParkingStatistcsList==null || cfDailyParkingStatistcsList.size()==0){
+        if (cfDailyParkingStatistcsList == null || cfDailyParkingStatistcsList.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfDailyParkingStatistcsList);
@@ -323,15 +323,16 @@ public class CarParkController implements CfCarParkSwagger {
 
     /**
      * 获取相关停车场的关联
+     *
      * @param userBasicInfo
      * @return
      */
-    List<CfCarParkLinkUser> getLinkUsersAndCheck(UserBasicInfo userBasicInfo){
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0 && StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "finance")<0){
+    List<CfCarParkLinkUser> getLinkUsersAndCheck(UserBasicInfo userBasicInfo) {
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0 && StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "finance") < 0) {
             CfCarParkLinkUserQuery cfCarParkLinkUserQuery = new CfCarParkLinkUserQuery();
             cfCarParkLinkUserQuery.setUid(userBasicInfo.getId());
             List<CfCarParkLinkUser> cfCarParkLinkUsers = cfCarParkLinkUserService.getListByQuery(cfCarParkLinkUserQuery);
-            if(cfCarParkLinkUsers==null || cfCarParkLinkUsers.size()==0){
+            if (cfCarParkLinkUsers == null || cfCarParkLinkUsers.size() == 0) {
                 ExceptionCast.cast(CarParkCode.NOT_BIND_ANY_CARPARK);
             }
             return cfCarParkLinkUsers;

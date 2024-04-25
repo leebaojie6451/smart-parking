@@ -43,9 +43,9 @@ public enum NET_EM_MOSAIC_TYPE {
         this.desc = desc;
     }
 
-    public static NET_EM_MOSAIC_TYPE getMosaicType(int type){
-        for (NET_EM_MOSAIC_TYPE mosaic:NET_EM_MOSAIC_TYPE.values()) {
-            if(type==mosaic.getType()){
+    public static NET_EM_MOSAIC_TYPE getMosaicType(int type) {
+        for (NET_EM_MOSAIC_TYPE mosaic : NET_EM_MOSAIC_TYPE.values()) {
+            if (type == mosaic.getType()) {
                 return mosaic;
             }
         }

@@ -45,7 +45,7 @@ public class CfLogisticsStorehouseController implements CfLogisticsStorehouseSwa
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseResult add(@Validated @RequestBody CfLogisticsStorehouseForm cfLogisticsStorehouseForm) throws Exception {
         CfLogisticsStorehouse cfLogisticsStorehouse = new CfLogisticsStorehouse();
-        BeanUtils.copyProperties(cfLogisticsStorehouseForm,cfLogisticsStorehouse);
+        BeanUtils.copyProperties(cfLogisticsStorehouseForm, cfLogisticsStorehouse);
         CfLogisticsStorehouse lastCfLogisticsStorehouse = cfLogisticsStorehouseService.add(cfLogisticsStorehouse);
         return new ResponseResult(CommonCode.SUCCESS, lastCfLogisticsStorehouse);
     }
@@ -55,7 +55,7 @@ public class CfLogisticsStorehouseController implements CfLogisticsStorehouseSwa
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public ResponseResult update(@Validated @RequestBody CfLogisticsStorehouseForm cfLogisticsStorehouseForm) {
         CfLogisticsStorehouse cfLogisticsStorehouse = new CfLogisticsStorehouse();
-        BeanUtils.copyProperties(cfLogisticsStorehouseForm,cfLogisticsStorehouse);
+        BeanUtils.copyProperties(cfLogisticsStorehouseForm, cfLogisticsStorehouse);
         CfLogisticsStorehouse update = cfLogisticsStorehouseService.update(cfLogisticsStorehouse);
         return new ResponseResult(CommonCode.SUCCESS, update);
     }
@@ -65,7 +65,7 @@ public class CfLogisticsStorehouseController implements CfLogisticsStorehouseSwa
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(Long id) {
         Integer delete = cfLogisticsStorehouseService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS, delete):new ResponseResult(CommonCode.FAIL, null);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS, delete) : new ResponseResult(CommonCode.FAIL, null);
     }
 
     @PreAuthorize("hasAuthority('logistics-CfLogisticsStorehouseController-getListByQuery')")
@@ -84,7 +84,7 @@ public class CfLogisticsStorehouseController implements CfLogisticsStorehouseSwa
 
         List<CfLogisticsStorehouse> cfLogisticsStorehouses = cfLogisticsStorehouseService.getListByQuery(cfLogisticsStorehouseQuery);
         Integer countByQuery = cfLogisticsStorehouseService.countByQuery(cfLogisticsStorehouseQuery);
-        if(cfLogisticsStorehouses==null || cfLogisticsStorehouses.size()==0){
+        if (cfLogisticsStorehouses == null || cfLogisticsStorehouses.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsStorehouses, countByQuery);
@@ -106,7 +106,7 @@ public class CfLogisticsStorehouseController implements CfLogisticsStorehouseSwa
 
         List<CfLogisticsStorehouse> cfLogisticsStorehouses = cfLogisticsStorehouseService.selectListByQuery(cfLogisticsStorehouseQuery);
         Integer countByQuery = cfLogisticsStorehouseService.countByQuery(cfLogisticsStorehouseQuery);
-        if(cfLogisticsStorehouses==null || cfLogisticsStorehouses.size()==0){
+        if (cfLogisticsStorehouses == null || cfLogisticsStorehouses.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsStorehouses, countByQuery);
@@ -114,17 +114,18 @@ public class CfLogisticsStorehouseController implements CfLogisticsStorehouseSwa
 
     /**
      * 检查用户是否有权限操作相关物流仓库数据
+     *
      * @param userBasicInfo
      * @param logisticsStorehouseId
      * @return
      */
-    private List<CfLogisticsStorehouseLinkUser> checkLinkerUser(UserBasicInfo userBasicInfo, Long logisticsStorehouseId){
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0){
+    private List<CfLogisticsStorehouseLinkUser> checkLinkerUser(UserBasicInfo userBasicInfo, Long logisticsStorehouseId) {
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0) {
             CfLogisticsStorehouseLinkUserQuery cfLogisticsStorehouseLinkUserQuery = new CfLogisticsStorehouseLinkUserQuery();
             cfLogisticsStorehouseLinkUserQuery.setUid(userBasicInfo.getId());
             cfLogisticsStorehouseLinkUserQuery.setLogisticsStorehouseId(logisticsStorehouseId);
             List<CfLogisticsStorehouseLinkUser> cfLogisticsStorehouseLinkUsers = cfLogisticsStorehouseLinkUserService.getListByQuery(cfLogisticsStorehouseLinkUserQuery);
-            if(cfLogisticsStorehouseLinkUsers==null || cfLogisticsStorehouseLinkUsers.size()==0){
+            if (cfLogisticsStorehouseLinkUsers == null || cfLogisticsStorehouseLinkUsers.size() == 0) {
                 ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
             }
             return cfLogisticsStorehouseLinkUsers;

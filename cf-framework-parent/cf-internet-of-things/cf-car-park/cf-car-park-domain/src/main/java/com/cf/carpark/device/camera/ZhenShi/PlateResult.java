@@ -1,10 +1,10 @@
 package com.cf.carpark.device.camera.ZhenShi;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
 /**
- *
  * @ClassName PlateResult
  * @Author 隔壁小王子 981011512@qq.com
  * @Date 2020/5/1/001 14:54

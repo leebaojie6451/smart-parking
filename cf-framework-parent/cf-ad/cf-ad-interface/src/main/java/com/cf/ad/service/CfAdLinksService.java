@@ -4,7 +4,6 @@ import com.cf.ad.domain.CfAdLinks;
 import com.cf.ad.domain.CfAdLinksExample;
 import com.cf.ad.domain.request.AdCounts;
 import com.cf.ad.domain.request.CfAdLinksQuery;
-import io.swagger.models.auth.In;
 
 import java.util.List;
 
@@ -30,6 +29,7 @@ public interface CfAdLinksService {
 
     /**
      * 广告统计
+     *
      * @param adCounts
      * @return
      */

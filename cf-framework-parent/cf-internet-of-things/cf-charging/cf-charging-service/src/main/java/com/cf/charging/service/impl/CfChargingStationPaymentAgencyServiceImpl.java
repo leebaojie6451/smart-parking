@@ -46,19 +46,19 @@ public class CfChargingStationPaymentAgencyServiceImpl implements CfChargingStat
         CfChargingStationPaymentAgencyExample cfChargingStationPaymentAgencyExample = new CfChargingStationPaymentAgencyExample();
         CfChargingStationPaymentAgencyExample.Criteria criteria = cfChargingStationPaymentAgencyExample.createCriteria();
 
-        if(StringUtils.isNotEmpty(cfChargingStationPaymentAgencyQuery.getChargingStationId())){
+        if (StringUtils.isNotEmpty(cfChargingStationPaymentAgencyQuery.getChargingStationId())) {
             criteria.andChargingStationIdEqualTo(cfChargingStationPaymentAgencyQuery.getChargingStationId());
         }
-        if(cfChargingStationPaymentAgencyQuery.getChargingStationIds()!=null && cfChargingStationPaymentAgencyQuery.getChargingStationIds().size()>0){
+        if (cfChargingStationPaymentAgencyQuery.getChargingStationIds() != null && cfChargingStationPaymentAgencyQuery.getChargingStationIds().size() > 0) {
             criteria.andChargingStationIdIn(cfChargingStationPaymentAgencyQuery.getChargingStationIds());
         }
-        if(StringUtils.isNotEmpty(cfChargingStationPaymentAgencyQuery.getUserPaymentAgency())){
+        if (StringUtils.isNotEmpty(cfChargingStationPaymentAgencyQuery.getUserPaymentAgency())) {
             criteria.andUserPaymentAgencyEqualTo(cfChargingStationPaymentAgencyQuery.getUserPaymentAgency());
         }
-        if(StringUtils.isNotEmpty(cfChargingStationPaymentAgencyQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfChargingStationPaymentAgencyQuery.getOrderBy())) {
             cfChargingStationPaymentAgencyExample.setOrderByClause(cfChargingStationPaymentAgencyQuery.getOrderBy());
         }
-        if(cfChargingStationPaymentAgencyQuery.getPage()!=null && cfChargingStationPaymentAgencyQuery.getSize()!=null){
+        if (cfChargingStationPaymentAgencyQuery.getPage() != null && cfChargingStationPaymentAgencyQuery.getSize() != null) {
             PageHelper.startPage(cfChargingStationPaymentAgencyQuery.getPage(), cfChargingStationPaymentAgencyQuery.getSize());
         }
         return cfChargingStationPaymentAgencyExample;

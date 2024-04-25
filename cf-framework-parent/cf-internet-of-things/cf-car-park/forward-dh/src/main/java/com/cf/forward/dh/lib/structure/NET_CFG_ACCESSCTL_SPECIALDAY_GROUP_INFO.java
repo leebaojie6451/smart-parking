@@ -7,7 +7,7 @@ import java.util.Arrays;
 /**
  * @author 47081
  * @version 1.0
- * @description 门禁假日组配置,对应枚举
+ * @description 门禁假日组配置, 对应枚举
  * {@link com.cf.forward.dh.lib.enumeration.NET_EM_CFG_OPERATE_TYPE#NET_EM_CFG_ACCESSCTL_SPECIALDAY_GROUP}
  * @date 2020/10/19
  */

@@ -92,7 +92,7 @@ public class CfCarParkServiceImpl implements CfCarParkService {
     @Override
     public Integer delete(String id) throws Exception {
         int i = cfCarParkMapper.deleteByPrimaryKey(id);
-        if(i==0){
+        if (i == 0) {
             return i;
         }
         //删除对应的白名单下发记录
@@ -100,9 +100,9 @@ public class CfCarParkServiceImpl implements CfCarParkService {
         cfCarParkPackageQuery.setCarParkId(id);
         List<CfCarParkPackage> cfCarParkPackages = cfCarParkPackageService.getListByQuery(cfCarParkPackageQuery);
         CfCarParkWhitelistIssuedLogQuery cfCarParkWhitelistIssuedLogQuery = new CfCarParkWhitelistIssuedLogQuery();
-        if(cfCarParkPackages!=null && cfCarParkPackages.size()>0){
+        if (cfCarParkPackages != null && cfCarParkPackages.size() > 0) {
             cfCarParkWhitelistIssuedLogQuery.setNumberPlates(new ArrayList<>());
-            for(CfCarParkPackage cfCarParkPackage: cfCarParkPackages){
+            for (CfCarParkPackage cfCarParkPackage : cfCarParkPackages) {
                 cfCarParkWhitelistIssuedLogQuery.getNumberPlates().add(cfCarParkPackage.getNumberPlate());
             }
             try {
@@ -186,9 +186,9 @@ public class CfCarParkServiceImpl implements CfCarParkService {
     @Override
     public CfCarPark findById(String id, Boolean expectEmpty) {
         CfCarPark cfCarPark = findById(id);
-        if(expectEmpty && cfCarPark!=null){
+        if (expectEmpty && cfCarPark != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
-        }else if(!expectEmpty && cfCarPark==null){
+        } else if (!expectEmpty && cfCarPark == null) {
             ExceptionCast.cast(CarParkCode.CAR_PARK_NOT_EXISTS);
         }
         return cfCarPark;
@@ -212,7 +212,7 @@ public class CfCarParkServiceImpl implements CfCarParkService {
     @Override
     public List<CfCarPark> selectNearbyDatas(BigDecimal positionX, BigDecimal positionY, Integer page, Integer limit) throws Exception {
         long currentTimeMillis = System.currentTimeMillis();
-        return cfCarParkMapper.selectNearbyDatas(positionX, positionY, (page-1)*limit, limit,DateUtil.getMillisecondBaseOnTheDay(currentTimeMillis),currentTimeMillis);
+        return cfCarParkMapper.selectNearbyDatas(positionX, positionY, (page - 1) * limit, limit, DateUtil.getMillisecondBaseOnTheDay(currentTimeMillis), currentTimeMillis);
     }
 
     @Override
@@ -225,108 +225,108 @@ public class CfCarParkServiceImpl implements CfCarParkService {
     public CfCarParkExample getExampleByQuery(CfCarParkQuery cfCarParkQuery) {
         CfCarParkExample cfCarParkExample = new CfCarParkExample();
         CfCarParkExample.Criteria criteria = cfCarParkExample.createCriteria();
-        if(StringUtils.isNotEmpty(cfCarParkQuery.getId())){
+        if (StringUtils.isNotEmpty(cfCarParkQuery.getId())) {
             criteria.andIdEqualTo(cfCarParkQuery.getId());
         }
-        if(cfCarParkQuery.getIds()!=null && cfCarParkQuery.getIds().size()>0){
+        if (cfCarParkQuery.getIds() != null && cfCarParkQuery.getIds().size() > 0) {
             criteria.andIdIn(cfCarParkQuery.getIds());
         }
-        if(StringUtils.isNotEmpty(cfCarParkQuery.getName())){
+        if (StringUtils.isNotEmpty(cfCarParkQuery.getName())) {
             criteria.andNameLike(cfCarParkQuery.getName());
         }
-        if(StringUtils.isNotEmpty(cfCarParkQuery.getCreaterId())){
+        if (StringUtils.isNotEmpty(cfCarParkQuery.getCreaterId())) {
             criteria.andCreaterIdEqualTo(cfCarParkQuery.getCreaterId());
         }
-        if(cfCarParkQuery.getMinPositionX()!=null){
+        if (cfCarParkQuery.getMinPositionX() != null) {
             criteria.andPositionXGreaterThanOrEqualTo(cfCarParkQuery.getMinPositionX());
         }
-        if(cfCarParkQuery.getMaxPositionX()!=null){
+        if (cfCarParkQuery.getMaxPositionX() != null) {
             criteria.andPositionXLessThanOrEqualTo(cfCarParkQuery.getMaxPositionX());
         }
-        if(cfCarParkQuery.getMinPositionY()!=null){
+        if (cfCarParkQuery.getMinPositionY() != null) {
             criteria.andPositionYGreaterThanOrEqualTo(cfCarParkQuery.getMinPositionY());
         }
-        if(cfCarParkQuery.getMaxPositionY()!=null){
+        if (cfCarParkQuery.getMaxPositionY() != null) {
             criteria.andPositionYLessThanOrEqualTo(cfCarParkQuery.getMaxPositionY());
         }
-        if(cfCarParkQuery.getMinStartBusinessHours()!=null){
+        if (cfCarParkQuery.getMinStartBusinessHours() != null) {
             criteria.andStartBusinessHoursGreaterThanOrEqualTo(cfCarParkQuery.getMinStartBusinessHours());
         }
-        if(cfCarParkQuery.getMaxStartBusinessHours()!=null){
+        if (cfCarParkQuery.getMaxStartBusinessHours() != null) {
             criteria.andStartBusinessHoursLessThanOrEqualTo(cfCarParkQuery.getMaxStartBusinessHours());
         }
-        if(cfCarParkQuery.getMinEndBusinessHours()!=null){
+        if (cfCarParkQuery.getMinEndBusinessHours() != null) {
             criteria.andEndBusinessHoursGreaterThanOrEqualTo(cfCarParkQuery.getMinEndBusinessHours());
         }
-        if(cfCarParkQuery.getMaxEndBusinessHours()!=null){
+        if (cfCarParkQuery.getMaxEndBusinessHours() != null) {
             criteria.andEndBusinessHoursLessThanOrEqualTo(cfCarParkQuery.getMaxEndBusinessHours());
         }
-        if(cfCarParkQuery.getMinParkingSpaceNumber()!=null){
+        if (cfCarParkQuery.getMinParkingSpaceNumber() != null) {
             criteria.andParkingSpaceNumberGreaterThanOrEqualTo(cfCarParkQuery.getMinParkingSpaceNumber());
         }
-        if(cfCarParkQuery.getMaxParkingSpaceNumber()!=null){
+        if (cfCarParkQuery.getMaxParkingSpaceNumber() != null) {
             criteria.andParkingSpaceNumberLessThanOrEqualTo(cfCarParkQuery.getMaxParkingSpaceNumber());
         }
-        if(cfCarParkQuery.getMinUsedParkingSpaceNumber()!=null){
+        if (cfCarParkQuery.getMinUsedParkingSpaceNumber() != null) {
             criteria.andUsedParkingSpaceNumberGreaterThanOrEqualTo(cfCarParkQuery.getMinUsedParkingSpaceNumber());
         }
-        if(cfCarParkQuery.getMaxUsedParkingSpaceNumber()!=null){
+        if (cfCarParkQuery.getMaxUsedParkingSpaceNumber() != null) {
             criteria.andUsedParkingSpaceNumberLessThanOrEqualTo(cfCarParkQuery.getMaxUsedParkingSpaceNumber());
         }
-        if(cfCarParkQuery.getMinFreeTime()!=null){
+        if (cfCarParkQuery.getMinFreeTime() != null) {
             criteria.andFreeTimeGreaterThanOrEqualTo(cfCarParkQuery.getMinFreeTime());
         }
-        if(cfCarParkQuery.getMaxFreeTime()!=null){
+        if (cfCarParkQuery.getMaxFreeTime() != null) {
             criteria.andFreeTimeLessThanOrEqualTo(cfCarParkQuery.getMaxFreeTime());
         }
-        if(cfCarParkQuery.getMinScore()!=null){
+        if (cfCarParkQuery.getMinScore() != null) {
             criteria.andScoreGreaterThanOrEqualTo(cfCarParkQuery.getMinScore());
         }
-        if(cfCarParkQuery.getMaxScore()!=null){
+        if (cfCarParkQuery.getMaxScore() != null) {
             criteria.andScoreLessThanOrEqualTo(cfCarParkQuery.getMaxScore());
         }
-        if(cfCarParkQuery.getMinNumberOfComments()!=null){
+        if (cfCarParkQuery.getMinNumberOfComments() != null) {
             criteria.andNumberOfCommentsGreaterThanOrEqualTo(cfCarParkQuery.getMinNumberOfComments());
         }
-        if(cfCarParkQuery.getMaxNumberOfComments()!=null){
+        if (cfCarParkQuery.getMaxNumberOfComments() != null) {
             criteria.andNumberOfCommentsLessThanOrEqualTo(cfCarParkQuery.getMaxNumberOfComments());
         }
-        if(cfCarParkQuery.getMinFeeUpperLimit()!=null){
+        if (cfCarParkQuery.getMinFeeUpperLimit() != null) {
             criteria.andFeeUpperLimitGreaterThanOrEqualTo(cfCarParkQuery.getMinFeeUpperLimit());
         }
-        if(cfCarParkQuery.getMaxFeeUpperLimit()!=null){
+        if (cfCarParkQuery.getMaxFeeUpperLimit() != null) {
             criteria.andFeeUpperLimitLessThanOrEqualTo(cfCarParkQuery.getMaxFeeUpperLimit());
         }
-        if(cfCarParkQuery.getMinStartingPrice()!=null){
+        if (cfCarParkQuery.getMinStartingPrice() != null) {
             criteria.andStartingPriceGreaterThanOrEqualTo(cfCarParkQuery.getMinStartingPrice());
         }
-        if(cfCarParkQuery.getMaxStartingPrice()!=null){
+        if (cfCarParkQuery.getMaxStartingPrice() != null) {
             criteria.andStartingPriceLessThanOrEqualTo(cfCarParkQuery.getMaxStartingPrice());
         }
-        if(cfCarParkQuery.getMinUnitDuration()!=null){
+        if (cfCarParkQuery.getMinUnitDuration() != null) {
             criteria.andUnitDurationGreaterThanOrEqualTo(cfCarParkQuery.getMinUnitDuration());
         }
-        if(cfCarParkQuery.getMaxUnitDuration()!=null){
+        if (cfCarParkQuery.getMaxUnitDuration() != null) {
             criteria.andUnitDurationLessThanOrEqualTo(cfCarParkQuery.getMaxUnitDuration());
         }
-        if(cfCarParkQuery.getBillingModel()!=null){
+        if (cfCarParkQuery.getBillingModel() != null) {
             criteria.andBillingModelEqualTo(cfCarParkQuery.getBillingModel());
         }
 
-        if(cfCarParkQuery.getSpecialFeeExpiredCar()!=null){
+        if (cfCarParkQuery.getSpecialFeeExpiredCar() != null) {
             criteria.andSpecialFeeExpiredCarEqualTo(cfCarParkQuery.getSpecialFeeExpiredCar());
         }
-        if(cfCarParkQuery.getShowExpiredCarType()!=null){
+        if (cfCarParkQuery.getShowExpiredCarType() != null) {
             criteria.andShowExpiredCarTypeEqualTo(cfCarParkQuery.getShowExpiredCarType());
         }
 
-        if(StringUtils.isNotEmpty(cfCarParkQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfCarParkQuery.getOrderBy())) {
             cfCarParkExample.setOrderByClause(cfCarParkQuery.getOrderBy());
         }
-        if(cfCarParkQuery.getPage()!=null && cfCarParkQuery.getSize()!=null){
+        if (cfCarParkQuery.getPage() != null && cfCarParkQuery.getSize() != null) {
             PageHelper.startPage(cfCarParkQuery.getPage(), cfCarParkQuery.getSize());
         }
-        if(cfCarParkQuery.getShowDistance()!=null){
+        if (cfCarParkQuery.getShowDistance() != null) {
             cfCarParkExample.setDistance(true);
         }
         return cfCarParkExample;
@@ -334,7 +334,7 @@ public class CfCarParkServiceImpl implements CfCarParkService {
 
     @Override
     public List<CfCarPark> selectContalDistanceListByQuery(CfCarParkQuery cfCarParkQuery) {
-        int page = (cfCarParkQuery.getPage() - 1)*cfCarParkQuery.getSize();
+        int page = (cfCarParkQuery.getPage() - 1) * cfCarParkQuery.getSize();
         cfCarParkQuery.setPage(page);
         return cfCarParkMapper.selectContalDistanceListByQuery(cfCarParkQuery);
     }
@@ -347,9 +347,9 @@ public class CfCarParkServiceImpl implements CfCarParkService {
     @Override
     public List<CfCarPark> getListByLinkerUser(String uid, Integer page, Integer size) {
         List<CfCarPark> cfCarParks = cfCarParkMapper.getListByLinkerUser(uid, page, size);
-        if(cfCarParks!=null && cfCarParks.size()>0){
+        if (cfCarParks != null && cfCarParks.size() > 0) {
             CfCarParkCheckpointQuery checkpointQuery = new CfCarParkCheckpointQuery();
-            for(CfCarPark cfCarPark: cfCarParks){
+            for (CfCarPark cfCarPark : cfCarParks) {
                 checkpointQuery.setCarParkId(cfCarPark.getId());
                 cfCarPark.setCfCarParkCheckpointList(cfCarParkCheckpointService.selectByQuery(checkpointQuery));
             }
@@ -377,46 +377,46 @@ public class CfCarParkServiceImpl implements CfCarParkService {
         //获取所有支付渠道列表
         CfPaymentAgencyQuery cfPaymentAgencyQuery = new CfPaymentAgencyQuery();
         List<CfPaymentAgency> cfPaymentAgencies = cfPaymentAgencySer.getListByQuery(cfPaymentAgencyQuery);
-        if(cfPaymentAgencies!=null && cfPaymentAgencies.size()>0){
-            for(CfPaymentAgency cfPaymentAgency: cfPaymentAgencies){
-                if(cfPaymentAgency.getShortName().equals("system_free_time") || cfPaymentAgency.getShortName().equals("abnormal_termination_of_order")){
+        if (cfPaymentAgencies != null && cfPaymentAgencies.size() > 0) {
+            for (CfPaymentAgency cfPaymentAgency : cfPaymentAgencies) {
+                if (cfPaymentAgency.getShortName().equals("system_free_time") || cfPaymentAgency.getShortName().equals("abnormal_termination_of_order")) {
                     continue;
                 }
                 cfOrderQuery.setCountField("amount_actually_paid");
                 cfOrderQuery.setPaymentAgencyShortName(cfPaymentAgency.getShortName());
-                totalCarParkFinanceReport.getPaymentChannel().put(cfPaymentAgency.getShortName(),cfCarParkMapper.getCarParkFinanceReport(cfOrderQuery));
+                totalCarParkFinanceReport.getPaymentChannel().put(cfPaymentAgency.getShortName(), cfCarParkMapper.getCarParkFinanceReport(cfOrderQuery));
             }
         }
 
         cfOrderQuery.setPaymentAgencyShortName(null);
 
-        if(cfOrderQuery.getGoodsType()==null){
-            cfOrderQuery.setGoodsType((byte)1);
+        if (cfOrderQuery.getGoodsType() == null) {
+            cfOrderQuery.setGoodsType((byte) 1);
             cfOrderQuery.setCountField("amounts_payable");
             totalCarParkFinanceReport.setParkingTotalAmountsPayable(cfCarParkMapper.getCarParkFinanceReport(cfOrderQuery));
             cfOrderQuery.setCountField("amount_actually_paid");
             totalCarParkFinanceReport.setParkingTotalAmountActuallyPaid(cfCarParkMapper.getCarParkFinanceReport(cfOrderQuery));
 
-            cfOrderQuery.setGoodsType((byte)5);
+            cfOrderQuery.setGoodsType((byte) 5);
             cfOrderQuery.setCountField("amounts_payable");
             totalCarParkFinanceReport.setParkingPackageTotalAmountsPayable(cfCarParkMapper.getCarParkFinanceReport(cfOrderQuery));
             cfOrderQuery.setCountField("amount_actually_paid");
             totalCarParkFinanceReport.setParkingPackageTotalAmountActuallyPaid(cfCarParkMapper.getCarParkFinanceReport(cfOrderQuery));
 
-            cfOrderQuery.setGoodsType((byte)7);
+            cfOrderQuery.setGoodsType((byte) 7);
             cfOrderQuery.setCountField("amounts_payable");
             totalCarParkFinanceReport.setParkCouponActivityRechargeTotalAmountsPayable(cfCarParkMapper.getCarParkFinanceReport(cfOrderQuery));
             cfOrderQuery.setCountField("amount_actually_paid");
             totalCarParkFinanceReport.setParkCouponActivityRechargeTotalAmountActuallyPaid(cfCarParkMapper.getCarParkFinanceReport(cfOrderQuery));
-        }else{
-            switch (cfOrderQuery.getGoodsType()){
-                case (byte)1:
+        } else {
+            switch (cfOrderQuery.getGoodsType()) {
+                case (byte) 1:
                     totalCarParkFinanceReport.setCarParkName("停车缴费");
                     break;
-                case (byte)5:
+                case (byte) 5:
                     totalCarParkFinanceReport.setCarParkName("停车套餐");
                     break;
-                case (byte)7:
+                case (byte) 7:
                     totalCarParkFinanceReport.setCarParkName("优惠活动");
                     break;
             }
@@ -431,108 +431,108 @@ public class CfCarParkServiceImpl implements CfCarParkService {
 //        totalCarParkFinanceReport.setTotalAmountActuallyPaid(cfCarParkMapper.getCarParkFinanceReport(cfOrderQuery));
 
         //维护历史账单，如果已经存在，不处理
-        if(StringUtils.isNotEmpty(cfOrderQuery.getShopId()) && cfOrderQuery.getMinPayTime()!=null &&
-                cfOrderQuery.getMaxPayTime()<=DateUtil.getSameDayMinOrMaxTimestamp("min")
-                && (cfOrderQuery.getMaxPayTime()-cfOrderQuery.getMinPayTime()<=86400000)
-                && (cfOrderQuery.getMaxPayTime()-cfOrderQuery.getMinPayTime()>86390000)
-                && (DateUtil.stampToDate(cfOrderQuery.getMinPayTime(), "yyyy-MM-dd HH:mm:ss").indexOf("00:00:00")>=0)
-        ){
+        if (StringUtils.isNotEmpty(cfOrderQuery.getShopId()) && cfOrderQuery.getMinPayTime() != null &&
+                cfOrderQuery.getMaxPayTime() <= DateUtil.getSameDayMinOrMaxTimestamp("min")
+                && (cfOrderQuery.getMaxPayTime() - cfOrderQuery.getMinPayTime() <= 86400000)
+                && (cfOrderQuery.getMaxPayTime() - cfOrderQuery.getMinPayTime() > 86390000)
+                && (DateUtil.stampToDate(cfOrderQuery.getMinPayTime(), "yyyy-MM-dd HH:mm:ss").indexOf("00:00:00") >= 0)
+        ) {
             CfHistoryOrderQuery cfHistoryOrderQuery = new CfHistoryOrderQuery();
             cfHistoryOrderQuery.setShopId(cfOrderQuery.getShopId());
             cfHistoryOrderQuery.setOrderTime(DateUtil.minMillisecondBaseOnTheDayToTimestamp(cfOrderQuery.getMinPayTime()));
             Integer count = cfHistoryOrderService.countByQuery(cfHistoryOrderQuery);
-            if(count==0){
+            if (count == 0) {
                 //插入历史账单数据
                 CfHistoryOrder cfHistoryOrder = new CfHistoryOrder();
                 cfHistoryOrder.setShopId(cfOrderQuery.getShopId());
                 cfHistoryOrder.setOrderTime(cfHistoryOrderQuery.getOrderTime());
-                if(totalCarParkFinanceReport.getParkingTotalAmountsPayable()!=null){
+                if (totalCarParkFinanceReport.getParkingTotalAmountsPayable() != null) {
                     cfHistoryOrder.setParkFeeAmountsPayable(new BigDecimal(totalCarParkFinanceReport.getParkingTotalAmountsPayable()));
-                }else{
+                } else {
                     cfHistoryOrder.setParkFeeAmountsPayable(new BigDecimal(0.00));
                 }
 
-                if(totalCarParkFinanceReport.getParkingTotalAmountActuallyPaid()!=null){
+                if (totalCarParkFinanceReport.getParkingTotalAmountActuallyPaid() != null) {
                     cfHistoryOrder.setParkFeeAmountActuallyPaid(new BigDecimal(totalCarParkFinanceReport.getParkingTotalAmountActuallyPaid()));
-                }else{
+                } else {
                     cfHistoryOrder.setParkFeeAmountActuallyPaid(new BigDecimal(0.00));
                 }
 
-                if(totalCarParkFinanceReport.getParkingPackageTotalAmountsPayable()!=null){
+                if (totalCarParkFinanceReport.getParkingPackageTotalAmountsPayable() != null) {
                     cfHistoryOrder.setParkPackageAmountsPayable(new BigDecimal(totalCarParkFinanceReport.getParkingPackageTotalAmountsPayable()));
-                }else{
+                } else {
                     cfHistoryOrder.setParkPackageAmountsPayable(new BigDecimal(0.00));
                 }
 
-                if(totalCarParkFinanceReport.getParkingPackageTotalAmountActuallyPaid()!=null){
+                if (totalCarParkFinanceReport.getParkingPackageTotalAmountActuallyPaid() != null) {
                     cfHistoryOrder.setParkPackageAmountActuallyPaid(new BigDecimal(totalCarParkFinanceReport.getParkingPackageTotalAmountActuallyPaid()));
-                }else{
+                } else {
                     cfHistoryOrder.setParkPackageAmountActuallyPaid(new BigDecimal(0.00));
                 }
 
-                if(totalCarParkFinanceReport.getParkCouponActivityRechargeTotalAmountsPayable()!=null){
+                if (totalCarParkFinanceReport.getParkCouponActivityRechargeTotalAmountsPayable() != null) {
                     cfHistoryOrder.setRechargeAmountsPayable(new BigDecimal(totalCarParkFinanceReport.getParkCouponActivityRechargeTotalAmountsPayable()));
-                }else{
+                } else {
                     cfHistoryOrder.setRechargeAmountsPayable(new BigDecimal(0.00));
                 }
 
-                if(totalCarParkFinanceReport.getParkCouponActivityRechargeTotalAmountActuallyPaid()!=null){
+                if (totalCarParkFinanceReport.getParkCouponActivityRechargeTotalAmountActuallyPaid() != null) {
                     cfHistoryOrder.setRechargeAmountActuallyPaid(new BigDecimal(totalCarParkFinanceReport.getParkCouponActivityRechargeTotalAmountActuallyPaid()));
-                }else{
+                } else {
                     cfHistoryOrder.setRechargeAmountActuallyPaid(new BigDecimal(0.00));
                 }
 
-                if(totalCarParkFinanceReport.getPaymentChannel().get("cash_pay_cny")!=null){
+                if (totalCarParkFinanceReport.getPaymentChannel().get("cash_pay_cny") != null) {
                     cfHistoryOrder.setCashPay(new BigDecimal(totalCarParkFinanceReport.getPaymentChannel().get("cash_pay_cny")));
-                }else{
+                } else {
                     cfHistoryOrder.setCashPay(new BigDecimal(0.00));
                 }
 
-                if(totalCarParkFinanceReport.getPaymentChannel().get("wei_xin_h5_pay_cny")!=null){
+                if (totalCarParkFinanceReport.getPaymentChannel().get("wei_xin_h5_pay_cny") != null) {
                     cfHistoryOrder.setWeixinH5Pay(new BigDecimal(totalCarParkFinanceReport.getPaymentChannel().get("wei_xin_h5_pay_cny")));
-                }else{
+                } else {
                     cfHistoryOrder.setWeixinH5Pay(new BigDecimal(0.00));
                 }
 
-                if(totalCarParkFinanceReport.getPaymentChannel().get("wei_xin_min_pay_cny")!=null){
+                if (totalCarParkFinanceReport.getPaymentChannel().get("wei_xin_min_pay_cny") != null) {
                     cfHistoryOrder.setWeixinMinPay(new BigDecimal(totalCarParkFinanceReport.getPaymentChannel().get("wei_xin_min_pay_cny")));
-                }else{
+                } else {
                     cfHistoryOrder.setWeixinMinPay(new BigDecimal(0.00));
                 }
 
-                if(totalCarParkFinanceReport.getPaymentChannel().get("wei_xin_app_pay_cny")!=null){
+                if (totalCarParkFinanceReport.getPaymentChannel().get("wei_xin_app_pay_cny") != null) {
                     cfHistoryOrder.setWeixinAppPay(new BigDecimal(totalCarParkFinanceReport.getPaymentChannel().get("wei_xin_app_pay_cny")));
-                }else{
+                } else {
                     cfHistoryOrder.setWeixinAppPay(new BigDecimal(0.00));
                 }
 
-                if(totalCarParkFinanceReport.getPaymentChannel().get("ali_h5_pay_cny")!=null){
+                if (totalCarParkFinanceReport.getPaymentChannel().get("ali_h5_pay_cny") != null) {
                     cfHistoryOrder.setAliH5Pay(new BigDecimal(totalCarParkFinanceReport.getPaymentChannel().get("ali_h5_pay_cny")));
-                }else{
+                } else {
                     cfHistoryOrder.setAliH5Pay(new BigDecimal(0.00));
                 }
 
-                if(totalCarParkFinanceReport.getPaymentChannel().get("ali_min_pay_cny")!=null){
+                if (totalCarParkFinanceReport.getPaymentChannel().get("ali_min_pay_cny") != null) {
                     cfHistoryOrder.setAliMinPay(new BigDecimal(totalCarParkFinanceReport.getPaymentChannel().get("ali_min_pay_cny")));
-                }else{
+                } else {
                     cfHistoryOrder.setAliMinPay(new BigDecimal(0.00));
                 }
 
-                if(totalCarParkFinanceReport.getPaymentChannel().get("ali_app_pay_cny")!=null){
+                if (totalCarParkFinanceReport.getPaymentChannel().get("ali_app_pay_cny") != null) {
                     cfHistoryOrder.setAliAppPay(new BigDecimal(totalCarParkFinanceReport.getPaymentChannel().get("ali_app_pay_cny")));
-                }else{
+                } else {
                     cfHistoryOrder.setAliAppPay(new BigDecimal(0.00));
                 }
 
-                if(totalCarParkFinanceReport.getPaymentChannel().get("package")!=null){
+                if (totalCarParkFinanceReport.getPaymentChannel().get("package") != null) {
                     cfHistoryOrder.setParkPackagePay(new BigDecimal(totalCarParkFinanceReport.getPaymentChannel().get("package")));
-                }else{
+                } else {
                     cfHistoryOrder.setParkPackagePay(new BigDecimal(0.00));
                 }
 
-                if(totalCarParkFinanceReport.getPaymentChannel().get("ccb_Password_free_payment_cny")!=null){
+                if (totalCarParkFinanceReport.getPaymentChannel().get("ccb_Password_free_payment_cny") != null) {
                     cfHistoryOrder.setBbcPay(new BigDecimal(totalCarParkFinanceReport.getPaymentChannel().get("ccb_Password_free_payment_cny")));
-                }else{
+                } else {
                     cfHistoryOrder.setBbcPay(new BigDecimal(0.00));
                 }
                 cfHistoryOrderService.add(cfHistoryOrder);

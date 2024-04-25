@@ -11,11 +11,12 @@ public interface CfWeiXinSubscribeToNotificationsService {
 
     /**
      * 发送订阅消息
+     *
      * @param toUid
      * @param messageType
      * @param contents
      * @param appId
      */
-    JSONObject sendMessage(String toUid, String messageType, Map<String, String> contents, String appId)throws Exception;
+    JSONObject sendMessage(String toUid, String messageType, Map<String, String> contents, String appId) throws Exception;
 
 }

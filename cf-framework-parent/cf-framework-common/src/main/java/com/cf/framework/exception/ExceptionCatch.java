@@ -21,6 +21,7 @@ import javax.validation.ConstraintViolationException;
 
 /**
  * 统一异常捕获类
+ *
  * @author Administrator
  * @version 1.0
  * @create 2018-09-14 17:32
@@ -33,37 +34,38 @@ public class ExceptionCatch {
     //定义map，配置异常类型所对应的错误代码
     private static ImmutableMap<Class<? extends Throwable>, ResultCode> EXCEPTIONS;
     //定义map的builder对象，去构建ImmutableMap
-    protected static ImmutableMap.Builder<Class<? extends Throwable>,ResultCode> builder = ImmutableMap.builder();
+    protected static ImmutableMap.Builder<Class<? extends Throwable>, ResultCode> builder = ImmutableMap.builder();
 
     //捕获CustomException此类异常
     @ExceptionHandler(CustomException.class)
     @ResponseBody
-    public ResponseResult customException(CustomException customException){
+    public ResponseResult customException(CustomException customException) {
         customException.printStackTrace();
         //记录日志
         ResultCode resultCode = customException.getResultCode();
         return new ResponseResult(resultCode);
     }
+
     //捕获Exception此类异常
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public ResponseResult exception(Exception exception){
+    public ResponseResult exception(Exception exception) {
         exception.printStackTrace();
         //记录日志
-        if(EXCEPTIONS == null){
+        if (EXCEPTIONS == null) {
             EXCEPTIONS = builder.build();//EXCEPTIONS构建成功
         }
         //从EXCEPTIONS中找异常类型所对应的错误代码，如果找到了将错误代码响应给用户，如果找不到给用户响应99999异常
         ResultCode resultCode = EXCEPTIONS.get(exception.getClass());
-        if(resultCode !=null){
-            if(exception instanceof BindException){
+        if (resultCode != null) {
+            if (exception instanceof BindException) {
                 BindException bindException = (BindException) exception;
                 resultCode.setMixMessage(bindException.getBindingResult().getAllErrors().get(0).getDefaultMessage());
-            }else if (!StringUtils.isEmpty(exception.getMessage())) {
+            } else if (!StringUtils.isEmpty(exception.getMessage())) {
                 resultCode.setMessage(exception.getMessage());
             }
             return new ResponseResult(resultCode);
-        }else{
+        } else {
             //返回99999异常
             return new ResponseResult(CommonCode.SERVER_ERROR, null, exception.getMessage());
         }
@@ -73,7 +75,7 @@ public class ExceptionCatch {
 
     static {
         //定义异常类型所对应的错误代码
-        builder.put(HttpMessageNotReadableException.class,CommonCode.INVALID_PARAM);
+        builder.put(HttpMessageNotReadableException.class, CommonCode.INVALID_PARAM);
         builder.put(ConstraintViolationException.class, CommonCode.INVALID_PARAM);
         builder.put(BindException.class, CommonCode.INVALID_PARAM);
         builder.put(MissingServletRequestParameterException.class, CommonCode.INVALID_PARAM);

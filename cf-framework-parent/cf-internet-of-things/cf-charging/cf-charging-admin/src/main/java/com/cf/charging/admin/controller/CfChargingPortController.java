@@ -36,7 +36,7 @@ public class CfChargingPortController implements CfChargingPortSwagger {
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseResult add(@Validated @RequestBody CfChargingPortForm cfChargingPortForm) throws Exception {
         CfChargingPort cfChargingPort = new CfChargingPort();
-        BeanUtils.copyProperties(cfChargingPortForm,cfChargingPort);
+        BeanUtils.copyProperties(cfChargingPortForm, cfChargingPort);
         CfChargingPort lastCfChargingPort = cfChargingPortService.add(cfChargingPort);
         return new ResponseResult(CommonCode.SUCCESS, lastCfChargingPort);
     }
@@ -46,7 +46,7 @@ public class CfChargingPortController implements CfChargingPortSwagger {
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public ResponseResult update(@Validated @RequestBody CfChargingPortForm cfChargingPortForm) {
         CfChargingPort cfChargingPort = new CfChargingPort();
-        BeanUtils.copyProperties(cfChargingPortForm,cfChargingPort);
+        BeanUtils.copyProperties(cfChargingPortForm, cfChargingPort);
         CfChargingPort lastCfChargingPort = cfChargingPortService.update(cfChargingPort);
         return new ResponseResult(CommonCode.SUCCESS, lastCfChargingPort);
     }
@@ -56,7 +56,7 @@ public class CfChargingPortController implements CfChargingPortSwagger {
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(String id) throws Exception {
         Integer delete = cfChargingPortService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS, delete):new ResponseResult(CommonCode.FAIL, null);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS, delete) : new ResponseResult(CommonCode.FAIL, null);
     }
 
     @PreAuthorize("hasAuthority('charging-CfChargingPortController-getListByQuery')")
@@ -64,7 +64,7 @@ public class CfChargingPortController implements CfChargingPortSwagger {
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(CfChargingPortQuery cfChargingPortQuery) throws Exception {
         List<CfChargingPort> cfChargingPortList = cfChargingPortService.getListByQuery(cfChargingPortQuery);
-        if(cfChargingPortList==null || cfChargingPortList.size()==0){
+        if (cfChargingPortList == null || cfChargingPortList.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfChargingPortList);

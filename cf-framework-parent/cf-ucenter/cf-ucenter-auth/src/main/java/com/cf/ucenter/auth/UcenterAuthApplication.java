@@ -12,11 +12,10 @@ import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 
-
 //@EnableFeignClients
 @EntityScan("com.cf.framework.domain.ucenter.dao")//扫描实体类
-@ComponentScan(basePackages={"com.cf.ucenter.auth"})//扫描接口
-@ComponentScan(basePackages={"com.cf.framework"})//扫描common下的所有类
+@ComponentScan(basePackages = {"com.cf.ucenter.auth"})//扫描接口
+@ComponentScan(basePackages = {"com.cf.framework"})//扫描common下的所有类
 @MapperScan("com.cf.ucenter.dao.mapper")
 @SpringBootApplication
 public class UcenterAuthApplication {

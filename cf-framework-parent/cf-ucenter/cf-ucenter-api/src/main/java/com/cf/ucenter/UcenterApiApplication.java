@@ -25,7 +25,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class UcenterApiApplication {
     public static void main(String[] args) {
-        SpringApplication.run(UcenterApiApplication.class,args);
+        SpringApplication.run(UcenterApiApplication.class, args);
     }
 
 }

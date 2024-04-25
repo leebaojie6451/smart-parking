@@ -18,7 +18,6 @@ public class MobileAuthenticationToken extends AbstractAuthenticationToken {
 
     /**
      * 认证之前使用的构造 方法, 此方法会标识未认证
-     *
      */
     public MobileAuthenticationToken(Object principal) {
         super(null);
@@ -28,7 +27,8 @@ public class MobileAuthenticationToken extends AbstractAuthenticationToken {
 
     /**
      * 认证通过后,会重新创建MobileAuthenticationToken实例 ,来进行封装认证信息
-     * @param principal 用户信息
+     *
+     * @param principal   用户信息
      * @param authorities 权限资源
      */
     public MobileAuthenticationToken(Object principal, Collection<? extends GrantedAuthority> authorities) {
@@ -39,6 +39,7 @@ public class MobileAuthenticationToken extends AbstractAuthenticationToken {
 
     /**
      * 因为它是父类中的抽象方法,,所以要实现,直接返回null即可
+     *
      * @return
      */
     @Override

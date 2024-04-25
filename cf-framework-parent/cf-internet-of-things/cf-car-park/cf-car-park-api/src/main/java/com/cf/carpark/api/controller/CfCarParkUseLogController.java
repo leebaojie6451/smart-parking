@@ -56,7 +56,6 @@ import java.math.BigDecimal;
 import java.util.*;
 
 /**
- *
  * @ClassName CfCarParkUseLogController
  * @Author 隔壁小王子 981011512@qq.com
  * @Date 2020/4/28/028 8:55
@@ -88,7 +87,7 @@ public class CfCarParkUseLogController implements CfCarParkUseLogSwagger {
         BufferedReader bufferedReader = null;
         InputStream inputStream = null;
         StringBuffer sb = null;
-        try{
+        try {
             inputStream = httpServletRequest.getInputStream();
             bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             sb = new StringBuffer();
@@ -96,13 +95,13 @@ public class CfCarParkUseLogController implements CfCarParkUseLogSwagger {
             while ((line = bufferedReader.readLine()) != null) {
                 sb.append(line);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             throw e;
-        }finally {
-            try{
+        } finally {
+            try {
                 bufferedReader.close();
                 inputStream.close();
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw e;
             }
 
@@ -112,34 +111,34 @@ public class CfCarParkUseLogController implements CfCarParkUseLogSwagger {
 
     @Override
     @RequestMapping(value = "add")
-    public Object add(HttpServletRequest httpServletRequest, HttpServletResponse response, String contents, String deviceBrand) throws Exception{
+    public Object add(HttpServletRequest httpServletRequest, HttpServletResponse response, String contents, String deviceBrand) throws Exception {
         String sb = null;
         Map carLogMap = null;
-        if(StringUtils.isNotEmpty(contents)){
+        if (StringUtils.isNotEmpty(contents)) {
             sb = contents;
-        }else{
-            if(deviceBrand.equals(DeviceBrand.QIAN_YI)){
+        } else {
+            if (deviceBrand.equals(DeviceBrand.QIAN_YI)) {
                 carLogMap = getAllRequestParam(httpServletRequest);
-            }else{
+            } else {
                 sb = getHttpData(httpServletRequest);
             }
         }
 
-        if(StringUtils.isNotEmpty(sb)){
+        if (StringUtils.isNotEmpty(sb)) {
             carLogMap = (JSONObject.parseObject(sb));
-            carLogMap.put("deviceBrand",httpServletRequest.getParameter("deviceBrand"));
-        }else{
-            if(carLogMap==null || carLogMap.get("AlarmInfoPlate")==null){
+            carLogMap.put("deviceBrand", httpServletRequest.getParameter("deviceBrand"));
+        } else {
+            if (carLogMap == null || carLogMap.get("AlarmInfoPlate") == null) {
                 carLogMap = new HashMap<String, Object>();
                 Map<String, String[]> parameterMap = request.getParameterMap();
-                for(Map.Entry<String, String[]> map:parameterMap.entrySet()){
+                for (Map.Entry<String, String[]> map : parameterMap.entrySet()) {
                     carLogMap.put(map.getKey(), map.getValue()[0]);
                 }
             }
         }
 
         Object o = cfCarParkUseLogService.parseCarParkUseLogForm(carLogMap);
-        if(carLogMap.containsKey("deviceBrand") && carLogMap.get("deviceBrand").toString().equals(DeviceBrand.HUA_XIA)){
+        if (carLogMap.containsKey("deviceBrand") && carLogMap.get("deviceBrand").toString().equals(DeviceBrand.HUA_XIA)) {
             int length = JSON.toJSONString(o).length();
             response.setContentLength(length);
             return JSON.toJSONString(o);
@@ -151,29 +150,29 @@ public class CfCarParkUseLogController implements CfCarParkUseLogSwagger {
     @RequestMapping(value = "getCarParkUseLogList", method = RequestMethod.GET)
     public ResponseResult getCarParkUseLogList(CfCarParkUseLogQuery cfCarParkUseLogQuery) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        if(StringUtils.isNotEmpty(cfCarParkUseLogQuery.getNumberPlate()) && cfCarParkUseLogQuery.getNumberPlate().length()<5){
+        if (StringUtils.isNotEmpty(cfCarParkUseLogQuery.getNumberPlate()) && cfCarParkUseLogQuery.getNumberPlate().length() < 5) {
             cfCarParkUseLogQuery.setNumberPlate(null);
         }
-        if(StringUtils.isEmpty(cfCarParkUseLogQuery.getNumberPlate())){
+        if (StringUtils.isEmpty(cfCarParkUseLogQuery.getNumberPlate())) {
             CfCarParkCarQuery cfCarParkCarQuery = new CfCarParkCarQuery();
             cfCarParkCarQuery.setUid(userBasicInfo.getId());
             List<CfCarParkCar> cfCarParkCars = cfCarParkCarService.getMyCarsByCondition(cfCarParkCarQuery);
-            if(cfCarParkCars!=null && cfCarParkCars.size()>0){
+            if (cfCarParkCars != null && cfCarParkCars.size() > 0) {
                 List<String> numberPlates = new ArrayList<String>();
-                for (CfCarParkCar cfCarParkCar: cfCarParkCars){
+                for (CfCarParkCar cfCarParkCar : cfCarParkCars) {
                     numberPlates.add(cfCarParkCar.getNumberPlate());
                 }
                 cfCarParkUseLogQuery.setNumberPlates(numberPlates);
-            }else{
+            } else {
                 return new ResponseResult(CommonCode.NO_MORE_DATAS);
             }
         }
         cfCarParkUseLogQuery.setOrderBy("cpul.create_time desc");
         List<CfCarParkUseLog> cfCarParkUseLogs = cfCarParkUseLogService.selectByQuery(cfCarParkUseLogQuery);
-        if(cfCarParkUseLogs!=null && cfCarParkUseLogs.size()>0){
-            for (CfCarParkUseLog cfCarParkUseLog: cfCarParkUseLogs){
-                if(cfCarParkUseLog.getCfCarPark()!=null){
-                    cfCarParkUseLog.getCfCarPark().setName(StringTools.vaguePartString(cfCarParkUseLog.getCfCarPark().getName(),3,2));
+        if (cfCarParkUseLogs != null && cfCarParkUseLogs.size() > 0) {
+            for (CfCarParkUseLog cfCarParkUseLog : cfCarParkUseLogs) {
+                if (cfCarParkUseLog.getCfCarPark() != null) {
+                    cfCarParkUseLog.getCfCarPark().setName(StringTools.vaguePartString(cfCarParkUseLog.getCfCarPark().getName(), 3, 2));
                     cfCarParkUseLog.getCfCarPark().setPositionX(null);
                     cfCarParkUseLog.getCfCarPark().setPositionY(null);
                 }
@@ -189,17 +188,17 @@ public class CfCarParkUseLogController implements CfCarParkUseLogSwagger {
         String deviceSerialNumber = "";
         Map<String, Object> param = getAllRequestParam(httpServletRequest);
 //        logger.error("Map数据: "+param);
-        if(StringUtils.isNotEmpty(deviceBrand)){
-            switch (deviceBrand){
+        if (StringUtils.isNotEmpty(deviceBrand)) {
+            switch (deviceBrand) {
                 case DeviceBrand.ZHEN_SHI:
                     deviceSerialNumber = param.get("serialno").toString();
-                    if(StringUtils.isEmpty(deviceSerialNumber)){
+                    if (StringUtils.isEmpty(deviceSerialNumber)) {
                         ZhenShi911202002050 zhenShi911202002050 = BeanUtils.deepMapToBean(ZhenShi911202002050.class.newInstance().getClass(), param);
                         deviceSerialNumber = zhenShi911202002050.getAlarmInfoPlate().getSerialno();
                     }
                     break;
                 case DeviceBrand.QIAN_YI:
-                    deviceSerialNumber = ((Map<String, Object>)param.get("heartbeat")).get("serialno").toString();
+                    deviceSerialNumber = ((Map<String, Object>) param.get("heartbeat")).get("serialno").toString();
                     break;
                 case DeviceBrand.HK:
                     deviceSerialNumber = param.get("serialNo").toString();
@@ -210,18 +209,18 @@ public class CfCarParkUseLogController implements CfCarParkUseLogSwagger {
                 default:
                     return new ResponseResult(CarParkCode.BRAND_DEVICES_THAT_IS_NOT_CURRENTLY_SUPPORTED);
             }
-            if(StringUtils.isEmpty(deviceSerialNumber)){
+            if (StringUtils.isEmpty(deviceSerialNumber)) {
                 return new ResponseResult(CarParkCode.DEVICE_SERIAL_NUMBER_IS_NOT_SPECIFIED);
             }
 //            return "{\"Response_AlarmInfoPlate\":{\"info\":\"ok\",\"plateid\":\"1416298816614875136\",\"channelNum\":0,\"manualTrigger\":\"fail\",\"is_pay\":null,\"serialData\":[{\"serialChannel\":0,\"data\":\"AGT//2IbAAEBAAIBAQMAAP8AAAAAAAAIALnzQTg4ODg4aTo=\",\"dataLen\":48,\"channel\":null,\"serialno\":null,\"ipaddr\":null,\"deviceName\":null},{\"serialChannel\":0,\"data\":\"AGT//2IZAQMBAAIDAQMA//8AAAAAAAAGAMHZyrGztQ13\",\"dataLen\":44,\"channel\":null,\"serialno\":null,\"ipaddr\":null,\"deviceName\":null},{\"serialChannel\":0,\"data\":\"AGT//2IbAgQBAAIEAQMA/wAAAAAAAAAIALu206254sHZYQk=\",\"dataLen\":48,\"channel\":null,\"serialno\":null,\"ipaddr\":null,\"deviceName\":null},{\"serialChannel\":0,\"data\":\"AGT//2ImAwEBAAIBAQMAAP8AAAAAAAATALu206254sHZLMfrvPXL2cL90NBO8w==\",\"dataLen\":64,\"channel\":null,\"serialno\":null,\"ipaddr\":null,\"deviceName\":null},{\"serialChannel\":0,\"data\":\"AGT//zAJALnzQTg4ODg4MaU=\",\"dataLen\":24,\"channel\":null,\"serialno\":null,\"ipaddr\":null,\"deviceName\":null},{\"serialChannel\":0,\"data\":\"AGT//zAHAMHZyrGztbfd\",\"dataLen\":20,\"channel\":null,\"serialno\":null,\"ipaddr\":null,\"deviceName\":null},{\"serialChannel\":0,\"data\":\"AGT//zAJAbu206254sHZMlg=\",\"dataLen\":24,\"channel\":null,\"serialno\":null,\"ipaddr\":null,\"deviceName\":null}],\"TriggerImage\":null}}";
             Map<String, Object> stringObjectMap = cfCarParkReleaseLogService.releaseMonitoring(deviceSerialNumber, deviceBrand);
-            if(stringObjectMap.get("prefix")!=null && stringObjectMap.get("carParkReleaseLog")!=null){
+            if (stringObjectMap.get("prefix") != null && stringObjectMap.get("carParkReleaseLog") != null) {
                 cfCarParkReleaseLogService.cleanReleaseRedis(stringObjectMap.get("prefix").toString(), (CfCarParkReleaseLog) stringObjectMap.get("carParkReleaseLog"));
-            }else if(stringObjectMap.get("capture")!=null){
+            } else if (stringObjectMap.get("capture") != null) {
                 cfCarParkReleaseLogService.cleanCaptureRedis(stringObjectMap.get("prefix").toString());
             }
             return stringObjectMap.get("object");
-        }else{
+        } else {
             return new ResponseResult(CarParkCode.DEVICE_BRAND_IS_NOT_SPECIFIED);
         }
     }
@@ -229,7 +228,7 @@ public class CfCarParkUseLogController implements CfCarParkUseLogSwagger {
     private Map<String, Object> getAllRequestParam(final HttpServletRequest request) throws Exception {
         String sb = getHttpData(request);
         Map res = (JSONObject.parseObject(sb));
-        if(res==null){
+        if (res == null) {
             res = new HashMap();
         }
         Enumeration<?> temp = request.getParameterNames();
@@ -257,7 +256,7 @@ public class CfCarParkUseLogController implements CfCarParkUseLogSwagger {
     ) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         CfCarParkUseLog cfCarParkUseLog = cfCarParkUseLogService.applyForAccess(userBasicInfo.getId(), direction, checkPointId, type, deviceNo);
-        return cfCarParkUseLog==null?new ResponseResult(CommonCode.FAIL):new ResponseResult(CommonCode.SUCCESS, cfCarParkUseLog);
+        return cfCarParkUseLog == null ? new ResponseResult(CommonCode.FAIL) : new ResponseResult(CommonCode.SUCCESS, cfCarParkUseLog);
     }
 
     @Override
@@ -276,26 +275,26 @@ public class CfCarParkUseLogController implements CfCarParkUseLogSwagger {
     @Override
     @RequestMapping(value = "getLastCarParkUseLogList", method = RequestMethod.GET)
     public ResponseResult getLastCarParkUseLogList(CfCarParkUseLogQuery cfCarParkUseLogQuery) throws Exception {
-        if(StringUtils.isEmpty(cfCarParkUseLogQuery.getOutCheckPointId())){
+        if (StringUtils.isEmpty(cfCarParkUseLogQuery.getOutCheckPointId())) {
             ExceptionCast.cast(CommonCode.INVALID_PARAM, "outCheckPointId required: 必须指定出入关卡id");
         }
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         cfCarParkUseLogQuery.setPayTime(0l);
         cfCarParkUseLogQuery.setMinInTime(1l);
-        cfCarParkUseLogQuery.setMinOutTime(System.currentTimeMillis()-180000);
+        cfCarParkUseLogQuery.setMinOutTime(System.currentTimeMillis() - 180000);
         cfCarParkUseLogQuery.setOrderBy("cpul.out_time desc");
         cfCarParkUseLogQuery.setPage(1);
         cfCarParkUseLogQuery.setSize(1);
         List<CfCarParkUseLog> cfCarParkUseLogs = cfCarParkUseLogService.selectByQuery(cfCarParkUseLogQuery);
-        if(cfCarParkUseLogs!=null && cfCarParkUseLogs.size()>0){
+        if (cfCarParkUseLogs != null && cfCarParkUseLogs.size() > 0) {
             CfCarParkOrder cfCarParkOrder = cfCarParkChargingRulesService.calculateTheAmounPayable(cfCarParkUseLogs.get(0).getId(), "", FeeQueryMode.QUERY_MODE_QUERY_ONLY);
             CfOrder cfOrder = cfCarParkOrder.getCfOrder();
 
             String couponId = null;
-            if(System.currentTimeMillis()-cfOrder.getManualOfferSetTime()<=900000){
+            if (System.currentTimeMillis() - cfOrder.getManualOfferSetTime() <= 900000) {
                 BigDecimal amountsPayable = cfOrder.getAmountsPayable();
                 cfOrder.setAmountsPayable(amountsPayable.subtract(cfOrder.getManualOffer()));
-            }else{
+            } else {
                 cfOrder.setAmountsPayable(cfCarParkOrder.getCfOrder().getAmountsPayable());
             }
 //        //更新应付金额
@@ -306,71 +305,71 @@ public class CfCarParkUseLogController implements CfCarParkUseLogSwagger {
 //            cfOrderService.updateByPrimaryKeySelective(order);
 //        }
             cfCarParkOrder.setCfOrder(cfOrder);
-            cfCarParkOrder.setCfCouponList(cfCouponService.getAvailableByShopIdAndScenes(System.currentTimeMillis(), cfCarParkOrder.getCfOrder().getShopId(), CouponScenes.CARPARK, cfCarParkOrder.getCfOrder().getEffectObject(),userBasicInfo.getId()));
-            if(StringUtils.isEmpty(couponId) && cfCarParkOrder.getCfCouponList()!=null && cfCarParkOrder.getCfCouponList().size()>0){
+            cfCarParkOrder.setCfCouponList(cfCouponService.getAvailableByShopIdAndScenes(System.currentTimeMillis(), cfCarParkOrder.getCfOrder().getShopId(), CouponScenes.CARPARK, cfCarParkOrder.getCfOrder().getEffectObject(), userBasicInfo.getId()));
+            if (StringUtils.isEmpty(couponId) && cfCarParkOrder.getCfCouponList() != null && cfCarParkOrder.getCfCouponList().size() > 0) {
                 couponId = cfCarParkOrder.getCfCouponList().get(0).getId();
             }
-            if(StringUtils.isNotEmpty(couponId)){
+            if (StringUtils.isNotEmpty(couponId)) {
                 CfCoupon cfCoupon = cfCouponService.findById(couponId, false);
-                if(cfCoupon.getCouponType()==(byte)3 && cfCoupon.getDenomination().longValue()+cfCarParkOrder.getCfCarParkUseLog().getInTime()<cfCarParkOrder.getCfCarParkUseLog().getOutTime()){
+                if (cfCoupon.getCouponType() == (byte) 3 && cfCoupon.getDenomination().longValue() + cfCarParkOrder.getCfCarParkUseLog().getInTime() < cfCarParkOrder.getCfCarParkUseLog().getOutTime()) {
                     long inTime = cfCoupon.getDenomination().longValue() + cfCarParkOrder.getCfCarParkUseLog().getInTime();
                     cfCarParkOrder.getCfCarParkUseLog().setInTime(inTime);
                 }
-                if(cfCarParkOrder.getCfOrder().getStatus()!=0){
+                if (cfCarParkOrder.getCfOrder().getStatus() != 0) {
                     ExceptionCast.cast(PayCode.NO_NEED_TO_PAY);
                 }
 
                 //如果人工设置了优惠金额，电子优惠券不再使用
                 boolean usedCoupon = true;
-                if(cfCarParkOrder.getCfOrder().getManualOfferSetTime()==0 || (System.currentTimeMillis()-cfCarParkOrder.getCfOrder().getManualOfferSetTime()>=900000)){
-                    if(System.currentTimeMillis()<cfCoupon.getEffectiveTime() || System.currentTimeMillis()>cfCoupon.getExpireTime() || cfCoupon.getStatus()!=1){
+                if (cfCarParkOrder.getCfOrder().getManualOfferSetTime() == 0 || (System.currentTimeMillis() - cfCarParkOrder.getCfOrder().getManualOfferSetTime() >= 900000)) {
+                    if (System.currentTimeMillis() < cfCoupon.getEffectiveTime() || System.currentTimeMillis() > cfCoupon.getExpireTime() || cfCoupon.getStatus() != 1) {
                         usedCoupon = false;
                     }
 
-                    if(StringUtils.isNotEmpty(cfCoupon.getGoodsId()) && !cfCoupon.getGoodsId().equals(cfCarParkOrder.getCfCarParkUseLog().getNumberPlate())){
+                    if (StringUtils.isNotEmpty(cfCoupon.getGoodsId()) && !cfCoupon.getGoodsId().equals(cfCarParkOrder.getCfCarParkUseLog().getNumberPlate())) {
                         usedCoupon = false;
-                    }else if(StringUtils.isEmpty(cfCoupon.getGoodsId()) && StringUtils.isNotEmpty(cfCoupon.getToUid()) && !cfCoupon.getToUid().equals(userBasicInfo.getId())){
+                    } else if (StringUtils.isEmpty(cfCoupon.getGoodsId()) && StringUtils.isNotEmpty(cfCoupon.getToUid()) && !cfCoupon.getToUid().equals(userBasicInfo.getId())) {
                         usedCoupon = false;
                     }
 
-                    if(cfCoupon.getScenes()!=0 && cfCoupon.getScenes()!=1){
+                    if (cfCoupon.getScenes() != 0 && cfCoupon.getScenes() != 1) {
                         usedCoupon = false;
                     }
-                    if(StringUtils.isNotEmpty(cfCoupon.getGoodsId()) && !cfCoupon.getGoodsId().equals(cfCarParkOrder.getCfCarParkUseLog().getNumberPlate())){
+                    if (StringUtils.isNotEmpty(cfCoupon.getGoodsId()) && !cfCoupon.getGoodsId().equals(cfCarParkOrder.getCfCarParkUseLog().getNumberPlate())) {
                         usedCoupon = false;
                     }
-                    if(cfCoupon.getCouponType()==(byte)1 ||
-                            (cfCoupon.getCouponType()==(byte)2 && cfCoupon.getDenomination().doubleValue()>=cfCarParkOrder.getCfOrder().getAmountsPayable().doubleValue()) ||
-                            (cfCoupon.getCouponType()==(byte)3 && cfCoupon.getDenomination().longValue()+cfCarParkOrder.getCfCarParkUseLog().getInTime()>=cfCarParkOrder.getCfCarParkUseLog().getOutTime())
-                    ){
+                    if (cfCoupon.getCouponType() == (byte) 1 ||
+                            (cfCoupon.getCouponType() == (byte) 2 && cfCoupon.getDenomination().doubleValue() >= cfCarParkOrder.getCfOrder().getAmountsPayable().doubleValue()) ||
+                            (cfCoupon.getCouponType() == (byte) 3 && cfCoupon.getDenomination().longValue() + cfCarParkOrder.getCfCarParkUseLog().getInTime() >= cfCarParkOrder.getCfCarParkUseLog().getOutTime())
+                    ) {
                         //禁止手动优惠券全额支付
                         ExceptionCast.cast(PayCode.NO_NEED_TO_PAY);
-                    }else if(usedCoupon){
-                        if(cfCoupon.getCouponType()==(byte)2){
+                    } else if (usedCoupon) {
+                        if (cfCoupon.getCouponType() == (byte) 2) {
                             cfCarParkOrder.getCfOrder().setAmountsPayable(
                                     cfCarParkOrder.getCfOrder().getAmountsPayable().subtract(cfCoupon.getDenomination())
                             );
                         }
                     }
                 }
-                if(cfCarParkOrder.getCfOrder().getStatus()!=0){
+                if (cfCarParkOrder.getCfOrder().getStatus() != 0) {
                     ExceptionCast.cast(PayCode.NO_NEED_TO_PAY);
                 }
             }
 
             //模糊掉返回停车数据
-            if(cfCarParkOrder.getCfCarPark()!=null){
-                cfCarParkOrder.getCfCarPark().setName(StringTools.vaguePartString(cfCarParkOrder.getCfCarPark().getName(),3,2));
+            if (cfCarParkOrder.getCfCarPark() != null) {
+                cfCarParkOrder.getCfCarPark().setName(StringTools.vaguePartString(cfCarParkOrder.getCfCarPark().getName(), 3, 2));
                 cfCarParkOrder.getCfCarPark().setPositionX(null);
                 cfCarParkOrder.getCfCarPark().setPositionY(null);
             }
-            if(cfCarParkOrder.getInCheckpoint()!=null){
-                cfCarParkOrder.getInCheckpoint().setName(StringTools.vaguePartString(cfCarParkOrder.getInCheckpoint().getName(),3,2));
+            if (cfCarParkOrder.getInCheckpoint() != null) {
+                cfCarParkOrder.getInCheckpoint().setName(StringTools.vaguePartString(cfCarParkOrder.getInCheckpoint().getName(), 3, 2));
                 cfCarParkOrder.getInCheckpoint().setPositionX(null);
                 cfCarParkOrder.getInCheckpoint().setPositionY(null);
             }
-            if(cfCarParkOrder.getOutCheckpoint()!=null){
-                cfCarParkOrder.getOutCheckpoint().setName(StringTools.vaguePartString(cfCarParkOrder.getOutCheckpoint().getName(),3,2));
+            if (cfCarParkOrder.getOutCheckpoint() != null) {
+                cfCarParkOrder.getOutCheckpoint().setName(StringTools.vaguePartString(cfCarParkOrder.getOutCheckpoint().getName(), 3, 2));
                 cfCarParkOrder.getOutCheckpoint().setPositionX(null);
                 cfCarParkOrder.getOutCheckpoint().setPositionY(null);
             }
@@ -457,7 +456,7 @@ public class CfCarParkUseLogController implements CfCarParkUseLogSwagger {
 //                cfCarParkOrder.getOutCheckpoint().setPositionX(null);
 //                cfCarParkOrder.getOutCheckpoint().setPositionY(null);
 //            }
-            return new ResponseResult(CommonCode.SUCCESS,cfCarParkOrder);
+            return new ResponseResult(CommonCode.SUCCESS, cfCarParkOrder);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);
     }
@@ -473,10 +472,10 @@ public class CfCarParkUseLogController implements CfCarParkUseLogSwagger {
     @RequestMapping(value = "manuallyUpload", method = RequestMethod.POST, headers = "content-type=multipart/form-data;charset=utf-8")
     public ResponseResult manuallyUpload(MultipartFile file, String carParkCheckPointId, Long time, String platform) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        if(StringUtils.isEmpty(platform)){
+        if (StringUtils.isEmpty(platform)) {
             platform = "ali_oss";
         }
-        if(time==null){
+        if (time == null) {
             time = System.currentTimeMillis();
         }
         CfCarParkOrder cfCarParkOrder = cfCarParkUseLogService.manuallyUpload(file.getBytes(), file.getOriginalFilename(), carParkCheckPointId, time, userBasicInfo.getId(), platform);

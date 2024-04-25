@@ -94,7 +94,7 @@ public class AuthServiceImpl implements AuthService {
 
         //请求spring security申请令牌
         AuthToken authToken = this.applyToken(username, password, clientId, clientSecret, "password");
-        if(authToken == null){
+        if (authToken == null) {
             ExceptionCast.cast(AuthCode.AUTH_LOGIN_APPLYTOKEN_FAIL);
         }
 //        //用户身份令牌
@@ -107,8 +107,8 @@ public class AuthServiceImpl implements AuthService {
 //            ExceptionCast.cast(AuthCode.AUTH_LOGIN_TOKEN_SAVEFAIL);
 //        }
 
-        stringRedisTemplate.boundSetOps("user:"+username).add(authToken.getJwt_token());
-        stringRedisTemplate.expire("user:"+username, AuthServiceImpl.loginTimeOut, TimeUnit.SECONDS);
+        stringRedisTemplate.boundSetOps("user:" + username).add(authToken.getJwt_token());
+        stringRedisTemplate.expire("user:" + username, AuthServiceImpl.loginTimeOut, TimeUnit.SECONDS);
 
         return authToken;
 
@@ -118,34 +118,34 @@ public class AuthServiceImpl implements AuthService {
     public AuthToken loginByPhone(String phone, String smsCode, String clientId, String clientSecret) {
         //请求spring security申请令牌
         AuthToken authToken = this.applyToken(phone, smsCode, clientId, clientSecret, "sms");
-        if(authToken == null){
+        if (authToken == null) {
             ExceptionCast.cast(AuthCode.AUTH_LOGIN_APPLYTOKEN_FAIL);
         }
         CfUser cfUser = cfUserService.findByPhone(phone);
-        if(cfUser==null){
+        if (cfUser == null) {
             ExceptionCast.cast(UcenterCode.PHONE_IS_NOT_REGISTERED);
         }
-        stringRedisTemplate.boundSetOps("user:"+phone).add(authToken.getJwt_token());
-        stringRedisTemplate.expire("user:"+phone, AuthServiceImpl.loginTimeOut, TimeUnit.SECONDS);
+        stringRedisTemplate.boundSetOps("user:" + phone).add(authToken.getJwt_token());
+        stringRedisTemplate.expire("user:" + phone, AuthServiceImpl.loginTimeOut, TimeUnit.SECONDS);
 
         return authToken;
     }
 
     /**
-     *
      * @param access_token 用户身份令牌
-     * @param content  内容就是AuthToken对象的内容
-     * @param ttl 过期时间
+     * @param content      内容就是AuthToken对象的内容
+     * @param ttl          过期时间
      * @return
      */
-    private boolean saveToken(String access_token,String content,long ttl){
+    private boolean saveToken(String access_token, String content, long ttl) {
         String key = "user_token:" + access_token;
-        stringRedisTemplate.boundValueOps(key).set(content,ttl, TimeUnit.SECONDS);
+        stringRedisTemplate.boundValueOps(key).set(content, ttl, TimeUnit.SECONDS);
         Long expire = stringRedisTemplate.getExpire(key, TimeUnit.SECONDS);
-        return expire>0;
+        return expire > 0;
     }
+
     //删除token
-    public boolean delToken(String access_token){
+    public boolean delToken(String access_token) {
         String key = "user_token:" + access_token;
         stringRedisTemplate.delete(key);
         return true;
@@ -158,7 +158,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     //从redis查询令牌
-    public AuthToken getUserToken(String token){
+    public AuthToken getUserToken(String token) {
         String key = "user_token:" + token;
         //从redis中取到令牌信息
         String value = stringRedisTemplate.opsForValue().get(key);
@@ -172,8 +172,9 @@ public class AuthServiceImpl implements AuthService {
         }
 
     }
+
     //申请令牌
-    private AuthToken applyToken(String username, String password, String clientId, String clientSecret, String grantType){
+    private AuthToken applyToken(String username, String password, String clientId, String clientSecret, String grantType) {
         //从eureka中获取认证服务的地址（因为spring security在认证服务中）
         //从eureka中获取认证服务的一个实例的地址
 //        ServiceInstance serviceInstance = loadBalancerClient.choose(XcServiceList.XC_SERVICE_UCENTER_AUTH);
@@ -184,23 +185,23 @@ public class AuthServiceImpl implements AuthService {
         //定义header
         LinkedMultiValueMap<String, String> header = new LinkedMultiValueMap<>();
         String httpBasic = getHttpBasic(clientId, clientSecret);
-        header.add("Authorization",httpBasic);
+        header.add("Authorization", httpBasic);
 
         //定义body
         LinkedMultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("grant_type","password");
-        body.add("username",username);
-        body.add("password",password);
-        body.add("auth_type",grantType);
+        body.add("grant_type", "password");
+        body.add("username", username);
+        body.add("password", password);
+        body.add("auth_type", grantType);
 
         HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(body, header);
         //String url, HttpMethod method, @Nullable HttpEntity<?> requestEntity, Class<T> responseType, Object... uriVariables
 
         //设置restTemplate远程调用时候，对400和401不让报错，正确返回数据
-        restTemplate.setErrorHandler(new DefaultResponseErrorHandler(){
+        restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
             @Override
             public void handleError(ClientHttpResponse response) throws IOException {
-                if(response.getRawStatusCode()!=400 && response.getRawStatusCode()!=401){
+                if (response.getRawStatusCode() != 400 && response.getRawStatusCode() != 401) {
                     super.handleError(response);
                 }
             }
@@ -210,17 +211,17 @@ public class AuthServiceImpl implements AuthService {
 
         //申请令牌信息
         Map bodyMap = exchange.getBody();
-        if(bodyMap == null ||
-            bodyMap.get("access_token") == null ||
+        if (bodyMap == null ||
+                bodyMap.get("access_token") == null ||
                 bodyMap.get("refresh_token") == null ||
-                bodyMap.get("jti") == null){
+                bodyMap.get("jti") == null) {
 
             //解析spring security返回的错误信息
-            if(bodyMap!=null && bodyMap.get("error_description")!=null){
+            if (bodyMap != null && bodyMap.get("error_description") != null) {
                 String error_description = (String) bodyMap.get("error_description");
-                if(error_description.indexOf("UserDetailsServiceImpl returned null")>=0){
+                if (error_description.indexOf("UserDetailsServiceImpl returned null") >= 0) {
                     ExceptionCast.cast(AuthCode.AUTH_ACCOUNT_NOTEXISTS);
-                }else if(error_description.indexOf("坏的凭证")>=0){
+                } else if (error_description.indexOf("坏的凭证") >= 0) {
                     ExceptionCast.cast(AuthCode.AUTH_CREDENTIAL_ERROR);
                 }
             }
@@ -245,36 +246,36 @@ public class AuthServiceImpl implements AuthService {
         //密钥库文件路径
         ClassPathResource classPathResource = new ClassPathResource(keystore);
         //密钥别名
-        String alias  = "xckey";
+        String alias = "xckey";
         //密钥的访问密码
         String key_password = "xuecheng";
         //密钥工厂
-        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(classPathResource,keystore_password.toCharArray());
+        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(classPathResource, keystore_password.toCharArray());
         //密钥对（公钥和私钥）
         KeyPair keyPair = keyStoreKeyFactory.getKeyPair(alias, key_password.toCharArray());
         //获取私钥
         RSAPrivateKey aPrivate = (RSAPrivateKey) keyPair.getPrivate();
         //jwt令牌的内容
-        userBasicInfo.setUserpic(StringTools.getRandomString("",10));
+        userBasicInfo.setUserpic(StringTools.getRandomString("", 10));
         String bodyString = JSON.toJSONString(userBasicInfo);
         //生成jwt令牌
         Jwt jwt = JwtHelper.encode(bodyString, new RsaSigner(aPrivate));
         //生成jwt令牌编码
         AuthToken authToken = new AuthToken();
         authToken.setJwt_token(jwt.getEncoded());
-        stringRedisTemplate.opsForSet().pop("user:"+userBasicInfo.getUsername());
-        stringRedisTemplate.boundSetOps("user:"+userBasicInfo.getUsername()).add(authToken.getJwt_token());
-        Long exp = userBasicInfo.getExp()!=null && userBasicInfo.getExp().longValue()>0 ? userBasicInfo.getExp() : AuthServiceImpl.loginTimeOut;
-        stringRedisTemplate.expire("user:"+userBasicInfo.getUsername(), exp, TimeUnit.SECONDS);
+        stringRedisTemplate.opsForSet().pop("user:" + userBasicInfo.getUsername());
+        stringRedisTemplate.boundSetOps("user:" + userBasicInfo.getUsername()).add(authToken.getJwt_token());
+        Long exp = userBasicInfo.getExp() != null && userBasicInfo.getExp().longValue() > 0 ? userBasicInfo.getExp() : AuthServiceImpl.loginTimeOut;
+        stringRedisTemplate.expire("user:" + userBasicInfo.getUsername(), exp, TimeUnit.SECONDS);
         return authToken;
     }
 
     //获取httpbasic的串
-    private String getHttpBasic(String clientId,String clientSecret){
-        String string = clientId+":"+clientSecret;
+    private String getHttpBasic(String clientId, String clientSecret) {
+        String string = clientId + ":" + clientSecret;
         //将串进行base64编码
         byte[] encode = Base64Utils.encode(string.getBytes());
-        return "Basic "+new String(encode);
+        return "Basic " + new String(encode);
     }
 
     @Override
@@ -284,7 +285,7 @@ public class AuthServiceImpl implements AuthService {
         //校验jwt令牌
         String claims = JwtHelper.decodeAndVerify(jwtString, new RsaVerifier(publickey)).getClaims();
         UserBasicInfo userBasicInfo = JSON.parseObject(claims, UserBasicInfo.class);
-        if(userBasicInfo.getExp()*1000<=System.currentTimeMillis()){
+        if (userBasicInfo.getExp() * 1000 <= System.currentTimeMillis()) {
             ExceptionCast.cast(AuthCode.AUTH_LOGIN_TOKEN_EXPIRED);
         }
         return claims;
@@ -295,24 +296,24 @@ public class AuthServiceImpl implements AuthService {
         CfAuthExample cfAuthExample = new CfAuthExample();
         CfAuthExample.Criteria criteria = cfAuthExample.createCriteria();
         criteria.andLevelEqualTo(authLevel);
-        if(authLevel==1){
+        if (authLevel == 1) {
             criteria.andModuleEqualTo(whereVal);
-        }else if(authLevel==2){
+        } else if (authLevel == 2) {
             criteria.andControllerEqualTo(whereVal);
         }
         cfAuthExample.setOrderByClause("sort_index asc");
         List<CfAuth> cfAuths = cfAuthMapper.selectByExample(cfAuthExample);
-        if(cfAuths!=null && authLevel<2){
-            if(authLevel==0){
+        if (cfAuths != null && authLevel < 2) {
+            if (authLevel == 0) {
                 Integer index = 0;
-                for (CfAuth cfAuth: cfAuths){
+                for (CfAuth cfAuth : cfAuths) {
                     List<CfAuth> cfAuthsChildren = recursiveQuery((byte) (authLevel + 1), cfAuth.getModule());
                     cfAuths.get(index).setChildren(cfAuthsChildren);
                     index++;
                 }
-            }else if(authLevel==1){
+            } else if (authLevel == 1) {
                 Integer index = 0;
-                for (CfAuth cfAuth: cfAuths){
+                for (CfAuth cfAuth : cfAuths) {
                     List<CfAuth> cfAuthsChildren = recursiveQuery((byte) (authLevel + 1), cfAuth.getController());
                     cfAuths.get(index).setChildren(cfAuthsChildren);
                     index++;
@@ -325,7 +326,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public List<CfAuth> getAuthsByUid(String uid) {
         List<CfAuth> cfAuths = selectByUidAndLevel(uid, (byte) 0, true);
-        if(cfAuths==null){
+        if (cfAuths == null) {
             return null;
         }
         return cfAuths;
@@ -334,12 +335,12 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public List<CfAuth> selectByUidAndLevel(String uid, Byte level, Boolean recursive) {
         List<CfAuth> cfAuths = cfAuthMapper.selectByUidAndRoleIdAndLevel(uid, level);
-        if(!recursive){
+        if (!recursive) {
             return cfAuths;
         }
-        if(recursive && level==0){
+        if (recursive && level == 0) {
             Integer index = 0;
-            for (CfAuth cfAuth: cfAuths){
+            for (CfAuth cfAuth : cfAuths) {
                 List<CfAuth> cfAuthsChildren = selectByUidAndModuleAndLevel(uid, cfAuth.getModule(), (byte) (level + 1), true);
                 cfAuths.get(index).setChildren(cfAuthsChildren);
                 index++;
@@ -350,12 +351,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public List<CfAuth> selectByUidAndModuleAndLevel(String uid, String module, Byte level, Boolean recursive) {
-        if(!recursive){
+        if (!recursive) {
             return cfAuthMapper.selectByUidAndModuleAndLevel(uid, module, level);
         }
         List<CfAuth> cfAuths = cfAuthMapper.selectByUidAndModuleAndLevel(uid, module, level);
         Integer index = 0;
-        for (CfAuth cfAuth: cfAuths){
+        for (CfAuth cfAuth : cfAuths) {
             List<CfAuth> cfAuthsChildren = selectByUidAndControllerAndLevel(uid, cfAuth.getController(), (byte) (level + 1));
             cfAuths.get(index).setChildren(cfAuthsChildren);
             index++;
@@ -371,7 +372,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public List<CfAuth> getAuthsByRoleId(String roleId) {
         List<CfAuth> cfAuths = selectByRoleIdAndLevel(roleId, (byte) 0, true);
-        if(cfAuths==null){
+        if (cfAuths == null) {
             return null;
         }
         return cfAuths;
@@ -379,13 +380,13 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public List<CfAuth> selectByRoleIdAndLevel(String roleId, Byte level, Boolean recursive) {
-        if(!recursive){
+        if (!recursive) {
             return cfAuthMapper.selectByRoleIdAndLevel(roleId, level);
         }
         List<CfAuth> cfAuths = cfAuthMapper.selectByRoleIdAndLevel(roleId, level);
-        if(recursive && level==0){
+        if (recursive && level == 0) {
             Integer index = 0;
-            for (CfAuth cfAuth: cfAuths){
+            for (CfAuth cfAuth : cfAuths) {
                 List<CfAuth> cfAuthsChildren = selectByRoleIdAndModuleAndLevel(roleId, cfAuth.getModule(), (byte) (level + 1), true);
                 cfAuths.get(index).setChildren(cfAuthsChildren);
                 index++;
@@ -396,12 +397,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public List<CfAuth> selectByRoleIdAndModuleAndLevel(String roleId, String module, Byte level, Boolean recursive) {
-        if(!recursive){
+        if (!recursive) {
             return cfAuthMapper.selectByRoleIdAndModuleAndLevel(roleId, module, level);
         }
         List<CfAuth> cfAuths = cfAuthMapper.selectByRoleIdAndModuleAndLevel(roleId, module, level);
         Integer index = 0;
-        for (CfAuth cfAuth: cfAuths){
+        for (CfAuth cfAuth : cfAuths) {
             List<CfAuth> cfAuthsChildren = selectByRoleIdAndControllerAndLevel(roleId, cfAuth.getController(), (byte) (level + 1));
             cfAuths.get(index).setChildren(cfAuthsChildren);
             index++;
@@ -427,7 +428,7 @@ public class AuthServiceImpl implements AuthService {
         CfAuth cfAuthOld = cfAuthMapper.selectByPrimaryKey(cfAuth.getId());
         Boolean checkIsExistSubordinate = checkIsExistSubordinate(cfAuthOld);
         makeAuthLevel(cfAuth);
-        if(checkIsExistSubordinate && !cfAuthOld.getLevel().equals(cfAuth.getLevel())){
+        if (checkIsExistSubordinate && !cfAuthOld.getLevel().equals(cfAuth.getLevel())) {
             ExceptionCast.cast(AuthCode.AUTH_EXIST_SUBORDINATE_FORBID_MOVE);
         }
         cfAuthMapper.updateByPrimaryKey(cfAuth);
@@ -437,11 +438,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public Integer deleteAuth(String id) {
         CfAuth cfAuth = cfAuthMapper.selectByPrimaryKey(id);
-        if(cfAuth==null){
+        if (cfAuth == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         Boolean checkIsExistSubordinate = checkIsExistSubordinate(cfAuth);
-        if(checkIsExistSubordinate){
+        if (checkIsExistSubordinate) {
             ExceptionCast.cast(AuthCode.AUTH_EXIST_SUBORDINATE);
         }
         return cfAuthMapper.deleteByPrimaryKey(id);
@@ -449,19 +450,19 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public CfAuth makeAuthLevel(CfAuth cfAuth) {
-        if(StringUtils.isNotEmpty(cfAuth.getModule()) && StringUtils.isNotEmpty(cfAuth.getController()) && StringUtils.isNotEmpty(cfAuth.getMethod())){
-            cfAuth.setLevel((byte)2);
-            cfAuth.setPath(cfAuth.getModule()+"-"+cfAuth.getController()+"-"+cfAuth.getMethod());
+        if (StringUtils.isNotEmpty(cfAuth.getModule()) && StringUtils.isNotEmpty(cfAuth.getController()) && StringUtils.isNotEmpty(cfAuth.getMethod())) {
+            cfAuth.setLevel((byte) 2);
+            cfAuth.setPath(cfAuth.getModule() + "-" + cfAuth.getController() + "-" + cfAuth.getMethod());
             return cfAuth;
-        }else if(StringUtils.isNotEmpty(cfAuth.getModule()) && StringUtils.isNotEmpty(cfAuth.getController()) && StringUtils.isEmpty(cfAuth.getMethod())){
-            cfAuth.setLevel((byte)1);
-            cfAuth.setPath(cfAuth.getModule()+"-"+cfAuth.getController());
+        } else if (StringUtils.isNotEmpty(cfAuth.getModule()) && StringUtils.isNotEmpty(cfAuth.getController()) && StringUtils.isEmpty(cfAuth.getMethod())) {
+            cfAuth.setLevel((byte) 1);
+            cfAuth.setPath(cfAuth.getModule() + "-" + cfAuth.getController());
             return cfAuth;
-        }else if(StringUtils.isNotEmpty(cfAuth.getModule()) && StringUtils.isEmpty(cfAuth.getController()) && StringUtils.isEmpty(cfAuth.getMethod())){
-            cfAuth.setLevel((byte)0);
+        } else if (StringUtils.isNotEmpty(cfAuth.getModule()) && StringUtils.isEmpty(cfAuth.getController()) && StringUtils.isEmpty(cfAuth.getMethod())) {
+            cfAuth.setLevel((byte) 0);
             cfAuth.setPath(cfAuth.getModule());
             return cfAuth;
-        }else{
+        } else {
             ExceptionCast.cast(AuthCode.AUTH_MODULE_CONTROLLER_METHOD_FORMAT_ERROR);
             return null;
         }
@@ -469,16 +470,16 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public Boolean checkIsExistSubordinate(CfAuth cfAuth) {
-        if(cfAuth.getLevel()<2){
+        if (cfAuth.getLevel() < 2) {
             CfAuthExample cfAuthExample = new CfAuthExample();
             CfAuthExample.Criteria criteria = cfAuthExample.createCriteria();
-            if(cfAuth.getLevel()==0){
-                criteria.andLevelEqualTo((byte)1).andModuleEqualTo(cfAuth.getModule());
-            }else {
-                criteria.andLevelEqualTo((byte)2).andModuleEqualTo(cfAuth.getController());
+            if (cfAuth.getLevel() == 0) {
+                criteria.andLevelEqualTo((byte) 1).andModuleEqualTo(cfAuth.getModule());
+            } else {
+                criteria.andLevelEqualTo((byte) 2).andModuleEqualTo(cfAuth.getController());
             }
             List<CfAuth> cfAuths = cfAuthMapper.selectByExample(cfAuthExample);
-            if(cfAuths!=null){
+            if (cfAuths != null) {
                 return true;
             }
         }
@@ -500,7 +501,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void flushUserAuths(List<CfUserAuth> cfUserAuths) {
-        if(cfUserAuths==null || cfUserAuths.size()==0){
+        if (cfUserAuths == null || cfUserAuths.size() == 0) {
             ExceptionCast.cast(AuthCode.HAVE_NOT_USER_AUTH);
         }
         deleteUserAuths(cfUserAuths.get(0).getUid());
@@ -522,32 +523,32 @@ public class AuthServiceImpl implements AuthService {
         CfAuthExample cfAuthExample = new CfAuthExample();
 
         CfAuthExample.Criteria criteria = cfAuthExample.createCriteria();
-        if(cfAuthQuery.getIds()!=null && cfAuthQuery.getIds().size()>0){
+        if (cfAuthQuery.getIds() != null && cfAuthQuery.getIds().size() > 0) {
             criteria.andIdIn(cfAuthQuery.getIds());
         }
-        if(cfAuthQuery.getLevel()!=null){
+        if (cfAuthQuery.getLevel() != null) {
             criteria.andLevelEqualTo(cfAuthQuery.getLevel());
         }
-        if(StringUtils.isNotEmpty(cfAuthQuery.getPath())){
+        if (StringUtils.isNotEmpty(cfAuthQuery.getPath())) {
             criteria.andPathEqualTo(cfAuthQuery.getPath());
         }
-        if(StringUtils.isNotEmpty(cfAuthQuery.getModule())){
+        if (StringUtils.isNotEmpty(cfAuthQuery.getModule())) {
             criteria.andModuleEqualTo(cfAuthQuery.getModule());
         }
-        if(StringUtils.isNotEmpty(cfAuthQuery.getController())){
+        if (StringUtils.isNotEmpty(cfAuthQuery.getController())) {
             criteria.andControllerEqualTo(cfAuthQuery.getController());
         }
-        if(cfAuthQuery.getBreadcrumbHidden()!=null){
+        if (cfAuthQuery.getBreadcrumbHidden() != null) {
             criteria.andBreadcrumbHiddenEqualTo(cfAuthQuery.getBreadcrumbHidden());
         }
-        if(cfAuthQuery.getShowMenu()!=null){
+        if (cfAuthQuery.getShowMenu() != null) {
             criteria.andShowMenuEqualTo(cfAuthQuery.getShowMenu());
         }
 
-        if(StringUtils.isNotEmpty(cfAuthQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfAuthQuery.getOrderBy())) {
             cfAuthExample.setOrderByClause(cfAuthQuery.getOrderBy());
         }
-        if(cfAuthQuery.getPage()!=null && cfAuthQuery.getSize()!=null){
+        if (cfAuthQuery.getPage() != null && cfAuthQuery.getSize() != null) {
             PageHelper.startPage(cfAuthQuery.getPage(), cfAuthQuery.getSize());
         }
         return cfAuthExample;
@@ -562,68 +563,68 @@ public class AuthServiceImpl implements AuthService {
     public List<CfAuth> getFullAuthsByRoleId(String roleId) {
 
         CfAuthQuery cfAuthQuery = new CfAuthQuery();
-        cfAuthQuery.setLevel((byte)0);
+        cfAuthQuery.setLevel((byte) 0);
         cfAuthQuery.setIds(new ArrayList<>());
 
         CfRoleAuthQuery cfRoleAuthQuery = new CfRoleAuthQuery();
         cfRoleAuthQuery.setRoleId(roleId);
         List<CfRoleAuth> cfRoleAuthList = cfRoleAuthService.getListByQuery(cfRoleAuthQuery);
-        if(cfRoleAuthList==null || cfRoleAuthList.size()==0){
+        if (cfRoleAuthList == null || cfRoleAuthList.size() == 0) {
             return null;
-        }else{
-            for (CfRoleAuth cfRoleAuth: cfRoleAuthList){
+        } else {
+            for (CfRoleAuth cfRoleAuth : cfRoleAuthList) {
                 cfAuthQuery.getIds().add(cfRoleAuth.getAuthId());
             }
         }
         cfAuthQuery.setOrderBy("sort_index asc");
-        cfAuthQuery.setShowMenu((byte)1);
+        cfAuthQuery.setShowMenu((byte) 1);
         List<CfAuth> cfAuthList = getListByQuery(cfAuthQuery);
-        if(cfAuthList==null || cfAuthList.size()==0){
+        if (cfAuthList == null || cfAuthList.size() == 0) {
             return null;
         }
-        for (CfAuth cfAuth: cfAuthList){
+        for (CfAuth cfAuth : cfAuthList) {
             cfAuth.setMeta(new CfAuthMeta());
             cfAuth.getMeta().setIcon(cfAuth.getIcon());
             cfAuth.getMeta().setTitle(cfAuth.getName());
-            if(cfAuth.getBreadcrumbHidden()==(byte)0){
+            if (cfAuth.getBreadcrumbHidden() == (byte) 0) {
                 cfAuth.getMeta().setBreadcrumbHidden(false);
-            }else{
+            } else {
                 cfAuth.getMeta().setBreadcrumbHidden(true);
             }
             cfAuth.setPath(cfAuth.getRouterPath());
             cfAuth.setName(cfAuth.getRouterName());
             //查找它的子级
-            cfAuthQuery.setLevel((byte)1);
+            cfAuthQuery.setLevel((byte) 1);
             cfAuthQuery.setIds(null);
             cfAuthQuery.setModule(cfAuth.getModule());
             List<CfAuth> controllerAuthList = getListByQuery(cfAuthQuery);
-            if(controllerAuthList!=null && controllerAuthList.size()>0){
-                for (CfAuth controllerCfAuth: controllerAuthList){
+            if (controllerAuthList != null && controllerAuthList.size() > 0) {
+                for (CfAuth controllerCfAuth : controllerAuthList) {
                     controllerCfAuth.setMeta(new CfAuthMeta());
                     controllerCfAuth.getMeta().setIcon(controllerCfAuth.getIcon());
                     controllerCfAuth.getMeta().setTitle(controllerCfAuth.getName());
-                    if(controllerCfAuth.getBreadcrumbHidden()==(byte)0){
+                    if (controllerCfAuth.getBreadcrumbHidden() == (byte) 0) {
                         controllerCfAuth.getMeta().setBreadcrumbHidden(false);
-                    }else{
+                    } else {
                         controllerCfAuth.getMeta().setBreadcrumbHidden(true);
                     }
                     controllerCfAuth.setPath(controllerCfAuth.getRouterPath());
                     controllerCfAuth.setName(controllerCfAuth.getRouterName());
                     //找到它的子级别
                     //start
-                    cfAuthQuery.setLevel((byte)2);
+                    cfAuthQuery.setLevel((byte) 2);
                     cfAuthQuery.setIds(null);
                     cfAuthQuery.setModule(null);
                     cfAuthQuery.setController(controllerCfAuth.getController());
                     List<CfAuth> methodAuthList = getListByQuery(cfAuthQuery);
-                    if(methodAuthList!=null && methodAuthList.size()>0){
-                        for (CfAuth methodCfAuth: methodAuthList){
+                    if (methodAuthList != null && methodAuthList.size() > 0) {
+                        for (CfAuth methodCfAuth : methodAuthList) {
                             methodCfAuth.setMeta(new CfAuthMeta());
                             methodCfAuth.getMeta().setIcon(methodCfAuth.getIcon());
                             methodCfAuth.getMeta().setTitle(methodCfAuth.getName());
-                            if(methodCfAuth.getBreadcrumbHidden()==(byte)0){
+                            if (methodCfAuth.getBreadcrumbHidden() == (byte) 0) {
                                 methodCfAuth.getMeta().setBreadcrumbHidden(false);
-                            }else{
+                            } else {
                                 methodCfAuth.getMeta().setBreadcrumbHidden(true);
                             }
                             methodCfAuth.setPath(methodCfAuth.getRouterPath());

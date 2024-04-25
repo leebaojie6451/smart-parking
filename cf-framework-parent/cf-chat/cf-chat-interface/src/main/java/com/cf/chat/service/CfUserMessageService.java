@@ -17,6 +17,7 @@ public interface CfUserMessageService {
 
     /**
      * 记录用户ip
+     *
      * @param serverLoaclIp
      * @param uid
      */
@@ -24,6 +25,7 @@ public interface CfUserMessageService {
 
     /**
      * 发送用户消息
+     *
      * @param cfUserMessage
      * @return
      */
@@ -31,6 +33,7 @@ public interface CfUserMessageService {
 
     /**
      * 插入消息数据到mongodb中
+     *
      * @param cfUserMessage
      * @return
      */
@@ -38,6 +41,7 @@ public interface CfUserMessageService {
 
     /**
      * 给通道塞入消息
+     *
      * @param cfUserMessage
      */
     public void sendMessageByChannel(CfUserMessage cfUserMessage) throws Exception;
@@ -51,6 +55,7 @@ public interface CfUserMessageService {
 
     /**
      * 改变消息状态
+     *
      * @param uid
      * @param messageId
      * @param status
@@ -60,6 +65,7 @@ public interface CfUserMessageService {
 
     /**
      * 获取指定用户未读消息(支持分页获取)
+     *
      * @param uid
      * @param page
      * @param limit
@@ -69,6 +75,7 @@ public interface CfUserMessageService {
 
     /**
      * 获取指定用户消息(支持分页获取)
+     *
      * @param uid
      * @param type
      * @param page
@@ -79,6 +86,7 @@ public interface CfUserMessageService {
 
     /**
      * 根据消息id组查询消息数据
+     *
      * @param ids
      * @return
      */
@@ -86,31 +94,36 @@ public interface CfUserMessageService {
 
     /**
      * 根据token获取用户基本信息
+     *
      * @param token
      * @return
      */
-    public UserBasicInfo getBaseUserInfoByToken(String token)throws Exception;
+    public UserBasicInfo getBaseUserInfoByToken(String token) throws Exception;
 
     /**
      * 获取离线消息
+     *
      * @param uid
      */
     public void getNotReadMessage(String uid) throws Exception;
 
     /**
      * 获取redis离线消息
+     *
      * @param uid
      */
     void getRedisNotReadMessage(String uid);
 
     /**
      * 批量更新消息状态
+     *
      * @param cfUserMessages
      */
     void batchUpdateStatusByIds(List<CfUserMessage> cfUserMessages);
 
     /**
      * 获取即时通讯在线人数最少的服务器ip
+     *
      * @return
      */
     String getMinChatLinkCountsServiceIp();

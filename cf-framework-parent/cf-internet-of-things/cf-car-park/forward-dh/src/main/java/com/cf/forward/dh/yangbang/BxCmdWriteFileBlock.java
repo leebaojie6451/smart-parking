@@ -38,8 +38,8 @@ public class BxCmdWriteFileBlock extends BxCmd {
 
         //
         // r0, r1
-        array.add((byte)0x00);
-        array.add((byte)0x00);
+        array.add((byte) 0x00);
+        array.add((byte) 0x00);
 
         //
         // file name
@@ -47,11 +47,10 @@ public class BxCmdWriteFileBlock extends BxCmd {
 
         //
         // is last
-        if(lastBlock) {
-            array.add((byte)0x01);
-        }
-        else {
-            array.add((byte)0x00);
+        if (lastBlock) {
+            array.add((byte) 0x01);
+        } else {
+            array.add((byte) 0x00);
         }
 
         //

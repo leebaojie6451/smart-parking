@@ -45,7 +45,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- *
  * @ClassName CfCarParkPackageServiceImpl
  * @Author 隔壁小王子 981011512@qq.com
  * @Date 2020/5/23/023 18:59
@@ -90,21 +89,21 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
 
     @Override
     public CfCarParkPackage add(CfCarParkPackage cfCarParkPackage) {
-        if(StringUtils.isEmpty(cfCarParkPackage.getId()) || cfCarParkPackage.getId().length()<17){
+        if (StringUtils.isEmpty(cfCarParkPackage.getId()) || cfCarParkPackage.getId().length() < 17) {
             cfCarParkPackage.setId(idWorker.nextId());
         }
         cfCarParkPackage.setCreateTime(System.currentTimeMillis());
         handleUidByPhone(cfCarParkPackage);
-        if(cfCarParkPackage.getTransRegional()==(byte)0){
+        if (cfCarParkPackage.getTransRegional() == (byte) 0) {
             cfCarParkPackage.setMainCarParkId(cfCarParkPackage.getCarParkId());
         }
         CfCarParkPackagePrice cfCarParkPackagePrice = cfCarParkPackagePriceService.findById(cfCarParkPackage.getPackagePriceId(), false);
-        if(cfCarParkPackagePrice.getSpecialCarPackage()==(byte)1){
+        if (cfCarParkPackagePrice.getSpecialCarPackage() == (byte) 1) {
             cfCarParkPackage.setSpecialCarId(idWorker.nextId());
         }
         cfCarParkPackageMapper.insertSelective(cfCarParkPackage);
 
-        if(cfCarParkPackagePrice.getSpecialCarPackage()==(byte)1){
+        if (cfCarParkPackagePrice.getSpecialCarPackage() == (byte) 1) {
             //如果其带有特殊车辆id，先删除对应停车场该车辆的特殊车辆，再新增对应特殊车辆
             CfCarParkSpecialCarQuery cfCarParkSpecialCarQuery = new CfCarParkSpecialCarQuery();
             cfCarParkSpecialCarQuery.setCarParkId(cfCarParkPackage.getCarParkId());
@@ -144,18 +143,18 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
     @Override
     public CfCarParkPackage update(CfCarParkPackage cfCarParkPackage) {
         handleUidByPhone(cfCarParkPackage);
-        if(cfCarParkPackage.getTransRegional()==(byte)0){
+        if (cfCarParkPackage.getTransRegional() == (byte) 0) {
             cfCarParkPackage.setMainCarParkId(cfCarParkPackage.getCarParkId());
         }
-        cfCarParkPackage.setIssuedWhitelist((byte)0);
+        cfCarParkPackage.setIssuedWhitelist((byte) 0);
         cfCarParkPackage.setIssuedWhitelistTime(0l);
         CfCarParkPackagePrice cfCarParkPackagePrice = cfCarParkPackagePriceService.findById(cfCarParkPackage.getPackagePriceId(), false);
-        if(cfCarParkPackagePrice.getSpecialCarPackage()==(byte)1){
+        if (cfCarParkPackagePrice.getSpecialCarPackage() == (byte) 1) {
             cfCarParkPackage.setSpecialCarId(idWorker.nextId());
         }
         cfCarParkPackageMapper.updateByPrimaryKeySelective(cfCarParkPackage);
 
-        if(cfCarParkPackagePrice.getSpecialCarPackage()==(byte)1){
+        if (cfCarParkPackagePrice.getSpecialCarPackage() == (byte) 1) {
             //如果其带有特殊车辆id，先删除对应停车场该车辆的特殊车辆，再新增对应特殊车辆
             CfCarParkSpecialCarQuery cfCarParkSpecialCarQuery = new CfCarParkSpecialCarQuery();
             cfCarParkSpecialCarQuery.setCarParkId(cfCarParkPackage.getCarParkId());
@@ -195,32 +194,32 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
         CfCarParkPackage oldCarParkPackage = findById(cfCarParkPackage.getId(), false);
         recordArtificialActionFee("update", oldCarParkPackage, cfCarParkPackage, handleUid);
         //设置是否已经短信通知字段值为 0
-        cfCarParkPackage.setNoticeExpiringSoon((byte)0);
-        cfCarParkPackage.setNoticeExpired((byte)0);
+        cfCarParkPackage.setNoticeExpiringSoon((byte) 0);
+        cfCarParkPackage.setNoticeExpired((byte) 0);
         cfCarParkPackage = update(cfCarParkPackage);
         return cfCarParkPackage;
     }
 
     @Override
     public void handleParentId(CfCarParkPackage cfCarParkPackage) {
-        if(cfCarParkPackage.getTransRegional()==0 && StringUtils.isNotEmpty(cfCarParkPackage.getCarParkIds())){
+        if (cfCarParkPackage.getTransRegional() == 0 && StringUtils.isNotEmpty(cfCarParkPackage.getCarParkIds())) {
             CfCarParkPackageQuery cfCarParkPackageQuery = new CfCarParkPackageQuery();
             cfCarParkPackageQuery.setParentId(cfCarParkPackage.getId());
 
             //如果为特殊车辆套餐，删除原有特殊车辆
             List<String> oldCarParkIds = new ArrayList<>();
-            if(StringUtils.isNotEmpty(cfCarParkPackage.getSpecialCarId())){
+            if (StringUtils.isNotEmpty(cfCarParkPackage.getSpecialCarId())) {
                 //找到原来关联的所有停车场id
                 List<CfCarParkPackage> cfCarParkPackages = getListByQuery(cfCarParkPackageQuery);
-                if(cfCarParkPackages!=null && cfCarParkPackages.size()>0){
-                    for (CfCarParkPackage carParkPackage: cfCarParkPackages){
-                        if(StringUtils.isNotEmpty(carParkPackage.getSpecialCarId())){
+                if (cfCarParkPackages != null && cfCarParkPackages.size() > 0) {
+                    for (CfCarParkPackage carParkPackage : cfCarParkPackages) {
+                        if (StringUtils.isNotEmpty(carParkPackage.getSpecialCarId())) {
                             oldCarParkIds.add(carParkPackage.getCarParkId());
                         }
                     }
                 }
             }
-            if(oldCarParkIds.size()>0){
+            if (oldCarParkIds.size() > 0) {
                 CfCarParkSpecialCarQuery cfCarParkSpecialCarQuery = new CfCarParkSpecialCarQuery();
                 cfCarParkSpecialCarQuery.setCarParkIds(oldCarParkIds);
                 cfCarParkSpecialCarQuery.setNumberPlate(cfCarParkPackage.getNumberPlate());
@@ -239,9 +238,9 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
                     "    values ";
             List<CfCarParkSpecialCar> cfCarParkSpecialCarList = new ArrayList<>();
             String carParkSpecialCarId = "";
-            for(String carParkId: carParkIds){
+            for (String carParkId : carParkIds) {
 
-                if(StringUtils.isNotEmpty(cfCarParkPackage.getSpecialCarId())){
+                if (StringUtils.isNotEmpty(cfCarParkPackage.getSpecialCarId())) {
                     carParkSpecialCarId = idWorker.nextId();
                     CfCarParkSpecialCar cfCarParkSpecialCar = new CfCarParkSpecialCar();
                     cfCarParkSpecialCar.setId(carParkSpecialCarId);
@@ -259,7 +258,7 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
                     cfCarParkSpecialCar.setStatus(cfCarParkPackage.getStatus());
                     //查询主套餐的特殊车辆
                     CfCarParkSpecialCar carParkSpecialCar = cfCarParkSpecialCarService.findById(cfCarParkPackage.getSpecialCarId());
-                    if(carParkSpecialCar!=null){
+                    if (carParkSpecialCar != null) {
                         cfCarParkSpecialCar.setRemainingParkTime(carParkSpecialCar.getRemainingParkTime());
                         cfCarParkSpecialCar.setAutoGiveAway(carParkSpecialCar.getAutoGiveAway());
                         cfCarParkSpecialCar.setAutoCleared(carParkSpecialCar.getAutoCleared());
@@ -270,16 +269,16 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
                         cfCarParkSpecialCarList.add(cfCarParkSpecialCar);
                     }
                 }
-                batchAddSQL += "('"+idWorker.nextId()+"','"+carParkId+"','"+cfCarParkPackage.getTypeKey()+"','"+cfCarParkPackage.getStartTime()
-                        +"','"+cfCarParkPackage.getEndTime()+"','"+cfCarParkPackage.getCreateTime()+"','"+cfCarParkPackage.getUid()
-                        +"','"+cfCarParkPackage.getNumberPlate()+"','"+cfCarParkPackage.getSpecialGive()+"','"+cfCarParkPackage.getPackagePriceId()
-                        +"','1','"+cfCarParkPackage.getId()+"','"+cfCarParkPackage.getPhone()+"','"+cfCarParkPackage.getCarParkId()+"',+'"+cfCarParkPackage.getRemarks()
-                        +"','"+cfCarParkPackage.getCarOwnerName()+"','"+cfCarParkPackage.getGroupFlag()+"','"+carParkSpecialCarId+"'),";
+                batchAddSQL += "('" + idWorker.nextId() + "','" + carParkId + "','" + cfCarParkPackage.getTypeKey() + "','" + cfCarParkPackage.getStartTime()
+                        + "','" + cfCarParkPackage.getEndTime() + "','" + cfCarParkPackage.getCreateTime() + "','" + cfCarParkPackage.getUid()
+                        + "','" + cfCarParkPackage.getNumberPlate() + "','" + cfCarParkPackage.getSpecialGive() + "','" + cfCarParkPackage.getPackagePriceId()
+                        + "','1','" + cfCarParkPackage.getId() + "','" + cfCarParkPackage.getPhone() + "','" + cfCarParkPackage.getCarParkId() + "',+'" + cfCarParkPackage.getRemarks()
+                        + "','" + cfCarParkPackage.getCarOwnerName() + "','" + cfCarParkPackage.getGroupFlag() + "','" + carParkSpecialCarId + "'),";
             }
-            batchAddSQL = batchAddSQL.substring(0, batchAddSQL.length()-1);
+            batchAddSQL = batchAddSQL.substring(0, batchAddSQL.length() - 1);
             cfCarParkPackageMapper.batchAdd(batchAddSQL);
 
-            if(cfCarParkSpecialCarList.size()>0){
+            if (cfCarParkSpecialCarList.size() > 0) {
                 //批量新增特殊车辆
                 cfCarParkSpecialCarService.batchAdd(cfCarParkSpecialCarList);
             }
@@ -288,18 +287,18 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
 
     @Override
     public CfCarParkPackage handleUidByPhone(CfCarParkPackage cfCarParkPackage) {
-        if(StringUtils.isNotEmpty(cfCarParkPackage.getPhone())){
+        if (StringUtils.isNotEmpty(cfCarParkPackage.getPhone())) {
             CfUser cfUser = cfUserService.findByPhone(cfCarParkPackage.getPhone());
-            if(cfUser!=null){
+            if (cfUser != null) {
                 cfCarParkPackage.setUid(cfUser.getId());
                 //如果传入的有车主姓名，将姓名更到对应的用户真实名字字段
-                if(StringUtils.isNotEmpty(cfCarParkPackage.getCarOwnerName())){
+                if (StringUtils.isNotEmpty(cfCarParkPackage.getCarOwnerName())) {
                     cfUser.setTrueName(cfCarParkPackage.getCarOwnerName());
                     cfUserService.update(cfUser);
                 }
             }
         }
-        if(cfCarParkPackage.getParentId()==null){
+        if (cfCarParkPackage.getParentId() == null) {
             cfCarParkPackage.setParentId("");
         }
         return cfCarParkPackage;
@@ -307,20 +306,21 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
 
     /**
      * 记录人工新增和续费 套餐车俩的费用
+     *
      * @param actionType
      * @param oldData
      * @param nowData
      */
     private CfOrder recordArtificialActionFee(String actionType, CfCarParkPackage oldData, CfCarParkPackage nowData, String handleUid) throws Exception {
         CfCarParkPackagePrice cfCarParkPackagePrice = cfCarParkPackagePriceMapper.selectByPrimaryKey(nowData.getPackagePriceId());
-        if(cfCarParkPackagePrice==null){
+        if (cfCarParkPackagePrice == null) {
             return null;
         }
 
         CfCarParkOrder cfCarParkOrder = null;
         try {
             cfCarParkOrder = cfCarParkPackagePriceService.queryCfCarParkPackageRecoverFee(cfCarParkPackagePrice, null, nowData.getNumberPlate());
-        } catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -336,40 +336,40 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
         cfOrder.setPayTime(System.currentTimeMillis());
         cfOrder.setStatus(PayStatus.PAID);
         Long totalTIme = 0l;
-        BigDecimal price = cfCarParkPackagePrice.getCurrentPrice().doubleValue()>0?cfCarParkPackagePrice.getCurrentPrice():cfCarParkPackagePrice.getOriginalPrice();
-        if(actionType.equals("add")){
-            cfOrder.setGoodsName("【"+nowData.getNumberPlate()+"】现金购买车辆套餐");
-            if(nowData.getQuantity()!=null && nowData.getQuantity()>0){
+        BigDecimal price = cfCarParkPackagePrice.getCurrentPrice().doubleValue() > 0 ? cfCarParkPackagePrice.getCurrentPrice() : cfCarParkPackagePrice.getOriginalPrice();
+        if (actionType.equals("add")) {
+            cfOrder.setGoodsName("【" + nowData.getNumberPlate() + "】现金购买车辆套餐");
+            if (nowData.getQuantity() != null && nowData.getQuantity() > 0) {
                 cfOrder.setPurchaseQuantity(nowData.getQuantity());
-                cfOrder.setAmountsPayable(new BigDecimal(nowData.getQuantity()*price.doubleValue()));
+                cfOrder.setAmountsPayable(new BigDecimal(nowData.getQuantity() * price.doubleValue()));
                 //判断是否为月卡
-                if(cfCarParkPackagePrice.getTimeQuota().longValue()>2419199000l && cfCarParkPackagePrice.getTimeQuota().longValue()<=2678400000l){
+                if (cfCarParkPackagePrice.getTimeQuota().longValue() > 2419199000l && cfCarParkPackagePrice.getTimeQuota().longValue() <= 2678400000l) {
                     Calendar calendar = Calendar.getInstance();
                     Date date = new Date(oldData.getEndTime());
                     calendar.setTime(date);
                     calendar.add(Calendar.MONTH, nowData.getQuantity().intValue());//增加N个⽉
                     nowData.setEndTime(calendar.getTimeInMillis());
-                }else{
+                } else {
                     //按固定时间倍数增加
-                    nowData.setEndTime(nowData.getQuantity().longValue()*cfCarParkPackagePrice.getTimeQuota().longValue());
+                    nowData.setEndTime(nowData.getQuantity().longValue() * cfCarParkPackagePrice.getTimeQuota().longValue());
                 }
 
-            }else{
-                totalTIme = nowData.getEndTime()-nowData.getStartTime();
+            } else {
+                totalTIme = nowData.getEndTime() - nowData.getStartTime();
                 BigDecimal number = new BigDecimal(new Double(totalTIme) / cfCarParkPackagePrice.getTimeQuota()).setScale(2, RoundingMode.HALF_UP);
                 cfOrder.setPurchaseQuantity(number.intValue());
-                cfOrder.setAmountsPayable(new BigDecimal(number.doubleValue()*price.doubleValue()));
+                cfOrder.setAmountsPayable(new BigDecimal(number.doubleValue() * price.doubleValue()));
             }
-        }else{
-            cfOrder.setGoodsName("【"+nowData.getNumberPlate()+"】现金续费车辆套餐");
-            if(nowData.getQuantity()!=null && nowData.getQuantity()>0){
+        } else {
+            cfOrder.setGoodsName("【" + nowData.getNumberPlate() + "】现金续费车辆套餐");
+            if (nowData.getQuantity() != null && nowData.getQuantity() > 0) {
                 cfOrder.setPurchaseQuantity(nowData.getQuantity());
-                cfOrder.setAmountsPayable(new BigDecimal(nowData.getQuantity()*price.doubleValue()));
-            }else{
-                totalTIme = nowData.getEndTime()-oldData.getEndTime();
+                cfOrder.setAmountsPayable(new BigDecimal(nowData.getQuantity() * price.doubleValue()));
+            } else {
+                totalTIme = nowData.getEndTime() - oldData.getEndTime();
                 BigDecimal number = new BigDecimal(new Double(totalTIme) / cfCarParkPackagePrice.getTimeQuota()).setScale(2, RoundingMode.HALF_UP);
                 cfOrder.setPurchaseQuantity(number.intValue());
-                cfOrder.setAmountsPayable(new BigDecimal(number.doubleValue()*price.doubleValue()));
+                cfOrder.setAmountsPayable(new BigDecimal(number.doubleValue() * price.doubleValue()));
             }
 
             //新增套餐修改记录
@@ -414,11 +414,11 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
             cfCarParkPackageLogService.add(cfCarParkPackageLog);
         }
 
-        if(totalTIme<=0 && (nowData.getQuantity()==null || nowData.getQuantity()==0)){
+        if (totalTIme <= 0 && (nowData.getQuantity() == null || nowData.getQuantity() == 0)) {
             return null;
         }
 
-        if(cfCarParkOrder!=null && cfCarParkOrder.getCfOrder()!=null && cfCarParkOrder.getCfOrder().getPayTime()==0){
+        if (cfCarParkOrder != null && cfCarParkOrder.getCfOrder() != null && cfCarParkOrder.getCfOrder().getPayTime() == 0) {
             BigDecimal amountsPayable = cfOrder.getAmountsPayable();
             cfOrder.setAmountsPayable(amountsPayable.add(cfCarParkOrder.getCfOrder().getAmountsPayable()));
             cfOrder.setAmountActuallyPaid(cfOrder.getAmountsPayable());
@@ -429,7 +429,7 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
             updateCfCarParkUseLog.setPayTime(System.currentTimeMillis());
             cfCarParkUseLogService.updateByPrimaryKeySelective(updateCfCarParkUseLog);
             //找到停车账单，标记该账单已被套餐账单代缴
-            cfOrder.setGoodsName(cfCarParkPackagePrice.getTitle()+"【套餐续费+车费补缴】"+cfCarParkUseLog.getNumberPlate());
+            cfOrder.setGoodsName(cfCarParkPackagePrice.getTitle() + "【套餐续费+车费补缴】" + cfCarParkUseLog.getNumberPlate());
             cfOrder.setCollectionAmount(cfCarParkOrder.getCfOrder().getAmountsPayable());
             CfOrder parkOrder = new CfOrder();
             parkOrder.setId(cfCarParkOrder.getCfOrder().getId());
@@ -438,7 +438,7 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
             parkOrder.setStatus(PayStatus.PAID);
             parkOrder.setPaymentAgencyShortName("cash_pay_cny");
             cfOrderService.updateByPrimaryKeySelective(parkOrder);
-        }else{
+        } else {
             cfOrder.setAmountActuallyPaid(cfOrder.getAmountsPayable());
         }
 
@@ -446,16 +446,16 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
         //如果当前用户为admin用户，则不记录财务入账记录
         boolean isAdmin = false;
         CfUser cfUser = cfUserService.getUserByUid(handleUid, true);
-        if(cfUser.getCfRoles()!=null && cfUser.getCfRoles().size()>0){
+        if (cfUser.getCfRoles() != null && cfUser.getCfRoles().size() > 0) {
             List<CfRole> cfRoles = cfUser.getCfRoles();
-            for (CfRole cfRole: cfRoles){
-                if(cfRole.getFlagKey().equals("admin")){
+            for (CfRole cfRole : cfRoles) {
+                if (cfRole.getFlagKey().equals("admin")) {
                     isAdmin = true;
                     break;
                 }
             }
         }
-        if(isAdmin){
+        if (isAdmin) {
             return null;
         }
         CfOrder order = cfOrderService.add(cfOrder);
@@ -469,92 +469,92 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
         CfCarParkPackageExample cfCarParkPackageExample = new CfCarParkPackageExample();
         CfCarParkPackageExample.Criteria criteria = cfCarParkPackageExample.createCriteria();
 
-        if(cfCarParkPackageQuery.getIds()!=null && cfCarParkPackageQuery.getIds().size()>0){
+        if (cfCarParkPackageQuery.getIds() != null && cfCarParkPackageQuery.getIds().size() > 0) {
             criteria.andIdIn(cfCarParkPackageQuery.getIds());
         }
-        if(StringUtils.isNotEmpty(cfCarParkPackageQuery.getCarParkId())){
+        if (StringUtils.isNotEmpty(cfCarParkPackageQuery.getCarParkId())) {
             criteria.andCarParkIdEqualTo(cfCarParkPackageQuery.getCarParkId());
         }
-        if(StringUtils.isNotEmpty(cfCarParkPackageQuery.getTypeKey())){
+        if (StringUtils.isNotEmpty(cfCarParkPackageQuery.getTypeKey())) {
             criteria.andTypeKeyEqualTo(cfCarParkPackageQuery.getTypeKey());
         }
-        if(cfCarParkPackageQuery.getMinStartTime()!=null){
+        if (cfCarParkPackageQuery.getMinStartTime() != null) {
             criteria.andStartTimeGreaterThanOrEqualTo(cfCarParkPackageQuery.getMinStartTime());
         }
-        if(cfCarParkPackageQuery.getMaxStartTime()!=null){
+        if (cfCarParkPackageQuery.getMaxStartTime() != null) {
             criteria.andStartTimeLessThanOrEqualTo(cfCarParkPackageQuery.getMaxStartTime());
         }
-        if(cfCarParkPackageQuery.getMinEndTime()!=null){
+        if (cfCarParkPackageQuery.getMinEndTime() != null) {
             criteria.andEndTimeGreaterThanOrEqualTo(cfCarParkPackageQuery.getMinEndTime());
         }
-        if(cfCarParkPackageQuery.getMaxEndTime()!=null){
+        if (cfCarParkPackageQuery.getMaxEndTime() != null) {
             criteria.andEndTimeLessThanOrEqualTo(cfCarParkPackageQuery.getMaxEndTime());
         }
-        if(cfCarParkPackageQuery.getSpecialGive()!=null){
+        if (cfCarParkPackageQuery.getSpecialGive() != null) {
             criteria.andSpecialGiveEqualTo(cfCarParkPackageQuery.getSpecialGive());
         }
-        if(cfCarParkPackageQuery.getUid()!=null){
+        if (cfCarParkPackageQuery.getUid() != null) {
             criteria.andUidEqualTo(cfCarParkPackageQuery.getUid());
         }
-        if(cfCarParkPackageQuery.getNumberPlate()!=null){
+        if (cfCarParkPackageQuery.getNumberPlate() != null) {
             criteria.andNumberPlateEqualTo(cfCarParkPackageQuery.getNumberPlate());
         }
-        if(cfCarParkPackageQuery.getNumberPlates()!=null && cfCarParkPackageQuery.getNumberPlates().size()>0){
+        if (cfCarParkPackageQuery.getNumberPlates() != null && cfCarParkPackageQuery.getNumberPlates().size() > 0) {
             criteria.andNumberPlateIn(cfCarParkPackageQuery.getNumberPlates());
         }
-        if(cfCarParkPackageQuery.getNumberPlateNotIn()!=null && cfCarParkPackageQuery.getNumberPlateNotIn().size()>0){
+        if (cfCarParkPackageQuery.getNumberPlateNotIn() != null && cfCarParkPackageQuery.getNumberPlateNotIn().size() > 0) {
             criteria.andNumberPlateNotIn(cfCarParkPackageQuery.getNumberPlateNotIn());
         }
-        if(cfCarParkPackageQuery.getNumberPlateLike()!=null){
-            criteria.andNumberPlateLike("%"+cfCarParkPackageQuery.getNumberPlate()+"%");
+        if (cfCarParkPackageQuery.getNumberPlateLike() != null) {
+            criteria.andNumberPlateLike("%" + cfCarParkPackageQuery.getNumberPlate() + "%");
         }
 
-        if(cfCarParkPackageQuery.getMainCarParkId()!=null){
+        if (cfCarParkPackageQuery.getMainCarParkId() != null) {
             criteria.andMainCarParkIdEqualTo(cfCarParkPackageQuery.getMainCarParkId());
         }
-        if(cfCarParkPackageQuery.getPackagePriceId()!=null){
+        if (cfCarParkPackageQuery.getPackagePriceId() != null) {
             criteria.andPackagePriceIdEqualTo(cfCarParkPackageQuery.getPackagePriceId());
         }
-        if(cfCarParkPackageQuery.getPhone()!=null){
+        if (cfCarParkPackageQuery.getPhone() != null) {
             criteria.andPhoneEqualTo(cfCarParkPackageQuery.getPhone());
         }
-        if(cfCarParkPackageQuery.getSpecialGive()!=null){
+        if (cfCarParkPackageQuery.getSpecialGive() != null) {
             criteria.andSpecialGiveEqualTo(cfCarParkPackageQuery.getSpecialGive());
         }
-        if(cfCarParkPackageQuery.getTransRegional()!=null){
+        if (cfCarParkPackageQuery.getTransRegional() != null) {
             criteria.andTransRegionalEqualTo(cfCarParkPackageQuery.getTransRegional());
         }
-        if(cfCarParkPackageQuery.getParentId()!=null){
+        if (cfCarParkPackageQuery.getParentId() != null) {
             criteria.andParentIdEqualTo(cfCarParkPackageQuery.getParentId());
         }
-        if(cfCarParkPackageQuery.getStatus()!=null){
+        if (cfCarParkPackageQuery.getStatus() != null) {
             criteria.andStatusEqualTo(cfCarParkPackageQuery.getStatus());
         }
-        if(cfCarParkPackageQuery.getMinStatus()!=null){
+        if (cfCarParkPackageQuery.getMinStatus() != null) {
             criteria.andStatusGreaterThanOrEqualTo(cfCarParkPackageQuery.getMinStatus());
         }
-        if(cfCarParkPackageQuery.getGroupFlag()!=null){
+        if (cfCarParkPackageQuery.getGroupFlag() != null) {
             criteria.andGroupFlagEqualTo(cfCarParkPackageQuery.getGroupFlag());
         }
-        if(cfCarParkPackageQuery.isGroupFlagNotEmpty()){
+        if (cfCarParkPackageQuery.isGroupFlagNotEmpty()) {
             criteria.andGroupFlagNotEqualTo("");
         }
-        if(cfCarParkPackageQuery.getCarOwnerName()!=null){
+        if (cfCarParkPackageQuery.getCarOwnerName() != null) {
             criteria.andCarOwnerNameEqualTo(cfCarParkPackageQuery.getCarOwnerName());
         }
-        if(cfCarParkPackageQuery.getIssuedWhitelist()!=null){
+        if (cfCarParkPackageQuery.getIssuedWhitelist() != null) {
             criteria.andIssuedWhitelistEqualTo(cfCarParkPackageQuery.getIssuedWhitelist());
         }
-        if(cfCarParkPackageQuery.getNoticeExpiringSoon()!=null){
+        if (cfCarParkPackageQuery.getNoticeExpiringSoon() != null) {
             criteria.andNoticeExpiringSoonEqualTo(cfCarParkPackageQuery.getNoticeExpiringSoon());
         }
-        if(cfCarParkPackageQuery.getNoticeExpired()!=null){
+        if (cfCarParkPackageQuery.getNoticeExpired() != null) {
             criteria.andNoticeExpiredEqualTo(cfCarParkPackageQuery.getNoticeExpired());
         }
-        if(StringUtils.isNotEmpty(cfCarParkPackageQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfCarParkPackageQuery.getOrderBy())) {
             cfCarParkPackageExample.setOrderByClause(cfCarParkPackageQuery.getOrderBy());
         }
-        if(cfCarParkPackageQuery.getPage()!=null && cfCarParkPackageQuery.getSize()!=null){
+        if (cfCarParkPackageQuery.getPage() != null && cfCarParkPackageQuery.getSize() != null) {
             PageHelper.startPage(cfCarParkPackageQuery.getPage(), cfCarParkPackageQuery.getSize());
         }
         return cfCarParkPackageExample;
@@ -573,8 +573,8 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
 
     @Override
     public List<CfCarParkPackage> selectByQuery(CfCarParkPackageQuery cfCarParkPackageQuery) {
-        if(StringUtils.isNotEmpty(cfCarParkPackageQuery.getNumberPlate())){
-            cfCarParkPackageQuery.setNumberPlate("%"+cfCarParkPackageQuery.getNumberPlate()+"%");
+        if (StringUtils.isNotEmpty(cfCarParkPackageQuery.getNumberPlate())) {
+            cfCarParkPackageQuery.setNumberPlate("%" + cfCarParkPackageQuery.getNumberPlate() + "%");
         }
         return cfCarParkPackageMapper.selectByQuery(cfCarParkPackageQuery);
     }
@@ -595,28 +595,28 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
         int i = cfCarParkPackageMapper.deleteByPrimaryKey(id);
         ArrayList<CfCarParkPackage> cfCarParkPackageArrayList = new ArrayList<>();
         cfCarParkPackageArrayList.add(cfCarParkPackage);
-        if(cfCarParkPackage.getIssuedWhitelist()==(byte)1){
-            synchronizePackageDataToDevice((byte)1, cfCarParkPackageArrayList);
+        if (cfCarParkPackage.getIssuedWhitelist() == (byte) 1) {
+            synchronizePackageDataToDevice((byte) 1, cfCarParkPackageArrayList);
         }
         //如果该套餐不是跨区套餐，删除其跨区套餐
-        if(StringUtils.isEmpty(cfCarParkPackage.getParentId())){
+        if (StringUtils.isEmpty(cfCarParkPackage.getParentId())) {
             CfCarParkPackageQuery cfCarParkPackageQuery = new CfCarParkPackageQuery();
             cfCarParkPackageQuery.setParentId(id);
 
             //如果该套擦为特殊车辆套餐，删除其子套餐对应停车场的特殊车辆数据
             List<String> oldCarParkIds = new ArrayList<>();
-            if(StringUtils.isNotEmpty(cfCarParkPackage.getSpecialCarId())){
+            if (StringUtils.isNotEmpty(cfCarParkPackage.getSpecialCarId())) {
                 //找到原来关联的所有停车场id
                 List<CfCarParkPackage> cfCarParkPackages = getListByQuery(cfCarParkPackageQuery);
-                if(cfCarParkPackages!=null && cfCarParkPackages.size()>0){
-                    for (CfCarParkPackage carParkPackage: cfCarParkPackages){
-                        if(StringUtils.isNotEmpty(carParkPackage.getSpecialCarId())){
+                if (cfCarParkPackages != null && cfCarParkPackages.size() > 0) {
+                    for (CfCarParkPackage carParkPackage : cfCarParkPackages) {
+                        if (StringUtils.isNotEmpty(carParkPackage.getSpecialCarId())) {
                             oldCarParkIds.add(carParkPackage.getCarParkId());
                         }
                     }
                 }
             }
-            if(oldCarParkIds.size()>0){
+            if (oldCarParkIds.size() > 0) {
                 CfCarParkSpecialCarQuery cfCarParkSpecialCarQuery = new CfCarParkSpecialCarQuery();
                 cfCarParkSpecialCarQuery.setCarParkIds(oldCarParkIds);
                 cfCarParkSpecialCarQuery.setNumberPlate(cfCarParkPackage.getNumberPlate());
@@ -626,7 +626,7 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
             deleteByQuery(cfCarParkPackageQuery);
         }
         //如果该套擦为特殊车辆套餐，删除其对应停车场的特殊车辆数据
-        if(StringUtils.isEmpty(cfCarParkPackage.getSpecialCarId())){
+        if (StringUtils.isEmpty(cfCarParkPackage.getSpecialCarId())) {
             CfCarParkSpecialCarQuery cfCarParkSpecialCarQuery = new CfCarParkSpecialCarQuery();
             cfCarParkSpecialCarQuery.setCarParkId(cfCarParkPackage.getCarParkId());
             cfCarParkSpecialCarQuery.setNumberPlate(cfCarParkPackage.getNumberPlate());
@@ -638,10 +638,10 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
     @Override
     public Integer deleteByQuery(CfCarParkPackageQuery cfCarParkPackageQuery) throws Exception {
         int delete = cfCarParkPackageMapper.deleteByExample(getExampleByQuery(cfCarParkPackageQuery));
-        cfCarParkPackageQuery.setIssuedWhitelist((byte)1);
+        cfCarParkPackageQuery.setIssuedWhitelist((byte) 1);
         List<CfCarParkPackage> cfCarParkPackageList = getListByQuery(cfCarParkPackageQuery);
-        if(cfCarParkPackageList!=null && cfCarParkPackageList.size()>0){
-            synchronizePackageDataToDevice((byte)1, cfCarParkPackageList);
+        if (cfCarParkPackageList != null && cfCarParkPackageList.size() > 0) {
+            synchronizePackageDataToDevice((byte) 1, cfCarParkPackageList);
         }
         return delete;
     }
@@ -654,9 +654,9 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
     @Override
     public CfCarParkPackage findById(String id, boolean expectEmpty) {
         CfCarParkPackage cfCarParkPackage = findById(id);
-        if(expectEmpty && cfCarParkPackage!=null){
+        if (expectEmpty && cfCarParkPackage != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
-        }else if(!expectEmpty && cfCarParkPackage==null){
+        } else if (!expectEmpty && cfCarParkPackage == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfCarParkPackage;
@@ -669,7 +669,7 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
         cfCarParkPackageQuery.setUid(cfCarParkPackage.getUid());
         cfCarParkPackageQuery.setNumberPlate(cfCarParkPackage.getNumberPlate());
         List<CfCarParkPackage> listByQuery = getListByQuery(cfCarParkPackageQuery);
-        if(listByQuery!=null && listByQuery.size()>0){
+        if (listByQuery != null && listByQuery.size() > 0) {
             CfCarParkPackage carParkPackage = listByQuery.get(0);
             carParkPackage.setStartTime(cfCarParkPackage.getStartTime());
             carParkPackage.setEndTime(cfCarParkPackage.getEndTime());
@@ -684,7 +684,7 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
         String sql = "SELECT cpp.*,cp.name carpark_name,u.user_name,cppp.title cppp_title,cppp.current_price cppp_current_price " +
                 "FROM cf_car_park_package cpp " +
                 "LEFT JOIN cf_car_park cp ON(cpp.car_park_id=cp.id) " +
-                "LEFT JOIN cf_car_park_package_price cppp ON(cppp.id=cpp.package_price_id) "+
+                "LEFT JOIN cf_car_park_package_price cppp ON(cppp.id=cpp.package_price_id) " +
                 "LEFT JOIN cf_user u ON(cpp.uid=u.id) ";
         sql = DbUtils.makeQuery(conditions, allowFiledsMap, allowFileds, sql, false);
         return cfCarParkPackageMapper.selectListByCondition(sql);
@@ -702,14 +702,14 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
         CfCarParkPackageQuery cfCarParkPackageQuery = new CfCarParkPackageQuery();
         cfCarParkPackageQuery.setMaxStartTime(System.currentTimeMillis());
         cfCarParkPackageQuery.setMinEndTime(System.currentTimeMillis());
-        if(numberPlate.equals("临A88888")){
+        if (numberPlate.equals("临A88888")) {
             cfCarParkPackageQuery.setUid(uid);
         }
         cfCarParkPackageQuery.setNumberPlate(numberPlate);
         cfCarParkPackageQuery.setCarParkId(carParkId);
-        cfCarParkPackageQuery.setMinStatus((byte)1);
+        cfCarParkPackageQuery.setMinStatus((byte) 1);
         List<CfCarParkPackage> cfCarParkPackages = getListByQuery(cfCarParkPackageQuery);
-        if(cfCarParkPackages!=null && cfCarParkPackages.size()>0){
+        if (cfCarParkPackages != null && cfCarParkPackages.size() > 0) {
             return cfCarParkPackages.get(0);
         }
         return null;
@@ -727,7 +727,7 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
 
     @Override
     public Integer updateGroupFlagTime(CfCarParkPackage cfCarParkPackage) {
-        if(StringUtils.isEmpty(cfCarParkPackage.getGroupFlag())){
+        if (StringUtils.isEmpty(cfCarParkPackage.getGroupFlag())) {
             return 0;
         }
         CfCarParkPackage updateCarParkPackage = new CfCarParkPackage();
@@ -737,9 +737,9 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
         CfCarParkPackageQuery cfCarParkPackageQuery = new CfCarParkPackageQuery();
         cfCarParkPackageQuery.setCarParkId(cfCarParkPackage.getCarParkId());
         cfCarParkPackageQuery.setGroupFlag(cfCarParkPackage.getGroupFlag());
-        cfCarParkPackageQuery.setMaxEndTime(cfCarParkPackage.getEndTime()-1000);
+        cfCarParkPackageQuery.setMaxEndTime(cfCarParkPackage.getEndTime() - 1000);
         Integer integer = countsByQuery(cfCarParkPackageQuery);
-        if(integer==0 || integer>20){
+        if (integer == 0 || integer > 20) {
             //如果命中条数太多，可能存在风险，暂停同步操作
             return 0;
         }
@@ -748,29 +748,29 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
 
     public void synchronizePackageDataToDevice(byte operateType, List<CfCarParkPackage> cfCarParkPackages) throws Exception {
 
-        for(CfCarParkPackage cfCarParkPackage: cfCarParkPackages){
+        for (CfCarParkPackage cfCarParkPackage : cfCarParkPackages) {
             //找到该套餐所有停车场的设备
             CfCarParkDeviceQuery cfCarParkDeviceQuery = new CfCarParkDeviceQuery();
             cfCarParkDeviceQuery.setCarParkId(cfCarParkPackage.getCarParkId());
-            cfCarParkDeviceQuery.setType((byte)2);
-            cfCarParkDeviceQuery.setStatus((byte)1);
+            cfCarParkDeviceQuery.setType((byte) 2);
+            cfCarParkDeviceQuery.setStatus((byte) 1);
             List<CfCarParkDevice> cfCarParkDeviceList = cfCarParkDeviceService.getListByQuery(cfCarParkDeviceQuery);
-            if(cfCarParkDeviceList==null || cfCarParkDeviceList.size()==0){
+            if (cfCarParkDeviceList == null || cfCarParkDeviceList.size() == 0) {
                 continue;
             }
-            for (CfCarParkDevice cfCarParkDevice: cfCarParkDeviceList){
-                if(!cfCarParkDevice.getLinkMode().equals("mqtt")){
+            for (CfCarParkDevice cfCarParkDevice : cfCarParkDeviceList) {
+                if (!cfCarParkDevice.getLinkMode().equals("mqtt")) {
                     continue;
                 }
                 ArrayList<CfCarParkPackage> carParkPackages = new ArrayList<>();
                 carParkPackages.add(cfCarParkPackage);
                 //判断是否在本机，在本机直接mqtt与客户端交互，否则动态寻找
                 boolean local = false;
-                if(ClientCache.channels.size()>0){
+                if (ClientCache.channels.size() > 0) {
                     ConcurrentHashMap<String, ClientDTO> channels = ClientCache.channels;
-                    for (Map.Entry channelEntry: channels.entrySet()) {
-                        ClientDTO clientDTO = (ClientDTO)channelEntry.getValue();
-                        if(!clientDTO.getFlagKey().equals(cfCarParkDevice.getBarCode())){
+                    for (Map.Entry channelEntry : channels.entrySet()) {
+                        ClientDTO clientDTO = (ClientDTO) channelEntry.getValue();
+                        if (!clientDTO.getFlagKey().equals(cfCarParkDevice.getBarCode())) {
                             continue;
                         }
                         local = true;
@@ -779,11 +779,11 @@ public class CfCarParkPackageServiceImpl implements CfCarParkPackageService, App
                         break;
                     }
                 }
-                if(!local){
+                if (!local) {
                     //改用Dubbo内置RPC远程服务调用
                     String deviceLinkIp = cfCarParkReleaseLogService.getDeviceLinkLocalServerIp(cfCarParkDevice.getBarCode());
-                    if(StringUtils.isNotEmpty(deviceLinkIp)){
-                        String url = "dubbo://"+deviceLinkIp+":20890/com.cf.carpark.service.CfCarParkPackageService?version=1.0.0";//更改不同的Dubbo服务暴露的ip地址&端口
+                    if (StringUtils.isNotEmpty(deviceLinkIp)) {
+                        String url = "dubbo://" + deviceLinkIp + ":20890/com.cf.carpark.service.CfCarParkPackageService?version=1.0.0";//更改不同的Dubbo服务暴露的ip地址&端口
                         ReferenceBean<IMqttDataService> referenceBean = new ReferenceBean<IMqttDataService>();
                         referenceBean.setApplicationContext(applicationContext);
                         referenceBean.setInterface(IMqttDataService.class);

@@ -20,25 +20,25 @@ public interface DepartmentSwagger {
 
     @ApiOperation(value = "部门列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string")
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string")
     })
     public ResponseResult list();
 
     @ApiOperation(value = "添加部门")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string")
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string")
     })
     public ResponseResult add(CfDepartmentForm cfDepartmentForm);
 
     @ApiOperation(value = "更新部门")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string")
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string")
     })
     public ResponseResult update(CfDepartmentForm cfDepartmentForm);
 
     @ApiOperation(value = "删除部门")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string")
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string")
     })
     public ResponseResult delete(String id);
 

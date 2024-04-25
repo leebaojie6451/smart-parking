@@ -71,7 +71,7 @@ public class CCBPayUtil {
         for (int i = 0; i < keys.size(); i++) {
             String key = keys.get(i);
             String value = sortedParams.get(key);
-            if (areNotEmpty(new String[] { key, value })) {
+            if (areNotEmpty(new String[]{key, value})) {
                 content.append(String.valueOf((index == 0) ? "" : "&") + key + "=" + value);
                 index++;
             }
@@ -107,5 +107,6 @@ public class CCBPayUtil {
         return true;
     }
 
-    private void log(String s) {}
+    private void log(String s) {
+    }
 }

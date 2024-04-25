@@ -32,6 +32,7 @@ public interface CfCarParkCheckpointMapper {
 
     /**
      * 查询附近的停车场(可以指定停车场查询)
+     *
      * @param cfCarParkCheckpointQuery
      * @return
      */
@@ -39,6 +40,7 @@ public interface CfCarParkCheckpointMapper {
 
     /**
      * 根据Query条件进行原生sql查询
+     *
      * @param cfCarParkCheckpointQuery
      * @return
      */

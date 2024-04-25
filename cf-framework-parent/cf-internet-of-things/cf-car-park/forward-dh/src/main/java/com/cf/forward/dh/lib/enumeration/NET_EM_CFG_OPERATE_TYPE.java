@@ -43,18 +43,18 @@ public class NET_EM_CFG_OPERATE_TYPE {
     public static final int NET_EM_CFG_GPSTITLE = 1006;                          // 叠加GPS标题显示配置，对应结构体 NET_OSD_GPS_TITLE
     public static final int NET_EM_CFG_OSD_NUMBERSTATPLAN = 1007;                // 人数统计计划叠加OSD配置, 支持NumberStatPlan算法大类时(球机)使用，对应结构体NET_OSD_NUMBER_STATPLAN
     public static final int NET_EM_CFG_GPSSTARNUM_OSD = 1008;                    // GPS搜星数OSD配置, 车载定制需求, 对应结构体 NET_CFG_GPSSTARNUM_OSD_INFO
-    public static final int NET_EM_CFG_PICTURETITLE=1009;			             // 图片标题,对应结构体 NET_OSD_PICTURE_TITLE
-    public static final int NET_EM_CFG_OSD_FACEFLOWSTAT=1010;		             // 人脸数量统计OSD配置，对应结构体 NET_OSD_FACEFLOWSTAT_INFO
+    public static final int NET_EM_CFG_PICTURETITLE = 1009;                         // 图片标题,对应结构体 NET_OSD_PICTURE_TITLE
+    public static final int NET_EM_CFG_OSD_FACEFLOWSTAT = 1010;                     // 人脸数量统计OSD配置，对应结构体 NET_OSD_FACEFLOWSTAT_INFO
 
-    public static final int NET_EM_CFG_PTZ_PRESET=1011;	                         // 预置点信息叠加,对应结构体 NET_OSD_CFG_PTZ_PRESET
-    public static final int NET_EM_CFG_PTZ_PATTERN=1012;	                     // 显示巡迹百分比叠加配置,对应结构体 NET_OSD_CFG_PTZ_PATTERN
-    public static final int NET_EM_CFG_PTZ_RS485_DETECT=1013;	   	             // 显示RS485检测结果的叠加配置,对应结构体 NET_OSD_CFG_PTZ_RS485_DETECT
-    public static final int NET_EM_CFG_PTZ_COORDINATES=1014;	                 // 显示云台坐标的叠加配置,对应结构体 NET_OSD_CFG_PTZ_COORDINATES
-    public static final int NET_EM_CFG_PTZ_DIRECTION=1015;                       // 显示云台方向的叠加配置,对应结构体 NET_OSD_CFG_PTZ_DIRECTION
-    public static final int NET_EM_CFG_TEMPERATURE=1016;	                     // 显示环境温度的叠加配置,对应结构体 NET_OSD_CFG_TEMPERATURE
-    public static final int NET_EM_CFG_COVERS=1017;	                             // 区域覆盖,对应结构体 NET_OSD_CFG_COVERS
-    public static final int NET_EM_CFG_USER_DEF_TITLE=1018;	                     // 用户自定义OSD标题，对应结构体 NET_OSD_USER_DEF_TITLE  DHOP专用
-    public static final int NET_EM_CFG_SNAP_OSD=1019;                            // 抓拍OSD配置, 对应结构体 NET_CFG_SNAP_OSD
+    public static final int NET_EM_CFG_PTZ_PRESET = 1011;                             // 预置点信息叠加,对应结构体 NET_OSD_CFG_PTZ_PRESET
+    public static final int NET_EM_CFG_PTZ_PATTERN = 1012;                         // 显示巡迹百分比叠加配置,对应结构体 NET_OSD_CFG_PTZ_PATTERN
+    public static final int NET_EM_CFG_PTZ_RS485_DETECT = 1013;                     // 显示RS485检测结果的叠加配置,对应结构体 NET_OSD_CFG_PTZ_RS485_DETECT
+    public static final int NET_EM_CFG_PTZ_COORDINATES = 1014;                     // 显示云台坐标的叠加配置,对应结构体 NET_OSD_CFG_PTZ_COORDINATES
+    public static final int NET_EM_CFG_PTZ_DIRECTION = 1015;                       // 显示云台方向的叠加配置,对应结构体 NET_OSD_CFG_PTZ_DIRECTION
+    public static final int NET_EM_CFG_TEMPERATURE = 1016;                         // 显示环境温度的叠加配置,对应结构体 NET_OSD_CFG_TEMPERATURE
+    public static final int NET_EM_CFG_COVERS = 1017;                                 // 区域覆盖,对应结构体 NET_OSD_CFG_COVERS
+    public static final int NET_EM_CFG_USER_DEF_TITLE = 1018;                         // 用户自定义OSD标题，对应结构体 NET_OSD_USER_DEF_TITLE  DHOP专用
+    public static final int NET_EM_CFG_SNAP_OSD = 1019;                            // 抓拍OSD配置, 对应结构体 NET_CFG_SNAP_OSD
 
     /*********encode 相关配置*************************************************************************************************/
     public static final int NET_EM_CFG_ENCODE_VIDEO = 1100;                      // 编码视频格式属性配置，对应结构体 NET_ENCODE_VIDEO_INFO
@@ -205,10 +205,10 @@ public class NET_EM_CFG_OPERATE_TYPE {
     public static final int NET_EM_CFG_FILE_HOLD_DAYS = 4010;                   // 录像保存天数配置, 对应结构体NET_CFG_FILE_HOLD_DAYS_INFO
 
     /***********第三方配置************************************************************************************************/
-    public static final int NET_EM_CFG_VSP_PAAS    			= 9000;		        // 乐橙云注册配置修改, 对应结构体 NET_CFG_VSP_PAAS_INFO
-    public static final int NET_EM_CFG_VSP_GAYS_SERVER		= 9001;		        // 公安一所平台接入配置(国标服务端),对应结构体 NET_CFG_VSP_GAYS_SERVER_INFO,对应通道为-1
-    public static final int NET_EM_CFG_VSP_CO_SIGN_SERVER   = 9002;		        // 协同签名服务器配置,对应结构体NET_CFG_VSP_CO_SIGN_SERVER_INFO,对应通道为-1
-    public static final int NET_EM_CFG_VSP_GAVI             = 9003;	            // 公安视频图像信息应用系统接入配置,对应结构体NET_CFG_VSP_GAVI_INFO,对应通道为-1
+    public static final int NET_EM_CFG_VSP_PAAS = 9000;                // 乐橙云注册配置修改, 对应结构体 NET_CFG_VSP_PAAS_INFO
+    public static final int NET_EM_CFG_VSP_GAYS_SERVER = 9001;                // 公安一所平台接入配置(国标服务端),对应结构体 NET_CFG_VSP_GAYS_SERVER_INFO,对应通道为-1
+    public static final int NET_EM_CFG_VSP_CO_SIGN_SERVER = 9002;                // 协同签名服务器配置,对应结构体NET_CFG_VSP_CO_SIGN_SERVER_INFO,对应通道为-1
+    public static final int NET_EM_CFG_VSP_GAVI = 9003;                // 公安视频图像信息应用系统接入配置,对应结构体NET_CFG_VSP_GAVI_INFO,对应通道为-1
 
     /***********道闸配置************************************************************************************************/
     public static final int NET_EM_CFG_TRAFFICSTROBE = 9100;                    // 道闸配置, 对应结构体 NET_CFG_TRAFFICSTROBE_INFO

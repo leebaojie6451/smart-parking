@@ -15,36 +15,36 @@ import java.util.Date;
  * 时间选择器, 年月日
  */
 public class DateChooserJButtonEx extends JButton {
-	private static final long serialVersionUID = 1L;
-	
+    private static final long serialVersionUID = 1L;
+
     int startYear = 1980; // 默认【最小】显示年份
     int lastYear = 2050; // 默认【最大】显示年份
-    
+
     private DateChooser dateChooser = null;
     private String preLabel = "";
     private String originalText = null;
     private SimpleDateFormat sdf = null;
-    
+
     private JSpinner yearSpin;
     private JSpinner monthSpin;
     private JSpinner daySpin;
     private JSpinner hourSpin;
     private JSpinner minuteSpin;
     private JSpinner secondSpin;
-    
+
     public DateChooserJButtonEx() {
-        this(getNowDate());   
-        
-		try {
-	        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-	    } catch (Exception e) {
-	    	e.printStackTrace();
-	    } 
+        this(getNowDate());
+
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public DateChooserJButtonEx(String dateString) {
-        this();     
-    	
+        this();
+
         setText(getDefaultDateFormat(), dateString);
         //保存原始是日期时间
         initOriginalText(dateString);
@@ -91,15 +91,15 @@ public class DateChooserJButtonEx extends JButton {
                     dateChooser = new DateChooser();
                 }
 
-                dateChooser.showDateChooser();          
+                dateChooser.showDateChooser();
             }
         });
     }
-    
+
     public void setStartYear(int startYear) {
         this.startYear = startYear;
     }
-    
+
     public void setLastYear(int lastYear) {
         this.lastYear = lastYear;
     }
@@ -114,12 +114,13 @@ public class DateChooserJButtonEx extends JButton {
 
     /**
      * 得到当前使用的日期格式化器
+     *
      * @return 日期格式化器
      */
-    public SimpleDateFormat getCurrentSimpleDateFormat(){
-        if(this.sdf != null){
+    public SimpleDateFormat getCurrentSimpleDateFormat() {
+        if (this.sdf != null) {
             return sdf;
-        }else{
+        } else {
             return getDefaultDateFormat();
         }
     }
@@ -135,8 +136,9 @@ public class DateChooserJButtonEx extends JButton {
         this.originalText = preLabel + getDefaultDateFormat().format(date);
     }
 
-    /** 
+    /**
      * 得到当前记忆的原始日期时间
+     *
      * @return 当前记忆的原始日期时间（未修改前的日期时间）
      */
     public String getOriginalText() {
@@ -181,8 +183,9 @@ public class DateChooserJButtonEx extends JButton {
         }
     }
 
-    /**  
+    /**
      * 覆盖父类的方法使之无效
+     *
      * @param listener 响应监听器
      */
     @Override
@@ -194,12 +197,12 @@ public class DateChooserJButtonEx extends JButton {
      * 然后再创建一个JDialog，把本内部类定义的JPanel放入JDialog的内容区
      */
     private class DateChooser extends JPanel implements MouseListener, ChangeListener {
-    	private static final long serialVersionUID = 1L;
-    	
+        private static final long serialVersionUID = 1L;
+
         JLabel yearLabel;
         JLabel monthLabel;
         JLabel dayLabel;
-        
+
         int width = 485; // 界面宽度
         int height = 230; // 界面高度
         Color backGroundColor = Color.gray; // 底色
@@ -212,7 +215,7 @@ public class DateChooserJButtonEx extends JButton {
         // 控制条配色------------------//
         Color controlLineColor = Color.pink; // 控制条底色
         Color controlTextColor = Color.white; // 控制条标签文字色
-        
+
         /** 点击DateChooserButton时弹出的对话框，日历内容在这个对话框内 */
         JDialog dialog;
         JLabel[][] daysLabels = new JLabel[6][7];
@@ -271,13 +274,13 @@ public class DateChooserJButtonEx extends JButton {
 
             dayLabel = new JLabel(Res.string().getDay());
             dayLabel.setForeground(controlTextColor);
-            result.add(dayLabel);      
+            result.add(dayLabel);
 
             return result;
         }
 
         private JPanel createWeekAndDayPanal() {
-        	Res.string().getWeek();
+            Res.string().getWeek();
             JPanel result = new JPanel();
             // 设置固定字体，以免调用环境改变影响界面美观
             result.setFont(new Font("宋体", Font.PLAIN, 12));
@@ -307,9 +310,9 @@ public class DateChooserJButtonEx extends JButton {
                     numberLabel.setBackground(palletTableColor);
                     numberLabel.setForeground(dateFontColor);
                     if (j == 0 || j == 6) {
-                    	numberLabel.setForeground(weekendFontColor);
+                        numberLabel.setForeground(weekendFontColor);
                     } else {
-                    	numberLabel.setForeground(dateFontColor);
+                        numberLabel.setForeground(dateFontColor);
                     }
                     daysLabels[i][j] = numberLabel;
                     result.add(numberLabel);
@@ -354,7 +357,7 @@ public class DateChooserJButtonEx extends JButton {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     //恢复原始的日期时间
-                    restoreTheOriginalDate();     
+                    restoreTheOriginalDate();
                     //隐藏日历对话框
                     dialog.setVisible(false);
                 }
@@ -371,17 +374,17 @@ public class DateChooserJButtonEx extends JButton {
             result.getContentPane().add(this, BorderLayout.CENTER);
             result.pack();
             result.setSize(width, height);
-            result.setModal(true);  
-            
+            result.setModal(true);
+
             result.addWindowListener(new WindowAdapter() {
-    	    	public void windowClosing(WindowEvent e) {
-    	    	     //恢复原始的日期时间
-                    restoreTheOriginalDate();     
+                public void windowClosing(WindowEvent e) {
+                    //恢复原始的日期时间
+                    restoreTheOriginalDate();
                     //隐藏日历对话框
                     dialog.setVisible(false);
-    	    	}
+                }
             });
-            
+
             return result;
         }
 
@@ -428,13 +431,13 @@ public class DateChooserJButtonEx extends JButton {
             int i = actionCommandId / 7;
             int j = actionCommandId % 7;
             if (isOldDay) {
-            	daysLabels[i][j].setForeground(dateFontColor);
+                daysLabels[i][j].setForeground(dateFontColor);
             } else {
-            	daysLabels[i][j].setForeground(todayBackColor);
+                daysLabels[i][j].setForeground(todayBackColor);
             }
         }
 
-        private void flushWeekAndDay() {     
+        private void flushWeekAndDay() {
             Calendar c = getCalendar();
             c.set(Calendar.DAY_OF_MONTH, 1);
             int maxDayNo = c.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -458,31 +461,31 @@ public class DateChooserJButtonEx extends JButton {
             daySpin.setValue(new Integer(date1[2]));
 
             // 重置日历天的数字颜色
-            for(int i = 0; i < 6; i++) {
-            	for(int j = 0; j < 7; j++) {
-            		if(!daysLabels[i][j].getText().equals("")) {
-            			daysLabels[i][j].setForeground(Color.BLACK);
-            		}
-            	}
+            for (int i = 0; i < 6; i++) {
+                for (int j = 0; j < 7; j++) {
+                    if (!daysLabels[i][j].getText().equals("")) {
+                        daysLabels[i][j].setForeground(Color.BLACK);
+                    }
+                }
             }
-            
+
             // 重置日历星期六、星期日的数字颜色
-            for(int i = 0; i < 6; i++) {
-            	if(!daysLabels[i][0].getText().equals("")) {
-            		daysLabels[i][0].setForeground(weekendFontColor);
-            	}
-            	if(!daysLabels[i][6].getText().equals("")) {
-            		daysLabels[i][6].setForeground(weekendFontColor);
-            	}
+            for (int i = 0; i < 6; i++) {
+                if (!daysLabels[i][0].getText().equals("")) {
+                    daysLabels[i][0].setForeground(weekendFontColor);
+                }
+                if (!daysLabels[i][6].getText().equals("")) {
+                    daysLabels[i][6].setForeground(weekendFontColor);
+                }
             }
-            
+
             // 设置当天的数字颜色
-            for(int i = 0; i < 6; i++) {
-            	for(int j = 0; j < 7; j++) {
-            		if(daysLabels[i][j].getText().equals(date1[2])) {
-            			daysLabels[i][j].setForeground(todayBackColor);
-            		}
-            	}
+            for (int i = 0; i < 6; i++) {
+                for (int j = 0; j < 7; j++) {
+                    if (daysLabels[i][j].getText().equals(date1[2])) {
+                        daysLabels[i][j].setForeground(todayBackColor);
+                    }
+                }
             }
 
             dayColorUpdate(false);
@@ -525,8 +528,8 @@ public class DateChooserJButtonEx extends JButton {
         /**
          * 选择日期时的响应事件
          */
-		@Override
-		public void mouseClicked(MouseEvent e) {
+        @Override
+        public void mouseClicked(MouseEvent e) {
             JLabel source = (JLabel) e.getSource();
             if (source.getText().length() == 0) {
                 return;
@@ -539,30 +542,30 @@ public class DateChooserJButtonEx extends JButton {
             setDate(c.getTime());
             //把daySpin中的值也变了
             daySpin.setValue(Integer.valueOf(newDay));
-		}
+        }
 
-		@Override
-		public void mouseEntered(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
+        @Override
+        public void mouseEntered(MouseEvent arg0) {
+            // TODO Auto-generated method stub
 
-		@Override
-		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
+        }
 
-		@Override
-		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
+        @Override
+        public void mouseExited(MouseEvent arg0) {
+            // TODO Auto-generated method stub
 
-		@Override
-		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
+        }
+
+        @Override
+        public void mousePressed(MouseEvent arg0) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent arg0) {
+            // TODO Auto-generated method stub
+
+        }
     }
 }

@@ -23,9 +23,10 @@ public class YangBangController {
 
     /**
      * 显示文字
+     *
      * @param contents
      */
-    public static void showText(String ip, Integer port, List<String> contents) throws Exception{
+    public static void showText(String ip, Integer port, List<String> contents) throws Exception {
         List<BxArea> areas = new ArrayList<BxArea>();
         byte id = 0x00;
         short x = 0;
@@ -34,18 +35,18 @@ public class YangBangController {
         short h = 16;
         int index = 0;
         String voiceText = "";
-        for(int i=contents.size()-1; i>0; i--){
-            x = 0/8;
-            y = (new Integer(index*16)).byteValue();
-            w = 64/8;
+        for (int i = contents.size() - 1; i > 0; i--) {
+            x = 0 / 8;
+            y = (new Integer(index * 16)).byteValue();
+            w = 64 / 8;
             h = 16;
             byte[] data;
             try {
                 data = contents.get(index).getBytes("gb2312");
                 //五代K卡最后一个参数给true、非5代的给false
                 BxAreaDynamic area = new BxAreaDynamic((new Integer(i)).byteValue(), x, y, w, h, data, false);
-                voiceText += ","+contents.get(index);
-                if(index==(contents.size()-2)){
+                voiceText += "," + contents.get(index);
+                if (index == (contents.size() - 2)) {
                     byte[] soundData = voiceText.substring(1).getBytes("gb2312");
 
                     //
@@ -62,7 +63,6 @@ public class YangBangController {
                     // 要发声的文字，仅在 soundMode = 0x02时有效
                     area.setSoundData(soundData);
                 }
-
 
 
                 // 显示方式，其定义如下：
@@ -133,10 +133,9 @@ public class YangBangController {
 
             //
             // 判断命令是否被正确执行
-            if(bxResp.isAck()) {
+            if (bxResp.isAck()) {
 //                System.out.println("Well done!!");
-            }
-            else {
+            } else {
 //                System.out.println("I am sorry!");
             }
 
@@ -148,10 +147,9 @@ public class YangBangController {
             out.write(seqTurnOff);
             len = in.read(resp);
             bxResp = BxResp.parse(resp, len);
-            if(bxResp.isAck()) {
+            if (bxResp.isAck()) {
 //                System.out.println("turn off, ok");
-            }
-            else {
+            } else {
 //                System.out.println("turn off, failed");
             }
 
@@ -163,10 +161,9 @@ public class YangBangController {
             out.write(seqTurnOn);
             len = in.read(resp);
             bxResp = BxResp.parse(resp, len);
-            if(bxResp.isAck()) {
+            if (bxResp.isAck()) {
 //                System.out.println("turn on, ok");
-            }
-            else {
+            } else {
 //                System.out.println("turn on, failed");
             }
 
@@ -177,10 +174,9 @@ public class YangBangController {
             out.write(seqtime);
             len = in.read(resp);
             bxResp = BxResp.parse(resp, len);
-            if(bxResp.isAck()) {
+            if (bxResp.isAck()) {
 //                System.out.println("system clock correct, ok");
-            }
-            else {
+            } else {
 //                System.out.println("system clock correct, failed");
             }
 
@@ -206,10 +202,9 @@ public class YangBangController {
             out.write(seqClearScreen);
             len = in.read(resp);
             bxResp = BxResp.parse(resp, len);
-            if(bxResp.isAck()) {
+            if (bxResp.isAck()) {
 //                System.out.println("clear screen, ok");
-            }
-            else {
+            } else {
 //                System.out.println("clear screen, failed");
             }
 

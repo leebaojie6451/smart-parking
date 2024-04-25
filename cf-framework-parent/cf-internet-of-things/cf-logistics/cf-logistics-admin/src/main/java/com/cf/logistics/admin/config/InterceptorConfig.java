@@ -10,10 +10,11 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor()).excludePathPatterns("/v2/api-docs", "/swagger-resources/configuration/ui",
-                "/swagger-resources","/swagger-resources/configuration/security",
-                "/swagger-ui.html","/webjars/**","/LogisticsTaskAdmin/thirdPartyPaskPush",
-                "/LogisticsTaskAdmin/thirdPartyPaskUpdate","/LogisticsTaskAdmin/thirdPartyPaskDelete");
+                "/swagger-resources", "/swagger-resources/configuration/security",
+                "/swagger-ui.html", "/webjars/**", "/LogisticsTaskAdmin/thirdPartyPaskPush",
+                "/LogisticsTaskAdmin/thirdPartyPaskUpdate", "/LogisticsTaskAdmin/thirdPartyPaskDelete");
     }
+
     @Bean
     public AuthenticationInterceptor authenticationInterceptor() {
         return new AuthenticationInterceptor();

@@ -28,7 +28,7 @@ public class CfChargingStationRulesController implements CfChargingStationRulesS
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(CfChargingStationRulesQuery cfChargingStationRulesQuery) throws Exception {
         List<CfChargingStationRules> cfChargingStationRulesList = cfChargingStationRulesService.getListByQuery(cfChargingStationRulesQuery);
-        if(cfChargingStationRulesList==null || cfChargingStationRulesList.size()==0){
+        if (cfChargingStationRulesList == null || cfChargingStationRulesList.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfChargingStationRulesList);

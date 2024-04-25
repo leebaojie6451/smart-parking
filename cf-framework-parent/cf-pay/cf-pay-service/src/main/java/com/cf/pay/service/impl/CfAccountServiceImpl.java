@@ -54,7 +54,7 @@ public class CfAccountServiceImpl implements CfAccountService {
         cfAccount.setId(idWorker.nextId());
         cfAccount.setCreateTime(System.currentTimeMillis());
         int insert = cfAccountMapper.insert(cfAccount);
-        if(insert>0){
+        if (insert > 0) {
             return cfAccount;
         }
         ExceptionCast.cast(CommonCode.FAIL);
@@ -73,7 +73,7 @@ public class CfAccountServiceImpl implements CfAccountService {
         cfAccountQuery.setUid(cfAccount.getUid());
         cfAccountQuery.setScoreType(cfAccount.getScoreType());
         List<CfAccount> cfAccounts = getListByQuery(cfAccountQuery);
-        if(cfAccounts==null || cfAccounts.size()==0){
+        if (cfAccounts == null || cfAccounts.size() == 0) {
             return add(cfAccount);
         }
         return cfAccounts.get(0);
@@ -83,43 +83,43 @@ public class CfAccountServiceImpl implements CfAccountService {
     public CfAccountExample getExampleByQuery(CfAccountQuery cfAccountQuery) {
         CfAccountExample cfAccountExample = new CfAccountExample();
         CfAccountExample.Criteria criteria = cfAccountExample.createCriteria();
-        if(cfAccountQuery.getId()!=null){
+        if (cfAccountQuery.getId() != null) {
             criteria.andIdEqualTo(cfAccountQuery.getId());
         }
-        if(StringUtils.isNotEmpty(cfAccountQuery.getUid())){
+        if (StringUtils.isNotEmpty(cfAccountQuery.getUid())) {
             criteria.andUidEqualTo(cfAccountQuery.getUid());
         }
-        if(StringUtils.isNotEmpty(cfAccountQuery.getScoreType())){
+        if (StringUtils.isNotEmpty(cfAccountQuery.getScoreType())) {
             criteria.andScoreTypeEqualTo(cfAccountQuery.getScoreType());
         }
-        if(cfAccountQuery.getType()!=null){
+        if (cfAccountQuery.getType() != null) {
             criteria.andTypeEqualTo(cfAccountQuery.getType());
         }
 
-        if(cfAccountQuery.getMinBalance()!=null){
+        if (cfAccountQuery.getMinBalance() != null) {
             criteria.andBalanceGreaterThanOrEqualTo(cfAccountQuery.getMinBalance());
         }
-        if(cfAccountQuery.getMaxBalance()!=null){
+        if (cfAccountQuery.getMaxBalance() != null) {
             criteria.andBalanceLessThanOrEqualTo(cfAccountQuery.getMaxBalance());
         }
-        if(cfAccountQuery.getMinFreeze()!=null){
+        if (cfAccountQuery.getMinFreeze() != null) {
             criteria.andFreezeGreaterThanOrEqualTo(cfAccountQuery.getMinFreeze());
         }
-        if(cfAccountQuery.getMaxFreeze()!=null){
+        if (cfAccountQuery.getMaxFreeze() != null) {
             criteria.andFreezeLessThanOrEqualTo(cfAccountQuery.getMaxFreeze());
         }
-        if(cfAccountQuery.getMinCreateTime()!=null){
+        if (cfAccountQuery.getMinCreateTime() != null) {
             criteria.andCreateTimeGreaterThanOrEqualTo(cfAccountQuery.getMinCreateTime());
         }
-        if(cfAccountQuery.getMaxCreateTime()!=null){
+        if (cfAccountQuery.getMaxCreateTime() != null) {
             criteria.andCreateTimeLessThanOrEqualTo(cfAccountQuery.getMaxCreateTime());
         }
 
-        if(StringUtils.isNotEmpty(cfAccountQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfAccountQuery.getOrderBy())) {
             cfAccountExample.setOrderByClause(cfAccountQuery.getOrderBy());
         }
 
-        if(cfAccountQuery.getPage()!=null && cfAccountQuery.getSize()!=null){
+        if (cfAccountQuery.getPage() != null && cfAccountQuery.getSize() != null) {
             PageHelper.startPage(cfAccountQuery.getPage(), cfAccountQuery.getSize());
         }
 
@@ -134,14 +134,14 @@ public class CfAccountServiceImpl implements CfAccountService {
     @Override
     public List<CfAccount> myAccountList(CfAccountQuery cfAccountQuery) {
         List<CfAccount> cfAccountList = cfAccountMapper.selectByExample(getExampleByQuery(cfAccountQuery));
-        if(cfAccountList==null || cfAccountList.size()==0){
+        if (cfAccountList == null || cfAccountList.size() == 0) {
             //创建新的账户
             CfAccount cfAccount = new CfAccount();
             cfAccount.setUid(cfAccountQuery.getUid());
             cfAccount.setScoreType("cny");
             cfAccount.setBalance(new BigDecimal(0.00));
             cfAccount.setFreeze(0l);
-            cfAccount.setType((byte)0);
+            cfAccount.setType((byte) 0);
             CfAccount account = add(cfAccount);
             cfAccountList = new ArrayList<>();
             cfAccountList.add(account);
@@ -164,19 +164,19 @@ public class CfAccountServiceImpl implements CfAccountService {
     public CfAccount checkAndUseBalanceByQuery(CfAccountQuery cfAccountQuery) {
         CfAccount cfAccount = checkBalanceByQuery(cfAccountQuery);
         Integer integer = cfAccountMapper.updateBalanceByQuery(cfAccountQuery);
-        return integer>0 ? cfAccount: null;
+        return integer > 0 ? cfAccount : null;
     }
 
     @Override
     public CfAccount checkBalanceByQuery(CfAccountQuery cfAccountQuery) {
-        if(cfAccountQuery.getChangeValue().doubleValue()>=0){
+        if (cfAccountQuery.getChangeValue().doubleValue() >= 0) {
             ExceptionCast.cast(CommonCode.INVALID_PARAM, "当前操作只能扣除资金账户余额");
         }
         List<CfAccount> cfAccounts = cfAccountMapper.selectByExample(getExampleByQuery(cfAccountQuery));
-        if(cfAccounts==null || cfAccounts.size()==0){
+        if (cfAccounts == null || cfAccounts.size() == 0) {
             ExceptionCast.cast(AccountCode.ACCOUNT_NOT_EXIST);
         }
-        if(cfAccounts.get(0).getBalance().doubleValue()<cfAccountQuery.getChangeValue().doubleValue()){
+        if (cfAccounts.get(0).getBalance().doubleValue() < cfAccountQuery.getChangeValue().doubleValue()) {
             ExceptionCast.cast(AccountCode.ACCOUNT_INSUFFICIENT_BALANCE);
         }
         return cfAccounts.get(0);
@@ -187,11 +187,11 @@ public class CfAccountServiceImpl implements CfAccountService {
 
         CfAccount cfAccount = checkAndAddBalance(cfAccountQuery);
 
-        if(cfAccount!=null && cfAccountQuery.getChangeValue().doubleValue()>0){
+        if (cfAccount != null && cfAccountQuery.getChangeValue().doubleValue() > 0) {
             CfScoreTypeQuery cfScoreTypeQuery = new CfScoreTypeQuery();
             cfScoreTypeQuery.setKeyFlag(cfAccountQuery.getScoreType());
             List<CfScoreType> cfScoreTypes = cfScoreTypeService.getListByQuery(cfScoreTypeQuery);
-            if(cfScoreTypes==null || cfScoreTypes.size()==0){
+            if (cfScoreTypes == null || cfScoreTypes.size() == 0) {
                 ExceptionCast.cast(AccountCode.SCORE_TYPE_NOT_EXIST);
             }
 
@@ -199,7 +199,7 @@ public class CfAccountServiceImpl implements CfAccountService {
             CfOrder cfOrder = new CfOrder();
             cfOrder.setRandomId(idWorker.nextId());
             cfOrder.setUid(cfAccountQuery.getUid());
-            cfOrder.setGoodsName("资金账户["+cfScoreTypes.get(0).getName()+"]充值");
+            cfOrder.setGoodsName("资金账户[" + cfScoreTypes.get(0).getName() + "]充值");
             cfOrder.setGoodsId(cfScoreTypes.get(0).getId());
             cfOrder.setGoodsType(GoodsType.DEPOSIT);
             cfOrder.setAmountsPayable(cfAccountQuery.getChangeValue());
@@ -224,11 +224,11 @@ public class CfAccountServiceImpl implements CfAccountService {
         updateCfAccountQuery.setChangeValue(cfAccountQuery.getChangeValue().abs().negate());
         CfAccount cfAccount = checkAndUseBalanceByQuery(updateCfAccountQuery);
 
-        if(cfAccount!=null){
+        if (cfAccount != null) {
             CfScoreTypeQuery cfScoreTypeQuery = new CfScoreTypeQuery();
             cfScoreTypeQuery.setKeyFlag(cfAccountQuery.getScoreType());
             List<CfScoreType> cfScoreTypes = cfScoreTypeService.getListByQuery(cfScoreTypeQuery);
-            if(cfScoreTypes==null || cfScoreTypes.size()==0){
+            if (cfScoreTypes == null || cfScoreTypes.size() == 0) {
                 ExceptionCast.cast(AccountCode.SCORE_TYPE_NOT_EXIST);
             }
 
@@ -236,7 +236,7 @@ public class CfAccountServiceImpl implements CfAccountService {
             CfOrder cfOrder = new CfOrder();
             cfOrder.setRandomId(idWorker.nextId());
             cfOrder.setUid(cfAccountQuery.getUid());
-            cfOrder.setGoodsName("资金账户["+cfScoreTypes.get(0).getName()+"]提现");
+            cfOrder.setGoodsName("资金账户[" + cfScoreTypes.get(0).getName() + "]提现");
             cfOrder.setGoodsId(cfScoreTypes.get(0).getId());
             cfOrder.setGoodsType(GoodsType.WITHDRAW);
             cfOrder.setAmountsPayable(cfAccountQuery.getChangeValue().abs());
@@ -256,10 +256,10 @@ public class CfAccountServiceImpl implements CfAccountService {
     @Override
     public CfAccount checkAndAddBalance(CfAccountQuery cfAccountQuery) {
 
-        if(cfAccountQuery.getChangeValue().doubleValue()<0){
+        if (cfAccountQuery.getChangeValue().doubleValue() < 0) {
             ExceptionCast.cast(CommonCode.INVALID_PARAM, "资金账户余额变动幅度必须大于0");
         }
-        if(StringUtils.isEmpty(cfAccountQuery.getUid()) || StringUtils.isEmpty(cfAccountQuery.getUid())){
+        if (StringUtils.isEmpty(cfAccountQuery.getUid()) || StringUtils.isEmpty(cfAccountQuery.getUid())) {
             ExceptionCast.cast(AccountCode.MISS_SOCRE_TYPE_OR_UID);
         }
 
@@ -269,21 +269,21 @@ public class CfAccountServiceImpl implements CfAccountService {
         CfAccount account = null;
         Integer integer = 0;
         List<CfAccount> cfAccounts = cfAccountMapper.selectByExample(getExampleByQuery(cfAccountQuery));
-        if(cfAccounts==null || cfAccounts.size()==0){
+        if (cfAccounts == null || cfAccounts.size() == 0) {
             //创建新的账户
             CfAccount cfAccount = new CfAccount();
             cfAccount.setUid(cfAccountQuery.getUid());
             cfAccount.setScoreType(cfAccountQuery.getScoreType());
             cfAccount.setBalance(cfAccountQuery.getChangeValue());
             cfAccount.setFreeze(0l);
-            cfAccount.setType((byte)0);
+            cfAccount.setType((byte) 0);
             account = add(cfAccount);
             integer = 1;
-        }else{
+        } else {
             account = cfAccounts.get(0);
             integer = cfAccountMapper.updateBalanceByQuery(cfAccountQuery);
         }
-        if(integer>0){
+        if (integer > 0) {
             return account;
         }
         return null;
@@ -291,10 +291,10 @@ public class CfAccountServiceImpl implements CfAccountService {
 
     @Override
     public ResultMap customerCheckAndAddBalanceByQuery(CfAccountQuery cfAccountQuery) throws Exception {
-        if(cfAccountQuery.getChangeValue().doubleValue()<=0){
+        if (cfAccountQuery.getChangeValue().doubleValue() <= 0) {
             ExceptionCast.cast(CommonCode.INVALID_PARAM, "资金账户余额变动幅度必须大于0");
         }
-        if(StringUtils.isEmpty(cfAccountQuery.getUid()) || StringUtils.isEmpty(cfAccountQuery.getUid())){
+        if (StringUtils.isEmpty(cfAccountQuery.getUid()) || StringUtils.isEmpty(cfAccountQuery.getUid())) {
             ExceptionCast.cast(AccountCode.MISS_SOCRE_TYPE_OR_UID);
         }
 
@@ -303,48 +303,48 @@ public class CfAccountServiceImpl implements CfAccountService {
 
         CfAccount account = null;
         List<CfAccount> cfAccounts = cfAccountMapper.selectByExample(getExampleByQuery(cfAccountQuery));
-        if(cfAccounts==null || cfAccounts.size()==0){
+        if (cfAccounts == null || cfAccounts.size() == 0) {
             //创建新的账户
             CfAccount cfAccount = new CfAccount();
             cfAccount.setUid(cfAccountQuery.getUid());
             cfAccount.setScoreType(cfAccountQuery.getScoreType());
             cfAccount.setBalance(new BigDecimal(0.00));
             cfAccount.setFreeze(0l);
-            cfAccount.setType((byte)0);
+            cfAccount.setType((byte) 0);
             account = add(cfAccount);
-        }else{
+        } else {
             account = cfAccounts.get(0);
         }
 
         CfScoreTypeQuery cfScoreTypeQuery = new CfScoreTypeQuery();
         cfScoreTypeQuery.setKeyFlag(cfAccountQuery.getScoreType());
         List<CfScoreType> cfScoreTypes = cfScoreTypeService.getListByQuery(cfScoreTypeQuery);
-        if(cfScoreTypes==null || cfScoreTypes.size()==0){
+        if (cfScoreTypes == null || cfScoreTypes.size() == 0) {
             ExceptionCast.cast(AccountCode.SCORE_TYPE_NOT_EXIST);
         }
 
         //查询最近10分钟内的是否有未提交的充值账单，如果有重复利用
         CfOrderQuery cfOrderQuery = new CfOrderQuery();
-        cfOrderQuery.setGoodsType((byte)2);
+        cfOrderQuery.setGoodsType((byte) 2);
         cfOrderQuery.setEffectObject(account.getId());
         cfOrderQuery.setUid(cfAccountQuery.getUid());
-        cfOrderQuery.setStatus((byte)0);
-        cfOrderQuery.setMinCreateTime(System.currentTimeMillis()-600000);
+        cfOrderQuery.setStatus((byte) 0);
+        cfOrderQuery.setMinCreateTime(System.currentTimeMillis() - 600000);
         List<CfOrder> cfOrders = cfOrderService.getListByQuery(cfOrderQuery);
         CfOrder order = null;
-        if(cfOrders!=null && cfOrders.size()>0){
+        if (cfOrders != null && cfOrders.size() > 0) {
             order = cfOrders.get(0);
-        }else{
+        } else {
             //新增账单记录
             CfOrder cfOrder = new CfOrder();
             cfOrder.setRandomId(idWorker.nextId());
             cfOrder.setUid(cfAccountQuery.getUid());
-            cfOrder.setGoodsName("资金账户["+cfScoreTypes.get(0).getName()+"]充值");
+            cfOrder.setGoodsName("资金账户[" + cfScoreTypes.get(0).getName() + "]充值");
             cfOrder.setGoodsId(cfScoreTypes.get(0).getId());
-            cfOrder.setGoodsType((byte)2);
+            cfOrder.setGoodsType((byte) 2);
             cfOrder.setAmountsPayable(cfAccountQuery.getChangeValue());
             cfOrder.setAmountActuallyPaid(new BigDecimal(0));
-            cfOrder.setStatus((byte)0);
+            cfOrder.setStatus((byte) 0);
             cfOrder.setPayTime(0l);
             cfOrder.setEffectObject(account.getId());
             cfOrder.setUserPaymentAgencyId(cfAccountQuery.getPayTypeId());

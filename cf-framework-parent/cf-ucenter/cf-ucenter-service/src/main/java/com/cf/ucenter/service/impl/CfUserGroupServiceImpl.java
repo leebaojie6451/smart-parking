@@ -28,15 +28,15 @@ public class CfUserGroupServiceImpl implements CfUserGroupService {
     @Override
     public ResponseResult createGroup(CfUserGroup cfUserGroup) {
         cfUserGroupMapper.insert(cfUserGroup);
-        addGroupmember(new CfUserGroupMember(idWorker.nextId(),cfUserGroup.getId(),cfUserGroup.getCreaterId(),2,"",0,
-            System.currentTimeMillis(),1,0L));
-        return new ResponseResult(CommonCode.SUCCESS,cfUserGroup);
+        addGroupmember(new CfUserGroupMember(idWorker.nextId(), cfUserGroup.getId(), cfUserGroup.getCreaterId(), 2, "", 0,
+                System.currentTimeMillis(), 1, 0L));
+        return new ResponseResult(CommonCode.SUCCESS, cfUserGroup);
     }
 
     @Override
     public ResponseResult addGroupmember(CfUserGroupMember cfUserGroupMember) {
         cfUserGroupMemberMapper.insert(cfUserGroupMember);
-        return new ResponseResult(CommonCode.SUCCESS,cfUserGroupMember);
+        return new ResponseResult(CommonCode.SUCCESS, cfUserGroupMember);
     }
 
     @Override
@@ -47,10 +47,10 @@ public class CfUserGroupServiceImpl implements CfUserGroupService {
     @Override
     public CfUserGroup checkGroupExistById(String groupId, Boolean expectEmpty) {
         CfUserGroup cfUserGroup = getGroupById(groupId);
-        if(expectEmpty && cfUserGroup!=null){
+        if (expectEmpty && cfUserGroup != null) {
             ExceptionCast.cast(FriendsCode.GROUP_NOT_EXIST);
             return null;
-        }else if(!expectEmpty && cfUserGroup==null){
+        } else if (!expectEmpty && cfUserGroup == null) {
             ExceptionCast.cast(FriendsCode.GROUP_EXIST);
             return null;
         }

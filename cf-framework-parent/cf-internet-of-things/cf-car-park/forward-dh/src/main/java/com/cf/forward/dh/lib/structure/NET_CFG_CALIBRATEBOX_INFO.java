@@ -13,5 +13,5 @@ public class NET_CFG_CALIBRATEBOX_INFO extends SdkStructure {
     /**
      * 相对基准校准框的比率(比如1表示基准框大小，0.5表示基准框大小的一半)
      */
-    public float               fRatio;
+    public float fRatio;
 }

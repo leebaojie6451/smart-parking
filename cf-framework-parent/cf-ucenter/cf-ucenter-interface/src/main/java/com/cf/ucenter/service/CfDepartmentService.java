@@ -15,12 +15,14 @@ import java.util.List;
 public interface CfDepartmentService {
     /**
      * 获取部门列表
+     *
      * @return
      */
     List<CfDepartment> list();
 
     /**
      * 添加部门
+     *
      * @param cfDepartment
      * @return
      */
@@ -28,6 +30,7 @@ public interface CfDepartmentService {
 
     /**
      * 更新部门
+     *
      * @param cfDepartment
      * @return
      */
@@ -35,6 +38,7 @@ public interface CfDepartmentService {
 
     /**
      * 删除部门
+     *
      * @param id
      * @return
      */

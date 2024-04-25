@@ -35,6 +35,7 @@ public interface CfStaffCouponLogMapper {
 
     /**
      * 统计某个用户在指定活动，时间中的发券额度
+     *
      * @param cfStaffCouponLogQuery
      * @return
      */

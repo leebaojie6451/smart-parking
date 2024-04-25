@@ -43,9 +43,9 @@ public class CfUserPaymentAgencyServiceImpl implements CfUserPaymentAgencyServic
     @Override
     public CfUserPaymentAgency findById(String id, Boolean expectEmpty) {
         CfUserPaymentAgency cfUserPaymentAgency = findById(id);
-        if(expectEmpty && cfUserPaymentAgency!=null){
+        if (expectEmpty && cfUserPaymentAgency != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
-        }else if(!expectEmpty && cfUserPaymentAgency==null){
+        } else if (!expectEmpty && cfUserPaymentAgency == null) {
             ExceptionCast.cast(PayCode.MERCHANT_PAYMENT_ACCOUNT_DOES_NOT_EXIST);
         }
         return cfUserPaymentAgency;
@@ -57,7 +57,7 @@ public class CfUserPaymentAgencyServiceImpl implements CfUserPaymentAgencyServic
         CfUserPaymentAgencyExample.Criteria criteria = cfUserPaymentAgencyExample.createCriteria();
         criteria.andUidEqualTo(uid).andPaymentAgencyShortNameEqualTo(paymentAgencyShortName);
         List<CfUserPaymentAgency> cfUserPaymentAgencies = cfUserPaymentAgencyMapper.selectByExample(cfUserPaymentAgencyExample);
-        if(cfUserPaymentAgencies==null || cfUserPaymentAgencies.size()==0){
+        if (cfUserPaymentAgencies == null || cfUserPaymentAgencies.size() == 0) {
             ExceptionCast.cast(PayCode.MERCHANT_PAYMENT_ACCOUNT_DOES_NOT_EXIST);
         }
         return cfUserPaymentAgencies.get(0);
@@ -67,19 +67,19 @@ public class CfUserPaymentAgencyServiceImpl implements CfUserPaymentAgencyServic
     public CfUserPaymentAgencyExample getExampleByQuery(CfUserPaymentAgencyQuery cfUserPaymentAgencyQuery) {
         CfUserPaymentAgencyExample cfUserPaymentAgencyExample = new CfUserPaymentAgencyExample();
         CfUserPaymentAgencyExample.Criteria criteria = cfUserPaymentAgencyExample.createCriteria();
-        if(StringUtils.isNotEmpty(cfUserPaymentAgencyQuery.getName())){
-            criteria.andNameLike("%"+cfUserPaymentAgencyQuery.getName()+"%");
+        if (StringUtils.isNotEmpty(cfUserPaymentAgencyQuery.getName())) {
+            criteria.andNameLike("%" + cfUserPaymentAgencyQuery.getName() + "%");
         }
-        if(StringUtils.isNotEmpty(cfUserPaymentAgencyQuery.getPaymentAgencyShortName())){
+        if (StringUtils.isNotEmpty(cfUserPaymentAgencyQuery.getPaymentAgencyShortName())) {
             criteria.andPaymentAgencyShortNameEqualTo(cfUserPaymentAgencyQuery.getPaymentAgencyShortName());
         }
-        if(StringUtils.isNotEmpty(cfUserPaymentAgencyQuery.getUseScenes())){
+        if (StringUtils.isNotEmpty(cfUserPaymentAgencyQuery.getUseScenes())) {
             criteria.andUseScenesEqualTo(cfUserPaymentAgencyQuery.getUseScenes());
         }
-        if(StringUtils.isNotEmpty(cfUserPaymentAgencyQuery.getUid())){
+        if (StringUtils.isNotEmpty(cfUserPaymentAgencyQuery.getUid())) {
             criteria.andUidEqualTo(cfUserPaymentAgencyQuery.getUid());
         }
-        if(StringUtils.isNotEmpty(cfUserPaymentAgencyQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfUserPaymentAgencyQuery.getOrderBy())) {
             cfUserPaymentAgencyExample.setOrderByClause(cfUserPaymentAgencyQuery.getOrderBy());
         }
         return cfUserPaymentAgencyExample;

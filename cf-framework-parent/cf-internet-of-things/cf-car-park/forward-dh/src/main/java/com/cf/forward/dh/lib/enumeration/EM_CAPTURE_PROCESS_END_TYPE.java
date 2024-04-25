@@ -5,15 +5,15 @@ public enum EM_CAPTURE_PROCESS_END_TYPE {
     /**
      * 未知
      */
-    EM_CAPTURE_PROCESS_END_TYPE_UNKNOWN(-1,"未知"),
+    EM_CAPTURE_PROCESS_END_TYPE_UNKNOWN(-1, "未知"),
     /**
      * 异常
      */
-    EM_CAPTURE_PROCESS_END_TYPE_ABNORMAL(0,"异常"),
+    EM_CAPTURE_PROCESS_END_TYPE_ABNORMAL(0, "异常"),
     /**
      * 正常
      */
-    EM_CAPTURE_PROCESS_END_TYPE_NORMAL(1,"正常");
+    EM_CAPTURE_PROCESS_END_TYPE_NORMAL(1, "正常");
 
     private int value;
     private String note;
@@ -42,7 +42,7 @@ public enum EM_CAPTURE_PROCESS_END_TYPE {
 
     public static int getValueByNote(String givenNote) {
         for (EM_CAPTURE_PROCESS_END_TYPE enumType : EM_CAPTURE_PROCESS_END_TYPE.values()) {
-            if (givenNote.equals(enumType.getNote()) ) {
+            if (givenNote.equals(enumType.getNote())) {
                 return enumType.getValue();
             }
         }

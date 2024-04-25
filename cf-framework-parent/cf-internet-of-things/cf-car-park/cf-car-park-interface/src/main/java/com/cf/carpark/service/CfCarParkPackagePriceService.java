@@ -33,6 +33,7 @@ public interface CfCarParkPackagePriceService {
 
     /**
      * 购买停车套餐
+     *
      * @param cfCarParkPackagePriceId
      * @param uid
      * @param payTypeId
@@ -44,6 +45,7 @@ public interface CfCarParkPackagePriceService {
 
     /**
      * 续费套餐时查询该车辆是否存在临停费追缴
+     *
      * @param cfCarParkPackagePrice
      * @param uid
      * @param numberPlate
@@ -58,24 +60,27 @@ public interface CfCarParkPackagePriceService {
 
     /**
      * 根据条件查询车辆套餐数据列表
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public List<CfCarParkPackagePrice> selectPackagePriceListByCondition(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);
 
     /**
      * 根据条件查询车辆套餐数据列表数
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public Integer selectPackagePriceListByConditionCounts(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);
 
     /**
      * 根据id获取详情(返回包含名字)
+     *
      * @param id
      * @return
      */

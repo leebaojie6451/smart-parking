@@ -31,6 +31,7 @@ public interface CfCarParkPackagePriceMapper {
 
     /**
      * 根据条件查询车辆套餐数据列表
+     *
      * @param conditions
      * @return
      */
@@ -38,6 +39,7 @@ public interface CfCarParkPackagePriceMapper {
 
     /**
      * 根据条件查询车辆套餐数据列表数
+     *
      * @param conditions
      * @return
      */
@@ -45,6 +47,7 @@ public interface CfCarParkPackagePriceMapper {
 
     /**
      * 根据id获取详情(返回包含名字)
+     *
      * @param id
      * @return
      */

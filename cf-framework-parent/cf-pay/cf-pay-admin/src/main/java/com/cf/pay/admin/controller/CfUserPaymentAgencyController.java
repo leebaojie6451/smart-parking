@@ -54,18 +54,18 @@ public class CfUserPaymentAgencyController implements CfUserPaymentAgencySwagger
         allowFileds.add("order");
         allowFileds.add("limit");
         Map<String, String> allowFiledsMap = new HashMap<String, String>();
-        allowFiledsMap.put("id","upm");
-        allowFiledsMap.put("name","upm");
-        allowFiledsMap.put("uid","upm");
-        allowFiledsMap.put("payment_agency_short_name","upm");
-        allowFiledsMap.put("like","");
-        allowFiledsMap.put("group","");
-        allowFiledsMap.put("order","");
-        allowFiledsMap.put("limit","");
+        allowFiledsMap.put("id", "upm");
+        allowFiledsMap.put("name", "upm");
+        allowFiledsMap.put("uid", "upm");
+        allowFiledsMap.put("payment_agency_short_name", "upm");
+        allowFiledsMap.put("like", "");
+        allowFiledsMap.put("group", "");
+        allowFiledsMap.put("order", "");
+        allowFiledsMap.put("limit", "");
         List<CfUserPaymentAgency> cfPaymentAgencies = cfUserPaymentAgencyService.selectListByCondition(conditionsMap, allowFiledsMap, allowFileds);
         Integer counts = cfUserPaymentAgencyService.selectListByConditionCounts(conditionsMap, allowFiledsMap, allowFileds);
-        if(cfPaymentAgencies!=null && cfPaymentAgencies.size()>0){
-            for (CfUserPaymentAgency cfUserPaymentAgency: cfPaymentAgencies){
+        if (cfPaymentAgencies != null && cfPaymentAgencies.size() > 0) {
+            for (CfUserPaymentAgency cfUserPaymentAgency : cfPaymentAgencies) {
                 cfUserPaymentAgency.setPayKey(null);
                 cfUserPaymentAgency.setSecret(null);
             }
@@ -99,7 +99,7 @@ public class CfUserPaymentAgencyController implements CfUserPaymentAgencySwagger
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(String id) {
         Integer delete = cfUserPaymentAgencyService.delete(id);
-        if(delete==0){
+        if (delete == 0) {
             return new ResponseResult(CommonCode.FAIL);
         }
         return new ResponseResult(CommonCode.SUCCESS);
@@ -108,15 +108,15 @@ public class CfUserPaymentAgencyController implements CfUserPaymentAgencySwagger
     @PreAuthorize("hasAuthority('pay-CfUserPaymentAgencyController-getListByQuery')")
     @Override
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
-    public ResponseResult getListByQuery(CfUserPaymentAgencyQuery cfUserPaymentAgencyQuery)throws Exception {
+    public ResponseResult getListByQuery(CfUserPaymentAgencyQuery cfUserPaymentAgencyQuery) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0){
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0) {
             cfUserPaymentAgencyQuery.setUid(userBasicInfo.getId());
         }
         List<CfUserPaymentAgency> cfUserPaymentAgencies = cfUserPaymentAgencyService.getListByQuery(cfUserPaymentAgencyQuery);
-        if(cfUserPaymentAgencies==null || cfUserPaymentAgencies.size()==0){
+        if (cfUserPaymentAgencies == null || cfUserPaymentAgencies.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
-        return new ResponseResult(CommonCode.SUCCESS,cfUserPaymentAgencies);
+        return new ResponseResult(CommonCode.SUCCESS, cfUserPaymentAgencies);
     }
 }

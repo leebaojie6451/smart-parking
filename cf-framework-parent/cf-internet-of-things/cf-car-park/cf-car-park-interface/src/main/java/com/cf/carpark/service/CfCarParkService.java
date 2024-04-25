@@ -24,6 +24,7 @@ public interface CfCarParkService {
 
     /**
      * 添加停车场
+     *
      * @param cfCarPark
      * @return
      */
@@ -31,6 +32,7 @@ public interface CfCarParkService {
 
     /**
      * 删除停车场
+     *
      * @param id
      * @return
      */
@@ -38,6 +40,7 @@ public interface CfCarParkService {
 
     /**
      * 更新停车场信息
+     *
      * @param cfCarPark
      * @return
      */
@@ -45,6 +48,7 @@ public interface CfCarParkService {
 
     /**
      * 根据条件更新停车场数据
+     *
      * @param cfCarPark
      * @param cfCarParkQuery
      * @return
@@ -53,6 +57,7 @@ public interface CfCarParkService {
 
     /**
      * 根据id获取一条停车场数据
+     *
      * @param id
      * @return
      */
@@ -60,6 +65,7 @@ public interface CfCarParkService {
 
     /**
      * 根据id获取一条停车场数据
+     *
      * @param id
      * @param expectEmpty 是否期望为空
      * @return
@@ -68,34 +74,38 @@ public interface CfCarParkService {
 
     /**
      * 根据条件查询停车场数据列表
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public List<CfCarPark> selectListByCondition(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);
 
     /**
      * 根据条件查询停车场数据列表数
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public Integer selectListByConditionCounts(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);
 
     /**
      * 查询附近停车场并返回其距离当前位置的距离(单位米)
+     *
      * @param positionX
      * @param positionY
-     * @param page  注意此要自己计算好,sql里面并未计算
-     * @param limit  注意此要自己计算好,sql里面并未计算
+     * @param page      注意此要自己计算好,sql里面并未计算
+     * @param limit     注意此要自己计算好,sql里面并未计算
      * @return
      */
     List<CfCarPark> selectNearbyDatas(BigDecimal positionX, BigDecimal positionY, Integer page, Integer limit) throws Exception;
 
     /**
      * 根据query查询实体条件获取停车场列表
+     *
      * @param cfCarParkQuery
      * @return
      */
@@ -103,6 +113,7 @@ public interface CfCarParkService {
 
     /**
      * 根据query实体获取mybatis的Example
+     *
      * @param cfCarParkQuery
      * @return
      */
@@ -112,6 +123,7 @@ public interface CfCarParkService {
 
     /**
      * 根据传入的经纬度(计算距离)和优惠券id查询该优惠券可用的停车场列表
+     *
      * @param positionX
      * @param positionY
      * @param couponId
@@ -121,6 +133,7 @@ public interface CfCarParkService {
 
     /**
      * 获取某个用户名下的停车场
+     *
      * @param uid
      * @param page
      * @param size
@@ -130,6 +143,7 @@ public interface CfCarParkService {
 
     /**
      * 获取停车场报表
+     *
      * @param cfOrderQuery
      * @return
      */
@@ -137,6 +151,7 @@ public interface CfCarParkService {
 
     /**
      * 获取停车场汇总报表
+     *
      * @param cfOrderQuery
      * @return
      */
@@ -144,6 +159,7 @@ public interface CfCarParkService {
 
     /**
      * 更新已用车位数
+     *
      * @param carParkId
      * @param changeValue
      * @return
@@ -152,6 +168,7 @@ public interface CfCarParkService {
 
     /**
      * 维护历史账单
+     *
      * @param totalCarParkFinanceReport
      * @param ShopId
      */
@@ -159,6 +176,7 @@ public interface CfCarParkService {
 
     /**
      * 统计某个字段
+     *
      * @param cfCarParkQuery
      * @return
      */

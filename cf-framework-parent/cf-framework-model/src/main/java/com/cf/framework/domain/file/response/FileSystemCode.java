@@ -10,17 +10,17 @@ import lombok.ToString;
  */
 @ToString
 public enum FileSystemCode implements ResultCode {
-    FS_UPLOADFILE_FILEISNULL(false,25001,"上传文件为空！"),
-    FS_UPLOADFILE_BUSINESSISNULL(false,25002,"业务Id为空！"),
-    FS_UPLOADFILE_SERVERFAIL(false,25003,"上传文件服务器失败！"),
-    FS_DELETEFILE_NOTEXISTS(false,25004,"删除的文件不存在！"),
-    FS_DELETEFILE_DBFAIL(false,25005,"删除文件信息失败！"),
-    FS_DELETEFILE_SERVERFAIL(false,25006,"删除文件失败！"),
-    FS_UPLOADFILE_METAERROR(false,25007,"上传文件的元信息请使用json格式！"),
-    FS_UPLOADFILE_USERISNULL(false,25008,"上传文件用户为空！"),
-    FS_INITFDFSERROR(false,25009,"初始化fastDFS环境出错！"),
-    FILE_NAME_INVALID(false,25010,"无效的文件名！"),
-    FILE_PLATFORM_INVALID(false,25011,"不支持的文件服务平台！");
+    FS_UPLOADFILE_FILEISNULL(false, 25001, "上传文件为空！"),
+    FS_UPLOADFILE_BUSINESSISNULL(false, 25002, "业务Id为空！"),
+    FS_UPLOADFILE_SERVERFAIL(false, 25003, "上传文件服务器失败！"),
+    FS_DELETEFILE_NOTEXISTS(false, 25004, "删除的文件不存在！"),
+    FS_DELETEFILE_DBFAIL(false, 25005, "删除文件信息失败！"),
+    FS_DELETEFILE_SERVERFAIL(false, 25006, "删除文件失败！"),
+    FS_UPLOADFILE_METAERROR(false, 25007, "上传文件的元信息请使用json格式！"),
+    FS_UPLOADFILE_USERISNULL(false, 25008, "上传文件用户为空！"),
+    FS_INITFDFSERROR(false, 25009, "初始化fastDFS环境出错！"),
+    FILE_NAME_INVALID(false, 25010, "无效的文件名！"),
+    FILE_PLATFORM_INVALID(false, 25011, "不支持的文件服务平台！");
 
     //操作代码
     boolean success;
@@ -29,11 +29,13 @@ public enum FileSystemCode implements ResultCode {
     int code;
     //提示信息
     String message;
-    private FileSystemCode(boolean success, int code, String message){
+
+    private FileSystemCode(boolean success, int code, String message) {
         this.success = success;
         this.code = code;
         this.message = message;
     }
+
     private static final ImmutableMap<Integer, FileSystemCode> CACHE;
 
     static {
@@ -65,6 +67,7 @@ public enum FileSystemCode implements ResultCode {
     }
 
     String mixMessage;
+
     @Override
     public String mixMessage() {
         return mixMessage;

@@ -8,7 +8,7 @@ public class BxUtils {
 
     public enum ENDIAN {LITTLE, BIG}
 
-    private static final int[] crc16_table = new int[] {
+    private static final int[] crc16_table = new int[]{
             0X0000, 0XC0C1, 0XC181, 0X0140, 0XC301, 0X03C0, 0X0280, 0XC241,
             0XC601, 0X06C0, 0X0780, 0XC741, 0X0500, 0XC5C1, 0XC481, 0X0440,
             0XCC01, 0X0CC0, 0X0D80, 0XCD41, 0X0F00, 0XCFC1, 0XCE81, 0X0E40,
@@ -49,15 +49,14 @@ public class BxUtils {
 
         short result = 0;
 
-        if(endian == ENDIAN.LITTLE) {
-            result = src[start+1];
+        if (endian == ENDIAN.LITTLE) {
+            result = src[start + 1];
             result <<= 8;
-            result |= (((short)src[start]) & 0x00ff);
-        }
-        else {
+            result |= (((short) src[start]) & 0x00ff);
+        } else {
             result = src[start];
             result <<= 8;
-            result |= (((short)src[start+1]) & 0x00ff);
+            result |= (((short) src[start + 1]) & 0x00ff);
         }
 
         return result;
@@ -66,9 +65,10 @@ public class BxUtils {
 
     /**
      * 用于对数据哉进行校验的 CRC16 算法
-     * @param	data	将要进行CRC16校验的原始数据
-     * @return	校验值
-     * @note	none
+     *
+     * @param    data    将要进行CRC16校验的原始数据
+     * @return 校验值
+     * @note none
      */
     public static short CRC16(byte[] data, int offset, int length) {
 
@@ -77,10 +77,10 @@ public class BxUtils {
         int a, b;
         byte d0;
 
-        for(int i=0; i<length; i++) {
+        for (int i = 0; i < length; i++) {
             //crc =  (short)(((crc) >> 8 ) ^ crc16_table[((crc) ^ (d0)) & 0xFF]);
 
-            d0 = data[offset+i];
+            d0 = data[offset + i];
 
             a = (crc ^ d0) & 0xff;
             b = crc16_table[a];
@@ -88,20 +88,21 @@ public class BxUtils {
             crc = crc ^ b;
         }
 
-        return (short)(crc & 0xffff);
+        return (short) (crc & 0xffff);
     }
 
     /**
      * 用于对数据哉进行校验的 CRC16 算法
-     * @param	data	将要进行CRC16校验的原始数据
-     * @return	校验值
-     * @note	none
+     *
+     * @param    data    将要进行CRC16校验的原始数据
+     * @return 校验值
+     * @note none
      */
     public static byte calcXorCrc(byte[] data, int len) {
 
         byte crc = 0x00;
 
-        for(int i = 0; i<len; i++) {
+        for (int i = 0; i < len; i++) {
             crc ^= data[i];
         }
 
@@ -111,7 +112,7 @@ public class BxUtils {
     public static String dateToString(Date model) {
         //
         SimpleDateFormat ft;
-        ft  = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return (ft.format(model));
     }
 
@@ -120,7 +121,7 @@ public class BxUtils {
         SimpleDateFormat ft;
         Date model;
 
-        if(data != null) {
+        if (data != null) {
             ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
             try {
@@ -131,8 +132,7 @@ public class BxUtils {
                 // 返回当时间
                 model = new Date(System.currentTimeMillis());
             }
-        }
-        else {
+        } else {
             model = new Date(System.currentTimeMillis());
         }
 

@@ -2,15 +2,14 @@ package com.cf.forward.hk.web.domain;
 
 public class BreakRulesType {
 
-    public static String getBreakRulesType( short rulesType ) {
+    public static String getBreakRulesType(short rulesType) {
 
 
-        if(1349 <= rulesType && rulesType <=1728 && rulesType !=1357){
+        if (1349 <= rulesType && rulesType <= 1728 && rulesType != 1357) {
             return "超速行驶";
-        }else
-        if(1018<= rulesType && rulesType <=1625){
+        } else if (1018 <= rulesType && rulesType <= 1625) {
 
-            switch (rulesType){
+            switch (rulesType) {
                 case 1018:
                     return "占用非机动车道";
                 case 1019:
@@ -34,9 +33,9 @@ public class BreakRulesType {
                 case 1625:
                     return "违反信号灯";
             }
-        }else {
+        } else {
 
-            switch (rulesType){
+            switch (rulesType) {
                 case 4613:
                     return "高速路违停";
                 case 4615:
@@ -49,7 +48,7 @@ public class BreakRulesType {
                     return "绿灯停车";
                 case 4016:
                     return "低速行驶";
-                case  4306:
+                case 4306:
                     return "低速行驶";
                 case 6046:
                     return "超速行驶";
@@ -57,7 +56,7 @@ public class BreakRulesType {
                     return "超速行驶";
                 case 6048:
                     return "超速行驶";
-                case  6050:
+                case 6050:
                     return "超速行驶";
             }
         }

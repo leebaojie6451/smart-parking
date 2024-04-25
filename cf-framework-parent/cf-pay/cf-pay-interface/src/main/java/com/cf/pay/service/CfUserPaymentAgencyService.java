@@ -19,6 +19,7 @@ public interface CfUserPaymentAgencyService {
 
     /**
      * 根据id获取一条数据
+     *
      * @param id
      * @return
      */
@@ -26,6 +27,7 @@ public interface CfUserPaymentAgencyService {
 
     /**
      * 根据id获取一条数据
+     *
      * @param id
      * @param expectEmpty 是否期望为空
      * @return
@@ -34,6 +36,7 @@ public interface CfUserPaymentAgencyService {
 
     /**
      * 根据用户id和支付机构简称获取商户支付账号数据
+     *
      * @param uid
      * @param paymentAgencyShortName
      * @return
@@ -46,18 +49,20 @@ public interface CfUserPaymentAgencyService {
 
     /**
      * 根据条件查询用户支付账号数据列表
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public List<CfUserPaymentAgency> selectListByCondition(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);
 
     /**
      * 根据条件查询用户支付账号数据列表数
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public Integer selectListByConditionCounts(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);
@@ -70,6 +75,7 @@ public interface CfUserPaymentAgencyService {
 
     /**
      * 根据停车场id和支付机构简称查询支付数据
+     *
      * @param carParkId
      * @param paymentAgencyShortName
      * @return

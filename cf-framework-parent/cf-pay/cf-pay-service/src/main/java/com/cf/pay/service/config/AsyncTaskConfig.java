@@ -22,8 +22,7 @@ public class AsyncTaskConfig implements SchedulingConfigurer, AsyncConfigurer {
     private int corePoolSize = 5;
 
     @Bean
-    public ThreadPoolTaskScheduler taskScheduler()
-    {
+    public ThreadPoolTaskScheduler taskScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
         scheduler.initialize();//初始化线程池
         scheduler.setPoolSize(corePoolSize);//线程池容量

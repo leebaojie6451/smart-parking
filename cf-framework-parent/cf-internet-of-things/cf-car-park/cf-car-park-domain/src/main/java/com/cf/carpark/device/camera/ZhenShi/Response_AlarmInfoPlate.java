@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- *
  * @ClassName Response_AlarmInfoPlate
  * @Author 隔壁小王子 981011512@qq.com
  * @Date 2020/5/3/003 10:28

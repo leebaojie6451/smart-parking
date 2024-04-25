@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- *
  * @ClassName CfCarParkUseLogController
  * @Author 隔壁小王子 981011512@qq.com
  * @Date 2020/4/28/028 8:55
@@ -42,7 +41,7 @@ public class CfAdLinksController implements CfAdLinkersSwagger {
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(CfAdLinksQuery cfAdLinksQuery) throws Exception {
         List<CfAdLinks> cfAdLinks = cfAdLinksService.getListByQuery(cfAdLinksQuery);
-        if(cfAdLinks==null || cfAdLinks.size()==0){
+        if (cfAdLinks == null || cfAdLinks.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         Integer integer = cfAdLinksService.countByQuery(cfAdLinksQuery);
@@ -56,6 +55,6 @@ public class CfAdLinksController implements CfAdLinkersSwagger {
         CfAdLinks cfAdLinks = new CfAdLinks();
         BeanUtils.copyProperties(cfAdLinksForm, cfAdLinks);
         Integer add = cfAdLinksService.add(cfAdLinks);
-        return add>0 ? new ResponseResult(CommonCode.SUCCESS, null, add) : new ResponseResult(CommonCode.FAIL);
+        return add > 0 ? new ResponseResult(CommonCode.SUCCESS, null, add) : new ResponseResult(CommonCode.FAIL);
     }
 }

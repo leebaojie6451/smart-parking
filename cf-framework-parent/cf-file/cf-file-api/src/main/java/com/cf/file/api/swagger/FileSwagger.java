@@ -20,7 +20,7 @@ public interface FileSwagger {
 //            @ApiImplicitParam(name="businesskey",value = "文件业务key",required=true,paramType="query",dataType="string"),
 //            @ApiImplicitParam(name="metadata",value = "文件元数据",required=false,paramType="query",dataType="string",defaultValue = ""),
 //    })
-    public ResponseResult upload(MultipartFile file,String filetag,String businesskey,String metadata,String platform) throws Exception;
+    public ResponseResult upload(MultipartFile file, String filetag, String businesskey, String metadata, String platform) throws Exception;
 
     @ApiOperation(value = "测试")
 //    @ApiImplicitParams({

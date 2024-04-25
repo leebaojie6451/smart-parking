@@ -36,6 +36,7 @@ public interface CfCarParkMapper {
 
     /**
      * 根据条件查询停车场数据列表
+     *
      * @param conditions
      * @return
      */
@@ -43,6 +44,7 @@ public interface CfCarParkMapper {
 
     /**
      * 根据条件查询停车场数据列表数
+     *
      * @param conditions
      * @return
      */
@@ -50,6 +52,7 @@ public interface CfCarParkMapper {
 
     /**
      * 查询附近停车场并返回其距离当前位置的距离(单位米)
+     *
      * @param positionX
      * @param positionY
      * @param page
@@ -63,6 +66,7 @@ public interface CfCarParkMapper {
 
     /**
      * 根据传入的经纬度(计算距离)和优惠券id查询该优惠券可用的停车场列表
+     *
      * @param positionX
      * @param positionY
      * @param couponId
@@ -70,10 +74,11 @@ public interface CfCarParkMapper {
      */
     List<CfCarPark> selectContainDistanceListByCouponId(@Param("positionX") BigDecimal positionX, @Param("positionY") BigDecimal positionY, @Param("couponId") String couponId);
 
-    List<CfCarPark> getListByLinkerUser(@Param("uid") String uid,@Param("page")  Integer page,@Param("size")  Integer size);
+    List<CfCarPark> getListByLinkerUser(@Param("uid") String uid, @Param("page") Integer page, @Param("size") Integer size);
 
     /**
      * 获取停车场报表
+     *
      * @param cfOrderQuery
      * @return
      */
@@ -81,14 +86,16 @@ public interface CfCarParkMapper {
 
     /**
      * 更新已用车位数
-     * @param carParkId 停车场id
-     * @param changeValue   改变的值
+     *
+     * @param carParkId   停车场id
+     * @param changeValue 改变的值
      * @return
      */
-    Integer updateUsedParkingSpaceNumber(@Param("carParkId") String carParkId,@Param("changeValue")  Integer changeValue);
+    Integer updateUsedParkingSpaceNumber(@Param("carParkId") String carParkId, @Param("changeValue") Integer changeValue);
 
     /**
      * 统计停车场的某些字段
+     *
      * @param cfCarParkQuery
      * @return
      */

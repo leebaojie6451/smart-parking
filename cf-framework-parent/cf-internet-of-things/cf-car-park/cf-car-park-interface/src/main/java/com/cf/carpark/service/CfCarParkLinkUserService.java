@@ -42,15 +42,17 @@ public interface CfCarParkLinkUserService {
 
     /**
      * 校验Saas模式下用户是否具有操作停车场相关数据的权限
+     *
      * @param userBasicInfo
      * @param cfCarParkId
-     * @param action 操作类型(edit-编辑/delete-删除)
+     * @param action        操作类型(edit-编辑/delete-删除)
      * @return 返回true则表示当前用户为超级管理员或者是停车场主
      */
     boolean checkSaasAction(UserBasicInfo userBasicInfo, String cfCarParkId, String action);
 
     /**
      * 校验用户是否是超级管理员或者指定停车场的主人
+     *
      * @param userBasicInfo
      * @param cfCarParkId
      */
@@ -58,6 +60,7 @@ public interface CfCarParkLinkUserService {
 
     /**
      * 检查重复数据
+     *
      * @param cfCarParkLinkUser
      */
     void checkRepeatData(CfCarParkLinkUser cfCarParkLinkUser);

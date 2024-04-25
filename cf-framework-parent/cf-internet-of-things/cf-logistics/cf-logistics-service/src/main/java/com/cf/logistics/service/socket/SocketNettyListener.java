@@ -13,7 +13,7 @@ public class SocketNettyListener implements ApplicationListener<ContextRefreshed
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        if(event.getApplicationContext().getParent() == null) {
+        if (event.getApplicationContext().getParent() == null) {
             try {
                 socketServer.start();
             } catch (Exception e) {

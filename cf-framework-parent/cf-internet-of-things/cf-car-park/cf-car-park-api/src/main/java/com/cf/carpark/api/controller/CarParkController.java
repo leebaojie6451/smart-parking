@@ -57,11 +57,11 @@ public class CarParkController implements CfCarParkSwagger {
     @Override
     @RequestMapping(value = "selectNearbyDatas", method = RequestMethod.GET)
     public ResponseResult selectNearbyDatas(BigDecimal positionX, BigDecimal positionY, Integer page, Integer limit) throws Exception {
-        if(page>3 || limit>10){
+        if (page > 3 || limit > 10) {
             return new ResponseResult(CommonCode.INVALID_PARAM, null, "you got too much data !");
         }
         List<CfCarPark> cfCarParks = cfCarParkService.selectNearbyDatas(positionX, positionY, page, limit);
-        if(cfCarParks==null || cfCarParks.size()==0){
+        if (cfCarParks == null || cfCarParks.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
 //        CfCarParkChargingRulesQuery cfCarParkChargingRulesQuery = new CfCarParkChargingRulesQuery();
@@ -75,17 +75,17 @@ public class CarParkController implements CfCarParkSwagger {
     @Override
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(@Validated CfCarParkQuery cfCarParkQuery) throws Exception {
-        if(cfCarParkQuery.getPage()>3 || cfCarParkQuery.getSize()>10){
+        if (cfCarParkQuery.getPage() > 3 || cfCarParkQuery.getSize() > 10) {
             return new ResponseResult(CommonCode.INVALID_PARAM, null, "you got too much data !");
         }
-        if(StringUtils.isNotEmpty(cfCarParkQuery.getName()) && cfCarParkQuery.getName().length()<2){
+        if (StringUtils.isNotEmpty(cfCarParkQuery.getName()) && cfCarParkQuery.getName().length() < 2) {
             return new ResponseResult(CommonCode.INVALID_PARAM, null, "请输入2个以上关键字进行搜索");
         }
         long currentTimeMillis = System.currentTimeMillis();
         cfCarParkQuery.setCurrentHourTime(DateUtil.getMillisecondBaseOnTheDay(currentTimeMillis));
         cfCarParkQuery.setCurrentTimeStamp(currentTimeMillis);
         List<CfCarPark> cfCarParks = cfCarParkService.selectContalDistanceListByQuery(cfCarParkQuery);
-        if(cfCarParks==null || cfCarParks.size()==0){
+        if (cfCarParks == null || cfCarParks.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
 //        CfCarParkChargingRulesQuery cfCarParkChargingRulesQuery = new CfCarParkChargingRulesQuery();
@@ -102,7 +102,7 @@ public class CarParkController implements CfCarParkSwagger {
         CfCarParkChargingRulesQuery cfCarParkChargingRulesQuery = new CfCarParkChargingRulesQuery();
         cfCarParkChargingRulesQuery.setCarParkId(carParkId);
         List<CfCarParkChargingRules> cfCarParkChargingRules = cfCarParkChargingRulesService.getListByCondition(cfCarParkChargingRulesQuery);
-        if(cfCarParkChargingRules!=null && cfCarParkChargingRules.size()>0){
+        if (cfCarParkChargingRules != null && cfCarParkChargingRules.size() > 0) {
             return new ResponseResult(CommonCode.SUCCESS, cfCarParkChargingRules);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);
@@ -112,7 +112,7 @@ public class CarParkController implements CfCarParkSwagger {
     @RequestMapping(value = "selectContainDistanceListByCouponId", method = RequestMethod.GET)
     public ResponseResult selectContalDistanceListByCouponId(BigDecimal positionX, BigDecimal positionY, String couponId) throws Exception {
         List<CfCarPark> cfCarParks = cfCarParkService.selectContainDistanceListByCouponId(positionX, positionY, couponId);
-        if(cfCarParks==null || cfCarParks.size()==0){
+        if (cfCarParks == null || cfCarParks.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfCarParks);
@@ -145,7 +145,7 @@ public class CarParkController implements CfCarParkSwagger {
 
         ZhenShiResponse911202002050 zhenShiResponse911202002050 = new ZhenShiResponse911202002050();
 
-        SeriaDataUtils.setSerialDataZhenshiByPlayRule(zhenShiResponse911202002050, playRule, "payOut","");
+        SeriaDataUtils.setSerialDataZhenshiByPlayRule(zhenShiResponse911202002050, playRule, "payOut", "");
 
 //        SeriaDataUtils.setSerialDataZhenshi(zhenShiResponse911202002050,"京A88888",0,(byte)1,"red","to_top","to_top","miu_new","text","");
 

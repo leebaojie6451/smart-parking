@@ -19,6 +19,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class PayAdminApplication {
     public static void main(String[] args) {
-        SpringApplication.run(PayAdminApplication.class,args);
+        SpringApplication.run(PayAdminApplication.class, args);
     }
 }

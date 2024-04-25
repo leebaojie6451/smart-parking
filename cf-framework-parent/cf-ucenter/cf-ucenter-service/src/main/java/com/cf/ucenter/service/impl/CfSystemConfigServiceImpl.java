@@ -27,7 +27,7 @@ public class CfSystemConfigServiceImpl implements CfSystemConfigService {
     @Override
     public CfSystemConfig add(CfSystemConfig cfSystemConfig) {
         int insert = cfSystemConfigMapper.insert(cfSystemConfig);
-        if(insert>0){
+        if (insert > 0) {
             return cfSystemConfig;
         }
         ExceptionCast.cast(CommonCode.FAIL);
@@ -37,7 +37,7 @@ public class CfSystemConfigServiceImpl implements CfSystemConfigService {
     @Override
     public CfSystemConfig update(CfSystemConfig cfSystemConfig) {
         int update = cfSystemConfigMapper.updateByPrimaryKey(cfSystemConfig);
-        if(update>0){
+        if (update > 0) {
             return cfSystemConfig;
         }
         ExceptionCast.cast(CommonCode.FAIL);
@@ -47,7 +47,7 @@ public class CfSystemConfigServiceImpl implements CfSystemConfigService {
     @Override
     public Integer delete(String enName) {
         int delete = cfSystemConfigMapper.deleteByPrimaryKey(enName);
-        if(delete>0){
+        if (delete > 0) {
             ExceptionCast.cast(CommonCode.SUCCESS);
         }
         ExceptionCast.cast(CommonCode.FAIL);
@@ -58,7 +58,7 @@ public class CfSystemConfigServiceImpl implements CfSystemConfigService {
     public CfSystemConfigExample getExampleByQuery(CfSystemConfigQuery cfSystemConfigQuery) {
         CfSystemConfigExample cfSystemConfigExample = new CfSystemConfigExample();
         CfSystemConfigExample.Criteria criteria = cfSystemConfigExample.createCriteria();
-        if(StringUtils.isNotEmpty(cfSystemConfigQuery.getEnName())){
+        if (StringUtils.isNotEmpty(cfSystemConfigQuery.getEnName())) {
             criteria.andEnNameEqualTo(cfSystemConfigQuery.getEnName());
         }
         return cfSystemConfigExample;
@@ -81,7 +81,7 @@ public class CfSystemConfigServiceImpl implements CfSystemConfigService {
         CfSystemConfigQuery cfSystemConfigQuery = new CfSystemConfigQuery();
         cfSystemConfigQuery.setEnName(configKey);
         List<CfSystemConfig> cfSystemConfigs = getListByQuery(cfSystemConfigQuery);
-        if(cfSystemConfigs!=null && cfSystemConfigs.size()>0){
+        if (cfSystemConfigs != null && cfSystemConfigs.size() > 0) {
             value = cfSystemConfigs.get(0).getValue();
         }
         return value;

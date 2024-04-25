@@ -3,7 +3,6 @@ package com.cf.carpark.device.camera.ZhenShi;
 import java.io.Serializable;
 
 /**
- *
  * @ClassName Timeval
  * @Author 隔壁小王子 981011512@qq.com
  * @Date 2020/5/1/001 14:57

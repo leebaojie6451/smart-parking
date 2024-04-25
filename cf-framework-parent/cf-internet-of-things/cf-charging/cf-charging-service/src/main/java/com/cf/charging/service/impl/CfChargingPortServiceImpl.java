@@ -50,22 +50,22 @@ public class CfChargingPortServiceImpl implements CfChargingPortService {
     public CfChargingPortExample getExampleByQuery(CfChargingPortQuery cfChargingPortQuery) {
         CfChargingPortExample cfChargingPortExample = new CfChargingPortExample();
         CfChargingPortExample.Criteria criteria = cfChargingPortExample.createCriteria();
-        if(cfChargingPortQuery.getId()!=null){
+        if (cfChargingPortQuery.getId() != null) {
             criteria.andIdEqualTo(cfChargingPortQuery.getId());
         }
-        if(cfChargingPortQuery.getChargingStationId()!=null){
+        if (cfChargingPortQuery.getChargingStationId() != null) {
             criteria.andChargingStationIdEqualTo(cfChargingPortQuery.getChargingStationId());
         }
-        if(cfChargingPortQuery.getChargingDeviceId()!=null){
+        if (cfChargingPortQuery.getChargingDeviceId() != null) {
             criteria.andChargingDeviceIdEqualTo(cfChargingPortQuery.getChargingDeviceId());
         }
-        if(cfChargingPortQuery.getPortNumber()!=null){
+        if (cfChargingPortQuery.getPortNumber() != null) {
             criteria.andPortNumberEqualTo(cfChargingPortQuery.getPortNumber());
         }
-        if(StringUtils.isNotEmpty(cfChargingPortQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfChargingPortQuery.getOrderBy())) {
             cfChargingPortExample.setOrderByClause(cfChargingPortQuery.getOrderBy());
         }
-        if(cfChargingPortQuery.getPage()!=null && cfChargingPortQuery.getSize()!=null){
+        if (cfChargingPortQuery.getPage() != null && cfChargingPortQuery.getSize() != null) {
             PageHelper.startPage(cfChargingPortQuery.getPage(), cfChargingPortQuery.getSize());
         }
         return cfChargingPortExample;

@@ -55,7 +55,7 @@ public class CfRoleServiceImpl implements CfRoleService {
     public CfRole add(CfRole cfRole) {
         cfRole.setId(idWorker.nextId());
         Integer effectRows = cfRoleMapper.insert(cfRole);
-        if(effectRows>0){
+        if (effectRows > 0) {
             return cfRole;
         }
         return null;
@@ -65,17 +65,17 @@ public class CfRoleServiceImpl implements CfRoleService {
     public CfRole update(CfRoleForm cfRoleForm) {
         CfRole cfRole = new CfRole();
         BeanUtils.copyProperties(cfRoleForm, cfRole);
-        if(cfRole.getIcon()==null){
+        if (cfRole.getIcon() == null) {
             cfRole.setIcon("");
         }
         Integer effectRows = cfRoleMapper.updateByPrimaryKey(cfRole);
-        if(effectRows==0){
+        if (effectRows == 0) {
             return null;
         }
-        if(StringUtils.isNotEmpty(cfRoleForm.getAuthIds())){
+        if (StringUtils.isNotEmpty(cfRoleForm.getAuthIds())) {
             ArrayList<CfRoleAuth> cfRoleAuths = new ArrayList<>();
             String[] authIds = cfRoleForm.getAuthIds().split(",");
-            for(String authId: authIds){
+            for (String authId : authIds) {
                 CfRoleAuth cfRoleAuth = new CfRoleAuth();
                 cfRoleAuth.setId(idWorker.nextId());
                 cfRoleAuth.setAuthId(authId);
@@ -107,9 +107,9 @@ public class CfRoleServiceImpl implements CfRoleService {
     public Integer updateRoleAuth(List<CfRoleAuth> cfRoleAuths, String roleId) {
         deleteRoleAuthByRoleId(roleId);
         Integer effectRows = 0;
-        if(cfRoleAuths!=null && cfRoleAuths.size()>0){
+        if (cfRoleAuths != null && cfRoleAuths.size() > 0) {
             effectRows = cfRoleAuthMapper.batchInsert(cfRoleAuths);
-            if(effectRows<cfRoleAuths.size()){
+            if (effectRows < cfRoleAuths.size()) {
                 ExceptionCast.cast(CommonCode.FAIL);
             }
         }
@@ -125,16 +125,16 @@ public class CfRoleServiceImpl implements CfRoleService {
     public CfRoleExample getExampleByQuery(CfRoleQuery cfRoleQuery) {
         CfRoleExample cfRoleExample = new CfRoleExample();
         CfRoleExample.Criteria criteria = cfRoleExample.createCriteria();
-        if(cfRoleQuery.getFlagKey()!=null){
+        if (cfRoleQuery.getFlagKey() != null) {
             criteria.andFlagKeyEqualTo(cfRoleQuery.getFlagKey());
         }
-        if(cfRoleQuery.getDepartmentId()!=null){
+        if (cfRoleQuery.getDepartmentId() != null) {
             criteria.andDepartmentIdEqualTo(cfRoleQuery.getDepartmentId());
         }
-        if(StringUtils.isNotEmpty(cfRoleQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfRoleQuery.getOrderBy())) {
             cfRoleExample.setOrderByClause(cfRoleQuery.getOrderBy());
         }
-        if(cfRoleQuery.getPage()!=null && cfRoleQuery.getSize()!=null){
+        if (cfRoleQuery.getPage() != null && cfRoleQuery.getSize() != null) {
             PageHelper.startPage(cfRoleQuery.getPage(), cfRoleQuery.getSize());
         }
         return cfRoleExample;

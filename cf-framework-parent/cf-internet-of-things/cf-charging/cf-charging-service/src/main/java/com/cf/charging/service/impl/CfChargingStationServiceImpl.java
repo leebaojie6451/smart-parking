@@ -61,9 +61,9 @@ public class CfChargingStationServiceImpl implements CfChargingStationService {
     @Override
     public CfChargingStation findById(String id, boolean expectEmty) {
         CfChargingStation cfChargingStation = findById(id);
-        if(expectEmty && cfChargingStation!=null){
+        if (expectEmty && cfChargingStation != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
-        }else if(!expectEmty && cfChargingStation==null){
+        } else if (!expectEmty && cfChargingStation == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfChargingStation;
@@ -73,44 +73,44 @@ public class CfChargingStationServiceImpl implements CfChargingStationService {
     public CfChargingStationExample getExampleByQuery(CfChargingStationQuery cfChargingStationQuery) {
         CfChargingStationExample cfChargingStationExample = new CfChargingStationExample();
         CfChargingStationExample.Criteria criteria = cfChargingStationExample.createCriteria();
-        if(StringUtils.isNotEmpty(cfChargingStationQuery.getId())){
+        if (StringUtils.isNotEmpty(cfChargingStationQuery.getId())) {
             criteria.andIdEqualTo(cfChargingStationQuery.getId());
         }
-        if(cfChargingStationQuery.getIds()!=null && cfChargingStationQuery.getIds().size()>0){
+        if (cfChargingStationQuery.getIds() != null && cfChargingStationQuery.getIds().size() > 0) {
             criteria.andIdIn(cfChargingStationQuery.getIds());
         }
-        if(StringUtils.isNotEmpty(cfChargingStationQuery.getStationName())){
-            criteria.andStationNameLike("%"+cfChargingStationQuery.getStationName()+"%");
+        if (StringUtils.isNotEmpty(cfChargingStationQuery.getStationName())) {
+            criteria.andStationNameLike("%" + cfChargingStationQuery.getStationName() + "%");
         }
-        if(cfChargingStationQuery.getMinPositionX()!=null){
+        if (cfChargingStationQuery.getMinPositionX() != null) {
             criteria.andPositionXGreaterThanOrEqualTo(cfChargingStationQuery.getMinPositionX());
         }
-        if(cfChargingStationQuery.getMaxPositionX()!=null){
+        if (cfChargingStationQuery.getMaxPositionX() != null) {
             criteria.andPositionXLessThanOrEqualTo(cfChargingStationQuery.getMaxPositionX());
         }
-        if(cfChargingStationQuery.getMinPositionY()!=null){
+        if (cfChargingStationQuery.getMinPositionY() != null) {
             criteria.andPositionYGreaterThanOrEqualTo(cfChargingStationQuery.getMinPositionY());
         }
-        if(cfChargingStationQuery.getMaxPositionY()!=null){
+        if (cfChargingStationQuery.getMaxPositionY() != null) {
             criteria.andPositionYLessThanOrEqualTo(cfChargingStationQuery.getMaxPositionY());
         }
-        if(cfChargingStationQuery.getMinStartBusinessTime()!=null){
+        if (cfChargingStationQuery.getMinStartBusinessTime() != null) {
             criteria.andStartBusinessTimeGreaterThanOrEqualTo(cfChargingStationQuery.getMinStartBusinessTime());
         }
-        if(cfChargingStationQuery.getMaxStartBusinessTime()!=null){
+        if (cfChargingStationQuery.getMaxStartBusinessTime() != null) {
             criteria.andStartBusinessTimeLessThanOrEqualTo(cfChargingStationQuery.getMaxStartBusinessTime());
         }
-        if(cfChargingStationQuery.getMinEndBusinessTime()!=null){
+        if (cfChargingStationQuery.getMinEndBusinessTime() != null) {
             criteria.andEndBusinessTimeGreaterThanOrEqualTo(cfChargingStationQuery.getMinEndBusinessTime());
         }
-        if(cfChargingStationQuery.getMaxEndBusinessTime()!=null){
+        if (cfChargingStationQuery.getMaxEndBusinessTime() != null) {
             criteria.andEndBusinessTimeLessThanOrEqualTo(cfChargingStationQuery.getMaxEndBusinessTime());
         }
 
-        if(StringUtils.isNotEmpty(cfChargingStationQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfChargingStationQuery.getOrderBy())) {
             cfChargingStationExample.setOrderByClause(cfChargingStationQuery.getOrderBy());
         }
-        if(cfChargingStationQuery.getPage()!=null && cfChargingStationQuery.getSize()!=null){
+        if (cfChargingStationQuery.getPage() != null && cfChargingStationQuery.getSize() != null) {
             PageHelper.startPage(cfChargingStationQuery.getPage(), cfChargingStationQuery.getSize());
         }
         return cfChargingStationExample;
@@ -143,8 +143,8 @@ public class CfChargingStationServiceImpl implements CfChargingStationService {
     }
 
     @Override
-    public List<CfChargingStation> selectContalDistanceListByQuery(CfChargingStationQuery cfChargingStationQuery) throws Exception{
-        int page = (cfChargingStationQuery.getPage() - 1)*cfChargingStationQuery.getSize();
+    public List<CfChargingStation> selectContalDistanceListByQuery(CfChargingStationQuery cfChargingStationQuery) throws Exception {
+        int page = (cfChargingStationQuery.getPage() - 1) * cfChargingStationQuery.getSize();
         cfChargingStationQuery.setPage(page);
         return cfChargingStationMapper.selectContalDistanceListByQuery(cfChargingStationQuery);
     }

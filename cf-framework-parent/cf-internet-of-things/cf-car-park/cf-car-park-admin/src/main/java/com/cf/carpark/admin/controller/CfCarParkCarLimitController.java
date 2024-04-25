@@ -33,7 +33,7 @@ public class CfCarParkCarLimitController implements CfCarParkCarLimitSwagger {
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseResult add(@RequestBody CfCarParkCarLimitForm cfCarParkCarLimitForm) {
         CfCarParkCarLimit cfCarParkCarLimit = new CfCarParkCarLimit();
-        BeanUtils.copyProperties(cfCarParkCarLimitForm,cfCarParkCarLimit);
+        BeanUtils.copyProperties(cfCarParkCarLimitForm, cfCarParkCarLimit);
         CfCarParkCarLimit carParkCarLimit = cfCarParkCarLimitService.add(cfCarParkCarLimit);
         return new ResponseResult(CommonCode.SUCCESS, carParkCarLimit);
     }
@@ -43,7 +43,7 @@ public class CfCarParkCarLimitController implements CfCarParkCarLimitSwagger {
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public ResponseResult update(@RequestBody CfCarParkCarLimitForm cfCarParkCarLimitForm) {
         CfCarParkCarLimit cfCarParkCarLimit = new CfCarParkCarLimit();
-        BeanUtils.copyProperties(cfCarParkCarLimitForm,cfCarParkCarLimit);
+        BeanUtils.copyProperties(cfCarParkCarLimitForm, cfCarParkCarLimit);
         CfCarParkCarLimit carParkCarLimit = cfCarParkCarLimitService.update(cfCarParkCarLimit);
         return new ResponseResult(CommonCode.SUCCESS, carParkCarLimit);
     }
@@ -53,7 +53,7 @@ public class CfCarParkCarLimitController implements CfCarParkCarLimitSwagger {
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(String id) {
         Integer delete = cfCarParkCarLimitService.delete(id);
-        return delete>0 ? new ResponseResult(CommonCode.SUCCESS) : new ResponseResult(CommonCode.FAIL);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS) : new ResponseResult(CommonCode.FAIL);
     }
 
     @PreAuthorize("hasAuthority('carpark-CfCarParkCarLimitController-getListByQuery')")
@@ -61,7 +61,7 @@ public class CfCarParkCarLimitController implements CfCarParkCarLimitSwagger {
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(@Validated CfCarParkCarLimitQuery cfCarParkCarLimitQuery) {
         List<CfCarParkCarLimit> cfCarParkCarLimits = cfCarParkCarLimitService.getListByQuery(cfCarParkCarLimitQuery);
-        return cfCarParkCarLimits!=null && cfCarParkCarLimits.size()>0 ? new ResponseResult(CommonCode.SUCCESS, cfCarParkCarLimits) : new ResponseResult(CommonCode.NO_MORE_DATAS);
+        return cfCarParkCarLimits != null && cfCarParkCarLimits.size() > 0 ? new ResponseResult(CommonCode.SUCCESS, cfCarParkCarLimits) : new ResponseResult(CommonCode.NO_MORE_DATAS);
     }
 
     @PreAuthorize("hasAuthority('carpark-CfCarParkCarLimitController-selectContinCarParkByQuery')")
@@ -70,9 +70,9 @@ public class CfCarParkCarLimitController implements CfCarParkCarLimitSwagger {
     public ResponseResult selectContinCarParkByQuery(@Validated CfCarParkCarLimitQuery cfCarParkCarLimitQuery) {
         List<CfCarParkCarLimit> cfCarParkCarLimits = cfCarParkCarLimitService.selectContinCarParkByQuery(cfCarParkCarLimitQuery);
         Integer total = 0;
-        if(cfCarParkCarLimitQuery.getPage()==1){
+        if (cfCarParkCarLimitQuery.getPage() == 1) {
             total = cfCarParkCarLimitService.countByQuery(cfCarParkCarLimitQuery);
         }
-        return cfCarParkCarLimits!=null && cfCarParkCarLimits.size()>0 ? new ResponseResult(CommonCode.SUCCESS, cfCarParkCarLimits, total) : new ResponseResult(CommonCode.NO_MORE_DATAS);
+        return cfCarParkCarLimits != null && cfCarParkCarLimits.size() > 0 ? new ResponseResult(CommonCode.SUCCESS, cfCarParkCarLimits, total) : new ResponseResult(CommonCode.NO_MORE_DATAS);
     }
 }

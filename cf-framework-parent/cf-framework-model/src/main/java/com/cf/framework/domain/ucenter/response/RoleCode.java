@@ -11,7 +11,7 @@ import lombok.ToString;
  */
 @ToString
 public enum RoleCode implements ResultCode {
-    HAVE_NOT_USER_ROLES(false,90000,"请提供用户角色列表数据！"),
+    HAVE_NOT_USER_ROLES(false, 90000, "请提供用户角色列表数据！"),
     ;
 
     //操作代码
@@ -24,11 +24,13 @@ public enum RoleCode implements ResultCode {
     //提示信息
     @ApiModelProperty(value = "操作提示", example = "操作过于频繁！", required = true)
     String message;
-    private RoleCode(boolean success, int code, String message){
+
+    private RoleCode(boolean success, int code, String message) {
         this.success = success;
         this.code = code;
         this.message = message;
     }
+
     private static final ImmutableMap<Integer, RoleCode> CACHE;
 
     static {
@@ -60,6 +62,7 @@ public enum RoleCode implements ResultCode {
     }
 
     String mixMessage;
+
     @Override
     public String mixMessage() {
         return mixMessage;

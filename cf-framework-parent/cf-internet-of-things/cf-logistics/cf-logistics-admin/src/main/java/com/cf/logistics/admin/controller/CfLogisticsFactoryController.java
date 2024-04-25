@@ -33,7 +33,7 @@ public class CfLogisticsFactoryController implements CfLogisticsFactorySwagger {
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseResult add(@Validated @RequestBody CfLogisticsFactoryForm cfLogisticsFactoryForm) throws Exception {
         CfLogisticsFactory cfLogisticsFactory = new CfLogisticsFactory();
-        BeanUtils.copyProperties(cfLogisticsFactoryForm,cfLogisticsFactory);
+        BeanUtils.copyProperties(cfLogisticsFactoryForm, cfLogisticsFactory);
         CfLogisticsFactory lastCfLogisticsFactory = cfLogisticsFactoryService.add(cfLogisticsFactory);
         return new ResponseResult(CommonCode.SUCCESS, lastCfLogisticsFactory);
     }
@@ -43,7 +43,7 @@ public class CfLogisticsFactoryController implements CfLogisticsFactorySwagger {
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public ResponseResult update(@Validated @RequestBody CfLogisticsFactoryForm cfLogisticsFactoryForm) {
         CfLogisticsFactory cfLogisticsFactory = new CfLogisticsFactory();
-        BeanUtils.copyProperties(cfLogisticsFactoryForm,cfLogisticsFactory);
+        BeanUtils.copyProperties(cfLogisticsFactoryForm, cfLogisticsFactory);
         CfLogisticsFactory update = cfLogisticsFactoryService.update(cfLogisticsFactory);
         return new ResponseResult(CommonCode.SUCCESS, update);
     }
@@ -53,7 +53,7 @@ public class CfLogisticsFactoryController implements CfLogisticsFactorySwagger {
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(Long id) {
         Integer delete = cfLogisticsFactoryService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS, delete):new ResponseResult(CommonCode.FAIL, null);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS, delete) : new ResponseResult(CommonCode.FAIL, null);
     }
 
     @PreAuthorize("hasAuthority('logistics-CfLogisticsFactoryController-getListByQuery')")
@@ -62,7 +62,7 @@ public class CfLogisticsFactoryController implements CfLogisticsFactorySwagger {
     public ResponseResult getListByQuery(CfLogisticsFactoryQuery cfLogisticsFactoryQuery) throws Exception {
         List<CfLogisticsFactory> cfLogisticsFactorys = cfLogisticsFactoryService.getListByQuery(cfLogisticsFactoryQuery);
         Integer countByQuery = cfLogisticsFactoryService.countByQuery(cfLogisticsFactoryQuery);
-        if(cfLogisticsFactorys==null || cfLogisticsFactorys.size()==0){
+        if (cfLogisticsFactorys == null || cfLogisticsFactorys.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsFactorys, countByQuery);

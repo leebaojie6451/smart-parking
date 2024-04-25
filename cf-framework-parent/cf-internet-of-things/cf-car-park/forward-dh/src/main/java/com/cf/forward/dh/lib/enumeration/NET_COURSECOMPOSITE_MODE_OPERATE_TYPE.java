@@ -5,6 +5,7 @@ import com.cf.forward.dh.lib.structure.*;
 
 /**
  * {@link NetSDKLib#CLIENT_OperateCourseCompositeChannelMode}
+ *
  * @author ： 47040
  * @since ： Created in 2020/9/27 16:30
  */

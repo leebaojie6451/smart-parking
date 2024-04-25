@@ -32,6 +32,7 @@ public interface CfChargingStationMapper {
 
     /**
      * 根据条件查询充电站数据列表
+     *
      * @param conditions
      * @return
      */
@@ -39,6 +40,7 @@ public interface CfChargingStationMapper {
 
     /**
      * 根据条件查询停车场数据列表数
+     *
      * @param conditions
      * @return
      */
@@ -46,6 +48,7 @@ public interface CfChargingStationMapper {
 
     /**
      * 查询附近充电站并返回其距离当前位置的距离(单位米)
+     *
      * @param cfChargingStationQuery
      * @return
      */
@@ -53,6 +56,7 @@ public interface CfChargingStationMapper {
 
     /**
      * 更新部分字段的值
+     *
      * @param cfChargingStation
      * @return
      */

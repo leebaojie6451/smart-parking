@@ -14,9 +14,9 @@ import org.springframework.context.annotation.ComponentScan;
  * @Version 1.0
  **/
 @EnableAutoConfiguration()
-@ComponentScan(basePackages = {"com.cf.logistics.service","com.cf.logistics.dao","com.cf.framework"})
+@ComponentScan(basePackages = {"com.cf.logistics.service", "com.cf.logistics.dao", "com.cf.framework"})
 @MapperScan("com.cf.logistics.dao.mapper")
-public class LogisticsApplication{
+public class LogisticsApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(LogisticsApplication.class, args);

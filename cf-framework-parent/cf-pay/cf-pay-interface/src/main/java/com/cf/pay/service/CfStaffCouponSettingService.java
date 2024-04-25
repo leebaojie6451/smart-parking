@@ -14,7 +14,8 @@ public interface CfStaffCouponSettingService {
 
     /**
      * 雇主添加员工活动优惠券发放设置
-     * @param employerId    雇主id
+     *
+     * @param employerId           雇主id
      * @param cfStaffCouponSetting
      * @return
      */
@@ -24,7 +25,8 @@ public interface CfStaffCouponSettingService {
 
     /**
      * 雇主更新员工活动优惠券发放设置
-     * @param employerId    雇主id
+     *
+     * @param employerId           雇主id
      * @param cfStaffCouponSetting
      * @return
      */
@@ -34,6 +36,7 @@ public interface CfStaffCouponSettingService {
 
     /**
      * 根据query条件删除数据
+     *
      * @param cfStaffCouponSettingQuery
      * @return
      */

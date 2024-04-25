@@ -37,12 +37,12 @@ public class CfStaffServiceImpl implements CfStaffService {
 
     @Override
     public CfStaff add(CfStaff cfStaff) {
-        if(cfStaff.getStaffId().equals(cfStaff.getEmployerId())){
+        if (cfStaff.getStaffId().equals(cfStaff.getEmployerId())) {
             ExceptionCast.cast(StaffCode.CANT_NOT_ADD_YOURSELF);
         }
         //判断是否存在相同的雇主和员工数据，如果存在直接更新
         CfStaff staff = checkStaffExistByEmployerIdAndStaffId(cfStaff.getEmployerId(), cfStaff.getStaffId(), "");
-        if(staff!=null){
+        if (staff != null) {
             staff.setNote(cfStaff.getNote());
             return update(staff);
         }
@@ -54,7 +54,7 @@ public class CfStaffServiceImpl implements CfStaffService {
 
     @Override
     public CfStaff update(CfStaff cfStaff) {
-        if(cfStaff.getStaffId().equals(cfStaff.getEmployerId())){
+        if (cfStaff.getStaffId().equals(cfStaff.getEmployerId())) {
             ExceptionCast.cast(StaffCode.CANT_NOT_ADD_YOURSELF);
         }
         cfStaffMapper.updateByPrimaryKey(cfStaff);
@@ -70,23 +70,23 @@ public class CfStaffServiceImpl implements CfStaffService {
     public CfStaffExample getExampleByQuery(CfStaffQuery cfStaffQuery) {
         CfStaffExample cfStaffExample = new CfStaffExample();
         CfStaffExample.Criteria criteria = cfStaffExample.createCriteria();
-        if(StringUtils.isNotEmpty(cfStaffQuery.getEmployerId())){
+        if (StringUtils.isNotEmpty(cfStaffQuery.getEmployerId())) {
             criteria.andEmployerIdEqualTo(cfStaffQuery.getEmployerId());
         }
-        if(StringUtils.isNotEmpty(cfStaffQuery.getStaffId())){
+        if (StringUtils.isNotEmpty(cfStaffQuery.getStaffId())) {
             criteria.andStaffIdEqualTo(cfStaffQuery.getStaffId());
         }
-        if(cfStaffQuery.getMinCreateTime()!=null){
+        if (cfStaffQuery.getMinCreateTime() != null) {
             criteria.andCreateTimeGreaterThanOrEqualTo(cfStaffQuery.getMinCreateTime());
         }
-        if(cfStaffQuery.getMaxCreateTime()!=null){
+        if (cfStaffQuery.getMaxCreateTime() != null) {
             criteria.andCreateTimeLessThanOrEqualTo(cfStaffQuery.getMaxCreateTime());
         }
 
-        if(StringUtils.isNotEmpty(cfStaffQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfStaffQuery.getOrderBy())) {
             cfStaffExample.setOrderByClause(cfStaffQuery.getOrderBy());
         }
-        if(cfStaffQuery.getPage()!=null && cfStaffQuery.getSize()!=null){
+        if (cfStaffQuery.getPage() != null && cfStaffQuery.getSize() != null) {
             PageHelper.startPage(cfStaffQuery.getPage(), cfStaffQuery.getSize());
         }
         return cfStaffExample;
@@ -106,14 +106,14 @@ public class CfStaffServiceImpl implements CfStaffService {
     @Override
     public CfStaff employerDeleteStaff(String employerId, String id) {
         CfStaff cfStaff = cfStaffMapper.selectByPrimaryKey(id);
-        if(cfStaff==null || cfStaff.getId()==null){
+        if (cfStaff == null || cfStaff.getId() == null) {
             ExceptionCast.cast(StaffCode.STAFF_DOES_NOT_EXIST);
         }
-        if(!cfStaff.getEmployerId().equals(employerId)){
+        if (!cfStaff.getEmployerId().equals(employerId)) {
             ExceptionCast.cast(StaffCode.STAFF_NOT_BELONG_TO_YOU);
         }
         int i = cfStaffMapper.deleteByPrimaryKey(id);
-        if(i==0){
+        if (i == 0) {
             ExceptionCast.cast(CommonCode.FAIL);
         }
         cfUserRoleService.deleteUserRoleByRoleFlagKey(cfStaff.getStaffId(), "staff");
@@ -123,12 +123,12 @@ public class CfStaffServiceImpl implements CfStaffService {
     @Override
     public CfStaff employerUpdateStaff(CfStaff cfStaff) {
         CfStaff cfStaffOld = cfStaffMapper.selectByPrimaryKey(cfStaff.getId());
-        if(cfStaffOld==null || cfStaffOld.getId()==null){
+        if (cfStaffOld == null || cfStaffOld.getId() == null) {
             ExceptionCast.cast(StaffCode.STAFF_DOES_NOT_EXIST);
         }
         cfStaff.setCreateTime(cfStaffOld.getCreateTime());
         cfStaff.setStaffId(cfStaffOld.getStaffId());
-        if(!cfStaff.getEmployerId().equals(cfStaffOld.getEmployerId())){
+        if (!cfStaff.getEmployerId().equals(cfStaffOld.getEmployerId())) {
             ExceptionCast.cast(StaffCode.STAFF_NOT_BELONG_TO_YOU);
         }
         update(cfStaff);
@@ -138,11 +138,11 @@ public class CfStaffServiceImpl implements CfStaffService {
     @Override
     public CfStaff employerAddStaff(CfStaff cfStaff) {
         CfUser cfUser = cfUserService.getUserByUid(cfStaff.getStaffId(), false);
-        if(cfUser==null || cfUser.getId()==null){
+        if (cfUser == null || cfUser.getId() == null) {
             ExceptionCast.cast(StaffCode.STAFF_DOES_NOT_EXIST);
         }
         add(cfStaff);
-        cfUserRoleService.addByUidAndRoleKey(cfUser.getId(),"staff");
+        cfUserRoleService.addByUidAndRoleKey(cfUser.getId(), "staff");
         return cfStaff;
     }
 
@@ -157,13 +157,13 @@ public class CfStaffServiceImpl implements CfStaffService {
         cfStaffQuery.setEmployerId(employerId);
         cfStaffQuery.setStaffId(staffId);
         List<CfStaff> cfStaffs = getListByQuery(cfStaffQuery);
-        if(cfStaffs!=null && cfStaffs.size()>0){
-            if(exceptionScene.equals("yes")){
+        if (cfStaffs != null && cfStaffs.size() > 0) {
+            if (exceptionScene.equals("yes")) {
                 ExceptionCast.cast(StaffCode.CANT_NOT_REPEAT_ADD_STAFF);
             }
             return cfStaffs.get(0);
         }
-        if(exceptionScene.equals("no")){
+        if (exceptionScene.equals("no")) {
             ExceptionCast.cast(StaffCode.STAFF_DOES_NOT_EXIST);
         }
         return null;

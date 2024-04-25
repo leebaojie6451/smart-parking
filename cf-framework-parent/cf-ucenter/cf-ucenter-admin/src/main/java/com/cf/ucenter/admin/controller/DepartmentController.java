@@ -41,7 +41,7 @@ public class DepartmentController implements DepartmentSwagger {
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public ResponseResult list() {
         List<CfDepartment> list = cfDepartmentService.list();
-        if(list!=null){
+        if (list != null) {
             return new ResponseResult(CommonCode.SUCCESS, list);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);
@@ -53,12 +53,12 @@ public class DepartmentController implements DepartmentSwagger {
     public ResponseResult add(@Validated @RequestBody CfDepartmentForm cfDepartmentForm) {
         CfDepartment cfDepartment = new CfDepartment();
         BeanUtils.copyProperties(cfDepartmentForm, cfDepartment);
-        if(cfDepartmentForm.getIcon()==null){
+        if (cfDepartmentForm.getIcon() == null) {
             cfDepartmentForm.setIcon("");
         }
-        
+
         CfDepartment department = cfDepartmentService.add(cfDepartment);
-        if(department!=null){
+        if (department != null) {
             return new ResponseResult(CommonCode.SUCCESS, department);
         }
         return new ResponseResult(CommonCode.FAIL);
@@ -70,11 +70,11 @@ public class DepartmentController implements DepartmentSwagger {
     public ResponseResult update(@RequestBody CfDepartmentForm cfDepartmentForm) {
         CfDepartment cfDepartment = new CfDepartment();
         BeanUtils.copyProperties(cfDepartmentForm, cfDepartment);
-        if(cfDepartmentForm.getIcon()==null){
+        if (cfDepartmentForm.getIcon() == null) {
             cfDepartmentForm.setIcon("");
         }
         CfDepartment department = cfDepartmentService.update(cfDepartment);
-        if(department!=null){
+        if (department != null) {
             return new ResponseResult(CommonCode.SUCCESS, department);
         }
         return new ResponseResult(CommonCode.FAIL);

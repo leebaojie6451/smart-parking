@@ -15,25 +15,27 @@ import java.util.Set;
  * Created by mrt on 2020/5/22.
  */
 public class BCryptUtil {
-    public static String encode(String password){
+    public static String encode(String password) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashPass = passwordEncoder.encode(password);
         return hashPass;
     }
-    public static boolean matches(String password,String hashPass){
+
+    public static boolean matches(String password, String hashPass) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         boolean f = passwordEncoder.matches(password, hashPass);
         return f;
     }
 
-    public static void checkSignType(String signType) throws Exception{
-        if(StringUtils.isEmpty(signType) || (!signType.equals("MD5") && !signType.equals("HMACSHA256") && !signType.equals("SHA-1"))){
+    public static void checkSignType(String signType) throws Exception {
+        if (StringUtils.isEmpty(signType) || (!signType.equals("MD5") && !signType.equals("HMACSHA256") && !signType.equals("SHA-1"))) {
             throw new Exception("signType not support");
         }
     }
 
     /**
      * 校验签名是否合法
+     *
      * @param data
      * @param key
      * @param signType
@@ -45,13 +47,14 @@ public class BCryptUtil {
         if (!data.containsKey("sign")) {
             return false;
         } else {
-            String sign = (String)data.get("sign");
+            String sign = (String) data.get("sign");
             return generateSignature(data, key, signType).equals(sign);
         }
     }
 
     /**
      * 制作签名
+     *
      * @param data
      * @param key
      * @param signType
@@ -61,16 +64,16 @@ public class BCryptUtil {
     public static String generateSignature(Map<String, String> data, String key, String signType) throws Exception {
         checkSignType(signType);
         Set<String> keySet = data.keySet();
-        String[] keyArray = (String[])keySet.toArray(new String[keySet.size()]);
+        String[] keyArray = (String[]) keySet.toArray(new String[keySet.size()]);
         Arrays.sort(keyArray);
         StringBuilder sb = new StringBuilder();
         String[] var6 = keyArray;
         int var7 = keyArray.length;
 
-        for(int var8 = 0; var8 < var7; ++var8) {
+        for (int var8 = 0; var8 < var7; ++var8) {
             String k = var6[var8];
-            if (!k.equals("sign") && ((String)data.get(k)).trim().length() > 0) {
-                sb.append(k).append("=").append(((String)data.get(k)).trim()).append("&");
+            if (!k.equals("sign") && ((String) data.get(k)).trim().length() > 0) {
+                sb.append(k).append("=").append(((String) data.get(k)).trim()).append("&");
             }
         }
 
@@ -79,7 +82,7 @@ public class BCryptUtil {
             return MD5(sb.toString()).toUpperCase();
         } else if ("HMACSHA256".equals(signType)) {
             return HMACSHA256(sb.toString(), key);
-        }  else if ("SHA1".equals(signType)) {
+        } else if ("SHA1".equals(signType)) {
             return SHA1(sb.toString());
         } else {
             throw new Exception(String.format("Invalid sign_type: %s", signType));
@@ -88,22 +91,23 @@ public class BCryptUtil {
 
     /**
      * 制作签名
+     *
      * @param data
      * @return
      * @throws Exception
      */
     public static String generateSHA1Signature(Map<String, String> data) throws Exception {
         Set<String> keySet = data.keySet();
-        String[] keyArray = (String[])keySet.toArray(new String[keySet.size()]);
+        String[] keyArray = (String[]) keySet.toArray(new String[keySet.size()]);
         Arrays.sort(keyArray);
         StringBuilder sb = new StringBuilder();
         String[] var6 = keyArray;
         int var7 = keyArray.length;
 
-        for(int var8 = 0; var8 < var7; ++var8) {
+        for (int var8 = 0; var8 < var7; ++var8) {
             String k = var6[var8];
-            if (((String)data.get(k)).trim().length() > 0) {
-                sb.append(k).append("=").append(((String)data.get(k)).trim()).append("&");
+            if (((String) data.get(k)).trim().length() > 0) {
+                sb.append(k).append("=").append(((String) data.get(k)).trim()).append("&");
             }
         }
         return SHA1(sb.toString()).toUpperCase();
@@ -116,7 +120,7 @@ public class BCryptUtil {
         byte[] var4 = array;
         int var5 = array.length;
 
-        for(int var6 = 0; var6 < var5; ++var6) {
+        for (int var6 = 0; var6 < var5; ++var6) {
             byte item = var4[var6];
             sb.append(Integer.toHexString(item & 255 | 256).substring(1, 3));
         }
@@ -133,7 +137,7 @@ public class BCryptUtil {
         byte[] var6 = array;
         int var7 = array.length;
 
-        for(int var8 = 0; var8 < var7; ++var8) {
+        for (int var8 = 0; var8 < var7; ++var8) {
             byte item = var6[var8];
             sb.append(Integer.toHexString(item & 255 | 256).substring(1, 3));
         }
@@ -152,6 +156,6 @@ public class BCryptUtil {
         for (int i = 0; i < messageDigest.length; i++)
             hexString.append(String.format("%02X", 0xFF & messageDigest[i]));
 
-        return   hexString.toString().toUpperCase();
+        return hexString.toString().toUpperCase();
     }
 }

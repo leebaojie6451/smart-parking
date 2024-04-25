@@ -38,7 +38,7 @@ public class CfCarParkLinkUserServiceImpl implements CfCarParkLinkUserService {
     @Override
     public CfCarParkLinkUser add(CfCarParkLinkUser cfCarParkLinkUser) {
         checkRepeatData(cfCarParkLinkUser);
-        if(cfCarParkLinkUser.getCheckPointIds()==null){
+        if (cfCarParkLinkUser.getCheckPointIds() == null) {
             cfCarParkLinkUser.setCheckPointIds("");
         }
         updateDeviceLinkers(cfCarParkLinkUser);
@@ -63,7 +63,7 @@ public class CfCarParkLinkUserServiceImpl implements CfCarParkLinkUserService {
     @Override
     public CfCarParkLinkUser update(CfCarParkLinkUser cfCarParkLinkUser) {
         checkRepeatData(cfCarParkLinkUser);
-        if(cfCarParkLinkUser.getCheckPointIds()==null){
+        if (cfCarParkLinkUser.getCheckPointIds() == null) {
             cfCarParkLinkUser.setCheckPointIds("");
         }
         updateDeviceLinkers(cfCarParkLinkUser);
@@ -84,10 +84,10 @@ public class CfCarParkLinkUserServiceImpl implements CfCarParkLinkUserService {
     @Override
     public CfCarParkLinkUser findById(String id, boolean expectEmpty) {
         CfCarParkLinkUser cfCarParkLinkUser = cfCarParkLinkUserMapper.selectByPrimaryKey(id);
-        if(expectEmpty && cfCarParkLinkUser!=null){
+        if (expectEmpty && cfCarParkLinkUser != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpty && cfCarParkLinkUser==null){
+        if (!expectEmpty && cfCarParkLinkUser == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfCarParkLinkUser;
@@ -97,16 +97,16 @@ public class CfCarParkLinkUserServiceImpl implements CfCarParkLinkUserService {
     public CfCarParkLinkUserExample getExampleByQuery(CfCarParkLinkUserQuery cfCarParkLinkUserQuery) {
         CfCarParkLinkUserExample cfCarParkLinkUserExample = new CfCarParkLinkUserExample();
         CfCarParkLinkUserExample.Criteria criteria = cfCarParkLinkUserExample.createCriteria();
-        if(StringUtils.isNotEmpty(cfCarParkLinkUserQuery.getCarParkId())){
+        if (StringUtils.isNotEmpty(cfCarParkLinkUserQuery.getCarParkId())) {
             criteria.andCarParkIdEqualTo(cfCarParkLinkUserQuery.getCarParkId());
         }
-        if(StringUtils.isNotEmpty(cfCarParkLinkUserQuery.getUid())){
+        if (StringUtils.isNotEmpty(cfCarParkLinkUserQuery.getUid())) {
             criteria.andUidEqualTo(cfCarParkLinkUserQuery.getUid());
         }
-        if(cfCarParkLinkUserQuery.getAllowDelete()!=null){
+        if (cfCarParkLinkUserQuery.getAllowDelete() != null) {
             criteria.andAllowDeleteEqualTo(cfCarParkLinkUserQuery.getAllowDelete());
         }
-        if(cfCarParkLinkUserQuery.getAllowEdit()!=null){
+        if (cfCarParkLinkUserQuery.getAllowEdit() != null) {
             criteria.andAllowEditEqualTo(cfCarParkLinkUserQuery.getAllowEdit());
         }
         return cfCarParkLinkUserExample;
@@ -130,23 +130,23 @@ public class CfCarParkLinkUserServiceImpl implements CfCarParkLinkUserService {
 
     @Override
     public boolean checkSaasAction(UserBasicInfo userBasicInfo, String cfCarParkId, String action) {
-        if(userBasicInfo.getRoleFlag().indexOf("admin")>-1){
+        if (userBasicInfo.getRoleFlag().indexOf("admin") > -1) {
             return true;
         }
         CfCarParkLinkUserQuery cfCarParkLinkUserQuery = new CfCarParkLinkUserQuery();
         cfCarParkLinkUserQuery.setCarParkId(cfCarParkId);
         cfCarParkLinkUserQuery.setUid(userBasicInfo.getId());
         List<CfCarParkLinkUser> cfCarParkLinkUsers = getListByQuery(cfCarParkLinkUserQuery);
-        if(cfCarParkLinkUsers==null || cfCarParkLinkUsers.size()==0){
+        if (cfCarParkLinkUsers == null || cfCarParkLinkUsers.size() == 0) {
             ExceptionCast.cast(CarParkCode.NO_PERMISSION);
         }
-        if(cfCarParkLinkUsers.get(0).getCreater()==(byte)1){
+        if (cfCarParkLinkUsers.get(0).getCreater() == (byte) 1) {
             return true;
         }
-        if(action.equals(ActionType.EDIT) && cfCarParkLinkUsers.get(0).getAllowEdit()!=(byte)1){
+        if (action.equals(ActionType.EDIT) && cfCarParkLinkUsers.get(0).getAllowEdit() != (byte) 1) {
             ExceptionCast.cast(CarParkCode.NO_PERMISSION);
         }
-        if(action.equals(ActionType.DELETE) && cfCarParkLinkUsers.get(0).getAllowDelete()!=(byte)1){
+        if (action.equals(ActionType.DELETE) && cfCarParkLinkUsers.get(0).getAllowDelete() != (byte) 1) {
             ExceptionCast.cast(CarParkCode.NO_PERMISSION);
         }
         return true;
@@ -155,7 +155,7 @@ public class CfCarParkLinkUserServiceImpl implements CfCarParkLinkUserService {
     @Override
     public void checkHostOrAdminer(UserBasicInfo userBasicInfo, String cfCarParkId) {
         boolean checkSaasActionResult = checkSaasAction(userBasicInfo, cfCarParkId, "");
-        if(!checkSaasActionResult){
+        if (!checkSaasActionResult) {
             ExceptionCast.cast(CarParkCode.NO_PERMISSION);
         }
     }
@@ -168,21 +168,21 @@ public class CfCarParkLinkUserServiceImpl implements CfCarParkLinkUserService {
         cfCarParkLinkUserQuery.setPage(1);
         cfCarParkLinkUserQuery.setSize(1);
         List<CfCarParkLinkUser> cfCarParkLinkUsers = getListByQuery(cfCarParkLinkUserQuery);
-        if(cfCarParkLinkUsers!=null && cfCarParkLinkUsers.size()>0){
-            if((StringUtils.isNotEmpty(cfCarParkLinkUser.getId()) && !cfCarParkLinkUsers.get(0).getId().equals(cfCarParkLinkUser.getId())) || StringUtils.isEmpty(cfCarParkLinkUser.getId())){
+        if (cfCarParkLinkUsers != null && cfCarParkLinkUsers.size() > 0) {
+            if ((StringUtils.isNotEmpty(cfCarParkLinkUser.getId()) && !cfCarParkLinkUsers.get(0).getId().equals(cfCarParkLinkUser.getId())) || StringUtils.isEmpty(cfCarParkLinkUser.getId())) {
                 ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
             }
         }
     }
 
-    private void updateDeviceLinkers(CfCarParkLinkUser cfCarParkLinkUser){
+    private void updateDeviceLinkers(CfCarParkLinkUser cfCarParkLinkUser) {
         //先删掉所有
         CfCarParkDeviceLinkUserQuery cfCarParkDeviceLinkUserQuery = new CfCarParkDeviceLinkUserQuery();
         cfCarParkDeviceLinkUserQuery.setCarParkId(cfCarParkLinkUser.getCarParkId());
         cfCarParkDeviceLinkUserQuery.setUid(cfCarParkLinkUser.getUid());
         cfCarParkDeviceLinkUserService.deleteByQuery(cfCarParkDeviceLinkUserQuery);
 
-        if(cfCarParkLinkUser.getId()==null){
+        if (cfCarParkLinkUser.getId() == null) {
             //表示删除操作
             return;
         }
@@ -192,10 +192,10 @@ public class CfCarParkLinkUserServiceImpl implements CfCarParkLinkUserService {
         cfCarParkDeviceQuery.setCarParkId(cfCarParkLinkUser.getCarParkId());
         List<CfCarParkDevice> cfCarParkDevices = cfCarParkDeviceService.getListByQuery(cfCarParkDeviceQuery);
 
-        if(cfCarParkDevices!=null && cfCarParkDevices.size()>0){
+        if (cfCarParkDevices != null && cfCarParkDevices.size() > 0) {
             //重新增加
             List<CfCarParkDeviceLinkUser> cfCarParkDeviceLinkUsers = new ArrayList<>();
-            for (CfCarParkDevice cfCarParkDevice: cfCarParkDevices){
+            for (CfCarParkDevice cfCarParkDevice : cfCarParkDevices) {
                 CfCarParkDeviceLinkUser cfCarParkDeviceLinkUser = new CfCarParkDeviceLinkUser();
                 cfCarParkDeviceLinkUser.setDeviceId(cfCarParkDevice.getId());
                 cfCarParkDeviceLinkUser.setCarParkId(cfCarParkDevice.getCarParkId());

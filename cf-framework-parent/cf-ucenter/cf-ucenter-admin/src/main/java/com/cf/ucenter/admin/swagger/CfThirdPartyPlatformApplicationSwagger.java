@@ -21,26 +21,26 @@ public interface CfThirdPartyPlatformApplicationSwagger {
 
     @ApiOperation(value = "第三方应用列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string")
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string")
     })
     public ResponseResult getListByQuery(CfThirdPartyPlatformApplicationQuery cfThirdPartyPlatformApplicationQuery);
 
     @ApiOperation(value = "添加第三方应用")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string")
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string")
     })
     public ResponseResult add(CfThirdPartyPlatformApplicationForm cfThirdPartyPlatformApplicationForm);
 
     @ApiOperation(value = "更新第三方应用")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string")
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string")
     })
     public ResponseResult update(CfThirdPartyPlatformApplicationForm cfThirdPartyPlatformApplicationForm);
 
     @ApiOperation(value = "删除第三方应用")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string"),
-            @ApiImplicitParam(name="appid",value = "数据id",required=true,paramType="query",dataType="string")
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string"),
+            @ApiImplicitParam(name = "appid", value = "数据id", required = true, paramType = "query", dataType = "string")
     })
     public ResponseResult delete(String appid);
 

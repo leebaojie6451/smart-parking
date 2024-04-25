@@ -21,52 +21,52 @@
             <groupId>com.cf</groupId>
             <artifactId>cf-ucenter-auth</artifactId>
             <version>1.0-SNAPSHOT</version>
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.mybatis.spring.boot</groupId>-->
-<!--                    <artifactId>mybatis-spring-boot-starter</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>com.github.pagehelper</groupId>-->
-<!--                    <artifactId>pagehelper</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>com.github.jsqlparser</groupId>-->
-<!--                    <artifactId>jsqlparser</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>mysql</groupId>-->
-<!--                    <artifactId>mysql-connector-java</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>com.alibaba</groupId>-->
-<!--                    <artifactId>druid</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.springframework.cloud</groupId>-->
-<!--                    <artifactId>spring-cloud-starter-security</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.springframework.cloud</groupId>-->
-<!--                    <artifactId>spring-cloud-starter-oauth2</artifactId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
+            <!--            <exclusions>-->
+            <!--                <exclusion>-->
+            <!--                    <groupId>org.mybatis.spring.boot</groupId>-->
+            <!--                    <artifactId>mybatis-spring-boot-starter</artifactId>-->
+            <!--                </exclusion>-->
+            <!--                <exclusion>-->
+            <!--                    <groupId>com.github.pagehelper</groupId>-->
+            <!--                    <artifactId>pagehelper</artifactId>-->
+            <!--                </exclusion>-->
+            <!--                <exclusion>-->
+            <!--                    <groupId>com.github.jsqlparser</groupId>-->
+            <!--                    <artifactId>jsqlparser</artifactId>-->
+            <!--                </exclusion>-->
+            <!--                <exclusion>-->
+            <!--                    <groupId>mysql</groupId>-->
+            <!--                    <artifactId>mysql-connector-java</artifactId>-->
+            <!--                </exclusion>-->
+            <!--                <exclusion>-->
+            <!--                    <groupId>com.alibaba</groupId>-->
+            <!--                    <artifactId>druid</artifactId>-->
+            <!--                </exclusion>-->
+            <!--                <exclusion>-->
+            <!--                    <groupId>org.springframework.cloud</groupId>-->
+            <!--                    <artifactId>spring-cloud-starter-security</artifactId>-->
+            <!--                </exclusion>-->
+            <!--                <exclusion>-->
+            <!--                    <groupId>org.springframework.cloud</groupId>-->
+            <!--                    <artifactId>spring-cloud-starter-oauth2</artifactId>-->
+            <!--                </exclusion>-->
+            <!--            </exclusions>-->
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.cf</groupId>-->
-<!--            <artifactId>cf-car-park-interface</artifactId>-->
-<!--            <version>1.0-SNAPSHOT</version>-->
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <groupId>com.cf</groupId>-->
-<!--                    <artifactId>cf-ucenter-interface</artifactId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <groupId>com.cf</groupId>-->
-<!--                    <artifactId>cf-ucenter-auth</artifactId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.cf</groupId>-->
+        <!--            <artifactId>cf-car-park-interface</artifactId>-->
+        <!--            <version>1.0-SNAPSHOT</version>-->
+        <!--            <exclusions>-->
+        <!--                <exclusion>-->
+        <!--                    <groupId>com.cf</groupId>-->
+        <!--                    <artifactId>cf-ucenter-interface</artifactId>-->
+        <!--                </exclusion>-->
+        <!--                <exclusion>-->
+        <!--                    <groupId>com.cf</groupId>-->
+        <!--                    <artifactId>cf-ucenter-auth</artifactId>-->
+        <!--                </exclusion>-->
+        <!--            </exclusions>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>

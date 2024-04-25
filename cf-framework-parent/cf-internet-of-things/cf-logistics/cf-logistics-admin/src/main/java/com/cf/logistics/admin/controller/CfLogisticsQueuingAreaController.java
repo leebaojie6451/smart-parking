@@ -33,7 +33,7 @@ public class CfLogisticsQueuingAreaController implements CfLogisticsQueuingAreaS
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseResult add(@Validated @RequestBody CfLogisticsQueuingAreaForm cfLogisticsQueuingAreaForm) throws Exception {
         CfLogisticsQueuingArea cfLogisticsQueuingArea = new CfLogisticsQueuingArea();
-        BeanUtils.copyProperties(cfLogisticsQueuingAreaForm,cfLogisticsQueuingArea);
+        BeanUtils.copyProperties(cfLogisticsQueuingAreaForm, cfLogisticsQueuingArea);
         CfLogisticsQueuingArea lastCfLogisticsQueuingArea = cfLogisticsQueuingAreaService.add(cfLogisticsQueuingArea);
         return new ResponseResult(CommonCode.SUCCESS, lastCfLogisticsQueuingArea);
     }
@@ -43,7 +43,7 @@ public class CfLogisticsQueuingAreaController implements CfLogisticsQueuingAreaS
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public ResponseResult update(@Validated @RequestBody CfLogisticsQueuingAreaForm cfLogisticsQueuingAreaForm) {
         CfLogisticsQueuingArea cfLogisticsQueuingArea = new CfLogisticsQueuingArea();
-        BeanUtils.copyProperties(cfLogisticsQueuingAreaForm,cfLogisticsQueuingArea);
+        BeanUtils.copyProperties(cfLogisticsQueuingAreaForm, cfLogisticsQueuingArea);
         CfLogisticsQueuingArea update = cfLogisticsQueuingAreaService.update(cfLogisticsQueuingArea);
         return new ResponseResult(CommonCode.SUCCESS, update);
     }
@@ -53,7 +53,7 @@ public class CfLogisticsQueuingAreaController implements CfLogisticsQueuingAreaS
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(Long id) {
         Integer delete = cfLogisticsQueuingAreaService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS, delete):new ResponseResult(CommonCode.FAIL, null);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS, delete) : new ResponseResult(CommonCode.FAIL, null);
     }
 
     @PreAuthorize("hasAuthority('logistics-CfLogisticsQueuingAreaController-getListByQuery')")
@@ -62,7 +62,7 @@ public class CfLogisticsQueuingAreaController implements CfLogisticsQueuingAreaS
     public ResponseResult getListByQuery(CfLogisticsQueuingAreaQuery cfLogisticsQueuingAreaQuery) throws Exception {
         List<CfLogisticsQueuingArea> cfLogisticsQueuingAreas = cfLogisticsQueuingAreaService.getListByQuery(cfLogisticsQueuingAreaQuery);
         Integer countByQuery = cfLogisticsQueuingAreaService.countByQuery(cfLogisticsQueuingAreaQuery);
-        if(cfLogisticsQueuingAreas==null || cfLogisticsQueuingAreas.size()==0){
+        if (cfLogisticsQueuingAreas == null || cfLogisticsQueuingAreas.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsQueuingAreas, countByQuery);
@@ -74,7 +74,7 @@ public class CfLogisticsQueuingAreaController implements CfLogisticsQueuingAreaS
     public ResponseResult selectListByQuery(CfLogisticsQueuingAreaQuery cfLogisticsQueuingAreaQuery) throws Exception {
         List<CfLogisticsQueuingArea> cfLogisticsQueuingAreas = cfLogisticsQueuingAreaService.selectListByQuery(cfLogisticsQueuingAreaQuery);
         Integer countByQuery = cfLogisticsQueuingAreaService.countByQuery(cfLogisticsQueuingAreaQuery);
-        if(cfLogisticsQueuingAreas==null || cfLogisticsQueuingAreas.size()==0){
+        if (cfLogisticsQueuingAreas == null || cfLogisticsQueuingAreas.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsQueuingAreas, countByQuery);

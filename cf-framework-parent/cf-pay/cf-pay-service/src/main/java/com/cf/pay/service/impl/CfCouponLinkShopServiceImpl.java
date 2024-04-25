@@ -44,10 +44,10 @@ public class CfCouponLinkShopServiceImpl implements CfCouponLinkShopService {
     public CfCouponLinkShopExample getExampleByQuery(CfCouponLinkShopQuery cfCouponLinkShopQuery) {
         CfCouponLinkShopExample cfCouponLinkShopExample = new CfCouponLinkShopExample();
         CfCouponLinkShopExample.Criteria criteria = cfCouponLinkShopExample.createCriteria();
-        if(StringUtils.isNotEmpty(cfCouponLinkShopQuery.getCouponId())){
+        if (StringUtils.isNotEmpty(cfCouponLinkShopQuery.getCouponId())) {
             criteria.andCouponIdEqualTo(cfCouponLinkShopQuery.getCouponId());
         }
-        if(StringUtils.isNotEmpty(cfCouponLinkShopQuery.getShopId())){
+        if (StringUtils.isNotEmpty(cfCouponLinkShopQuery.getShopId())) {
             criteria.andShopIdEqualTo(cfCouponLinkShopQuery.getShopId());
         }
         return cfCouponLinkShopExample;
@@ -70,13 +70,13 @@ public class CfCouponLinkShopServiceImpl implements CfCouponLinkShopService {
 
     @Override
     public List<CfCouponLinkShop> batchAdd(List<CfCouponLinkShop> cfCouponLinkShopList) {
-        if(cfCouponLinkShopList!=null && cfCouponLinkShopList.size()>0){
+        if (cfCouponLinkShopList != null && cfCouponLinkShopList.size() > 0) {
             String batchAddLinkShopsSQL = "insert into cf_coupon_link_shop (id, coupon_id, shop_id, scene) values ";
-            for(CfCouponLinkShop cfCouponLinkShop: cfCouponLinkShopList){
+            for (CfCouponLinkShop cfCouponLinkShop : cfCouponLinkShopList) {
                 cfCouponLinkShop.setId(idWorker.nextId());
-                batchAddLinkShopsSQL += "('"+cfCouponLinkShop.getId()+"','"+cfCouponLinkShop.getCouponId()+"','"+cfCouponLinkShop.getShopId()+"','"+cfCouponLinkShop.getScene()+"'),";
+                batchAddLinkShopsSQL += "('" + cfCouponLinkShop.getId() + "','" + cfCouponLinkShop.getCouponId() + "','" + cfCouponLinkShop.getShopId() + "','" + cfCouponLinkShop.getScene() + "'),";
             }
-            batchAddLinkShopsSQL = batchAddLinkShopsSQL.substring(0, batchAddLinkShopsSQL.length()-1);
+            batchAddLinkShopsSQL = batchAddLinkShopsSQL.substring(0, batchAddLinkShopsSQL.length() - 1);
             cfCouponLinkShopMapper.batchAdd(batchAddLinkShopsSQL);
         }
         return cfCouponLinkShopList;

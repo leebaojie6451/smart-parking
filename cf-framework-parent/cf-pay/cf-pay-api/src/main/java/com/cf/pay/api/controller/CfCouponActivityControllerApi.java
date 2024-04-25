@@ -12,11 +12,28 @@ import com.cf.framework.utils.HttpClient;
 import com.cf.framework.utils.HttpHearderUtils;
 import com.cf.pay.api.config.AuthenticationInterceptor;
 import com.cf.pay.api.swagger.CfCouponActivitySwagger;
-import com.cf.pay.domain.*;
-import com.cf.pay.domain.request.*;
+import com.cf.pay.domain.CfCoupon;
+import com.cf.pay.domain.CfCouponActivity;
+import com.cf.pay.domain.CfCouponActivityCouponType;
+import com.cf.pay.domain.CfQrCode;
+import com.cf.pay.domain.CfStaffCouponLog;
+import com.cf.pay.domain.CfStaffCouponSetting;
+import com.cf.pay.domain.request.CfCouponActivityCouponTypeForm;
+import com.cf.pay.domain.request.CfCouponActivityCouponTypeQuery;
+import com.cf.pay.domain.request.CfCouponActivityQuery;
+import com.cf.pay.domain.request.CfQrCodeForm;
+import com.cf.pay.domain.request.CfStaffCouponLogQuery;
+import com.cf.pay.domain.request.CfStaffCouponSettingQuery;
+import com.cf.pay.domain.request.GetCouponByQrCode;
+import com.cf.pay.domain.request.RechargeToCouponActivity;
+import com.cf.pay.domain.request.StaffOrShopkeeperGiveCouponToCar;
 import com.cf.pay.domain.response.ResultMap;
 import com.cf.pay.domain.type.CouponType;
-import com.cf.pay.service.*;
+import com.cf.pay.service.CfCouponActivityCouponTypeService;
+import com.cf.pay.service.CfCouponActivityService;
+import com.cf.pay.service.CfQrCodeService;
+import com.cf.pay.service.CfStaffCouponLogService;
+import com.cf.pay.service.CfStaffCouponSettingService;
 import com.cf.ucenter.domain.CfRole;
 import com.cf.ucenter.domain.CfStaff;
 import com.cf.ucenter.domain.CfUser;
@@ -72,12 +89,12 @@ public class CfCouponActivityControllerApi implements CfCouponActivitySwagger {
     public ResponseResult getMyCouponActivityList(@Validated CfCouponActivityQuery cfCouponActivityQuery) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         //判断是员工还是商户
-        if(userBasicInfo.getRoles()==null || userBasicInfo.getRoles().size()==0){
+        if (userBasicInfo.getRoles() == null || userBasicInfo.getRoles().size() == 0) {
             String roleFlag = userBasicInfo.getRoleFlag();
-            if(StringUtils.isNotEmpty(roleFlag)){
+            if (StringUtils.isNotEmpty(roleFlag)) {
                 String[] roleKeys = roleFlag.split(",");
-                for (String roleKey: roleKeys){
-                    if(userBasicInfo.getRoles()==null){
+                for (String roleKey : roleKeys) {
+                    if (userBasicInfo.getRoles() == null) {
                         userBasicInfo.setRoles(new ArrayList<>());
                     }
                     userBasicInfo.getRoles().add(roleKey);
@@ -85,36 +102,36 @@ public class CfCouponActivityControllerApi implements CfCouponActivitySwagger {
             }
         }
         List<String> roles = userBasicInfo.getRoles();
-        if(roles.size()==0){
+        if (roles.size() == 0) {
             //找到用户对应角色
             List<CfRole> cfRoleList = cfRoleService.getRolesByUid(userBasicInfo.getId());
-            for(CfRole cfRole: cfRoleList){
+            for (CfRole cfRole : cfRoleList) {
                 roles.add(cfRole.getFlagKey());
             }
         }
-        if(roles!=null && roles.contains("merchant") || (roles!=null && roles.contains("[merchant]"))){
+        if (roles != null && roles.contains("merchant") || (roles != null && roles.contains("[merchant]"))) {
             cfCouponActivityQuery.setMainBodyId(userBasicInfo.getId());
-        }else if(roles!=null && roles.contains("staff") || (roles!=null && roles.contains("[staff]"))){
+        } else if (roles != null && roles.contains("staff") || (roles != null && roles.contains("[staff]"))) {
             //获取该员工所有参与管理的优惠活动
             CfStaffQuery cfStaffQuery = new CfStaffQuery();
             cfStaffQuery.setStaffId(userBasicInfo.getId());
             List<CfStaff> cfStaffs = cfStaffService.getListByQuery(cfStaffQuery);
-            if(cfStaffs==null || cfStaffs.size()==0){
+            if (cfStaffs == null || cfStaffs.size() == 0) {
                 return new ResponseResult(CommonCode.NO_MORE_DATAS);
             }
             ArrayList<String> mainBodyIds = new ArrayList<>();
-            for(CfStaff cfStaff: cfStaffs){
+            for (CfStaff cfStaff : cfStaffs) {
                 mainBodyIds.add(cfStaff.getEmployerId());
             }
             cfCouponActivityQuery.setMainBodyIds(mainBodyIds);
-        }else{
+        } else {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         List<CfCouponActivity> cfCouponActivities = cfCouponActivityService.getListByQuery(cfCouponActivityQuery);
-        if(cfCouponActivities==null || cfCouponActivities.size()==0){
+        if (cfCouponActivities == null || cfCouponActivities.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
-        for (CfCouponActivity cfCouponActivity: cfCouponActivities){
+        for (CfCouponActivity cfCouponActivity : cfCouponActivities) {
             //可用额度等于充值额度+自动赠送额度
             BigDecimal totalIssueQuota = cfCouponActivity.getTotalIssueQuota();
             cfCouponActivity.setTotalIssueQuota(totalIssueQuota.add(cfCouponActivity.getAutoGiveAwayOverageQuota()));
@@ -136,13 +153,13 @@ public class CfCouponActivityControllerApi implements CfCouponActivitySwagger {
         cfStaffCouponLogQuery.setMinCreateTime(DateUtil.getSameDayMinOrMaxTimestamp("min"));
         cfStaffCouponLogQuery.setMaxCreateTime(DateUtil.getSameDayMinOrMaxTimestamp("max"));
         cfStaffCouponLogQuery.setCouponActivityId(activityId);
-        cfStaffCouponLogQuery.setCouponType((byte)2);
+        cfStaffCouponLogQuery.setCouponType((byte) 2);
         //判断是员工还是商户
         List<String> roles = userBasicInfo.getRoles();
-        if(roles!=null && roles.contains("merchant")){
+        if (roles != null && roles.contains("merchant")) {
             //获取商户今日的总发券量
             cfCouponActivity.setTodayIssued(cfStaffCouponLogService.countDenominationByQuery(cfStaffCouponLogQuery));
-        }else if(roles!=null && roles.contains("staff")){
+        } else if (roles != null && roles.contains("staff")) {
             //获取员工今日的总发券量
             cfStaffCouponLogQuery.setStaffId(userBasicInfo.getId());
             cfCouponActivity.setTodayIssued(cfStaffCouponLogService.countDenominationByQuery(cfStaffCouponLogQuery));
@@ -151,12 +168,12 @@ public class CfCouponActivityControllerApi implements CfCouponActivitySwagger {
             cfStaffCouponSettingQuery.setStaffId(userBasicInfo.getId());
             cfStaffCouponSettingQuery.setCouponActivityId(activityId);
             List<CfStaffCouponSetting> staffCouponSettings = cfStaffCouponSettingService.getListByQuery(cfStaffCouponSettingQuery);
-            if(staffCouponSettings!=null && staffCouponSettings.size()>0){
+            if (staffCouponSettings != null && staffCouponSettings.size() > 0) {
                 cfCouponActivity.setTodayQuota(staffCouponSettings.get(0).getSameDayQuota());
-            }else{
+            } else {
                 cfCouponActivity.setTodayQuota(new BigDecimal("0.00"));
             }
-        }else{
+        } else {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfCouponActivity);
@@ -190,7 +207,7 @@ public class CfCouponActivityControllerApi implements CfCouponActivitySwagger {
     public ResponseResult shopkeeperDeleteCouponActivityCouponType(@Validated String couponActivityCouponTypeId) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         Integer delete = cfCouponActivityCouponTypeService.shopkeeperDelete(userBasicInfo.getId(), couponActivityCouponTypeId);
-        if(delete>0){
+        if (delete > 0) {
             return new ResponseResult(CommonCode.SUCCESS);
         }
         return new ResponseResult(CommonCode.FAIL);
@@ -200,11 +217,11 @@ public class CfCouponActivityControllerApi implements CfCouponActivitySwagger {
 //    @PreAuthorize("hasAuthority('couponActivity-CfCouponActivityControllerApi-getCouponActivityCouponTypeListByQuery')")
     @RequestMapping(value = "getCouponActivityCouponTypeListByQuery", method = RequestMethod.GET)
     public ResponseResult getCouponActivityCouponTypeListByQuery(CfCouponActivityCouponTypeQuery cfCouponActivityCouponTypeQuery) throws Exception {
-        if(StringUtils.isEmpty(cfCouponActivityCouponTypeQuery.getCouponActivityId())){
+        if (StringUtils.isEmpty(cfCouponActivityCouponTypeQuery.getCouponActivityId())) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         List<CfCouponActivityCouponType> cfCouponActivityCouponTypes = cfCouponActivityCouponTypeService.getListByQuery(cfCouponActivityCouponTypeQuery);
-        if(cfCouponActivityCouponTypes==null || cfCouponActivityCouponTypes.size()==0){
+        if (cfCouponActivityCouponTypes == null || cfCouponActivityCouponTypes.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfCouponActivityCouponTypes);
@@ -215,30 +232,30 @@ public class CfCouponActivityControllerApi implements CfCouponActivitySwagger {
     @RequestMapping(value = "getCouponActivityCouponLogList", method = RequestMethod.GET)
     public ResponseResult getCouponActivityCouponLogList(CfStaffCouponLogQuery cfStaffCouponLogQuery) throws Exception {
 
-        if(StringUtils.isEmpty(cfStaffCouponLogQuery.getCouponActivityId())){
+        if (StringUtils.isEmpty(cfStaffCouponLogQuery.getCouponActivityId())) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         List<String> roles = userBasicInfo.getRoles();
-        if(roles!=null && roles.contains("merchant")){
+        if (roles != null && roles.contains("merchant")) {
             cfCouponActivityService.checkActivityAscription(userBasicInfo.getId(), cfStaffCouponLogQuery.getCouponActivityId());
-        }else if(roles!=null && roles.contains("staff")){
+        } else if (roles != null && roles.contains("staff")) {
             cfStaffCouponLogQuery.setStaffId(userBasicInfo.getId());
         }
 
-        if(cfStaffCouponLogQuery.getMinCreateTime()==null){
+        if (cfStaffCouponLogQuery.getMinCreateTime() == null) {
             cfStaffCouponLogQuery.setMinCreateTime(DateUtil.getSameDayMinOrMaxTimestamp("min"));
         }
-        if(cfStaffCouponLogQuery.getMaxCreateTime()==null){
+        if (cfStaffCouponLogQuery.getMaxCreateTime() == null) {
             cfStaffCouponLogQuery.setMaxCreateTime(DateUtil.getSameDayMinOrMaxTimestamp("max"));
         }
         List<CfStaffCouponLog> staffCouponLogServiceListByQuery = cfStaffCouponLogService.selectByQuery(cfStaffCouponLogQuery);
-        if(staffCouponLogServiceListByQuery==null || staffCouponLogServiceListByQuery.size()==0){
+        if (staffCouponLogServiceListByQuery == null || staffCouponLogServiceListByQuery.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         Integer integer = cfStaffCouponLogService.countByQuery(cfStaffCouponLogQuery);
         String fileSourceAddress = cfSystemConfigService.getValueByKey("file_source_address", "http://file.cfeng.wang/");
-        for (CfStaffCouponLog cfStaffCouponLog: staffCouponLogServiceListByQuery){
+        for (CfStaffCouponLog cfStaffCouponLog : staffCouponLogServiceListByQuery) {
             FileUtils.handleFileSourcePrefix(cfStaffCouponLog, fileSourceAddress, "staffAvatar");
             FileUtils.handleFileSourcePrefix(cfStaffCouponLog, fileSourceAddress, "toUidAvatar");
         }
@@ -262,25 +279,25 @@ public class CfCouponActivityControllerApi implements CfCouponActivitySwagger {
     @RequestMapping(value = "staffOrShopkeeperGiveCouponToCar", method = RequestMethod.POST)
     public ResponseResult staffOrShopkeeperGiveCouponToCar(@RequestBody @Validated StaffOrShopkeeperGiveCouponToCar staffOrShopkeeperGiveCouponToCar) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        if(staffOrShopkeeperGiveCouponToCar.getCouponType()==null){
+        if (staffOrShopkeeperGiveCouponToCar.getCouponType() == null) {
             staffOrShopkeeperGiveCouponToCar.setCouponType(CouponType.AMOUNT_COUPON);
         }
         String toUid = "";
-        if(StringUtils.isEmpty(staffOrShopkeeperGiveCouponToCar.getPhone())){
+        if (StringUtils.isEmpty(staffOrShopkeeperGiveCouponToCar.getPhone())) {
             staffOrShopkeeperGiveCouponToCar.setPhone("");
-        }else{
+        } else {
             CfUser cfUser = cfUserService.findByPhone(staffOrShopkeeperGiveCouponToCar.getPhone());
-            if(cfUser==null){
+            if (cfUser == null) {
                 return new ResponseResult(UcenterCode.PHONE_IS_NOT_REGISTERED);
-            }else{
+            } else {
                 toUid = cfUser.getId();
             }
         }
         //查询优惠券活动类型面额
         CfCouponActivityCouponType cfCouponActivityCouponType = null;
-        if(StringUtils.isNotEmpty(staffOrShopkeeperGiveCouponToCar.getCouponActivityCouponTypeId())){
+        if (StringUtils.isNotEmpty(staffOrShopkeeperGiveCouponToCar.getCouponActivityCouponTypeId())) {
             cfCouponActivityCouponType = cfCouponActivityCouponTypeService.findById(staffOrShopkeeperGiveCouponToCar.getCouponActivityCouponTypeId(), true);
-            if(cfCouponActivityCouponType.getCouponActivityId().equals(staffOrShopkeeperGiveCouponToCar.getCfCouponActivityId())){
+            if (cfCouponActivityCouponType.getCouponActivityId().equals(staffOrShopkeeperGiveCouponToCar.getCfCouponActivityId())) {
                 staffOrShopkeeperGiveCouponToCar.setQuantity(cfCouponActivityCouponType.getDenomination().intValue());
             }
         }
@@ -293,11 +310,11 @@ public class CfCouponActivityControllerApi implements CfCouponActivitySwagger {
     @RequestMapping(value = "getCouponByQrCode", method = RequestMethod.POST)
     public ResponseResult getCouponByQrCode(@RequestBody @Validated GetCouponByQrCode getCouponByQrCode) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        if(StringUtils.isEmpty(getCouponByQrCode.getNumberPlate())){
+        if (StringUtils.isEmpty(getCouponByQrCode.getNumberPlate())) {
             getCouponByQrCode.setNumberPlate("");
         }
         CfCouponActivityCouponType cfCouponActivityCouponType = null;
-        if(StringUtils.isNotEmpty(getCouponByQrCode.getCouponActivityCouponTypeId())){
+        if (StringUtils.isNotEmpty(getCouponByQrCode.getCouponActivityCouponTypeId())) {
             cfCouponActivityCouponType = cfCouponActivityCouponTypeService.findById(getCouponByQrCode.getCouponActivityCouponTypeId(), false);
         }
         CfCoupon cfCoupon = cfCouponActivityService.getCouponByQrCode(userBasicInfo.getId(), getCouponByQrCode.getQrCodeId(), getCouponByQrCode.getNumberPlate(), cfCouponActivityCouponType);
@@ -308,10 +325,10 @@ public class CfCouponActivityControllerApi implements CfCouponActivitySwagger {
 //    @PreAuthorize("hasAuthority('couponActivity-CfCouponActivityControllerApi-rechargeToCouponActivity')")
     @RequestMapping(value = "rechargeToCouponActivity", method = RequestMethod.POST)
     public ResponseResult rechargeToCouponActivity(HttpServletRequest httpServletRequest, @RequestBody @Validated RechargeToCouponActivity rechargeToCouponActivity) throws Exception {
-        if(rechargeToCouponActivity.getAmountOfMoney().compareTo(new BigDecimal(0.00))<=0){
+        if (rechargeToCouponActivity.getAmountOfMoney().compareTo(new BigDecimal(0.00)) <= 0) {
             ExceptionCast.cast(PayCode.NO_NEED_TO_PAY);
         }
-        if(rechargeToCouponActivity.getCouponType()==null){
+        if (rechargeToCouponActivity.getCouponType() == null) {
             rechargeToCouponActivity.setCouponType(CouponType.AMOUNT_COUPON);
         }
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));

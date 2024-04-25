@@ -32,12 +32,12 @@ public class CfLogisticsStorehouseController implements CfLogisticsStorehouseSwa
     @Override
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(CfLogisticsStorehouseQuery cfLogisticsStorehouseQuery) throws Exception {
-        if(StringUtils.isEmpty(cfLogisticsStorehouseQuery.getStorehouseName()) || cfLogisticsStorehouseQuery.getStorehouseName().length()<2){
+        if (StringUtils.isEmpty(cfLogisticsStorehouseQuery.getStorehouseName()) || cfLogisticsStorehouseQuery.getStorehouseName().length() < 2) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null, "没有提供仓库搜索关键字，或者提供的关键字太短，需要两个以上关键字");
         }
         List<CfLogisticsStorehouse> cfLogisticsStorehouses = cfLogisticsStorehouseService.getListByQuery(cfLogisticsStorehouseQuery);
         Integer countByQuery = cfLogisticsStorehouseService.countByQuery(cfLogisticsStorehouseQuery);
-        if(cfLogisticsStorehouses==null || cfLogisticsStorehouses.size()==0){
+        if (cfLogisticsStorehouses == null || cfLogisticsStorehouses.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsStorehouses, countByQuery);
@@ -47,7 +47,7 @@ public class CfLogisticsStorehouseController implements CfLogisticsStorehouseSwa
     @RequestMapping(value = "findById", method = RequestMethod.GET)
     public ResponseResult findById(Long id) throws Exception {
         CfLogisticsStorehouse cfLogisticsStorehouse = cfLogisticsStorehouseService.findById(id, false);
-        if(cfLogisticsStorehouse==null){
+        if (cfLogisticsStorehouse == null) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsStorehouse);

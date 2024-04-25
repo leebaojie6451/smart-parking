@@ -19,6 +19,7 @@ public interface CfAccountService {
 
     /**
      * 根据用户id和积分类型自动添加(存在则返回返回，否则添加)
+     *
      * @param cfAccount
      * @return
      */
@@ -34,6 +35,7 @@ public interface CfAccountService {
 
     /**
      * 根据条件和值更新账户余额
+     *
      * @param cfAccountQuery
      * @return
      */
@@ -41,6 +43,7 @@ public interface CfAccountService {
 
     /**
      * 检查积分是否满足扣费，如果满足直接扣费
+     *
      * @param cfAccountQuery
      * @return
      */
@@ -48,6 +51,7 @@ public interface CfAccountService {
 
     /**
      * 检查积分是否满足扣费(只查询)
+     *
      * @param cfAccountQuery
      * @return
      */
@@ -55,6 +59,7 @@ public interface CfAccountService {
 
     /**
      * 检查积分和新增积分，并且会产生一条充值账单记录
+     *
      * @param cfAccountQuery
      * @return
      */
@@ -62,6 +67,7 @@ public interface CfAccountService {
 
     /**
      * 检查积分和减少积分，并且会产生一条提现账单记录
+     *
      * @param cfAccountQuery 实体建议带 用户id和积分类型，还有要变动的值 三个字段的值
      * @return
      */
@@ -69,6 +75,7 @@ public interface CfAccountService {
 
     /**
      * 检查积分和新增积分，【注意】该方法不会产生充值账单
+     *
      * @param cfAccountQuery
      * @return
      */
@@ -76,6 +83,7 @@ public interface CfAccountService {
 
     /**
      * 客户端充值
+     *
      * @param cfAccountQuery
      * @return
      */

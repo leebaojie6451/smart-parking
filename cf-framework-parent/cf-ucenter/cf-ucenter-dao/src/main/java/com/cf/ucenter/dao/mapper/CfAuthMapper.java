@@ -31,22 +31,23 @@ public interface CfAuthMapper {
 
     List<CfAuth> selectByUid(String uid);
 
-    List<CfAuth> selectByUidAndLevel(@Param("uid")String uid, @Param("level")Byte level);
+    List<CfAuth> selectByUidAndLevel(@Param("uid") String uid, @Param("level") Byte level);
 
-    List<CfAuth> selectByUidAndRoleIdAndLevel(@Param("uid")String uid, @Param("level")Byte level);
+    List<CfAuth> selectByUidAndRoleIdAndLevel(@Param("uid") String uid, @Param("level") Byte level);
 
-    List<CfAuth> selectByUidAndModuleAndLevel(@Param("uid")String uid, @Param("module")String module, @Param("level")Byte level);
+    List<CfAuth> selectByUidAndModuleAndLevel(@Param("uid") String uid, @Param("module") String module, @Param("level") Byte level);
 
-    List<CfAuth> selectByUidAndControllerAndLevel(@Param("uid")String uid, @Param("controller")String controller, @Param("level")Byte level);
+    List<CfAuth> selectByUidAndControllerAndLevel(@Param("uid") String uid, @Param("controller") String controller, @Param("level") Byte level);
 
-    List<CfAuth> selectByRoleIdAndLevel(@Param("roleId")String roleId, @Param("level")Byte level);
+    List<CfAuth> selectByRoleIdAndLevel(@Param("roleId") String roleId, @Param("level") Byte level);
 
-    List<CfAuth> selectByRoleIdAndModuleAndLevel(@Param("roleId")String roleId, @Param("module")String module, @Param("level")Byte level);
+    List<CfAuth> selectByRoleIdAndModuleAndLevel(@Param("roleId") String roleId, @Param("module") String module, @Param("level") Byte level);
 
-    List<CfAuth> selectByRoleIdAndControllerAndLevel(@Param("roleId")String roleId, @Param("controller")String controller, @Param("level")Byte level);
+    List<CfAuth> selectByRoleIdAndControllerAndLevel(@Param("roleId") String roleId, @Param("controller") String controller, @Param("level") Byte level);
 
     /**
      * 根据角色id获取获取角色权限路径
+     *
      * @param roleId
      * @return
      */

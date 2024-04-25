@@ -27,9 +27,11 @@ public class NET_CFG_HEALTH_CODE_INFO extends NetSDKLib.SdkStructure {
      * 健康码读头使能，TRUE：使能；FALSE：未使能
      */
     public boolean bQRCodeReaderEnable;
-    public NET_CFG_HEALTH_CODE_INFO(){
-        this.dwSize=size();
+
+    public NET_CFG_HEALTH_CODE_INFO() {
+        this.dwSize = size();
     }
+
     @Override
     public String toString() {
         return "NET_CFG_HEALTH_CODE_INFO{" +

@@ -8,12 +8,12 @@ public class ResultObj {
     private String resMsg;
     private Object data;
 
-    public static ResultObj success(String resMsg,Object data){
-        return new ResultObj("000000",resMsg,data);
+    public static ResultObj success(String resMsg, Object data) {
+        return new ResultObj("000000", resMsg, data);
     }
 
-    public static ResultObj error(String resMsg,Object data){
-        return new ResultObj("1",resMsg,data);
+    public static ResultObj error(String resMsg, Object data) {
+        return new ResultObj("1", resMsg, data);
     }
 
     public ResultObj(String resCode, String resMsg, Object data) {

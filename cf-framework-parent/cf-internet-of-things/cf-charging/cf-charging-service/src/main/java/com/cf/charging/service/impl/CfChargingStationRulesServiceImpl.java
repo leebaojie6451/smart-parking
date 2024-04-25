@@ -60,34 +60,34 @@ public class CfChargingStationRulesServiceImpl implements CfChargingStationRules
         CfChargingStationRulesExample cfChargingStationRulesExample = new CfChargingStationRulesExample();
         CfChargingStationRulesExample.Criteria criteria = cfChargingStationRulesExample.createCriteria();
 
-        if(cfChargingStationRulesQuery.getMinStartTime()!=null && cfChargingStationRulesQuery.getMinStartTime()>0){
+        if (cfChargingStationRulesQuery.getMinStartTime() != null && cfChargingStationRulesQuery.getMinStartTime() > 0) {
             criteria.andStartTimeGreaterThanOrEqualTo(cfChargingStationRulesQuery.getMinStartTime());
         }
-        if(cfChargingStationRulesQuery.getMaxStartTime()!=null && cfChargingStationRulesQuery.getMaxStartTime()>0){
+        if (cfChargingStationRulesQuery.getMaxStartTime() != null && cfChargingStationRulesQuery.getMaxStartTime() > 0) {
             criteria.andStartTimeLessThanOrEqualTo(cfChargingStationRulesQuery.getMaxStartTime());
         }
-        if(cfChargingStationRulesQuery.getMinEndTime()!=null && cfChargingStationRulesQuery.getMinEndTime()>0){
+        if (cfChargingStationRulesQuery.getMinEndTime() != null && cfChargingStationRulesQuery.getMinEndTime() > 0) {
             criteria.andEndTimeGreaterThanOrEqualTo(cfChargingStationRulesQuery.getMinEndTime());
         }
-        if(cfChargingStationRulesQuery.getMaxEndTime()!=null && cfChargingStationRulesQuery.getMaxEndTime()>0){
+        if (cfChargingStationRulesQuery.getMaxEndTime() != null && cfChargingStationRulesQuery.getMaxEndTime() > 0) {
             criteria.andEndTimeLessThanOrEqualTo(cfChargingStationRulesQuery.getMaxEndTime());
         }
-        if(cfChargingStationRulesQuery.getStatus()!=null){
+        if (cfChargingStationRulesQuery.getStatus() != null) {
             criteria.andStatusEqualTo(cfChargingStationRulesQuery.getStatus());
         }
-        if(StringUtils.isNotEmpty(cfChargingStationRulesQuery.getChargingStationId())){
+        if (StringUtils.isNotEmpty(cfChargingStationRulesQuery.getChargingStationId())) {
             criteria.andChargingStationIdEqualTo(cfChargingStationRulesQuery.getChargingStationId());
         }
-        if(cfChargingStationRulesQuery.getChargingDeviceType()!=null){
+        if (cfChargingStationRulesQuery.getChargingDeviceType() != null) {
             criteria.andChargingDeviceTypeEqualTo(cfChargingStationRulesQuery.getChargingDeviceType());
         }
 
-        if(StringUtils.isNotEmpty(cfChargingStationRulesQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfChargingStationRulesQuery.getOrderBy())) {
             cfChargingStationRulesExample.setOrderByClause(cfChargingStationRulesQuery.getOrderBy());
-        }else{
+        } else {
             cfChargingStationRulesExample.setOrderByClause("start_time ASC");
         }
-        if(cfChargingStationRulesQuery.getPage()!=null && cfChargingStationRulesQuery.getSize()!=null){
+        if (cfChargingStationRulesQuery.getPage() != null && cfChargingStationRulesQuery.getSize() != null) {
             PageHelper.startPage(cfChargingStationRulesQuery.getPage(), cfChargingStationRulesQuery.getSize());
         }
         return cfChargingStationRulesExample;
@@ -106,7 +106,7 @@ public class CfChargingStationRulesServiceImpl implements CfChargingStationRules
 
     @Override
     public CfChargingStationRules validAndHandleChargingRulesStartEndTime(CfChargingStationRules cfChargingStationRules) {
-        if(cfChargingStationRules.getEndTime()<=cfChargingStationRules.getStartTime()){
+        if (cfChargingStationRules.getEndTime() <= cfChargingStationRules.getStartTime()) {
             ExceptionCast.cast(CarParkCode.END_TIME_MUST_BE_GREATER_THAN_START_TIME);
         }
         try {

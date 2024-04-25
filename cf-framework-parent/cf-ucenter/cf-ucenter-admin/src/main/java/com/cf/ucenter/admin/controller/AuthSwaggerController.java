@@ -1,6 +1,7 @@
 package com.cf.ucenter.admin.controller;
 
 //import com.cf.carpark.service.CfCarParkCheckpointService;
+
 import com.cf.framework.domain.response.CommonCode;
 import com.cf.framework.domain.response.ResponseResult;
 import com.cf.framework.domain.ucenter.ext.AuthToken;
@@ -67,16 +68,16 @@ public class AuthSwaggerController implements AuthSwagger {
     @Override
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public ResponseResult login(@RequestBody LoginRequest loginRequest) throws Exception {
-        if(loginRequest==null || StringUtils.isEmpty(loginRequest.getUsername())){
+        if (loginRequest == null || StringUtils.isEmpty(loginRequest.getUsername())) {
             ExceptionCast.cast(AuthCode.AUTH_USERNAME_NONE);
         }
-        if(StringUtils.isEmpty(loginRequest.getPassword())){
+        if (StringUtils.isEmpty(loginRequest.getPassword())) {
             ExceptionCast.cast(AuthCode.AUTH_PASSWORD_NONE);
         }
         AuthToken authToken = authService.login(loginRequest.getUsername(), loginRequest.getPassword(), clientId, clientSecret);
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(authToken.getJwt_token());
 
-        if(userBasicInfo.getRoleFlag().indexOf("toll_collector")>=0){
+        if (userBasicInfo.getRoleFlag().indexOf("toll_collector") >= 0) {
             //自动值班(过滤已经被值班的通道)
 
         }
@@ -88,15 +89,15 @@ public class AuthSwaggerController implements AuthSwagger {
 
     @Override
     @RequestMapping(value = "logout", method = RequestMethod.GET)
-    public ResponseResult logout(String type) throws Exception{
+    public ResponseResult logout(String type) throws Exception {
         String jwt = HttpHearderUtils.getAuthorization(request);
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(jwt);
         Object deleteResult = null;
-        if(type.equals("all")){
+        if (type.equals("all")) {
             deleteResult = stringRedisTemplate.delete("user:" + userBasicInfo.getUsername());
-        }else if(type.equals("current")){
+        } else if (type.equals("current")) {
             deleteResult = stringRedisTemplate.boundSetOps("user:" + userBasicInfo.getUsername()).remove(jwt);
-        }else{
+        } else {
             return new ResponseResult(CommonCode.FAIL, null, "invalid typ");
         }
 //        //退出所有岗亭值班
@@ -108,16 +109,16 @@ public class AuthSwaggerController implements AuthSwagger {
     @Override
     @RequestMapping(value = "getAuths", method = RequestMethod.GET)
     public ResponseResult getAuths(
-        @RequestParam(value = "type", required = false)
-        @Pattern(regexp = "^(user|role){1}$", message = "暂时只支持user|role两种类型")String type,
-    String value) {
+            @RequestParam(value = "type", required = false)
+            @Pattern(regexp = "^(user|role){1}$", message = "暂时只支持user|role两种类型") String type,
+            String value) {
         List<CfAuth> cfAuths = null;
-        if(value==null || value.equals("")){
+        if (value == null || value.equals("")) {
             cfAuths = authService.recursiveQuery((byte) 0, null);
-        }else{
-            cfAuths = type.equals("user")?authService.getAuthsByUid(value):authService.getAuthsByRoleId(value);
+        } else {
+            cfAuths = type.equals("user") ? authService.getAuthsByUid(value) : authService.getAuthsByRoleId(value);
         }
-        if(cfAuths==null){
+        if (cfAuths == null) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfAuths);

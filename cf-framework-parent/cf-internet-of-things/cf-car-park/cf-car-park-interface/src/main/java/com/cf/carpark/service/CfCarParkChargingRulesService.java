@@ -25,6 +25,7 @@ public interface CfCarParkChargingRulesService {
 
     /**
      * 计算应付金额，同时处理支付相关业务操作
+     *
      * @param cfCarParkUseLogId
      * @param uid
      * @param payTypeId
@@ -36,6 +37,7 @@ public interface CfCarParkChargingRulesService {
 
     /**
      * 计算应付金额，同时处理支付相关业务操作(包含优惠券)
+     *
      * @param cfCarParkUseLogId
      * @param uid
      * @param couponId
@@ -48,32 +50,36 @@ public interface CfCarParkChargingRulesService {
 
     /**
      * 计算应付金额
+     *
      * @param cfCarParkUseLogId
      * @param uid
-     * @param queryMode 模式(query_only-只查询不更新订单/query_and_query-查询且会更新停车记录和相关订单)
+     * @param queryMode         模式(query_only-只查询不更新订单/query_and_query-查询且会更新停车记录和相关订单)
      * @return
      */
-    public CfCarParkOrder calculateTheAmounPayable(String cfCarParkUseLogId, String uid, String queryMode) throws Exception ;
+    public CfCarParkOrder calculateTheAmounPayable(String cfCarParkUseLogId, String uid, String queryMode) throws Exception;
 
     /**
      * 计算应付金额
+     *
      * @param cfCarParkUseLog
      * @param uid
-     * @param queryMode 模式(query_only-只查询不更新订单/query_and_update-查询且会更新停车记录和相关订单)
+     * @param queryMode       模式(query_only-只查询不更新订单/query_and_update-查询且会更新停车记录和相关订单)
      * @return
      */
-    public CfCarParkOrder calculateTheAmounPayable(CfCarParkUseLog cfCarParkUseLog, String uid, String queryMode) throws Exception ;
+    public CfCarParkOrder calculateTheAmounPayable(CfCarParkUseLog cfCarParkUseLog, String uid, String queryMode) throws Exception;
 
     /**
      * 调试性计算应付金额
+     *
      * @param cfCarParkUseLog
      * @return
      * @throws Exception
      */
-    CfCarParkOrder deBugCalculateTheAmounPayable(CfCarParkUseLog cfCarParkUseLog) throws Exception ;
+    CfCarParkOrder deBugCalculateTheAmounPayable(CfCarParkUseLog cfCarParkUseLog) throws Exception;
 
     /**
      * 处理预约订单(若存在预约，考虑是否需要生成新订单，若预支付费用刚好足够不生成订单且无需额外支付，若预支付费用多余则部分退款，若不足以支付则生成新订单)
+     *
      * @param cfCarParkUseLog
      * @param cfOrder
      * @param cfOrderList
@@ -83,6 +89,7 @@ public interface CfCarParkChargingRulesService {
 
     /**
      * 每日固定模式计算停车费
+     *
      * @param startTime
      * @param endTime
      * @param cfCarPark
@@ -90,7 +97,7 @@ public interface CfCarParkChargingRulesService {
      * @param currentCalculateingCarType
      * @param calculateingCfCarPark
      * @param counts
-     * @param upperLimitTime 上限时间
+     * @param upperLimitTime             上限时间
      * @return
      * @throws Exception
      */
@@ -98,6 +105,7 @@ public interface CfCarParkChargingRulesService {
 
     /**
      * 24小时固定模式计算停车费
+     *
      * @param startTime
      * @param endTime
      * @param cfCarPark
@@ -112,6 +120,7 @@ public interface CfCarParkChargingRulesService {
 
     /**
      * 每日动态模式计算停车费
+     *
      * @param startTime
      * @param endTime
      * @param totalFee
@@ -120,8 +129,8 @@ public interface CfCarParkChargingRulesService {
      * @param counts
      * @param carParkChargingRules
      * @param upperLimitTime
-     * @param countFee  已经统计到的部分金额(如果upperLimitTime大于0时需要用到)
-     * @param originalStartTime 原始开始时间(如果upperLimitTime大于0时需要用到)
+     * @param countFee              已经统计到的部分金额(如果upperLimitTime大于0时需要用到)
+     * @param originalStartTime     原始开始时间(如果upperLimitTime大于0时需要用到)
      * @return
      * @throws Exception
      */
@@ -129,9 +138,10 @@ public interface CfCarParkChargingRulesService {
 
     /**
      * 24小时动态模式计算停车费
-     * @param totalTime 总停车时间
-     * @param startCountTime 开始计费的时间(不是开始时间，而是从开始时间起那时从0累计)
-     * @param carType   类型类
+     *
+     * @param totalTime             总停车时间
+     * @param startCountTime        开始计费的时间(不是开始时间，而是从开始时间起那时从0累计)
+     * @param carType               类型类
      * @param calculateingCfCarPark
      * @param counts
      * @param carParkChargingRules
@@ -143,13 +153,15 @@ public interface CfCarParkChargingRulesService {
 
     /**
      * 根据停车场获取收费规则
+     *
      * @param carParkId
      * @return
      */
-    public List<CfCarParkChargingRules> getListByCarParkId(String carParkId) throws Exception ;
+    public List<CfCarParkChargingRules> getListByCarParkId(String carParkId) throws Exception;
 
     /**
      * 根据条件查询收费规则
+     *
      * @param cfCarParkChargingRulesQuery
      * @return
      */
@@ -157,20 +169,23 @@ public interface CfCarParkChargingRulesService {
 
     /**
      * 新增
+     *
      * @param cfCarParkChargingRules
      * @return
      */
-    public CfCarParkChargingRules add(CfCarParkChargingRules cfCarParkChargingRules) throws Exception ;
+    public CfCarParkChargingRules add(CfCarParkChargingRules cfCarParkChargingRules) throws Exception;
 
     /**
      * 更新
+     *
      * @param cfCarParkChargingRules
      * @return
      */
-    public CfCarParkChargingRules update(CfCarParkChargingRules cfCarParkChargingRules) throws Exception ;
+    public CfCarParkChargingRules update(CfCarParkChargingRules cfCarParkChargingRules) throws Exception;
 
     /**
      * 删除
+     *
      * @param cfCarParkChargingRulesId
      * @return
      */
@@ -182,6 +197,7 @@ public interface CfCarParkChargingRulesService {
 
     /**
      * 校验和处理车场计费规则的起止时间
+     *
      * @param cfCarParkChargingRules
      * @return
      */
@@ -189,15 +205,17 @@ public interface CfCarParkChargingRulesService {
 
     /**
      * 给停车场记录进行支付停车费
+     *
      * @param cfOrder
      * @param payTypeId
      * @param ipAddress
      * @return
      */
-    public ResultMap payForCarUseLog(CfOrder cfOrder, String payTypeId, String ipAddress) throws Exception ;
+    public ResultMap payForCarUseLog(CfOrder cfOrder, String payTypeId, String ipAddress) throws Exception;
 
     /**
      * 停车场自动扣费
+     *
      * @param cfCarParkUseLog
      * @param numberPlate
      * @return
@@ -206,6 +224,7 @@ public interface CfCarParkChargingRulesService {
 
     /**
      * 使用账户余额支付停车费
+     *
      * @param cfOrder
      * @return
      */
@@ -213,6 +232,7 @@ public interface CfCarParkChargingRulesService {
 
     /**
      * 建行测试支付
+     *
      * @param carParkUseLogId
      * @param numberPlate
      * @return
@@ -221,6 +241,7 @@ public interface CfCarParkChargingRulesService {
 
     /**
      * 自动使用券抵扣
+     *
      * @param cfOrder
      * @return
      */
@@ -228,6 +249,7 @@ public interface CfCarParkChargingRulesService {
 
     /**
      * 被扫码扣款
+     *
      * @param cfOrder
      * @param cfUserPaymentAgency
      * @param ccbScannedChargebackForm
@@ -237,6 +259,7 @@ public interface CfCarParkChargingRulesService {
 
     /**
      * 车费免密支付
+     *
      * @param cfOrder
      * @param cfUserPaymentAgency
      * @param ccbScannedChargebackForm

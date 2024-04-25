@@ -34,22 +34,22 @@ public class BaseResult implements Serializable {
     private boolean inWhiteList;
 
     /**
-     *  是否已支付
+     * 是否已支付
      */
     private Boolean payed;
 
     /**
-     *  停车费用
+     * 停车费用
      */
     private BigDecimal money;
 
     /**
-     *  停车时长
+     * 停车时长
      */
     private String parkingTime;
 
     /**
-     *  剩余天数
+     * 剩余天数
      */
     private Integer remainDays;
 
@@ -59,12 +59,12 @@ public class BaseResult implements Serializable {
     private String typeKey;
 
     /**
-     *  剩余车位数
+     * 剩余车位数
      */
     private Integer spaceNum;
 
     /**
-     *  in：入场，out：出场
+     * in：入场，out：出场
      */
     private String direction;
 

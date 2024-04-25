@@ -64,10 +64,10 @@ public class CfCarParkVisitServiceImpl implements CfCarParkVisitService {
     @Override
     public CfCarParkVisit findById(Long id, boolean expectEmpty) {
         CfCarParkVisit cfCarParkVisit = findById(id);
-        if(cfCarParkVisit==null && !expectEmpty){
+        if (cfCarParkVisit == null && !expectEmpty) {
             ExceptionCast.cast(CarParkCode.VISIT_RECORD_NOT_FOUND);
         }
-        if(cfCarParkVisit!=null && expectEmpty){
+        if (cfCarParkVisit != null && expectEmpty) {
             ExceptionCast.cast(CarParkCode.VISIT_RECORD_ALREADY_EXISTS);
         }
         return cfCarParkVisit;
@@ -77,54 +77,53 @@ public class CfCarParkVisitServiceImpl implements CfCarParkVisitService {
     public CfCarParkVisitExample getExampleByQuery(CfCarParkVisitQuery cfCarParkVisitQuery) {
         CfCarParkVisitExample cfCarParkVisitExample = new CfCarParkVisitExample();
         CfCarParkVisitExample.Criteria criteria = cfCarParkVisitExample.createCriteria();
-        if(cfCarParkVisitQuery.getCarParkId()!=null){
+        if (cfCarParkVisitQuery.getCarParkId() != null) {
             criteria.andCarParkIdEqualTo(cfCarParkVisitQuery.getCarParkId());
         }
-        if(cfCarParkVisitQuery.getCarParkIds()!=null && cfCarParkVisitQuery.getCarParkIds().size()>0){
+        if (cfCarParkVisitQuery.getCarParkIds() != null && cfCarParkVisitQuery.getCarParkIds().size() > 0) {
             criteria.andCarParkIdIn(cfCarParkVisitQuery.getCarParkIds());
         }
-        if(cfCarParkVisitQuery.getFromUid()!=null){
+        if (cfCarParkVisitQuery.getFromUid() != null) {
             criteria.andFromUidEqualTo(cfCarParkVisitQuery.getFromUid());
         }
-        if(cfCarParkVisitQuery.getToUid()!=null){
+        if (cfCarParkVisitQuery.getToUid() != null) {
             criteria.andToUidEqualTo(cfCarParkVisitQuery.getToUid());
         }
-        if(cfCarParkVisitQuery.getPlateNumber()!=null){
+        if (cfCarParkVisitQuery.getPlateNumber() != null) {
             criteria.andPlateNumberEqualTo(cfCarParkVisitQuery.getPlateNumber());
         }
-        if(cfCarParkVisitQuery.getMinCreateTime()!=null){
+        if (cfCarParkVisitQuery.getMinCreateTime() != null) {
             criteria.andCreateTimeGreaterThanOrEqualTo(cfCarParkVisitQuery.getMinCreateTime());
         }
-        if(cfCarParkVisitQuery.getMaxCreateTime()!=null){
+        if (cfCarParkVisitQuery.getMaxCreateTime() != null) {
             criteria.andCreateTimeLessThanOrEqualTo(cfCarParkVisitQuery.getMaxCreateTime());
         }
 
-        if(cfCarParkVisitQuery.getProcessTime()!=null){
+        if (cfCarParkVisitQuery.getProcessTime() != null) {
             criteria.andProcessTimeEqualTo(cfCarParkVisitQuery.getProcessTime());
         }
-        if(cfCarParkVisitQuery.getMinProcessTime()!=null){
+        if (cfCarParkVisitQuery.getMinProcessTime() != null) {
             criteria.andProcessTimeGreaterThanOrEqualTo(cfCarParkVisitQuery.getMinProcessTime());
         }
-        if(cfCarParkVisitQuery.getMaxProcessTime()!=null){
+        if (cfCarParkVisitQuery.getMaxProcessTime() != null) {
             criteria.andProcessTimeLessThanOrEqualTo(cfCarParkVisitQuery.getMaxProcessTime());
         }
 
-        if(cfCarParkVisitQuery.getVisitTime()!=null){
+        if (cfCarParkVisitQuery.getVisitTime() != null) {
             criteria.andVisitTimeEqualTo(cfCarParkVisitQuery.getVisitTime());
         }
-        if(cfCarParkVisitQuery.getMinVisitTime()!=null){
+        if (cfCarParkVisitQuery.getMinVisitTime() != null) {
             criteria.andVisitTimeGreaterThanOrEqualTo(cfCarParkVisitQuery.getMinVisitTime());
         }
-        if(cfCarParkVisitQuery.getMaxVisitTime()!=null){
+        if (cfCarParkVisitQuery.getMaxVisitTime() != null) {
             criteria.andVisitTimeLessThanOrEqualTo(cfCarParkVisitQuery.getMaxVisitTime());
         }
 
 
-
-        if(StringUtils.isNotEmpty(cfCarParkVisitQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfCarParkVisitQuery.getOrderBy())) {
             cfCarParkVisitExample.setOrderByClause(cfCarParkVisitQuery.getOrderBy());
         }
-        if(cfCarParkVisitQuery.getPage()!=null && cfCarParkVisitQuery.getSize()!=null){
+        if (cfCarParkVisitQuery.getPage() != null && cfCarParkVisitQuery.getSize() != null) {
             PageHelper.startPage(cfCarParkVisitQuery.getPage(), cfCarParkVisitQuery.getSize());
         }
         return cfCarParkVisitExample;
@@ -153,7 +152,7 @@ public class CfCarParkVisitServiceImpl implements CfCarParkVisitService {
         allowOrderBy.add("cpvt.visit_time desc");
         allowOrderBy.add("cpvt.expiration_time asc");
         allowOrderBy.add("cpvt.expiration_time desc");
-        cfCarParkVisitQuery.setOrderBy(DbUtils.makeAllowOrderBy(allowOrderBy,cfCarParkVisitQuery.getOrderBy()));
+        cfCarParkVisitQuery.setOrderBy(DbUtils.makeAllowOrderBy(allowOrderBy, cfCarParkVisitQuery.getOrderBy()));
         return cfCarParkVisitMapper.selectContinByQuery(cfCarParkVisitQuery);
     }
 }

@@ -6,7 +6,7 @@ import com.cf.ucenter.domain.CfUser;
  * @author LIQIU
  * @date 2018-4-4
  **/
-public abstract class AbstractPreparableIntegrationAuthenticator implements IntegrationAuthenticator{
+public abstract class AbstractPreparableIntegrationAuthenticator implements IntegrationAuthenticator {
 
     @Override
     public abstract CfUser authenticate(IntegrationAuthentication integrationAuthentication);

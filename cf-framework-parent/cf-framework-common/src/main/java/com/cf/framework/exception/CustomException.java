@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 /**
  * 自定义异常类型
+ *
  * @author Administrator
  * @version 1.0
  * @create 2018-09-14 17:28
@@ -17,21 +18,21 @@ public class CustomException extends RuntimeException implements Serializable {
     //语言
     String lang;
 
-    public CustomException(ResultCode resultCode){
+    public CustomException(ResultCode resultCode) {
         this.resultCode = resultCode;
     }
 
-    public CustomException(ResultCode resultCode, String message){
+    public CustomException(ResultCode resultCode, String message) {
         resultCode.setMessage(message);
         this.resultCode = resultCode;
     }
 
-    public CustomException(ResultCode resultCode, String message, String lang){
+    public CustomException(ResultCode resultCode, String message, String lang) {
         resultCode.setMessage(message);
         this.resultCode = resultCode;
     }
 
-    public ResultCode getResultCode(){
+    public ResultCode getResultCode() {
         return resultCode;
     }
 

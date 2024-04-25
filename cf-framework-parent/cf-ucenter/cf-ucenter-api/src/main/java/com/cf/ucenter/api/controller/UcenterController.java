@@ -84,13 +84,13 @@ public class UcenterController implements UcenterSwagger {
     @RequestMapping(value = "register", method = RequestMethod.POST)
     public ResponseResult register(
             @RequestParam("phone")
-        @Pattern(regexp = "^(1[3-9])[0-9]{9}$", message = "手机号不合法") String phone,
+            @Pattern(regexp = "^(1[3-9])[0-9]{9}$", message = "手机号不合法") String phone,
             @RequestParam("sms_code")
-        @NotEmpty String smsCode,
+            @NotEmpty String smsCode,
             @RequestParam("username")
-        @Pattern(regexp = "^[a-zA-Z0-9_]{5,32}$", message = "用户名长度5-32位") String userName,
+            @Pattern(regexp = "^[a-zA-Z0-9_]{5,32}$", message = "用户名长度5-32位") String userName,
             @RequestParam("password")
-        @Size(min = 10, max = 32, message = "密码长度10-32位") String password,
+            @Size(min = 10, max = 32, message = "密码长度10-32位") String password,
             @RequestParam("nick_name")
             @Size(min = 1, max = 20, message = "昵称长度1-20位") String nickName) {
         return new ResponseResult(CommonCode.SUCCESS, cfUserService.register(phone, smsCode, userName, password, nickName));
@@ -110,7 +110,7 @@ public class UcenterController implements UcenterSwagger {
     public ResponseResult findById(String uid, String simpleQuery) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         boolean filling = false;
-        if(StringUtils.isEmpty(uid) || userBasicInfo.getId().equals(uid)){
+        if (StringUtils.isEmpty(uid) || userBasicInfo.getId().equals(uid)) {
             uid = userBasicInfo.getId();
             filling = true;
         }
@@ -118,7 +118,7 @@ public class UcenterController implements UcenterSwagger {
 
         if (cfUser != null) {
             cfUser.setPassword("");
-            if(!uid.equals(userBasicInfo.getId())){
+            if (!uid.equals(userBasicInfo.getId())) {
                 cfUser.setPhone("");
                 cfUser.setEmail("");
             }
@@ -156,24 +156,24 @@ public class UcenterController implements UcenterSwagger {
         cfAccountQuery.setUid(cfUser.getId());
         cfAccountQuery.setScoreType("common_use");
         List<CfAccount> cfAccounts = cfAccountService.getListByQuery(cfAccountQuery);
-        if(cfAccounts!=null && cfAccounts.size()>0){
+        if (cfAccounts != null && cfAccounts.size() > 0) {
             cfUser.setScore(cfAccounts.get(0).getBalance());
-        }else{
+        } else {
             cfUser.setScore(new BigDecimal(0.00));
         }
         FileUtils.handleFileSourcePrefix(cfUser, "", "avatar");
         return new ResponseResult(CommonCode.SUCCESS, user);
     }
 
-    private CfUser checkByUnionIdAndApiTokenAndPlatform(String unionId, String apiToken, String platform, String AppId){
+    private CfUser checkByUnionIdAndApiTokenAndPlatform(String unionId, String apiToken, String platform, String AppId) {
         //获取token，进行校验
         CfSystemConfigQuery cfSystemConfigQuery = new CfSystemConfigQuery();
         cfSystemConfigQuery.setEnName("api_token");
         List<CfSystemConfig> cfSystemConfigs = cfSystemConfigService.getListByQuery(cfSystemConfigQuery);
-        if(cfSystemConfigs==null || cfSystemConfigs.size()==0){
+        if (cfSystemConfigs == null || cfSystemConfigs.size() == 0) {
             ExceptionCast.cast(UcenterCode.SYSTEM_CONFIGURATION_DOES_NOT_EXIST, "api_token");
         }
-        if(!apiToken.equals(cfSystemConfigs.get(0).getValue())){
+        if (!apiToken.equals(cfSystemConfigs.get(0).getValue())) {
             ExceptionCast.cast(AuthCode.AUTH_LOGIN_TOKEN_ILLEGAL);
         }
 
@@ -184,7 +184,7 @@ public class UcenterController implements UcenterSwagger {
         cfThirdPartyLoginQuery.setPlatform(platform);
         cfThirdPartyLoginQuery.setUnionid(unionId);
         List<CfThirdPartyLogin> cfThirdPartyLogins = cfThirdPartyLoginService.getListByQuery(cfThirdPartyLoginQuery);
-        if(cfThirdPartyLogins==null || cfThirdPartyLogins.size()==0){
+        if (cfThirdPartyLogins == null || cfThirdPartyLogins.size() == 0) {
             WxUser wxUser = new WxUser();
             wxUser.setUnionid(unionId);
             wxUser.setNickname("");
@@ -193,9 +193,9 @@ public class UcenterController implements UcenterSwagger {
             wxUser.setOpenid("");
             wxUser.setAppid(AppId);
             cfUser = cfUserService.addOrUpdateUserByWxUser(wxUser, platform);
-        }else{
+        } else {
             cfUser = cfUserService.getUserByUid(cfThirdPartyLogins.get(0).getUid(), false);
-            if(cfUser==null || cfUser.getId()==null){
+            if (cfUser == null || cfUser.getId() == null) {
                 ExceptionCast.cast(UcenterCode.UCENTER_ACCOUNT_NOTEXISTS);
             }
         }
@@ -209,26 +209,26 @@ public class UcenterController implements UcenterSwagger {
 
         //更新用户账户相关信息
         CfAccount account = new CfAccount();
-        if(cfWxUserForm.getScore()!=null && cfWxUserForm.getScoreAction()!=null && StringUtils.isNotEmpty(cfWxUserForm.getScoreType())){
+        if (cfWxUserForm.getScore() != null && cfWxUserForm.getScoreAction() != null && StringUtils.isNotEmpty(cfWxUserForm.getScoreType())) {
             CfAccount cfAccount = new CfAccount();
             cfAccount.setUid(cfUser.getId());
             cfAccount.setScoreType(cfWxUserForm.getScoreType());
             cfAccount.setBalance(new BigDecimal(0.00));
             cfAccount.setFreeze(0L);
-            cfAccount.setType((byte)0);
+            cfAccount.setType((byte) 0);
             //先判断该用户账户是否已经存在
             account = cfAccountService.autoCheckExistAndAddByUidAndScoreType(cfAccount);
 
 
-            if(cfWxUserForm.getScoreAction()==(byte)0){
+            if (cfWxUserForm.getScoreAction() == (byte) 0) {
                 account.setBalance(cfWxUserForm.getScore());
-            }else if(cfWxUserForm.getScoreAction()==(byte)-1){
+            } else if (cfWxUserForm.getScoreAction() == (byte) -1) {
                 BigDecimal balance = account.getBalance();
                 account.setBalance(balance.subtract(cfWxUserForm.getScore()));
-                if(account.getBalance().doubleValue()<0){
+                if (account.getBalance().doubleValue() < 0) {
                     account.setBalance(new BigDecimal(0.00));
                 }
-            }else if(cfWxUserForm.getScoreAction()==(byte)1){
+            } else if (cfWxUserForm.getScoreAction() == (byte) 1) {
                 BigDecimal balance = account.getBalance();
                 account.setBalance(balance.add(cfWxUserForm.getScore()));
             }
@@ -236,8 +236,8 @@ public class UcenterController implements UcenterSwagger {
         }
         //给相关用户发券
         CfCoupon cfCoupon = new CfCoupon();
-        if(cfWxUserForm.getCouponDenomination()!=null && cfWxUserForm.getCouponScenes()!=null && cfWxUserForm.getCouponType()!=null
-        && cfWxUserForm.getEffectiveTime()!=null && cfWxUserForm.getExpireTime()!=null && StringUtils.isNotEmpty(cfWxUserForm.getShopIds())){
+        if (cfWxUserForm.getCouponDenomination() != null && cfWxUserForm.getCouponScenes() != null && cfWxUserForm.getCouponType() != null
+                && cfWxUserForm.getEffectiveTime() != null && cfWxUserForm.getExpireTime() != null && StringUtils.isNotEmpty(cfWxUserForm.getShopIds())) {
             cfCoupon.setFromUid("0");
             cfCoupon.setToUid(cfUser.getId());
             cfCoupon.setScenes(cfWxUserForm.getCouponScenes());
@@ -245,18 +245,18 @@ public class UcenterController implements UcenterSwagger {
             cfCoupon.setGoodsId("");
             cfCoupon.setDenomination(cfWxUserForm.getCouponDenomination());
             cfCoupon.setThresholdPrice(new BigDecimal(0.00));
-            cfCoupon.setStatus((byte)1);
+            cfCoupon.setStatus((byte) 1);
             cfCoupon.setAmountUsed(new BigDecimal(0.00));
             cfCoupon.setCouponType(cfWxUserForm.getCouponType());
             cfCoupon.setEffectiveTime(cfWxUserForm.getEffectiveTime());
             cfCoupon.setExpireTime(cfWxUserForm.getExpireTime());
             cfCoupon.setUseTime(0L);
             String scene = null;
-            switch (cfWxUserForm.getCouponScenes()){
-                case (byte)1:
+            switch (cfWxUserForm.getCouponScenes()) {
+                case (byte) 1:
                     scene = "carpark";
                     break;
-                case (byte)2:
+                case (byte) 2:
                     scene = "shop";
                     break;
                 default:
@@ -266,11 +266,11 @@ public class UcenterController implements UcenterSwagger {
         }
         //更改指定账单
         CfOrder cfOrder = null;
-        if(cfWxUserForm.getOrderForm()!=null && StringUtils.isNotEmpty(cfWxUserForm.getOrderForm().getId())){
+        if (cfWxUserForm.getOrderForm() != null && StringUtils.isNotEmpty(cfWxUserForm.getOrderForm().getId())) {
             checkSign(cfWxUserForm);
             cfOrder = cfOrderService.findById(cfWxUserForm.getOrderForm().getId(), false);
             cfOrder.setUserPaymentAgencyId(cfWxUserForm.getOrderForm().getUserPaymentAgencyId());
-            if(StringUtils.isNotEmpty(cfWxUserForm.getOrderForm().getCouponId())){
+            if (StringUtils.isNotEmpty(cfWxUserForm.getOrderForm().getCouponId())) {
                 cfCouponService.findById(cfWxUserForm.getOrderForm().getCouponId(), false);
                 cfOrder.setCouponId(cfWxUserForm.getOrderForm().getCouponId());
             }
@@ -282,10 +282,10 @@ public class UcenterController implements UcenterSwagger {
         }
 
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("user",cfUser);
-        jsonObject.put("account",account);
-        jsonObject.put("cfCoupon",cfCoupon);
-        jsonObject.put("cfOrder",cfOrder);
+        jsonObject.put("user", cfUser);
+        jsonObject.put("account", account);
+        jsonObject.put("cfCoupon", cfCoupon);
+        jsonObject.put("cfOrder", cfOrder);
         return new ResponseResult(CommonCode.SUCCESS, jsonObject);
     }
 
@@ -294,24 +294,24 @@ public class UcenterController implements UcenterSwagger {
         CfSystemConfigQuery cfSystemConfigQuery = new CfSystemConfigQuery();
         cfSystemConfigQuery.setEnName("api_token");
         List<CfSystemConfig> cfSystemConfigs = cfSystemConfigService.getListByQuery(cfSystemConfigQuery);
-        if(cfSystemConfigs==null || cfSystemConfigs.size()==0){
+        if (cfSystemConfigs == null || cfSystemConfigs.size() == 0) {
             ExceptionCast.cast(UcenterCode.SYSTEM_CONFIGURATION_DOES_NOT_EXIST, "api_token");
         }
-        Map<String,String> params = new HashMap<>();
+        Map<String, String> params = new HashMap<>();
         Class cls = cfWxUserForm.getClass();
         Field[] fields = cls.getDeclaredFields();
-        for(int i=0; i<fields.length; i++){
+        for (int i = 0; i < fields.length; i++) {
             Field f = fields[i];
             f.setAccessible(true);
-            if(f.getName()!=null && !f.getName().equals("serialVersionUID") && !f.getName().equals("orderForm") && !f.getName().equals("signType") && !f.getName().equals("dataSign") && f.get(cfWxUserForm)!=null && StringUtils.isNotEmpty(f.get(cfWxUserForm).toString())){
+            if (f.getName() != null && !f.getName().equals("serialVersionUID") && !f.getName().equals("orderForm") && !f.getName().equals("signType") && !f.getName().equals("dataSign") && f.get(cfWxUserForm) != null && StringUtils.isNotEmpty(f.get(cfWxUserForm).toString())) {
                 params.put(f.getName(), f.get(cfWxUserForm).toString());
-            }else if(f.getName().equals("orderForm") && f.get(cfWxUserForm)!=null){
+            } else if (f.getName().equals("orderForm") && f.get(cfWxUserForm) != null) {
                 Class cls2 = cfWxUserForm.getOrderForm().getClass();
                 Field[] fields2 = cls2.getDeclaredFields();
-                for(int j=0; j<fields.length; j++){
+                for (int j = 0; j < fields.length; j++) {
                     Field f2 = fields2[j];
                     f2.setAccessible(true);
-                    if(f2.getName()!=null && f2.get(cfWxUserForm.getOrderForm())!=null && StringUtils.isNotEmpty(f2.get(cfWxUserForm.getOrderForm()).toString())){
+                    if (f2.getName() != null && f2.get(cfWxUserForm.getOrderForm()) != null && StringUtils.isNotEmpty(f2.get(cfWxUserForm.getOrderForm()).toString())) {
                         params.put(f2.getName(), f2.get(cfWxUserForm.getOrderForm()).toString());
                     }
                 }
@@ -319,7 +319,7 @@ public class UcenterController implements UcenterSwagger {
         }
         params.put("sign", cfWxUserForm.getDataSign());
         boolean signatureValid = BCryptUtil.isSignatureValid(params, cfSystemConfigs.get(0).getValue(), cfWxUserForm.getSignType());
-        if(!signatureValid){
+        if (!signatureValid) {
             throw new Exception("invalid sign");
         }
     }
@@ -331,8 +331,8 @@ public class UcenterController implements UcenterSwagger {
 
         UserBasicInfo userBasicInfo = new UserBasicInfo();
         userBasicInfo.setRoles(new ArrayList<String>());
-        if(cfUser.getCfRoles()!=null && cfUser.getCfRoles().size()>0){
-            for (CfRole cfRole: cfUser.getCfRoles()){
+        if (cfUser.getCfRoles() != null && cfUser.getCfRoles().size() > 0) {
+            for (CfRole cfRole : cfUser.getCfRoles()) {
                 userBasicInfo.getRoles().add(cfRole.getFlagKey());
             }
         }
@@ -354,11 +354,11 @@ public class UcenterController implements UcenterSwagger {
         CfCouponActivityQuery cfCouponActivityQuery = new CfCouponActivityQuery();
         cfCouponActivityQuery.setPhone(checkSms.getPhone());
         List<CfCouponActivity> cfCouponActivities = cfCouponActivityService.getListByQuery(cfCouponActivityQuery);
-        if(cfCouponActivities!=null && cfCouponActivities.size()>0 && StringUtils.isEmpty(cfCouponActivities.get(0).getMainBodyId())){
+        if (cfCouponActivities != null && cfCouponActivities.size() > 0 && StringUtils.isEmpty(cfCouponActivities.get(0).getMainBodyId())) {
             cfCouponActivities.get(0).setMainBodyId(cfUser.getId());
             cfCouponActivityService.update(cfCouponActivities.get(0));
             //设置该用户为商家
-            cfUserRoleService.addByUidAndRoleKey(userBasicInfo.getId(),"merchant");
+            cfUserRoleService.addByUidAndRoleKey(userBasicInfo.getId(), "merchant");
         }
 
         //临时使用，后期此处代码删除  判断该手机号是否有套餐，如果有将对应套餐绑定到该用户名下
@@ -376,29 +376,29 @@ public class UcenterController implements UcenterSwagger {
     @RequestMapping(value = "getClientIp", method = RequestMethod.GET)
     public ResponseResult getClientIp(HttpServletRequest request) throws Exception {
         String ipAddress = request.getHeader("x-forwarded-for");
-        if(ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+        if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("Proxy-Client-IP");
         }
-        if(ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+        if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("WL-Proxy-Client-IP");
         }
-        if(ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+        if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getRemoteAddr();
-            if(ipAddress.equals("127.0.0.1") || ipAddress.equals("0:0:0:0:0:0:0:1")){
+            if (ipAddress.equals("127.0.0.1") || ipAddress.equals("0:0:0:0:0:0:0:1")) {
                 //根据网卡取本机配置的IP
-                InetAddress inet=null;
+                InetAddress inet = null;
                 try {
                     inet = InetAddress.getLocalHost();
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
                 }
-                ipAddress= inet.getHostAddress();
+                ipAddress = inet.getHostAddress();
             }
         }
         //对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
-        if(ipAddress!=null && ipAddress.length()>15){ //"***.***.***.***".length() = 15
-            if(ipAddress.indexOf(",")>0){
-                ipAddress = ipAddress.substring(0,ipAddress.indexOf(","));
+        if (ipAddress != null && ipAddress.length() > 15) { //"***.***.***.***".length() = 15
+            if (ipAddress.indexOf(",") > 0) {
+                ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
             }
         }
         return new ResponseResult(CommonCode.SUCCESS, ipAddress);

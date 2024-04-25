@@ -84,10 +84,10 @@ public class CfDailyParkingStatistcsServiceImpl implements CfDailyParkingStatist
     @Override
     public CfDailyParkingStatistcs findById(String id, boolean expectEmpty) {
         CfDailyParkingStatistcs cfDailyParkingStatistcs = findById(id);
-        if(expectEmpty && cfDailyParkingStatistcs!=null){
+        if (expectEmpty && cfDailyParkingStatistcs != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpty && cfDailyParkingStatistcs==null){
+        if (!expectEmpty && cfDailyParkingStatistcs == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfDailyParkingStatistcs;
@@ -97,52 +97,52 @@ public class CfDailyParkingStatistcsServiceImpl implements CfDailyParkingStatist
     public CfDailyParkingStatistcsExample getExampleByQuery(CfDailyParkingStatistcsQuery cfDailyParkingStatistcsQuery) {
         CfDailyParkingStatistcsExample cfDailyParkingStatistcsExample = new CfDailyParkingStatistcsExample();
         CfDailyParkingStatistcsExample.Criteria criteria = cfDailyParkingStatistcsExample.createCriteria();
-        if(cfDailyParkingStatistcsQuery.getCarparkId()!=null){
+        if (cfDailyParkingStatistcsQuery.getCarparkId() != null) {
             criteria.andCarparkIdEqualTo(cfDailyParkingStatistcsQuery.getCarparkId());
         }
-        if(cfDailyParkingStatistcsQuery.getMinStartTime()!=null){
+        if (cfDailyParkingStatistcsQuery.getMinStartTime() != null) {
             criteria.andStartTimeGreaterThanOrEqualTo(cfDailyParkingStatistcsQuery.getMinStartTime());
         }
-        if(cfDailyParkingStatistcsQuery.getMaxStartTime()!=null){
+        if (cfDailyParkingStatistcsQuery.getMaxStartTime() != null) {
             criteria.andStartTimeLessThanOrEqualTo(cfDailyParkingStatistcsQuery.getMaxStartTime());
         }
-        if(cfDailyParkingStatistcsQuery.getMinEndTime()!=null){
+        if (cfDailyParkingStatistcsQuery.getMinEndTime() != null) {
             criteria.andEndTimeGreaterThanOrEqualTo(cfDailyParkingStatistcsQuery.getMinEndTime());
         }
-        if(cfDailyParkingStatistcsQuery.getMaxEndTime()!=null){
+        if (cfDailyParkingStatistcsQuery.getMaxEndTime() != null) {
             criteria.andEndTimeLessThanOrEqualTo(cfDailyParkingStatistcsQuery.getMaxEndTime());
         }
-        if(cfDailyParkingStatistcsQuery.getYear()!=null){
+        if (cfDailyParkingStatistcsQuery.getYear() != null) {
             criteria.andYearEqualTo(cfDailyParkingStatistcsQuery.getYear());
         }
-        if(cfDailyParkingStatistcsQuery.getMinYear()!=null){
+        if (cfDailyParkingStatistcsQuery.getMinYear() != null) {
             criteria.andYearGreaterThanOrEqualTo(cfDailyParkingStatistcsQuery.getMinYear());
         }
-        if(cfDailyParkingStatistcsQuery.getMaxYear()!=null){
+        if (cfDailyParkingStatistcsQuery.getMaxYear() != null) {
             criteria.andYearLessThanOrEqualTo(cfDailyParkingStatistcsQuery.getMaxYear());
         }
-        if(cfDailyParkingStatistcsQuery.getMonth()!=null){
+        if (cfDailyParkingStatistcsQuery.getMonth() != null) {
             criteria.andMonthEqualTo(cfDailyParkingStatistcsQuery.getMonth());
         }
-        if(cfDailyParkingStatistcsQuery.getMinMonth()!=null){
+        if (cfDailyParkingStatistcsQuery.getMinMonth() != null) {
             criteria.andMonthGreaterThanOrEqualTo(cfDailyParkingStatistcsQuery.getMinMonth());
         }
-        if(cfDailyParkingStatistcsQuery.getMaxMonth()!=null){
+        if (cfDailyParkingStatistcsQuery.getMaxMonth() != null) {
             criteria.andMonthLessThanOrEqualTo(cfDailyParkingStatistcsQuery.getMaxMonth());
         }
-        if(cfDailyParkingStatistcsQuery.getDate()!=null){
+        if (cfDailyParkingStatistcsQuery.getDate() != null) {
             criteria.andDateEqualTo(cfDailyParkingStatistcsQuery.getDate());
         }
-        if(cfDailyParkingStatistcsQuery.getMinDate()!=null){
+        if (cfDailyParkingStatistcsQuery.getMinDate() != null) {
             criteria.andDateGreaterThanOrEqualTo(cfDailyParkingStatistcsQuery.getMinDate());
         }
-        if(cfDailyParkingStatistcsQuery.getMaxDate()!=null){
+        if (cfDailyParkingStatistcsQuery.getMaxDate() != null) {
             criteria.andDateLessThanOrEqualTo(cfDailyParkingStatistcsQuery.getMaxDate());
         }
-        if(StringUtils.isNotEmpty(cfDailyParkingStatistcsQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfDailyParkingStatistcsQuery.getOrderBy())) {
             cfDailyParkingStatistcsExample.setOrderByClause(cfDailyParkingStatistcsQuery.getOrderBy());
         }
-        if(cfDailyParkingStatistcsQuery.getPage()!=null && cfDailyParkingStatistcsQuery.getSize()!=null){
+        if (cfDailyParkingStatistcsQuery.getPage() != null && cfDailyParkingStatistcsQuery.getSize() != null) {
             PageHelper.startPage(cfDailyParkingStatistcsQuery.getPage(), cfDailyParkingStatistcsQuery.getSize());
         }
         return cfDailyParkingStatistcsExample;
@@ -164,16 +164,16 @@ public class CfDailyParkingStatistcsServiceImpl implements CfDailyParkingStatist
         //查询所有停车场
         CfCarParkQuery cfCarParkQuery = new CfCarParkQuery();
         List<CfCarPark> cfCarParkList = cfCarParkService.getListByQuery(cfCarParkQuery);
-        if(cfCarParkList!=null && cfCarParkList.size()>0){
-            for (CfCarPark cfCarPark: cfCarParkList){
-                statisticsDatas(dateStr, startTime, endTime, cfCarPark,countMonth);
+        if (cfCarParkList != null && cfCarParkList.size() > 0) {
+            for (CfCarPark cfCarPark : cfCarParkList) {
+                statisticsDatas(dateStr, startTime, endTime, cfCarPark, countMonth);
             }
         }
         //统计所有
         CfCarPark cfCarPark = new CfCarPark();
         cfCarPark.setId("");
         cfCarPark.setName("总计");
-        statisticsDatas(dateStr, startTime, endTime, cfCarPark,countMonth);
+        statisticsDatas(dateStr, startTime, endTime, cfCarPark, countMonth);
     }
 
     private void statisticsDatas(String dayStr, Long startTime, Long endTime, CfCarPark cfCarPark, boolean countMonth) throws Exception {
@@ -182,27 +182,27 @@ public class CfDailyParkingStatistcsServiceImpl implements CfDailyParkingStatist
         CfDailyParkingStatistcsQuery cfDailyParkingStatistcsQuery = new CfDailyParkingStatistcsQuery();
         cfDailyParkingStatistcsQuery.setYear(new Integer(todayArr[0]).shortValue());
         cfDailyParkingStatistcsQuery.setMonth(new Integer(todayArr[1]).byteValue());
-        if(!countMonth){
+        if (!countMonth) {
             cfDailyParkingStatistcsQuery.setDate(new Integer(todayArr[2]).byteValue());
-        }else{
-            cfDailyParkingStatistcsQuery.setDate((byte)0);
+        } else {
+            cfDailyParkingStatistcsQuery.setDate((byte) 0);
         }
         cfDailyParkingStatistcsQuery.setCarparkId(cfCarPark.getId());
         List<CfDailyParkingStatistcs> cfDailyParkingStatistcsList = getListByQuery(cfDailyParkingStatistcsQuery);
 
         CfDailyParkingStatistcs cfDailyParkingStatistcs = new CfDailyParkingStatistcs();
 
-        if(!countMonth){
-            cfDailyParkingStatistcs.setTitle(dayStr+"-"+cfCarPark.getName()+"停车数据统计");
-        }else{
-            cfDailyParkingStatistcs.setTitle(todayArr[0]+"-"+todayArr[1]+"-"+cfCarPark.getName()+"停车数据统计");
+        if (!countMonth) {
+            cfDailyParkingStatistcs.setTitle(dayStr + "-" + cfCarPark.getName() + "停车数据统计");
+        } else {
+            cfDailyParkingStatistcs.setTitle(todayArr[0] + "-" + todayArr[1] + "-" + cfCarPark.getName() + "停车数据统计");
         }
         cfDailyParkingStatistcs.setYear(new Integer(todayArr[0]).shortValue());
         cfDailyParkingStatistcs.setMonth(new Integer(todayArr[1]).byteValue());
-        if(!countMonth){
+        if (!countMonth) {
             cfDailyParkingStatistcs.setDate(new Integer(todayArr[2]).byteValue());
-        }else{
-            cfDailyParkingStatistcs.setDate((byte)0);
+        } else {
+            cfDailyParkingStatistcs.setDate((byte) 0);
         }
         cfDailyParkingStatistcs.setCarparkId(cfCarPark.getId());
         cfDailyParkingStatistcs.setStartTime(startTime);
@@ -215,32 +215,32 @@ public class CfDailyParkingStatistcsServiceImpl implements CfDailyParkingStatist
         cfCarParkUseLogQuery.setMaxCreateTime(cfDailyParkingStatistcs.getEndTime());
         cfDailyParkingStatistcs.setParkingCounts(cfCarParkUseLogService.getCountByQuery(cfCarParkUseLogQuery));
         //各种车牌颜色数量
-        cfCarParkUseLogQuery.setCarNumberPlateColor((byte)1);
+        cfCarParkUseLogQuery.setCarNumberPlateColor((byte) 1);
         cfDailyParkingStatistcs.setBlueNumberPlateCounts(cfCarParkUseLogService.getCountByQuery(cfCarParkUseLogQuery));
-        cfCarParkUseLogQuery.setCarNumberPlateColor((byte)2);
+        cfCarParkUseLogQuery.setCarNumberPlateColor((byte) 2);
         cfDailyParkingStatistcs.setYellowNumberPlateCounts(cfCarParkUseLogService.getCountByQuery(cfCarParkUseLogQuery));
-        cfCarParkUseLogQuery.setCarNumberPlateColor((byte)5);
+        cfCarParkUseLogQuery.setCarNumberPlateColor((byte) 5);
         cfDailyParkingStatistcs.setGreenNumberPlateCounts(cfCarParkUseLogService.getCountByQuery(cfCarParkUseLogQuery));
         //临时停车数
         cfCarParkUseLogQuery.setCarNumberPlateColor(null);
         cfCarParkUseLogQuery.setCarType("temporary_car");
         cfDailyParkingStatistcs.setParkingTemporaryCounts(cfCarParkUseLogService.getCountByQuery(cfCarParkUseLogQuery));
         //总车位
-        if(cfCarPark==null || StringUtils.isEmpty(cfCarPark.getId())){
+        if (cfCarPark == null || StringUtils.isEmpty(cfCarPark.getId())) {
             CfCarParkQuery cfCarParkQuery = new CfCarParkQuery();
             cfCarParkQuery.setCountField("parking_space_number");
             cfDailyParkingStatistcs.setParkingSpace(cfCarParkService.countByField(cfCarParkQuery).intValue());
             //已使用车位数
             cfCarParkQuery.setCountField("used_parking_space_number");
             cfDailyParkingStatistcs.setParkingUsedSpace(cfCarParkService.countByField(cfCarParkQuery).intValue());
-        }else{
-            if(cfCarPark!=null){
+        } else {
+            if (cfCarPark != null) {
                 cfDailyParkingStatistcs.setParkingSpace(cfCarPark.getParkingSpaceNumber());
-                if(cfCarPark.getUsedParkingSpaceNumber().intValue()>cfCarPark.getParkingSpaceNumber().intValue()){
+                if (cfCarPark.getUsedParkingSpaceNumber().intValue() > cfCarPark.getParkingSpaceNumber().intValue()) {
                     cfDailyParkingStatistcs.setParkingUsedSpace(cfCarPark.getParkingSpaceNumber());
-                }else if(cfCarPark.getUsedParkingSpaceNumber().intValue()<0){
+                } else if (cfCarPark.getUsedParkingSpaceNumber().intValue() < 0) {
                     cfDailyParkingStatistcs.setParkingUsedSpace(0);
-                }else{
+                } else {
                     cfDailyParkingStatistcs.setParkingUsedSpace(cfCarPark.getUsedParkingSpaceNumber());
                 }
             }
@@ -255,7 +255,7 @@ public class CfDailyParkingStatistcsServiceImpl implements CfDailyParkingStatist
         cfCarParkReleaseLogQuery.setCarparkId(cfCarPark.getId());
         cfCarParkReleaseLogQuery.setMinApplicationTime(cfDailyParkingStatistcs.getStartTime());
         cfCarParkReleaseLogQuery.setMaxApplicationTime(cfDailyParkingStatistcs.getEndTime());
-        cfCarParkReleaseLogQuery.setType((byte)2);
+        cfCarParkReleaseLogQuery.setType((byte) 2);
         cfDailyParkingStatistcs.setParkingAbnormalReleaseCounts(cfCarParkReleaseLogService.getCountByQuery(cfCarParkReleaseLogQuery));
         //总停车时间
         cfCarParkUseLogQuery.setCarType(null);
@@ -265,19 +265,19 @@ public class CfDailyParkingStatistcsServiceImpl implements CfDailyParkingStatist
         cfCarParkUseLogQuery.setMinOutTime(1l);
         cfCarParkUseLogQuery.setCountField("out_time-in_time");
         Long totalParkingTime = cfCarParkUseLogService.countByField(cfCarParkUseLogQuery);
-        if(totalParkingTime==null){
+        if (totalParkingTime == null) {
             totalParkingTime = 0l;
         }
         //统计还未出场的停车时间
         cfCarParkUseLogQuery.setPayTime(0l);
-        cfCarParkUseLogQuery.setMaxInTime(startTime-1000);
+        cfCarParkUseLogQuery.setMaxInTime(startTime - 1000);
         Integer integer = cfCarParkUseLogService.countByQuery(cfCarParkUseLogQuery);
-        Long notOutTotalInTime = (endTime-startTime)*integer.longValue();
-        if(notOutTotalInTime==null){
+        Long notOutTotalInTime = (endTime - startTime) * integer.longValue();
+        if (notOutTotalInTime == null) {
             notOutTotalInTime = 0l;
         }
         //时间统计为秒数
-        cfDailyParkingStatistcs.setParkingTimeCounts(totalParkingTime/1000+notOutTotalInTime/1000);
+        cfDailyParkingStatistcs.setParkingTimeCounts(totalParkingTime / 1000 + notOutTotalInTime / 1000);
         //车辆套餐新购和续费次数
         CfOrderQuery cfOrderQuery = new CfOrderQuery();
         cfOrderQuery.setGoodsId(cfCarPark.getId());
@@ -289,10 +289,10 @@ public class CfDailyParkingStatistcsServiceImpl implements CfDailyParkingStatist
 
 
         //查询今天的停车统计数据
-        if(cfDailyParkingStatistcsList==null || cfDailyParkingStatistcsList.size()==0){
+        if (cfDailyParkingStatistcsList == null || cfDailyParkingStatistcsList.size() == 0) {
             //新增
             add(cfDailyParkingStatistcs);
-        }else{
+        } else {
             //更新
             cfDailyParkingStatistcs.setId(cfDailyParkingStatistcsList.get(0).getId());
             update(cfDailyParkingStatistcs);

@@ -32,6 +32,7 @@ public interface CfCarParkReleaseLogMapper {
 
     /**
      * 根据条件查询放行记录数据列表
+     *
      * @param conditions
      * @return
      */
@@ -39,6 +40,7 @@ public interface CfCarParkReleaseLogMapper {
 
     /**
      * 根据条件查询放行记录数据列表数
+     *
      * @param conditions
      * @return
      */
@@ -46,6 +48,7 @@ public interface CfCarParkReleaseLogMapper {
 
     /**
      * 更新(值为null的字段会被忽略掉)
+     *
      * @param record
      * @return
      */
@@ -53,6 +56,7 @@ public interface CfCarParkReleaseLogMapper {
 
     /**
      * 统计N天前的放行次数，并按倒序排序
+     *
      * @param day
      * @return
      */

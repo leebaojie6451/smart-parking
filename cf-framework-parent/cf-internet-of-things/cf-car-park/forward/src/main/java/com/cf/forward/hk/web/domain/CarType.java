@@ -2,7 +2,7 @@ package com.cf.forward.hk.web.domain;
 
 public class CarType {
 
-    public static String getCarType( String carType ) {
+    public static String getCarType(String carType) {
         switch (carType) {
             case "0":
                 return "未知";

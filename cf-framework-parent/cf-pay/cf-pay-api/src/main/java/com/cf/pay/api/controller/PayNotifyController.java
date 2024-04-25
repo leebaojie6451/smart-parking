@@ -1,6 +1,5 @@
 package com.cf.pay.api.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.cf.framework.utils.Snowflake;
 import com.cf.pay.api.swagger.PayNotifySwagger;
 import com.cf.pay.service.AlipayService;
@@ -45,9 +44,9 @@ public class PayNotifyController implements PayNotifySwagger {
     @RequestMapping(value = "AliPayNotify")
     public String AliPayNotify(HttpServletRequest request) throws Exception {
         //获取支付宝POST过来反馈信息
-        Map<String,String> params = new HashMap<String,String>();
+        Map<String, String> params = new HashMap<String, String>();
         Map requestParams = request.getParameterMap();
-        for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+        for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext(); ) {
             String name = (String) iter.next();
             String[] values = (String[]) requestParams.get(name);
             String valueStr = "";
@@ -65,7 +64,7 @@ public class PayNotifyController implements PayNotifySwagger {
 
     @Override
     @RequestMapping(value = "WxinPayNotify")
-    public String WxinPayNotify(HttpServletRequest httpServletRequest) throws Exception{
+    public String WxinPayNotify(HttpServletRequest httpServletRequest) throws Exception {
         InputStream is = null;
         String xmlBack = "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[报文为空]]></return_msg></xml> ";
         StringBuilder sb = null;
@@ -80,7 +79,7 @@ public class PayNotifyController implements PayNotifySwagger {
             }
             xmlBack = wxPayService.notify(sb.toString());
         } catch (Exception e) {
-            logger.error("wei_xin_callback_data:"+sb.toString());
+            logger.error("wei_xin_callback_data:" + sb.toString());
             throw e;
         } finally {
             if (is != null) {
@@ -101,7 +100,7 @@ public class PayNotifyController implements PayNotifySwagger {
         Map<String, String> allRequestParam = getAllRequestParam(httpServletRequest);
 
         String notice = null;
-        for ( Map.Entry<String, String> entry: allRequestParam.entrySet()){
+        for (Map.Entry<String, String> entry : allRequestParam.entrySet()) {
             notice = entry.getKey();
             break;
         }
@@ -112,11 +111,11 @@ public class PayNotifyController implements PayNotifySwagger {
     @RequestMapping(value = "duoLaBaoPayNotify")
     public String duoLaBaoPayNotify(HttpServletRequest httpServletRequest) throws Exception {
         Map<String, String> allRequestParam = getAllRequestParam(httpServletRequest);
-        if(StringUtils.isNotEmpty(httpServletRequest.getHeader("timestamp"))){
-            allRequestParam.put("timestamp",httpServletRequest.getHeader("timestamp"));
+        if (StringUtils.isNotEmpty(httpServletRequest.getHeader("timestamp"))) {
+            allRequestParam.put("timestamp", httpServletRequest.getHeader("timestamp"));
         }
-        if(StringUtils.isNotEmpty(httpServletRequest.getHeader("token"))){
-            allRequestParam.put("token",httpServletRequest.getHeader("token"));
+        if (StringUtils.isNotEmpty(httpServletRequest.getHeader("token"))) {
+            allRequestParam.put("token", httpServletRequest.getHeader("token"));
         }
         return wxPayService.duoLaBaoNotify(allRequestParam);
     }

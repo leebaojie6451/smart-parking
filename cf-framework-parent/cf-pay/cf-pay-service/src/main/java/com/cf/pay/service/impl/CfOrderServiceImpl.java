@@ -113,15 +113,15 @@ public class CfOrderServiceImpl implements CfOrderService {
 
     @Override
     public CfOrder add(CfOrder cfOrder) {
-        if(StringUtils.isEmpty(cfOrder.getId()) || cfOrder.getId().length()<17){
+        if (StringUtils.isEmpty(cfOrder.getId()) || cfOrder.getId().length() < 17) {
             cfOrder.setId(idWorker.nextId());
         }
         cfOrder.setCreateTime(System.currentTimeMillis());
 
-        if(cfOrder.getManualOffer()==null){
+        if (cfOrder.getManualOffer() == null) {
             cfOrder.setManualOffer(new BigDecimal(0.00));
         }
-        if(cfOrder.getCollectionShopId()==null){
+        if (cfOrder.getCollectionShopId() == null) {
             cfOrder.setCollectionShopId("");
         }
         cfOrder.setUpdateTime(System.currentTimeMillis());
@@ -151,9 +151,9 @@ public class CfOrderServiceImpl implements CfOrderService {
     @Override
     public CfOrder findById(String id, Boolean expectEmpty) {
         CfOrder cfOrder = findById(id);
-        if(cfOrder==null && !expectEmpty){
+        if (cfOrder == null && !expectEmpty) {
             ExceptionCast.cast(PayCode.ORDER_DOES_NOT_EXIST);
-        }else if(cfOrder!=null && expectEmpty){
+        } else if (cfOrder != null && expectEmpty) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
         return cfOrder;
@@ -164,64 +164,64 @@ public class CfOrderServiceImpl implements CfOrderService {
         CfOrderExample cfOrderExample = new CfOrderExample();
         CfOrderExample.Criteria criteria = cfOrderExample.createCriteria();
 
-        if(cfOrderQuery.getRandomId()!=null){
+        if (cfOrderQuery.getRandomId() != null) {
             criteria.andRandomIdEqualTo(cfOrderQuery.getRandomId());
         }
-        if(cfOrderQuery.getUid()!=null){
+        if (cfOrderQuery.getUid() != null) {
             criteria.andUidEqualTo(cfOrderQuery.getUid());
         }
-        if(cfOrderQuery.getHandleUid()!=null){
+        if (cfOrderQuery.getHandleUid() != null) {
             criteria.andHandleUidEqualTo(cfOrderQuery.getHandleUid());
         }
-        if(cfOrderQuery.getGoodsId()!=null){
+        if (cfOrderQuery.getGoodsId() != null) {
             criteria.andGoodsIdEqualTo(cfOrderQuery.getGoodsId());
         }
-        if(cfOrderQuery.getGoodsIds()!=null && cfOrderQuery.getGoodsIds().size()>0){
+        if (cfOrderQuery.getGoodsIds() != null && cfOrderQuery.getGoodsIds().size() > 0) {
             criteria.andGoodsIdIn(cfOrderQuery.getGoodsIds());
         }
-        if(cfOrderQuery.getShopId()!=null){
+        if (cfOrderQuery.getShopId() != null) {
             criteria.andShopIdEqualTo(cfOrderQuery.getShopId());
         }
-        if(cfOrderQuery.getGoodsType()!=null){
+        if (cfOrderQuery.getGoodsType() != null) {
             criteria.andGoodsTypeEqualTo(cfOrderQuery.getGoodsType());
         }
-        if(cfOrderQuery.getStatus()!=null){
+        if (cfOrderQuery.getStatus() != null) {
             criteria.andStatusEqualTo(cfOrderQuery.getStatus());
         }
-        if(cfOrderQuery.getMinCreateTime()!=null && cfOrderQuery.getMinCreateTime()>0){
+        if (cfOrderQuery.getMinCreateTime() != null && cfOrderQuery.getMinCreateTime() > 0) {
             criteria.andCreateTimeGreaterThanOrEqualTo(cfOrderQuery.getMinCreateTime());
         }
-        if(cfOrderQuery.getMaxCreateTime()!=null && cfOrderQuery.getMaxCreateTime()>0){
+        if (cfOrderQuery.getMaxCreateTime() != null && cfOrderQuery.getMaxCreateTime() > 0) {
             criteria.andCreateTimeLessThanOrEqualTo(cfOrderQuery.getMaxCreateTime());
         }
-        if(cfOrderQuery.getMinPayTime()!=null && cfOrderQuery.getMinPayTime()>0){
+        if (cfOrderQuery.getMinPayTime() != null && cfOrderQuery.getMinPayTime() > 0) {
             criteria.andPayTimeGreaterThanOrEqualTo(cfOrderQuery.getMinPayTime());
         }
-        if(cfOrderQuery.getMaxPayTime()!=null && cfOrderQuery.getMaxPayTime()>0){
+        if (cfOrderQuery.getMaxPayTime() != null && cfOrderQuery.getMaxPayTime() > 0) {
             criteria.andPayTimeLessThanOrEqualTo(cfOrderQuery.getMaxPayTime());
         }
-        if(cfOrderQuery.getCollectionShopId()!=null){
+        if (cfOrderQuery.getCollectionShopId() != null) {
             criteria.andCollectionShopIdEqualTo(cfOrderQuery.getCollectionShopId());
         }
-        if(cfOrderQuery.getCollectionOrderId()!=null){
+        if (cfOrderQuery.getCollectionOrderId() != null) {
             criteria.andCollectionOrderIdEqualTo(cfOrderQuery.getCollectionOrderId());
         }
-        if(StringUtils.isNotEmpty(cfOrderQuery.getScoreKeyFlag())){
+        if (StringUtils.isNotEmpty(cfOrderQuery.getScoreKeyFlag())) {
             criteria.andScoreKeyFlagEqualTo(cfOrderQuery.getScoreKeyFlag());
         }
-        if(StringUtils.isNotEmpty(cfOrderQuery.getEffectObject())){
+        if (StringUtils.isNotEmpty(cfOrderQuery.getEffectObject())) {
             criteria.andEffectObjectEqualTo(cfOrderQuery.getEffectObject());
         }
-        if(cfOrderQuery.getMinAmountActuallyPaid()!=null){
+        if (cfOrderQuery.getMinAmountActuallyPaid() != null) {
             criteria.andAmountActuallyPaidGreaterThanOrEqualTo(cfOrderQuery.getMinAmountActuallyPaid());
         }
-        if(cfOrderQuery.getMaxAmountActuallyPaid()!=null){
+        if (cfOrderQuery.getMaxAmountActuallyPaid() != null) {
             criteria.andAmountActuallyPaidLessThanOrEqualTo(cfOrderQuery.getMaxAmountActuallyPaid());
         }
-        if(StringUtils.isNotEmpty(cfOrderQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfOrderQuery.getOrderBy())) {
             cfOrderExample.setOrderByClause(cfOrderQuery.getOrderBy());
         }
-        if(cfOrderQuery.getPage()!=null && cfOrderQuery.getSize()!=null){
+        if (cfOrderQuery.getPage() != null && cfOrderQuery.getSize() != null) {
             PageHelper.startPage(cfOrderQuery.getPage(), cfOrderQuery.getSize());
         }
         return cfOrderExample;
@@ -279,7 +279,7 @@ public class CfOrderServiceImpl implements CfOrderService {
     @Override
     public ResultMap payForOrder(CfOrder cfOrder, String cfUserPaymentAgencyId, String ip) throws Exception {
         CfUserPaymentAgency cfUserPaymentAgency = cfUserPaymentAgencyService.findById(cfUserPaymentAgencyId, false);
-        if(cfOrder.getPayTime()!=null && cfOrder.getPayTime()>0){
+        if (cfOrder.getPayTime() != null && cfOrder.getPayTime() > 0) {
             cfOrder.setUserPaymentAgencyId(cfUserPaymentAgencyId);
             return null;
         }
@@ -289,11 +289,11 @@ public class CfOrderServiceImpl implements CfOrderService {
 //        cfOrder.setCouponId("");
         cfOrder.setUpdateTime(System.currentTimeMillis());
         cfOrder = update(cfOrder);
-        if(cfOrder.getManualOfferSetTime()!=null && (System.currentTimeMillis()-cfOrder.getManualOfferSetTime()<900000) && cfOrder.getManualOffer()!=null && cfOrder.getManualOffer().doubleValue()>0 && cfOrder.getAmountsPayable().doubleValue()>cfOrder.getManualOffer().doubleValue()){
+        if (cfOrder.getManualOfferSetTime() != null && (System.currentTimeMillis() - cfOrder.getManualOfferSetTime() < 900000) && cfOrder.getManualOffer() != null && cfOrder.getManualOffer().doubleValue() > 0 && cfOrder.getAmountsPayable().doubleValue() > cfOrder.getManualOffer().doubleValue()) {
             BigDecimal amountsPayable = cfOrder.getAmountsPayable();
             cfOrder.setAmountsPayable(amountsPayable.subtract(cfOrder.getManualOffer()));
         }
-        if(cfOrder.getAmountsPayable().doubleValue()<=0){
+        if (cfOrder.getAmountsPayable().doubleValue() <= 0) {
             ExceptionCast.cast(PayCode.NO_NEED_TO_PAY);
         }
         return getUnifiedOrderByPaymentAgency(cfUserPaymentAgency, cfOrder, ip);
@@ -310,28 +310,28 @@ public class CfOrderServiceImpl implements CfOrderService {
                 cfThirdPartyLoginQuery.setAppid(cfUserPaymentAgency.getAppid());
                 cfThirdPartyLoginQuery.setPlatform(cfUserPaymentAgency.getUseScenes());
                 List<CfThirdPartyLogin> cfThirdPartyLogins = cfThirdPartyLoginService.getListByQuery(cfThirdPartyLoginQuery);
-                if(cfThirdPartyLogins.size()>0){
+                if (cfThirdPartyLogins.size() > 0) {
                     openid = cfThirdPartyLogins.get(0).getOpenid();
                 }
                 WxPayService wxPayService = new WxPayServiceImpl(cfUserPaymentAgency);
-                if(cfUserPaymentAgency.getAccountNumberNote().equals("yi_sheng_pay")){
+                if (cfUserPaymentAgency.getAccountNumberNote().equals("yi_sheng_pay")) {
                     //易生支付
 
-                }else if(cfUserPaymentAgency.getAccountNumberNote().equals("duo_la_bao")){
+                } else if (cfUserPaymentAgency.getAccountNumberNote().equals("duo_la_bao")) {
                     //哆啦宝
 
-                }else{
+                } else {
                     //微信官方支付
-                    if(cfOrder.getRefundAmount()==null){
+                    if (cfOrder.getRefundAmount() == null) {
                         cfOrder.setRefundAmount(new BigDecimal(0.00));
                     }
-                    if(cfOrder.getRefundAmount().doubleValue()>0){
+                    if (cfOrder.getRefundAmount().doubleValue() > 0) {
                         resultMap = wxPayService.refund(cfOrder.getThirdPartyOrderId(), cfOrder.getAmountActuallyPaid(), cfOrder.getRefundAmount(), cfOrder.getRefundReason());
-                    }else{
-                        try{
+                    } else {
+                        try {
                             resultMap = wxPayService.unifiedOrder(cfOrder.getId(), cfOrder.getAmountsPayable().doubleValue(), cfOrder.getGoodsName(), ip, openid, cfUserPaymentAgency);
-                        }catch (CustomException e){
-                            if(e.getResultCode().mixMessage()!=null && e.getResultCode().mixMessage().equals("201 商户订单号重复")){
+                        } catch (CustomException e) {
+                            if (e.getResultCode().mixMessage() != null && e.getResultCode().mixMessage().equals("201 商户订单号重复")) {
                                 //如果是重复支付，给其再重新生成最新的id
                                 String newOrderId = idWorker.nextId();
                                 flushOrderId(newOrderId, cfOrder.getId());
@@ -344,16 +344,16 @@ public class CfOrderServiceImpl implements CfOrderService {
             case "wei_xin_app_pay_cny":
                 openid = null;
                 wxPayService = new WxPayServiceImpl(cfUserPaymentAgency);
-                if(cfOrder.getRefundAmount()==null){
+                if (cfOrder.getRefundAmount() == null) {
                     cfOrder.setRefundAmount(new BigDecimal(0.00));
                 }
-                if(cfOrder.getRefundAmount().doubleValue()>0){
+                if (cfOrder.getRefundAmount().doubleValue() > 0) {
                     resultMap = wxPayService.refund(cfOrder.getThirdPartyOrderId(), cfOrder.getAmountActuallyPaid(), cfOrder.getRefundAmount(), cfOrder.getRefundReason());
-                }else{
-                    try{
+                } else {
+                    try {
                         resultMap = wxPayService.unifiedOrder(cfOrder.getId(), cfOrder.getAmountsPayable().doubleValue(), cfOrder.getGoodsName(), ip, openid, cfUserPaymentAgency);
-                    }catch (CustomException e){
-                        if(e.getResultCode().mixMessage()!=null && e.getResultCode().mixMessage().equals("201 商户订单号重复")){
+                    } catch (CustomException e) {
+                        if (e.getResultCode().mixMessage() != null && e.getResultCode().mixMessage().equals("201 商户订单号重复")) {
                             //如果是重复支付，给其再重新生成最新的id
                             String newOrderId = idWorker.nextId();
                             flushOrderId(newOrderId, cfOrder.getId());
@@ -369,11 +369,11 @@ public class CfOrderServiceImpl implements CfOrderService {
                 cfThirdPartyLoginQuery.setAppid(cfUserPaymentAgency.getAppid());
                 cfThirdPartyLoginQuery.setPlatform(cfUserPaymentAgency.getUseScenes());
                 cfThirdPartyLogins = cfThirdPartyLoginService.getListByQuery(cfThirdPartyLoginQuery);
-                if(cfThirdPartyLogins.size()>0){
+                if (cfThirdPartyLogins.size() > 0) {
                     openid = cfThirdPartyLogins.get(0).getOpenid();
                 }
                 wxPayService = new WxPayServiceImpl(cfUserPaymentAgency);
-                if(!cfUserPaymentAgency.getAccountNumberNote().equals("yi_sheng_pay")) {
+                if (!cfUserPaymentAgency.getAccountNumberNote().equals("yi_sheng_pay")) {
                     if (cfOrder.getRefundAmount() == null) {
                         cfOrder.setRefundAmount(new BigDecimal(0.00));
                     }
@@ -388,7 +388,7 @@ public class CfOrderServiceImpl implements CfOrderService {
                                 String newOrderId = idWorker.nextId();
                                 flushOrderId(newOrderId, cfOrder.getId());
                                 //                            resultMap = wxPayService.unifiedOrder(newOrderId, cfOrder.getAmountsPayable().doubleValue(), cfOrder.getGoodsName(), ip, openid);
-                            }else{
+                            } else {
                                 logger.error("wei_xin_order_error");
                                 logger.error(e.getResultCode().mixMessage());
                                 logger.error(JSONObject.toJSONString(cfOrder));
@@ -397,38 +397,38 @@ public class CfOrderServiceImpl implements CfOrderService {
                         }
 
                     }
-                }else{
+                } else {
                     //易生支付
-                    if(cfThirdPartyLogins.size()>0){
+                    if (cfThirdPartyLogins.size() > 0) {
                         openid = cfThirdPartyLogins.get(0).getOpenid();
                     }
-                    if(cfOrder.getRefundAmount()==null){
+                    if (cfOrder.getRefundAmount() == null) {
                         cfOrder.setRefundAmount(new BigDecimal(0.00));
                     }
 
                     Map<String, String> params = new HashMap<>();
-                    params.put("openid",openid);
-                    params.put("channelid",cfUserPaymentAgency.getPayKey());
-                    params.put("merid",cfUserPaymentAgency.getSubMchId());
-                    params.put("termid",cfUserPaymentAgency.getSubAppid());
-                    params.put("opt","wxPreOrder");
-                    params.put("tradetype","JSAPI");
-                    params.put("tradetrace",cfOrder.getId());
-                    params.put("tradeamt",String.valueOf((int)(cfOrder.getAmountsPayable().doubleValue()*100)));
-                    params.put("body","电子支付结算");
+                    params.put("openid", openid);
+                    params.put("channelid", cfUserPaymentAgency.getPayKey());
+                    params.put("merid", cfUserPaymentAgency.getSubMchId());
+                    params.put("termid", cfUserPaymentAgency.getSubAppid());
+                    params.put("opt", "wxPreOrder");
+                    params.put("tradetype", "JSAPI");
+                    params.put("tradetrace", cfOrder.getId());
+                    params.put("tradeamt", String.valueOf((int) (cfOrder.getAmountsPayable().doubleValue() * 100)));
+                    params.put("body", "电子支付结算");
                     params.put("notifyurl", cfUserPaymentAgency.getPayNotifyUrl());
-                    params.put("version","2");
+                    params.put("version", "2");
                     params.put("sign", SignUtil.getSign(params, cfUserPaymentAgency.getSecret()));
 
                     Connection.Response result = HttpUtils.post("https://open.eycard.cn:8443/WorthTech_Access_AppPaySystemV2/apppayacc", params, HttpUtils.FORM_TYPE);
                     Map jsonObject = JSONObject.parseObject(result.body());
-                    if(!jsonObject.get("resultcode").toString().equals("00")){
-                        System.out.println("提交的参数:"+params);
-                        System.out.println("接口返回:"+jsonObject);
+                    if (!jsonObject.get("resultcode").toString().equals("00")) {
+                        System.out.println("提交的参数:" + params);
+                        System.out.println("接口返回:" + jsonObject);
                         ExceptionCast.cast(PayCode.WECHAT_PAY_FAILED_TO_PLACE_A_UNIFIED_ORDER, jsonObject.get("returnmsg").toString());
                     }
                     Map prepayid = JSONObject.parseObject(jsonObject.get("prepayid").toString());
-                    prepayid.put("sign",prepayid.get("paySign"));
+                    prepayid.put("sign", prepayid.get("paySign"));
                     prepayid.remove("paySign");
                     resultMap = ResultMap.ok().put("data", prepayid);
                 }
@@ -440,15 +440,15 @@ public class CfOrderServiceImpl implements CfOrderService {
                 cfThirdPartyLoginQuery.setPlatform(cfUserPaymentAgency.getUseScenes());
                 cfThirdPartyLogins = cfThirdPartyLoginService.getListByQuery(cfThirdPartyLoginQuery);
                 openid = "";
-                if(cfUserPaymentAgency.getAccountNumberNote().equals("duo_la_bao")){
+                if (cfUserPaymentAgency.getAccountNumberNote().equals("duo_la_bao")) {
                     //哆啦宝
 
                     Map<String, Object> returnMap = new HashMap<>();
 
 
                     resultMap = ResultMap.ok().put("data", returnMap);
-                }else{
-                    if(cfThirdPartyLogins == null || cfThirdPartyLogins.size()==0){
+                } else {
+                    if (cfThirdPartyLogins == null || cfThirdPartyLogins.size() == 0) {
                         return null;
                     }
                     Object alipayConfig = alipayService.initAlipayConfig(cfUserPaymentAgency);
@@ -458,9 +458,9 @@ public class CfOrderServiceImpl implements CfOrderService {
                 break;
             case "ali_h5_pay_cny":
                 Object alipayConfig = alipayService.initAlipayConfig(cfUserPaymentAgency);
-                if(!cfUserPaymentAgency.getAccountNumberNote().equals("yi_sheng_pay")) {
-                    resultMap = alipayService.doPay(cfOrder, "wap",alipayConfig);
-                }else{
+                if (!cfUserPaymentAgency.getAccountNumberNote().equals("yi_sheng_pay")) {
+                    resultMap = alipayService.doPay(cfOrder, "wap", alipayConfig);
+                } else {
                     //易生支付
 
                 }
@@ -475,39 +475,39 @@ public class CfOrderServiceImpl implements CfOrderService {
     @Override
     public void handlePaySuccessfulOrder(CfOrder cfOrder) {
         update(cfOrder);
-        switch (cfOrder.getGoodsType()){
-            case (byte)1:
+        switch (cfOrder.getGoodsType()) {
+            case (byte) 1:
                 CfCarParkUseLog cfCarParkUseLog = cfCarParkUseLogService.findById(cfOrder.getGoodsId(), false);
                 cfCarParkUseLog.setPayTime(System.currentTimeMillis());
                 break;
-            case (byte)5:
+            case (byte) 5:
                 CfCarParkPackagePrice cfCarParkPackagePrice = cfCarParkPackagePriceService.findById(cfOrder.getGoodsId(), false);
                 CfCarParkPackageQuery cfCarParkPackageQuery = new CfCarParkPackageQuery();
                 cfCarParkPackageQuery.setCarParkId(cfCarParkPackagePrice.getCarParkId());
                 cfCarParkPackageQuery.setNumberPlate(cfOrder.getEffectObject());
                 List<CfCarParkPackage> cfCarParkPackages = cfCarParkPackageService.getListByQuery(cfCarParkPackageQuery);
-                if(cfCarParkPackages==null ||cfCarParkPackages.size()==0){
+                if (cfCarParkPackages == null || cfCarParkPackages.size() == 0) {
                     CfCarParkPackage cfCarParkPackage = new CfCarParkPackage();
                     cfCarParkPackage.setCarParkId(cfCarParkPackagePrice.getCarParkId());
                     cfCarParkPackage.setTypeKey(cfCarParkPackagePrice.getFlagKey());
                     cfCarParkPackage.setStartTime(System.currentTimeMillis());
-                    cfCarParkPackage.setEndTime(System.currentTimeMillis()+cfCarParkPackagePrice.getTimeQuota());
+                    cfCarParkPackage.setEndTime(System.currentTimeMillis() + cfCarParkPackagePrice.getTimeQuota());
                     cfCarParkPackage.setCreateTime(System.currentTimeMillis());
                     cfCarParkPackage.setUid(cfOrder.getUid());
                     cfCarParkPackage.setNumberPlate(cfOrder.getEffectObject());
                     cfCarParkPackageService.add(cfCarParkPackage);
-                }else{
+                } else {
                     long oldEndTime = cfCarParkPackages.get(0).getEndTime();
-                    if(oldEndTime>System.currentTimeMillis()){
-                        cfCarParkPackages.get(0).setEndTime(oldEndTime+cfCarParkPackagePrice.getTimeQuota());
-                    }else{
-                        cfCarParkPackages.get(0).setEndTime(System.currentTimeMillis()+cfCarParkPackagePrice.getTimeQuota());
+                    if (oldEndTime > System.currentTimeMillis()) {
+                        cfCarParkPackages.get(0).setEndTime(oldEndTime + cfCarParkPackagePrice.getTimeQuota());
+                    } else {
+                        cfCarParkPackages.get(0).setEndTime(System.currentTimeMillis() + cfCarParkPackagePrice.getTimeQuota());
                     }
                     cfCarParkPackageService.update(cfCarParkPackages.get(0));
                     //更新跨区停车场的到期时间
                     cfCarParkPackageQuery.setParentId(cfCarParkPackages.get(0).getId());
                     CfCarParkPackage parkPackage = new CfCarParkPackage();
-                    parkPackage.setEndTime(oldEndTime+cfCarParkPackagePrice.getTimeQuota());
+                    parkPackage.setEndTime(oldEndTime + cfCarParkPackagePrice.getTimeQuota());
                     cfCarParkPackageService.updateByQuery(cfCarParkPackageQuery, parkPackage);
                 }
                 break;
@@ -526,14 +526,14 @@ public class CfOrderServiceImpl implements CfOrderService {
 
     @Override
     public List<CountByDay> yearMonthCountByDay(CfCountFinanceQuery cfCountFinanceQuery) {
-        cfCountFinanceQuery.setDate(cfCountFinanceQuery.getYear()+"-"+cfCountFinanceQuery.getMonth()+"-16"+" 00:00:00");
+        cfCountFinanceQuery.setDate(cfCountFinanceQuery.getYear() + "-" + cfCountFinanceQuery.getMonth() + "-16" + " 00:00:00");
         return cfOrderMapper.yearMonthCountByDay(cfCountFinanceQuery);
     }
 
     @Override
     public List<CountByDay> yearCountByMonth(CfCountFinanceQuery cfCountFinanceQuery) {
-        cfCountFinanceQuery.setDate(cfCountFinanceQuery.getYear()+"-01-01 00:00:00");
-        cfCountFinanceQuery.setEndDate(cfCountFinanceQuery.getYear()+"-12-31 23:59:59");
+        cfCountFinanceQuery.setDate(cfCountFinanceQuery.getYear() + "-01-01 00:00:00");
+        cfCountFinanceQuery.setEndDate(cfCountFinanceQuery.getYear() + "-12-31 23:59:59");
         return cfOrderMapper.yearCountByMonth(cfCountFinanceQuery);
     }
 
@@ -544,17 +544,17 @@ public class CfOrderServiceImpl implements CfOrderService {
 
     @Override
     public Object paySuccessAndupdateOrder(CfOrder cfOrder, BigDecimal paiedTotalFee) throws Exception {
-        if(cfOrder.getStatus()==PayStatus.PAID){
+        if (cfOrder.getStatus() == PayStatus.PAID) {
             return null;
         }
-        if(cfOrder.getGoodsType().equals(GoodsType.CARPARK_PAYMENT) || cfOrder.getGoodsType().equals(GoodsType.MALL_CONSUMPTION)){
+        if (cfOrder.getGoodsType().equals(GoodsType.CARPARK_PAYMENT) || cfOrder.getGoodsType().equals(GoodsType.MALL_CONSUMPTION)) {
             try {
                 carParkUseLogPaySuccessfullHandle(cfOrder, paiedTotalFee);
             } catch (Exception e) {
-                logger.error("停车缴费支付成功后处理出现异常，订单id："+cfOrder.getId());
+                logger.error("停车缴费支付成功后处理出现异常，订单id：" + cfOrder.getId());
                 e.printStackTrace();
             }
-        }else if(cfOrder.getGoodsType().equals(GoodsType.DEPOSIT)){
+        } else if (cfOrder.getGoodsType().equals(GoodsType.DEPOSIT)) {
             CfAccountQuery cfAccountQuery = new CfAccountQuery();
             cfAccountQuery.setUid(cfOrder.getUid());
             cfAccountQuery.setScoreType(cfOrder.getScoreKeyFlag());
@@ -564,22 +564,22 @@ public class CfOrderServiceImpl implements CfOrderService {
             cfOrder.setAmountActuallyPaid(paiedTotalFee);
             cfOrder.setStatus(PayStatus.PAID);
 
-        }else if(cfOrder.getGoodsType().equals(GoodsType.CARPARK_PAYMENT_PACKEAGE)){
+        } else if (cfOrder.getGoodsType().equals(GoodsType.CARPARK_PAYMENT_PACKEAGE)) {
             carParkPackagePaySuccessfullHandle(cfOrder, paiedTotalFee);
-        }else if(cfOrder.getGoodsType().equals(GoodsType.COUPON_ACTIVITY_RECHARGE)){
+        } else if (cfOrder.getGoodsType().equals(GoodsType.COUPON_ACTIVITY_RECHARGE)) {
             //增减活动额度
             CfCouponActivity cfCouponActivity = cfCouponActivityService.findById(cfOrder.getGoodsId());
             CfCouponActivity updateCouponActivity = new CfCouponActivity();
             updateCouponActivity.setId(cfCouponActivity.getId());
-            switch (new Byte(cfOrder.getEffectObject())){
+            switch (new Byte(cfOrder.getEffectObject())) {
                 case CouponType.TIMES_COUPON:   //次数券
-                    updateCouponActivity.setRemainingTimes(cfOrder.getPurchaseQuantity()+cfCouponActivity.getRemainingTimes());
+                    updateCouponActivity.setRemainingTimes(cfOrder.getPurchaseQuantity() + cfCouponActivity.getRemainingTimes());
                     break;
                 case CouponType.AMOUNT_COUPON:  //金额券
                     updateCouponActivity.setTotalIssueQuota((cfCouponActivity.getTotalIssueQuota().add((paiedTotalFee).multiply(cfCouponActivity.getRechargeRatio()))).setScale(2, BigDecimal.ROUND_HALF_UP));
                     break;
                 case CouponType.TIME_COUPON:    //时长券
-                    updateCouponActivity.setRemainingTime(cfOrder.getPurchaseQuantity().longValue()*3600000l+cfCouponActivity.getRemainingTime());
+                    updateCouponActivity.setRemainingTime(cfOrder.getPurchaseQuantity().longValue() * 3600000l + cfCouponActivity.getRemainingTime());
                     break;
                 default:
                     ExceptionCast.cast(CouponActivityCode.ACTIVITY_NOT_MATCH_COUPON_TYPE);
@@ -591,9 +591,9 @@ public class CfOrderServiceImpl implements CfOrderService {
             cfOrder.setStatus(PayStatus.PAID);
         }
 
-        if(StringUtils.isNotEmpty(cfOrder.getUserPaymentAgencyId())){
+        if (StringUtils.isNotEmpty(cfOrder.getUserPaymentAgencyId())) {
             CfUserPaymentAgency cfUserPaymentAgency = cfUserPaymentAgencyService.findById(cfOrder.getUserPaymentAgencyId());
-            if(cfUserPaymentAgency!=null){
+            if (cfUserPaymentAgency != null) {
                 cfOrder.setPaymentAgencyShortName(cfUserPaymentAgency.getPaymentAgencyShortName());
             }
         }
@@ -604,13 +604,13 @@ public class CfOrderServiceImpl implements CfOrderService {
         cfRoleQuery.setPage(1);
         cfRoleQuery.setSize(1);
         List<CfRole> cfRoleList = cfRoleService.getListByQuery(cfRoleQuery);
-        if(cfRoleList!=null && cfRoleList.size()>0){
+        if (cfRoleList != null && cfRoleList.size() > 0) {
             try {
                 CfUserRoleQuery cfUserRoleQuery = new CfUserRoleQuery();
                 cfUserRoleQuery.setRoleId(cfRoleList.get(0).getId());
                 List<CfUserRole> cfUserRoleList = cfUserRoleService.getListByQuery(cfUserRoleQuery);
-                if(cfUserRoleList!=null && cfUserRoleList.size()>0){
-                    for (CfUserRole cfUserRole: cfUserRoleList){
+                if (cfUserRoleList != null && cfUserRoleList.size() > 0) {
+                    for (CfUserRole cfUserRole : cfUserRoleList) {
                         CfUserMessage cfUserMessage = new CfUserMessage();
                         cfUserMessage.setFromUid("0");
                         cfUserMessage.setToUid(cfUserRole.getUid());
@@ -631,16 +631,17 @@ public class CfOrderServiceImpl implements CfOrderService {
 
     /**
      * 停车缴费支付成功后相关业务处理
+     *
      * @param cfOrder
      * @param paiedTotalFee
      * @return
      */
-    private CfOrder carParkUseLogPaySuccessfullHandle(CfOrder cfOrder, BigDecimal paiedTotalFee) throws Exception{
+    private CfOrder carParkUseLogPaySuccessfullHandle(CfOrder cfOrder, BigDecimal paiedTotalFee) throws Exception {
         CfCarParkUseLog cfCarParkUseLog = cfCarParkUseLogService.findById(cfOrder.getGoodsId(), false);
 
         cfOrder.setAmountActuallyPaid(paiedTotalFee);
         cfOrder.setStatus(PayStatus.PAID);
-        if(cfOrder.getGoodsType().equals(GoodsType.CARPARK_PAYMENT)){
+        if (cfOrder.getGoodsType().equals(GoodsType.CARPARK_PAYMENT)) {
             CfCarParkUseLog updateCarParkUseLog = new CfCarParkUseLog();
             updateCarParkUseLog.setId(cfCarParkUseLog.getId());
             updateCarParkUseLog.setPayTime(cfOrder.getPayTime());
@@ -648,7 +649,7 @@ public class CfOrderServiceImpl implements CfOrderService {
             cfCarParkUseLogService.updateByPrimaryKeySelective(updateCarParkUseLog);
         }
         //如果该停车记录存在赠送停车时间进行部分抵扣
-        if(cfCarParkUseLog.getGiveAwayParkTime()>0){
+        if (cfCarParkUseLog.getGiveAwayParkTime() > 0) {
             //更新指定特殊车辆的剩余停车时间(说明本次抵扣后已用完)
             CfCarParkSpecialCarQuery cfCarParkSpecialCarQuery = new CfCarParkSpecialCarQuery();
             cfCarParkSpecialCarQuery.setNumberPlate(cfCarParkUseLog.getNumberPlate());
@@ -658,7 +659,7 @@ public class CfOrderServiceImpl implements CfOrderService {
             cfCarParkSpecialCarQuery.setPage(1);
             cfCarParkSpecialCarQuery.setSize(1);
             List<CfCarParkSpecialCar> cfCarParkSpecialCars = cfCarParkSpecialCarService.getListByQuery(cfCarParkSpecialCarQuery);
-            if(cfCarParkSpecialCars!=null && cfCarParkSpecialCars.size()>0){
+            if (cfCarParkSpecialCars != null && cfCarParkSpecialCars.size() > 0) {
                 CfCarParkSpecialCar cfCarParkSpecialCar = new CfCarParkSpecialCar();
                 cfCarParkSpecialCar.setId(cfCarParkSpecialCars.get(0).getId());
                 cfCarParkSpecialCar.setRemainingParkTime(0l);
@@ -666,47 +667,47 @@ public class CfOrderServiceImpl implements CfOrderService {
             }
         }
         //如果车辆未出场，生成新的停车记录和订单
-        if(cfCarParkUseLog.getOutTime()==0){
+        if (cfCarParkUseLog.getOutTime() == 0) {
             carParkUseLogPaySuccessfullNotOutHandle(cfOrder, cfCarParkUseLog);
-        }else{
+        } else {
             CfCarParkUseLog cfCarParkUseLog2 = new CfCarParkUseLog();
             cfCarParkUseLog2.setId(cfCarParkUseLog.getId());
             cfCarParkUseLog2.setOutReleaseType(ReleaseType.AUTO);
             this.cfCarParkUseLogService.updateByPrimaryKeySelective(cfCarParkUseLog2);
             try {
                 cfCarParkUseLog.setCfOrder(cfOrder);
-                cfCarParkReleaseLogService.executeReleaseByCarParkUseLog(cfCarParkUseLog,"自助缴费开闸" ,(byte)1);
+                cfCarParkReleaseLogService.executeReleaseByCarParkUseLog(cfCarParkUseLog, "自助缴费开闸", (byte) 1);
             } catch (Exception e) {
                 //开闸失败不能影响其它账单后续操作，等待5秒后，进行二次开闸
-                logger.error("电子支付成功后开闸失败，准备5秒后尝试二次开闸，停车记录id："+cfCarParkUseLog.getId());
+                logger.error("电子支付成功后开闸失败，准备5秒后尝试二次开闸，停车记录id：" + cfCarParkUseLog.getId());
                 e.printStackTrace();
-                Thread thread = new Thread(){
+                Thread thread = new Thread() {
                     @Override
                     public void run() {
                         try {
                             Thread.sleep(5000); //延时5秒
-                            cfCarParkReleaseLogService.executeReleaseByCarParkUseLog(cfCarParkUseLog,"自助缴费开闸" ,(byte)1);
+                            cfCarParkReleaseLogService.executeReleaseByCarParkUseLog(cfCarParkUseLog, "自助缴费开闸", (byte) 1);
                         } catch (Exception e) {
-                            logger.error("尝试二次开闸失败，停车记录id："+cfCarParkUseLog.getId());
+                            logger.error("尝试二次开闸失败，停车记录id：" + cfCarParkUseLog.getId());
                         }
                     }
                 };
                 thread.start();
             }
             //给值班人员发送即时消息通知
-            if(StringUtils.isNotEmpty(cfCarParkUseLog.getOutHandleUid())){
+            if (StringUtils.isNotEmpty(cfCarParkUseLog.getOutHandleUid())) {
                 try {
                     cfCarParkUseLogService.sendMessage(cfCarParkUseLog, cfCarParkUseLog.getOutHandleUid(), 2);
                 } catch (Exception e) {
                     //通知失败不能影响后续操作
-                    logger.error("电子支付成功后通知岗亭人员失败，停车记录id："+cfCarParkUseLog.getId());
+                    logger.error("电子支付成功后通知岗亭人员失败，停车记录id：" + cfCarParkUseLog.getId());
                 }
             }
         }
 
-        if(StringUtils.isNotEmpty(cfOrder.getCouponId())){
+        if (StringUtils.isNotEmpty(cfOrder.getCouponId())) {
             CfCoupon coupon = cfCouponService.findById(cfOrder.getCouponId());
-            if(coupon!=null && (coupon.getCouponType()!=(byte)1 || (coupon.getCouponType()!=(byte)1 && coupon.getDenomination().intValue()==1))){
+            if (coupon != null && (coupon.getCouponType() != (byte) 1 || (coupon.getCouponType() != (byte) 1 && coupon.getDenomination().intValue() == 1))) {
                 //更新优惠券状态
                 CfCoupon cfCoupon = new CfCoupon();
                 cfCoupon.setId(cfOrder.getCouponId());
@@ -716,7 +717,7 @@ public class CfOrderServiceImpl implements CfOrderService {
                 cfCouponService.updateByPrimaryKeySelective(cfCoupon);
             }
             //次数券未用完，只减次数
-            if(coupon!=null && coupon.getCouponType()==(byte)1 && coupon.getDenomination().intValue()>1){
+            if (coupon != null && coupon.getCouponType() == (byte) 1 && coupon.getDenomination().intValue() > 1) {
                 CfCoupon cfCoupon = new CfCoupon();
                 cfCoupon.setId(cfOrder.getCouponId());
                 cfCoupon.setDenomination(cfCoupon.getDenomination().subtract(new BigDecimal(1)));
@@ -728,19 +729,20 @@ public class CfOrderServiceImpl implements CfOrderService {
 
     /**
      * 支付临停缴费成功但是车辆未出场处理
+     *
      * @param cfOrder
      * @param cfCarParkUseLog
      */
     private void carParkUseLogPaySuccessfullNotOutHandle(CfOrder cfOrder, CfCarParkUseLog cfCarParkUseLog) throws Exception {
-        if(cfCarParkUseLog.getNumberPlate().equals("临A88888")){
+        if (cfCarParkUseLog.getNumberPlate().equals("临A88888")) {
             CfCarParkUseLog cfCarParkUseLog2 = new CfCarParkUseLog();
             cfCarParkUseLog2.setId(cfCarParkUseLog.getId());
             cfCarParkUseLog2.setOutTime(System.currentTimeMillis());
             cfCarParkUseLog2.setPayTime(cfOrder.getPayTime());
             cfCarParkUseLog2.setOutReleaseType(ReleaseType.AUTO);
             cfCarParkUseLogService.updateByPrimaryKeySelective(cfCarParkUseLog2);
-            cfCarParkReleaseLogService.executeReleaseByCarParkUseLog(cfCarParkUseLog,"无牌车自助缴费开闸" ,(byte)1);
-        }else{
+            cfCarParkReleaseLogService.executeReleaseByCarParkUseLog(cfCarParkUseLog, "无牌车自助缴费开闸", (byte) 1);
+        } else {
             CfCarParkUseLog updateCarParkUseLog = new CfCarParkUseLog();
             updateCarParkUseLog.setId(cfCarParkUseLog.getId());
             updateCarParkUseLog.setOutTime(cfOrder.getPayTime());
@@ -764,11 +766,12 @@ public class CfOrderServiceImpl implements CfOrderService {
 
     /**
      * 购买停车套餐支付成功后相关业务处理
+     *
      * @param cfOrder
      * @param paiedTotalFee
      * @return
      */
-    private CfOrder carParkPackagePaySuccessfullHandle(CfOrder cfOrder, BigDecimal paiedTotalFee) throws Exception{
+    private CfOrder carParkPackagePaySuccessfullHandle(CfOrder cfOrder, BigDecimal paiedTotalFee) throws Exception {
         cfOrder.setAmountActuallyPaid(paiedTotalFee);
         cfOrder.setStatus(PayStatus.PAID);
         //找到对应商品(停车套餐)
@@ -777,11 +780,11 @@ public class CfOrderServiceImpl implements CfOrderService {
         CfCarParkPackageQuery cfCarParkPackageQuery = new CfCarParkPackageQuery();
         cfCarParkPackageQuery.setNumberPlate(cfOrder.getEffectObject());
         cfCarParkPackageQuery.setUid(cfOrder.getUid());
-        cfCarParkPackageQuery.setTransRegional((byte)0);
+        cfCarParkPackageQuery.setTransRegional((byte) 0);
         cfCarParkPackageQuery.setPackagePriceId(cfCarParkPackagePrice.getId());
         List<CfCarParkPackage> cfCarParkPackages = cfCarParkPackageService.getListByQuery(cfCarParkPackageQuery);
         CfCarParkPackage cfCarParkPackage = null;
-        if(cfCarParkPackages==null || cfCarParkPackages.size()==0){
+        if (cfCarParkPackages == null || cfCarParkPackages.size() == 0) {
             //不存在，则新建
             cfCarParkPackage = new CfCarParkPackage();
             cfCarParkPackage.setCarParkId(cfCarParkPackagePrice.getCarParkId());
@@ -790,35 +793,35 @@ public class CfOrderServiceImpl implements CfOrderService {
             cfCarParkPackage.setNumberPlate(cfOrder.getEffectObject());
             cfCarParkPackage.setPackagePriceId(cfOrder.getGoodsId());
             cfCarParkPackage.setStartTime(System.currentTimeMillis());
-            cfCarParkPackage.setSpecialGive((byte)0);
-            cfCarParkPackage.setTransRegional((byte)0);
+            cfCarParkPackage.setSpecialGive((byte) 0);
+            cfCarParkPackage.setTransRegional((byte) 0);
             cfCarParkPackage.setParentId("");
             CfUser cfUser = cfUserService.getUserByUid(cfOrder.getUid(), false);
-            if(cfUser!=null){
+            if (cfUser != null) {
                 cfCarParkPackage.setPhone(cfUser.getPhone());
                 cfCarParkPackage.setCarOwnerName(cfUser.getTrueName());
                 cfCarParkPackage.setRemarks("自助购买");
-            }else{
+            } else {
                 cfCarParkPackage.setPhone("");
             }
             cfCarParkPackage.setMainCarParkId(cfCarParkPackagePrice.getCarParkId());
-        }else{
+        } else {
             cfCarParkPackage = cfCarParkPackages.get(0);
         }
-        if(StringUtils.isNotEmpty(cfCarParkPackage.getId())){
+        if (StringUtils.isNotEmpty(cfCarParkPackage.getId())) {
             long oldEndTime = cfCarParkPackages.get(0).getEndTime();
             //更新
-            if(cfCarParkPackage.getEndTime()>System.currentTimeMillis()){
+            if (cfCarParkPackage.getEndTime() > System.currentTimeMillis()) {
                 //延期
                 Long endTime = cfCarParkPackage.getEndTime();
-                cfCarParkPackage.setEndTime(endTime+cfCarParkPackagePrice.getTimeQuota());
-            }else{
+                cfCarParkPackage.setEndTime(endTime + cfCarParkPackagePrice.getTimeQuota());
+            } else {
                 //从现在开始算
-                cfCarParkPackage.setEndTime(System.currentTimeMillis()+cfCarParkPackagePrice.getTimeQuota());
+                cfCarParkPackage.setEndTime(System.currentTimeMillis() + cfCarParkPackagePrice.getTimeQuota());
             }
             //设置是否已经短信通知字段值为 0
-            cfCarParkPackage.setNoticeExpiringSoon((byte)0);
-            cfCarParkPackage.setNoticeExpired((byte)0);
+            cfCarParkPackage.setNoticeExpiringSoon((byte) 0);
+            cfCarParkPackage.setNoticeExpired((byte) 0);
             cfCarParkPackageService.update(cfCarParkPackage);
 
             //更新跨区停车场的到期时间
@@ -827,12 +830,12 @@ public class CfOrderServiceImpl implements CfOrderService {
             CfCarParkPackage parkPackage = new CfCarParkPackage();
             parkPackage.setEndTime(cfCarParkPackage.getEndTime());
             //设置跨区套餐是否已经短信通知字段值为 0
-            parkPackage.setNoticeExpiringSoon((byte)0);
-            parkPackage.setNoticeExpired((byte)0);
+            parkPackage.setNoticeExpiringSoon((byte) 0);
+            parkPackage.setNoticeExpired((byte) 0);
             cfCarParkPackageService.updateByQuery(cfCarParkPackageQuery, parkPackage);
-        }else{
+        } else {
             //新建
-            cfCarParkPackage.setEndTime(System.currentTimeMillis()+cfCarParkPackagePrice.getTimeQuota());
+            cfCarParkPackage.setEndTime(System.currentTimeMillis() + cfCarParkPackagePrice.getTimeQuota());
             cfCarParkPackageService.add(cfCarParkPackage);
         }
         //判断该账单是否存在临停车费追缴代收
@@ -840,10 +843,10 @@ public class CfOrderServiceImpl implements CfOrderService {
         cfOrderQuery.setCollectionOrderId(cfOrder.getId());
         cfOrderQuery.setGoodsType(GoodsType.CARPARK_PAYMENT);
         List<CfOrder> collectionOrderList = getListByQuery(cfOrderQuery);
-        if(collectionOrderList!=null && collectionOrderList.size()>0){
+        if (collectionOrderList != null && collectionOrderList.size() > 0) {
             CfCarParkUseLog collectionCarParkUseLog = cfCarParkUseLogService.findById(collectionOrderList.get(0).getGoodsId());
             //如果该车辆还未支付出场，生成场内订单
-            if(collectionCarParkUseLog!=null && collectionCarParkUseLog.getPayTime()==0){
+            if (collectionCarParkUseLog != null && collectionCarParkUseLog.getPayTime() == 0) {
                 //结束被代缴的停车记录和其账单
                 CfOrder collectionOrder = new CfOrder();
                 collectionOrder.setId(collectionOrderList.get(0).getId());
@@ -870,24 +873,24 @@ public class CfOrderServiceImpl implements CfOrderService {
         CfOrder cfOrder = findById(orderId, false);
         CfUserPaymentAgency cfUserPaymentAgency = cfUserPaymentAgencyService.findById(cfOrder.getUserPaymentAgencyId(), false);
         Object returnObj = null;
-        switch (platform){
+        switch (platform) {
             case "yi_sheng_pay":
                 Map<String, String> params = new HashMap<>();
-                params.put("channelid",cfUserPaymentAgency.getPayKey());
-                params.put("merid",cfUserPaymentAgency.getSubMchId());
-                params.put("termid",cfUserPaymentAgency.getSubAppid());
-                params.put("opt","tradeQuery");
-                params.put("tradetrace",cfOrder.getId());
+                params.put("channelid", cfUserPaymentAgency.getPayKey());
+                params.put("merid", cfUserPaymentAgency.getSubMchId());
+                params.put("termid", cfUserPaymentAgency.getSubAppid());
+                params.put("opt", "tradeQuery");
+                params.put("tradetrace", cfOrder.getId());
                 params.put("sign", SignUtil.getSign(params, cfUserPaymentAgency.getSecret()));
                 String paramsString = "";
                 String pre = "";
                 int i = 0;
-                for(Map.Entry<String, String> param: params.entrySet()){
-                    pre = i==0 ? "?" : "&";
+                for (Map.Entry<String, String> param : params.entrySet()) {
+                    pre = i == 0 ? "?" : "&";
                     paramsString += pre + param.getKey() + "=" + param.getValue();
                     i++;
                 }
-                Connection.Response result = HttpUtils.get("https://open.eycard.cn:8443/WorthTech_Access_AppPaySystemV2/apppayacc"+paramsString);
+                Connection.Response result = HttpUtils.get("https://open.eycard.cn:8443/WorthTech_Access_AppPaySystemV2/apppayacc" + paramsString);
                 returnObj = result.body();
                 break;
             default:
@@ -899,7 +902,7 @@ public class CfOrderServiceImpl implements CfOrderService {
     @Override
     public BigDecimal countByField(CfOrderQuery cfOrderQuery) {
         BigDecimal countByField = cfOrderMapper.countByField(cfOrderQuery);
-        if(countByField==null){
+        if (countByField == null) {
             return new BigDecimal("0.00");
         }
         return countByField;

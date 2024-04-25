@@ -52,7 +52,7 @@ public class CfCarParkVisitController implements CfCarParkVisitSwagger {
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseResult add(@RequestBody CfCarParkVisitForm cfCarParkVisitForm) {
         CfCarParkVisit cfCarParkVisit = new CfCarParkVisit();
-        BeanUtils.copyProperties(cfCarParkVisitForm,cfCarParkVisit);
+        BeanUtils.copyProperties(cfCarParkVisitForm, cfCarParkVisit);
         CfCarParkVisit carParkVisit = cfCarParkVisitService.add(cfCarParkVisit);
         return new ResponseResult(CommonCode.SUCCESS, carParkVisit);
     }
@@ -62,7 +62,7 @@ public class CfCarParkVisitController implements CfCarParkVisitSwagger {
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public ResponseResult update(@RequestBody CfCarParkVisitForm cfCarParkVisitForm) {
         CfCarParkVisit cfCarParkVisit = new CfCarParkVisit();
-        BeanUtils.copyProperties(cfCarParkVisitForm,cfCarParkVisit);
+        BeanUtils.copyProperties(cfCarParkVisitForm, cfCarParkVisit);
         CfCarParkVisit carParkVisit = cfCarParkVisitService.update(cfCarParkVisit);
         return new ResponseResult(CommonCode.SUCCESS, carParkVisit);
     }
@@ -72,7 +72,7 @@ public class CfCarParkVisitController implements CfCarParkVisitSwagger {
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(Long id) {
         Integer delete = cfCarParkVisitService.delete(id);
-        return delete>0 ? new ResponseResult(CommonCode.SUCCESS) : new ResponseResult(CommonCode.FAIL);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS) : new ResponseResult(CommonCode.FAIL);
     }
 
     @PreAuthorize("hasAuthority('carpark-CfCarParkVisitController-getListByQuery')")
@@ -81,11 +81,11 @@ public class CfCarParkVisitController implements CfCarParkVisitSwagger {
     public ResponseResult getListByQuery(CfCarParkVisitQuery cfCarParkVisitQuery) throws Exception {
         limitQuery(cfCarParkVisitQuery);
         List<CfCarParkVisit> cfCarParkVisits = cfCarParkVisitService.getListByQuery(cfCarParkVisitQuery);
-        if(cfCarParkVisits==null || cfCarParkVisits.size()==0){
+        if (cfCarParkVisits == null || cfCarParkVisits.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         Integer countByQuery = cfCarParkVisitService.countByQuery(cfCarParkVisitQuery);
-        return  new ResponseResult(CommonCode.SUCCESS, cfCarParkVisits, countByQuery);
+        return new ResponseResult(CommonCode.SUCCESS, cfCarParkVisits, countByQuery);
     }
 
     @PreAuthorize("hasAuthority('carpark-CfCarParkVisitController-selectContinByQuery')")
@@ -95,26 +95,27 @@ public class CfCarParkVisitController implements CfCarParkVisitSwagger {
         limitQuery(cfCarParkVisitQuery);
         List<CfCarParkVisit> cfCarParkVisits = cfCarParkVisitService.selectContinByQuery(cfCarParkVisitQuery);
         Integer total = 0;
-        if(cfCarParkVisitQuery.getPage()==1){
+        if (cfCarParkVisitQuery.getPage() == 1) {
             total = cfCarParkVisitService.countByQuery(cfCarParkVisitQuery);
         }
-        return cfCarParkVisits!=null && cfCarParkVisits.size()>0 ? new ResponseResult(CommonCode.SUCCESS, cfCarParkVisits, total) : new ResponseResult(CommonCode.NO_MORE_DATAS);
+        return cfCarParkVisits != null && cfCarParkVisits.size() > 0 ? new ResponseResult(CommonCode.SUCCESS, cfCarParkVisits, total) : new ResponseResult(CommonCode.NO_MORE_DATAS);
     }
 
     /**
      * 限制查询条件(非管理人员只能查询自己名下的停车场相关数据)
+     *
      * @param cfCarParkVisitQuery
      * @throws Exception
      */
-    private void limitQuery(CfCarParkVisitQuery cfCarParkVisitQuery) throws Exception{
+    private void limitQuery(CfCarParkVisitQuery cfCarParkVisitQuery) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
 
         List<CfCarParkLinkUser> linkUsers = carParkController.getLinkUsersAndCheck(userBasicInfo);
-        if(linkUsers!=null && linkUsers.size()>0){
-            if(cfCarParkVisitQuery.getCarParkIds()==null){
+        if (linkUsers != null && linkUsers.size() > 0) {
+            if (cfCarParkVisitQuery.getCarParkIds() == null) {
                 cfCarParkVisitQuery.setCarParkIds(new ArrayList<>());
             }
-            for (CfCarParkLinkUser cfCarParkLinkUser: linkUsers){
+            for (CfCarParkLinkUser cfCarParkLinkUser : linkUsers) {
                 cfCarParkVisitQuery.getCarParkIds().add(new Long(cfCarParkLinkUser.getCarParkId()));
             }
         }

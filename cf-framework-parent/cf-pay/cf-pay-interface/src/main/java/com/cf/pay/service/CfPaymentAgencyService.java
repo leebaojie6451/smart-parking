@@ -20,6 +20,7 @@ public interface CfPaymentAgencyService {
 
     /**
      * 根据短名获取数据
+     *
      * @param shortName
      * @return
      */
@@ -27,6 +28,7 @@ public interface CfPaymentAgencyService {
 
     /**
      * 根据短名获取数据
+     *
      * @param shortName
      * @param expectEmpty
      * @return
@@ -35,6 +37,7 @@ public interface CfPaymentAgencyService {
 
     /**
      * 获取指定停车场的支付方式(机构)数据列表
+     *
      * @param carParkId
      * @param useScenes 使用场景
      * @return
@@ -53,18 +56,20 @@ public interface CfPaymentAgencyService {
 
     /**
      * 根据条件查询支付机构数据列表
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public List<CfPaymentAgency> selectListByCondition(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);
 
     /**
      * 根据条件查询支付机构数据列表数
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public Integer selectListByConditionCounts(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);

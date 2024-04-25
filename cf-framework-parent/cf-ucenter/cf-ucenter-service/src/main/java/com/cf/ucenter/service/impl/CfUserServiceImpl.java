@@ -75,7 +75,7 @@ public class CfUserServiceImpl implements CfUserService {
         CfUserExample.Criteria criteria = cfUserExample.createCriteria();
         criteria.andUserNameEqualTo(userName);
         List<CfUser> cfUsers = cfUserMapper.selectByExample(cfUserExample);
-        if(cfUsers==null || cfUsers.size()==0){
+        if (cfUsers == null || cfUsers.size() == 0) {
             return null;
         }
         return cfUsers.get(0);
@@ -88,7 +88,7 @@ public class CfUserServiceImpl implements CfUserService {
 
         criteria.andPhoneEqualTo(phone);
         List<CfUser> cfUsers = cfUserMapper.selectByExample(cfUserExample);
-        if(cfUsers==null || cfUsers.size()==0){
+        if (cfUsers == null || cfUsers.size() == 0) {
             return null;
         }
         return cfUsers.get(0);
@@ -98,10 +98,10 @@ public class CfUserServiceImpl implements CfUserService {
     public CfUser register(String phone, String smsCode, String userName, String password, String nickName) {
         checkUserNameExist(userName);
         checkPhoneExist(phone);
-        smsService.checkCode(phone,smsCode,CfSms.SMS_TYPE_REGISTER);
-        CfUser cfUser = new CfUser(idWorker.nextId(), userName, password, "", (byte)0,
-                nickName, "", phone,"", 0L, (byte)0, "",
-                System.currentTimeMillis(), null, new BigDecimal(0),0l);
+        smsService.checkCode(phone, smsCode, CfSms.SMS_TYPE_REGISTER);
+        CfUser cfUser = new CfUser(idWorker.nextId(), userName, password, "", (byte) 0,
+                nickName, "", phone, "", 0L, (byte) 0, "",
+                System.currentTimeMillis(), null, new BigDecimal(0), 0l);
         add(cfUser);
         return cfUser;
     }
@@ -109,7 +109,7 @@ public class CfUserServiceImpl implements CfUserService {
     @Override
     public void checkUserNameExist(String userName) {
         CfUser byUserName = findByUserName(userName);
-        if(byUserName!=null){
+        if (byUserName != null) {
             ExceptionCast.cast(UcenterCode.UCENTER_USERNAME_EXIST);
         }
     }
@@ -117,7 +117,7 @@ public class CfUserServiceImpl implements CfUserService {
     @Override
     public CfUser checkPhoneExist(String phone) {
         CfUser cfUser = findByPhone(phone);
-        if(cfUser!=null){
+        if (cfUser != null) {
             ExceptionCast.cast(UcenterCode.UCENTER_PHONE_REGISTERED);
         }
         return cfUser;
@@ -126,7 +126,7 @@ public class CfUserServiceImpl implements CfUserService {
     @Override
     public CfUser getUserByUid(String uid, Boolean fillingRole) {
         CfUser cfUser = cfUserMapper.selectByPrimaryKey(uid);
-        if(fillingRole && cfUser!=null){
+        if (fillingRole && cfUser != null) {
             cfUser.setCfRoles(cfRoleService.getRolesByUid(cfUser.getId()));
         }
         return cfUser;
@@ -136,7 +136,7 @@ public class CfUserServiceImpl implements CfUserService {
     public CfUserExt getUserAdministratorByUid(String uid) {
         CfUser cfUser = checkUserExistByUid(uid, false);
         CfUserExt cfUserExt = new CfUserExt();
-        BeanUtils.copyProperties(cfUser,cfUserExt);
+        BeanUtils.copyProperties(cfUser, cfUserExt);
         List<CfRole> cfRoles = cfRoleMapper.selectContainDepartmentByUid(uid);
         cfUserExt.setCfRole(cfRoles);
         List<CfAuth> cfAuths = cfAuthMapper.selectByUid(uid);
@@ -147,10 +147,10 @@ public class CfUserServiceImpl implements CfUserService {
     @Override
     public CfUser checkUserExistByUid(String uid, Boolean expectEmpty) {
         CfUser userByUid = getUserByUid(uid, false);
-        if(expectEmpty && userByUid!=null){
+        if (expectEmpty && userByUid != null) {
             ExceptionCast.cast(UcenterCode.UCENTER_EXIST);
             return null;
-        }else if(!expectEmpty && userByUid==null){
+        } else if (!expectEmpty && userByUid == null) {
             ExceptionCast.cast(UcenterCode.UCENTER_NOT_EXIST);
             return null;
         }
@@ -188,8 +188,8 @@ public class CfUserServiceImpl implements CfUserService {
         String sql = "SELECT u.id,u.user_name,u.avatar,u.type,u.nick_name,u.true_name,u.phone,u.email,u.birthday,u.sex,u.sign,u.create_time FROM cf_user u";
         sql = DbUtils.makeQuery(conditions, allowFiledsMap, allowFileds, sql, false);
         List<CfUser> cfUsers = cfUserMapper.selectListByCondition(sql);
-        if(cfUsers!=null){
-            for (CfUser cfUser: cfUsers){
+        if (cfUsers != null) {
+            for (CfUser cfUser : cfUsers) {
                 cfUser.setCfRoles(cfRoleService.getRolesByUid(cfUser.getId()));
             }
         }
@@ -205,9 +205,9 @@ public class CfUserServiceImpl implements CfUserService {
 
     @Override
     public CfUser update(CfUser cfUser) {
-        if(StringUtils.isEmpty(cfUser.getPassword())){
+        if (StringUtils.isEmpty(cfUser.getPassword())) {
             cfUser.setPassword(null);
-        }else{
+        } else {
             cfUser.setPassword(new BCryptPasswordEncoder().encode(cfUser.getPassword()));
         }
         return directUpdate(cfUser);
@@ -225,7 +225,7 @@ public class CfUserServiceImpl implements CfUserService {
 
     @Override
     public CfUser directUpdate(CfUser cfUser) {
-        if(cfUser.getLastLoginTime()==null){
+        if (cfUser.getLastLoginTime() == null) {
             cfUser.setLastLoginTime(System.currentTimeMillis());
         }
         cfUserMapper.updateByPrimaryKeySelective(cfUser);
@@ -234,7 +234,7 @@ public class CfUserServiceImpl implements CfUserService {
 
     @Override
     public CfUser update(CfUser cfUser, String roleIds) {
-        if(cfUser.getLastLoginTime()==null){
+        if (cfUser.getLastLoginTime() == null) {
             cfUser.setLastLoginTime(System.currentTimeMillis());
         }
         update(cfUser);
@@ -246,14 +246,14 @@ public class CfUserServiceImpl implements CfUserService {
 
     @Override
     public CfUser add(CfUser cfUser) {
-        if(cfUser.getLastLoginTime()==null){
+        if (cfUser.getLastLoginTime() == null) {
             cfUser.setLastLoginTime(System.currentTimeMillis());
         }
         cfUser.setId(idWorker.nextId());
         cfUser.setPassword(new BCryptPasswordEncoder().encode(cfUser.getPassword()));
         cfUser.setCreateTime(System.currentTimeMillis());
         int insert = cfUserMapper.insertSelective(cfUser);
-        if(insert==0){
+        if (insert == 0) {
             ExceptionCast.cast(CommonCode.FAIL);
         }
         //创建用户资金账户
@@ -262,7 +262,7 @@ public class CfUserServiceImpl implements CfUserService {
         cfAccount.setScoreType("cny");
         cfAccount.setBalance(new BigDecimal("0.00"));
         cfAccount.setFreeze(0l);
-        cfAccount.setType((byte)0);
+        cfAccount.setType((byte) 0);
         cfAccount.setCreateTime(System.currentTimeMillis());
         cfAccountService.add(cfAccount);
         return cfUser;
@@ -270,7 +270,7 @@ public class CfUserServiceImpl implements CfUserService {
 
     @Override
     public CfUser add(CfUser cfUser, String roleIds) {
-        if(cfUser.getLastLoginTime()==null){
+        if (cfUser.getLastLoginTime() == null) {
             cfUser.setLastLoginTime(System.currentTimeMillis());
         }
         add(cfUser);
@@ -284,7 +284,7 @@ public class CfUserServiceImpl implements CfUserService {
     public List<CfUserRole> makeCfUserRoles(String uid, String roleIds) {
         String[] cfRoleIds = roleIds.split(",");
         ArrayList<CfUserRole> cfUserRoles = new ArrayList<>();
-        for (String cfRoleId: cfRoleIds){
+        for (String cfRoleId : cfRoleIds) {
             CfUserRole cfUserRole = new CfUserRole();
             cfUserRole.setId(idWorker.nextId());
             cfUserRole.setUid(uid);
@@ -303,7 +303,7 @@ public class CfUserServiceImpl implements CfUserService {
     @Override
     public void recoverPasswordByPhoneAndCode(String phone, String password, String smsCode) {
         CfUser cfUser = findByPhone(phone);
-        if(cfUser==null){
+        if (cfUser == null) {
             ExceptionCast.cast(UcenterCode.PHONE_IS_NOT_REGISTERED);
         }
         updatePasswordByUserAndCode(cfUser, password, smsCode);
@@ -311,14 +311,14 @@ public class CfUserServiceImpl implements CfUserService {
 
     @Override
     public CfUser bindPhone(String uid, String phone, String smsCode) {
-        smsService.checkCode(phone,smsCode,CfSms.SMS_TYPE_IDENTITY);
+        smsService.checkCode(phone, smsCode, CfSms.SMS_TYPE_IDENTITY);
         //判断该手机号是否已经被绑定
         CfUser userByPhone = findByPhone(phone);
-        if(userByPhone!=null){
+        if (userByPhone != null) {
             ExceptionCast.cast(UcenterCode.UCENTER_PHONE_REGISTERED);
         }
         CfUser cfUser = cfUserMapper.selectByPrimaryKey(uid);
-        if(cfUser==null){
+        if (cfUser == null) {
             ExceptionCast.cast(UcenterCode.UCENTER_NOT_EXIST);
         }
         cfUser.setPhone(phone);
@@ -329,7 +329,7 @@ public class CfUserServiceImpl implements CfUserService {
 
     @Override
     public void updatePasswordByUserAndCode(CfUser cfUser, String password, String smsCode) {
-        smsService.checkCode(cfUser.getPhone(),smsCode,CfSms.SMS_TYPE_IDENTITY);
+        smsService.checkCode(cfUser.getPhone(), smsCode, CfSms.SMS_TYPE_IDENTITY);
         cfUser.setPassword(password);
         update(cfUser);
     }
@@ -337,16 +337,16 @@ public class CfUserServiceImpl implements CfUserService {
     @Override
     public CfUser customerBaseUpdate(CfUser cfUser) {
         CfUser user = checkUserExistByUid(cfUser.getId(), false);
-        if(StringUtils.isNotEmpty(cfUser.getNickName())){
+        if (StringUtils.isNotEmpty(cfUser.getNickName())) {
             user.setNickName(cfUser.getNickName());
         }
-        if(StringUtils.isNotEmpty(cfUser.getAvatar())){
+        if (StringUtils.isNotEmpty(cfUser.getAvatar())) {
             user.setAvatar(cfUser.getAvatar());
         }
-        if(StringUtils.isNotEmpty(cfUser.getSign())){
+        if (StringUtils.isNotEmpty(cfUser.getSign())) {
             user.setSign(cfUser.getSign());
         }
-        if(cfUser.getSex()!=null){
+        if (cfUser.getSex() != null) {
             user.setSex(cfUser.getSex());
         }
         directUpdate(user);
@@ -359,25 +359,25 @@ public class CfUserServiceImpl implements CfUserService {
         CfThirdPartyLoginQuery cfThirdPartyLoginQuery = new CfThirdPartyLoginQuery();
         cfThirdPartyLoginQuery.setPlatform(platform);
         String toJSONString = JSONObject.toJSONString(wxUser);
-        if(StringUtils.isNotEmpty(wxUser.getUnionid())){
+        if (StringUtils.isNotEmpty(wxUser.getUnionid())) {
             cfThirdPartyLoginQuery.setUnionid(wxUser.getUnionid());
         }
         cfThirdPartyLoginQuery.setAppid(wxUser.getAppid());
         List<CfThirdPartyLogin> cfThirdPartyLogins = cfThirdPartyLoginService.getListByQuery(cfThirdPartyLoginQuery);
-        if(cfThirdPartyLogins!=null && cfThirdPartyLogins.size()>0){
+        if (cfThirdPartyLogins != null && cfThirdPartyLogins.size() > 0) {
             CfUser cfUser = getUserByUid(cfThirdPartyLogins.get(0).getUid(), true);
             CfUser user = new CfUser();
-            if(cfUser!=null){
+            if (cfUser != null) {
                 user.setId(cfUser.getId());
-                if(StringUtils.isNotEmpty(cfUser.getNickName())){
+                if (StringUtils.isNotEmpty(cfUser.getNickName())) {
                     user.setNickName(wxUser.getNickname().replaceAll("[^a-zA-Z0-9\\u4e00-\\u9fa5]", " "));
                     cfUser.setNickName(wxUser.getNickname().replaceAll("[^a-zA-Z0-9\\u4e00-\\u9fa5]", " "));
                 }
-                if(StringUtils.isNotEmpty(cfUser.getAvatar())){
+                if (StringUtils.isNotEmpty(cfUser.getAvatar())) {
                     user.setAvatar(wxUser.getHeadimgurl());
                     cfUser.setAvatar(wxUser.getHeadimgurl());
                 }
-                if(StringUtils.isEmpty(cfThirdPartyLogins.get(0).getOpenid())){
+                if (StringUtils.isEmpty(cfThirdPartyLogins.get(0).getOpenid())) {
                     //更新微信用户信息，考虑第三方平台与本平台数据互动只是unionid导致用户不完全的问题
                     CfThirdPartyLogin cfThirdPartyLogin = cfThirdPartyLogins.get(0);
                     cfThirdPartyLogin.setOpenid(wxUser.getOpenid());
@@ -386,7 +386,7 @@ public class CfUserServiceImpl implements CfUserService {
                 cfUser.setPassword(null);
                 update(user);    //只做局部更新
                 return cfUser;
-            }else{
+            } else {
                 cfThirdPartyLoginService.delete(cfThirdPartyLogins.get(0).getId());
                 return addUserByWxUser(wxUser, platform);
             }
@@ -399,27 +399,27 @@ public class CfUserServiceImpl implements CfUserService {
 
         CfThirdPartyLoginQuery cfThirdPartyLoginQuery = new CfThirdPartyLoginQuery();
         cfThirdPartyLoginQuery.setPlatform(platform);
-        if(StringUtils.isNotEmpty(wxUser.getUnionid())){
+        if (StringUtils.isNotEmpty(wxUser.getUnionid())) {
             cfThirdPartyLoginQuery.setUnionid(wxUser.getUnionid());
-        }else{
+        } else {
             cfThirdPartyLoginQuery.setOpenid(wxUser.getOpenid());
         }
         List<CfThirdPartyLogin> cfThirdPartyLogins = cfThirdPartyLoginService.getListByQuery(cfThirdPartyLoginQuery);
         CfUser user = null;
-        if(cfThirdPartyLogins==null || cfThirdPartyLogins.size()==0){
+        if (cfThirdPartyLogins == null || cfThirdPartyLogins.size() == 0) {
             //判断同样的unionid是否存在
             cfThirdPartyLoginQuery.setPlatform(null);
             cfThirdPartyLogins = cfThirdPartyLoginService.getListByQuery(cfThirdPartyLoginQuery);
-            if(cfThirdPartyLogins!=null && cfThirdPartyLogins.size()>0){
+            if (cfThirdPartyLogins != null && cfThirdPartyLogins.size() > 0) {
                 user = getUserByUid(cfThirdPartyLogins.get(0).getUid(), false);
-            }else{
+            } else {
                 CfUser cfUser = new CfUser();
                 cfUser.setId(idWorker.nextId());
-                cfUser.setUserName(randomMakeUserName("",0));
+                cfUser.setUserName(randomMakeUserName("", 0));
                 cfUser.setAvatar(wxUser.getHeadimgurl());
                 cfUser.setNickName(wxUser.getNickname().replaceAll("[^a-zA-Z0-9\\u4e00-\\u9fa5]", " "));
                 cfUser.setPassword(StringTools.getRandomString("", 0));
-                cfUser.setType((byte)0);
+                cfUser.setType((byte) 0);
                 cfUser.setPhone("");
                 cfUser.setTrueName("");
                 cfUser.setBirthday(0L);
@@ -430,7 +430,7 @@ public class CfUserServiceImpl implements CfUserService {
                 user = add(cfUser);
             }
 
-        }else{
+        } else {
             user = getUserByUid(cfThirdPartyLogins.get(0).getUid(), false);
         }
         CfThirdPartyLogin cfThirdPartyLogin = new CfThirdPartyLogin();
@@ -448,7 +448,7 @@ public class CfUserServiceImpl implements CfUserService {
     public String randomMakeUserName(String optionalCharacter, Integer length) {
         String userName = StringTools.getRandomString(optionalCharacter, length);
         CfUser cfUser = findByUserName(userName);
-        if(cfUser!=null){
+        if (cfUser != null) {
             return randomMakeUserName(optionalCharacter, length);
         }
         return userName;
@@ -461,14 +461,14 @@ public class CfUserServiceImpl implements CfUserService {
 
     @Override
     public List<CountByDay> yearMonthCountByDay(CfCountUserQuery cfCountUserQuery) {
-        cfCountUserQuery.setDate(cfCountUserQuery.getYear()+"-"+cfCountUserQuery.getMonth()+"-16"+" 00:00:00");
+        cfCountUserQuery.setDate(cfCountUserQuery.getYear() + "-" + cfCountUserQuery.getMonth() + "-16" + " 00:00:00");
         return cfUserMapper.yearMonthCountByDay(cfCountUserQuery);
     }
 
     @Override
     public List<CountByDay> yearCountByMonth(CfCountUserQuery cfCountUserQuery) {
-        cfCountUserQuery.setDate(cfCountUserQuery.getYear()+"-01-01 00:00:00");
-        cfCountUserQuery.setEndDate(cfCountUserQuery.getYear()+"-12-31 23:59:59");
+        cfCountUserQuery.setDate(cfCountUserQuery.getYear() + "-01-01 00:00:00");
+        cfCountUserQuery.setEndDate(cfCountUserQuery.getYear() + "-12-31 23:59:59");
         return cfUserMapper.yearCountByMonth(cfCountUserQuery);
     }
 
@@ -476,22 +476,22 @@ public class CfUserServiceImpl implements CfUserService {
     public CfUserExample getExampleByQuery(CfUserQuery cfUserQuery) {
         CfUserExample cfUserExample = new CfUserExample();
         CfUserExample.Criteria criteria = cfUserExample.createCriteria();
-        if(StringUtils.isNotEmpty(cfUserQuery.getUserName())){
+        if (StringUtils.isNotEmpty(cfUserQuery.getUserName())) {
             criteria.andUserNameEqualTo(cfUserQuery.getUserName());
         }
-        if(cfUserQuery.getIdCardStatus()!=null){
+        if (cfUserQuery.getIdCardStatus() != null) {
             criteria.andIdCardStatusEqualTo(cfUserQuery.getIdCardStatus());
         }
-        if(cfUserQuery.getDriverLicenseStatus()!=null){
+        if (cfUserQuery.getDriverLicenseStatus() != null) {
             criteria.andDriverLicenseStatusEqualTo(cfUserQuery.getDriverLicenseStatus());
         }
-        if(cfUserQuery.getType()!=null){
+        if (cfUserQuery.getType() != null) {
             criteria.andTypeEqualTo(cfUserQuery.getType());
         }
-        if(StringUtils.isNotEmpty(cfUserQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfUserQuery.getOrderBy())) {
             cfUserExample.setOrderByClause(cfUserQuery.getOrderBy());
         }
-        if(cfUserQuery.getPage()!=null && cfUserQuery.getSize()!=null){
+        if (cfUserQuery.getPage() != null && cfUserQuery.getSize() != null) {
             PageHelper.startPage(cfUserQuery.getPage(), cfUserQuery.getSize());
         }
         return cfUserExample;
@@ -513,10 +513,10 @@ public class CfUserServiceImpl implements CfUserService {
         Map<String, Object> userDocuments = new HashMap<>();
         //判断用户驾驶证是否有上传并且审核通过
         CfUserDriverLicense cfUserDriverLicense = checkUserDriverDocumentsStatus(uid);
-        userDocuments.put("UserDriverLicense",cfUserDriverLicense);
+        userDocuments.put("UserDriverLicense", cfUserDriverLicense);
         //判断用户身份证是否有上传并且审核通过
         CfUserIdCard cfUserIdCard = checkUserIdCardDocumentsStatus(uid);
-        userDocuments.put("UserIdCard",cfUserIdCard);
+        userDocuments.put("UserIdCard", cfUserIdCard);
         return userDocuments;
     }
 
@@ -525,8 +525,8 @@ public class CfUserServiceImpl implements CfUserService {
         CfUserIdCardQuery cfUserIdCardQuery = new CfUserIdCardQuery();
         cfUserIdCardQuery.setUid(uid);
         List<CfUserIdCard> cfUserIdCards = cfUserIdCardService.getListByQuery(cfUserIdCardQuery);
-        if(cfUserIdCards==null || cfUserIdCards.size()==0 || cfUserIdCards.get(0).getCheckStatus()==(byte)0){
-            ExceptionCast.cast(UcenterCode.USER_ID_IS_ABNORMAL,"身份证出现了问题，请自己确认或者联系管理员确认");
+        if (cfUserIdCards == null || cfUserIdCards.size() == 0 || cfUserIdCards.get(0).getCheckStatus() == (byte) 0) {
+            ExceptionCast.cast(UcenterCode.USER_ID_IS_ABNORMAL, "身份证出现了问题，请自己确认或者联系管理员确认");
         }
         return cfUserIdCards.get(0);
     }
@@ -536,8 +536,8 @@ public class CfUserServiceImpl implements CfUserService {
         CfUserDriverLicenseQuery cfUserDriverLicenseQuery = new CfUserDriverLicenseQuery();
         cfUserDriverLicenseQuery.setUid(uid);
         List<CfUserDriverLicense> cfUserDriverLicenses = cfUserDriverLicenseService.getListByQuery(cfUserDriverLicenseQuery);
-        if(cfUserDriverLicenses==null || cfUserDriverLicenses.size()==0 || cfUserDriverLicenses.get(0).getCheckStatus()==(byte)0){
-            ExceptionCast.cast(UcenterCode.USER_ID_IS_ABNORMAL,"驾驶证出现了问题，请自己确认或者联系管理员确认");
+        if (cfUserDriverLicenses == null || cfUserDriverLicenses.size() == 0 || cfUserDriverLicenses.get(0).getCheckStatus() == (byte) 0) {
+            ExceptionCast.cast(UcenterCode.USER_ID_IS_ABNORMAL, "驾驶证出现了问题，请自己确认或者联系管理员确认");
         }
         return cfUserDriverLicenses.get(0);
     }

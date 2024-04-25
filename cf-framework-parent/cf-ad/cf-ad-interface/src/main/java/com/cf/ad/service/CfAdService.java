@@ -25,6 +25,7 @@ public interface CfAdService {
 
     /**
      * 广告统计
+     *
      * @param adCounts
      * @return
      */

@@ -102,7 +102,7 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
         CfChargingStationDeviceQuery cfChargingStationDeviceQuery = new CfChargingStationDeviceQuery();
         cfChargingStationDeviceQuery.setId(cfChargingStationDeviceForm.getId());
         List<CfChargingStationDevice> cfChargingStationDevices = cfChargingStationDeviceService.getListByQuery(cfChargingStationDeviceQuery);
-        if(cfChargingStationDevices==null || cfChargingStationDevices.size()==0){
+        if (cfChargingStationDevices == null || cfChargingStationDevices.size() == 0) {
             ExceptionCast.cast(ChargingCode.DEVICE_IS_NOT_REGISTERED);
         }
         cfChargingStationDeviceForm.setBrand(cfChargingStationDevices.get(0).getBrand());
@@ -110,8 +110,8 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
 
         //判断该设备是否在本机
         String deviceLinkIp = checkSameServer(cfChargingStationDeviceForm.getBarCode());
-        if(StringUtils.isNotEmpty(deviceLinkIp)){
-            String url = "dubbo://"+deviceLinkIp+":28101/com.cf.charging.service.CfChargingStationBusinessService?version=1.0.0";//更改不同的Dubbo服务暴露的ip地址&端口
+        if (StringUtils.isNotEmpty(deviceLinkIp)) {
+            String url = "dubbo://" + deviceLinkIp + ":28101/com.cf.charging.service.CfChargingStationBusinessService?version=1.0.0";//更改不同的Dubbo服务暴露的ip地址&端口
             ReferenceBean<CfChargingStationBusinessService> referenceBean = new ReferenceBean<CfChargingStationBusinessService>();
             referenceBean.setApplicationContext(applicationContext);
             referenceBean.setInterface(CfChargingStationBusinessService.class);
@@ -126,10 +126,10 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
         cfChargingPortQuery.setChargingDeviceId(cfChargingStationDevices.get(0).getId());
         cfChargingPortQuery.setPortNumber(cfChargingStationDeviceForm.getChargingPort());
         List<CfChargingPort> cfChargingPorts = cfChargingPortService.getListByQuery(cfChargingPortQuery);
-        if(cfChargingPorts==null || cfChargingPorts.size()==0){
+        if (cfChargingPorts == null || cfChargingPorts.size() == 0) {
             ExceptionCast.cast(ChargingCode.CHARGING_PORT_NOT_EXIST);
         }
-        if(cfChargingPorts.get(0).getStatus()==(byte)2){
+        if (cfChargingPorts.get(0).getStatus() == (byte) 2) {
             //触发设备状态检查
             getPortRealTimeData(cfChargingStationDeviceForm);
             ExceptionCast.cast(ChargingCode.CHARGING_PORT_USED);
@@ -144,42 +144,42 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
         //查询该充电站的收费规则
         CfChargingStationRulesQuery cfChargingStationRulesQuery = new CfChargingStationRulesQuery();
         cfChargingStationRulesQuery.setChargingStationId(cfChargingStationDevices.get(0).getChargingStationId());
-        cfChargingStationRulesQuery.setStatus((byte)1);
+        cfChargingStationRulesQuery.setStatus((byte) 1);
         List<CfChargingStationRules> cfChargingStationRulesList = cfChargingStationRulesService.getListByQuery(cfChargingStationRulesQuery);
-        if(cfChargingStationRulesList==null || cfChargingStationRulesList.size()==0){
+        if (cfChargingStationRulesList == null || cfChargingStationRulesList.size() == 0) {
             ExceptionCast.cast(ChargingCode.MISSING_FEE_RULES);
         }
         //获取当前电价
         long currentTime = System.currentTimeMillis();  //当前时间戳
         long earlyMorningTime = DateUtil.minMillisecondBaseOnTheDayToTimestamp(currentTime).longValue(); //当天凌晨时间戳
         Integer chargingAmount = 0;
-        byte b = (byte)4;
-        if(b==(byte)2){
+        byte b = (byte) 4;
+        if (b == (byte) 2) {
             //汽车
-            if(cfChargingStationDeviceForm.getChargingFee().doubleValue()<0){
-                ExceptionCast.cast(CommonCode.INVALID_PARAM,"充电费用不能小于0");
+            if (cfChargingStationDeviceForm.getChargingFee().doubleValue() < 0) {
+                ExceptionCast.cast(CommonCode.INVALID_PARAM, "充电费用不能小于0");
             }
             cfChargingUseLog.setPlanChargingFee(cfChargingStationDeviceForm.getChargingFee());
-            for (CfChargingStationRules cfChargingStationRules: cfChargingStationRulesList){
-                if(currentTime >= earlyMorningTime+cfChargingStationRules.getStartTime() && currentTime <= earlyMorningTime+cfChargingStationRules.getEndTime()){
+            for (CfChargingStationRules cfChargingStationRules : cfChargingStationRulesList) {
+                if (currentTime >= earlyMorningTime + cfChargingStationRules.getStartTime() && currentTime <= earlyMorningTime + cfChargingStationRules.getEndTime()) {
                     cfChargingUseLog.setChargingPrice(cfChargingStationRules.getFee());
                     cfChargingUseLog.setServicePrice(cfChargingStationRules.getServiceFee());
                     break;
                 }
             }
-            if(cfChargingUseLog.getChargingPrice()==null){
+            if (cfChargingUseLog.getChargingPrice() == null) {
                 ExceptionCast.cast(ChargingCode.NOT_MATCHED_TO_CHARGING_PRICE);
             }
 
-            cfChargingUseLog.setPlanChargingKwh(cfChargingUseLog.getPlanChargingFee().divide(cfChargingUseLog.getChargingPrice().add(cfChargingUseLog.getServicePrice()),2,BigDecimal.ROUND_HALF_UP).floatValue());
-            chargingAmount = new Double(cfChargingUseLog.getPlanChargingKwh()*10).intValue();
+            cfChargingUseLog.setPlanChargingKwh(cfChargingUseLog.getPlanChargingFee().divide(cfChargingUseLog.getChargingPrice().add(cfChargingUseLog.getServicePrice()), 2, BigDecimal.ROUND_HALF_UP).floatValue());
+            chargingAmount = new Double(cfChargingUseLog.getPlanChargingKwh() * 10).intValue();
         } else {
             cfChargingUseLog.setChargingPrice(cfChargingStationRulesList.get(0).getFee());
             cfChargingUseLog.setServicePrice(cfChargingStationRulesList.get(0).getServiceFee());
             cfChargingUseLog.setPlanChargingTime(cfChargingStationDeviceForm.getPlanChargingTime());
             //计算两轮充电费用
-            cfChargingStationDeviceForm.setChargingFee(new BigDecimal(cfChargingStationDeviceForm.getPlanChargingTime().doubleValue()/3600000d).multiply(cfChargingUseLog.getChargingPrice()).setScale(2,BigDecimal.ROUND_HALF_DOWN));
-            chargingAmount = new Double(cfChargingStationDeviceForm.getPlanChargingTime().doubleValue()/60000d).intValue();
+            cfChargingStationDeviceForm.setChargingFee(new BigDecimal(cfChargingStationDeviceForm.getPlanChargingTime().doubleValue() / 3600000d).multiply(cfChargingUseLog.getChargingPrice()).setScale(2, BigDecimal.ROUND_HALF_DOWN));
+            chargingAmount = new Double(cfChargingStationDeviceForm.getPlanChargingTime().doubleValue() / 60000d).intValue();
             cfChargingUseLog.setPlanChargingFee(cfChargingStationDeviceForm.getChargingFee());
         }
 
@@ -199,7 +199,7 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
         cfChargingUseLog = cfChargingUseLogService.add(cfChargingUseLog);
 
 
-        switch (cfChargingStationDeviceForm.getBrand()){
+        switch (cfChargingStationDeviceForm.getBrand()) {
             case "lv_chong_chong":
                 //开始充电
                 break;
@@ -209,18 +209,18 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
 
         //消费一个充电口
         CfChargingStationDevice cfChargingStationDevice = cfChargingStationDeviceService.findById(cfChargingUseLog.getChargingDeviceId());
-        if(cfChargingStationDevice!=null){
+        if (cfChargingStationDevice != null) {
             CfChargingStation cfChargingStation = new CfChargingStation();
             cfChargingStation.setId(cfChargingUseLog.getChargingStationId());
-            switch (cfChargingStationDevice.getPowerType()){
-                case (byte)1:
-                    cfChargingStation.setUsedSlowChargeNumber((short)1);
+            switch (cfChargingStationDevice.getPowerType()) {
+                case (byte) 1:
+                    cfChargingStation.setUsedSlowChargeNumber((short) 1);
                     break;
-                case (byte)2:
-                    cfChargingStation.setUsedFastChargeNumber((short)1);
+                case (byte) 2:
+                    cfChargingStation.setUsedFastChargeNumber((short) 1);
                     break;
-                case (byte)3:
-                    cfChargingStation.setUsedSuperFastChargeNumber((short)1);
+                case (byte) 3:
+                    cfChargingStation.setUsedSuperFastChargeNumber((short) 1);
                     break;
             }
             cfChargingStationService.increaseOrreduceFieldValue(cfChargingStation);
@@ -235,7 +235,7 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
         CfChargingStationDeviceQuery cfChargingStationDeviceQuery = new CfChargingStationDeviceQuery();
         cfChargingStationDeviceQuery.setId(cfChargingStationDeviceForm.getId());
         List<CfChargingStationDevice> cfChargingStationDevices = cfChargingStationDeviceService.getListByQuery(cfChargingStationDeviceQuery);
-        if(cfChargingStationDevices==null || cfChargingStationDevices.size()==0){
+        if (cfChargingStationDevices == null || cfChargingStationDevices.size() == 0) {
             ExceptionCast.cast(ChargingCode.DEVICE_IS_NOT_REGISTERED);
         }
         cfChargingStationDeviceForm.setBrand(cfChargingStationDevices.get(0).getBrand());
@@ -243,8 +243,8 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
 
         //判断该设备是否在本机
         String deviceLinkIp = checkSameServer(cfChargingStationDeviceForm.getBarCode());
-        if(StringUtils.isNotEmpty(deviceLinkIp)){
-            String url = "dubbo://"+deviceLinkIp+":28101/com.cf.charging.service.CfChargingStationBusinessService?version=1.0.0";//更改不同的Dubbo服务暴露的ip地址&端口
+        if (StringUtils.isNotEmpty(deviceLinkIp)) {
+            String url = "dubbo://" + deviceLinkIp + ":28101/com.cf.charging.service.CfChargingStationBusinessService?version=1.0.0";//更改不同的Dubbo服务暴露的ip地址&端口
             ReferenceBean<CfChargingStationBusinessService> referenceBean = new ReferenceBean<CfChargingStationBusinessService>();
             referenceBean.setApplicationContext(applicationContext);
             referenceBean.setInterface(CfChargingStationBusinessService.class);
@@ -255,8 +255,7 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
         }
 
 
-
-        switch (cfChargingStationDeviceForm.getBrand()){
+        switch (cfChargingStationDeviceForm.getBrand()) {
             case "lv_chong_chong":
                 //停止充电
                 break;
@@ -271,7 +270,7 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
 
         //查询传入的充电记录
         CfChargingUseLog chargingUseLog = cfChargingUseLogService.findById(cfChargingStationDeviceForm.getChargingUseLogId(), false);
-        if(!cfChargingStationDeviceForm.getUid().equals(chargingUseLog.getUid())){
+        if (!cfChargingStationDeviceForm.getUid().equals(chargingUseLog.getUid())) {
             ExceptionCast.cast(ChargingCode.THE_RECORD_DOES_NOT_BELONG_TO_YOU);
         }
         //找到指定的充电设备，同时检查设备状态
@@ -282,8 +281,8 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
 
         //判断该设备是否在本机
         String deviceLinkIp = checkSameServer(cfChargingStationDeviceForm.getBarCode());
-        if(StringUtils.isNotEmpty(deviceLinkIp)){
-            String url = "dubbo://"+deviceLinkIp+":28101/com.cf.charging.service.CfChargingStationBusinessService?version=1.0.0";//更改不同的Dubbo服务暴露的ip地址&端口
+        if (StringUtils.isNotEmpty(deviceLinkIp)) {
+            String url = "dubbo://" + deviceLinkIp + ":28101/com.cf.charging.service.CfChargingStationBusinessService?version=1.0.0";//更改不同的Dubbo服务暴露的ip地址&端口
             ReferenceBean<CfChargingStationBusinessService> referenceBean = new ReferenceBean<CfChargingStationBusinessService>();
             referenceBean.setApplicationContext(applicationContext);
             referenceBean.setInterface(CfChargingStationBusinessService.class);
@@ -295,11 +294,11 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
 
         //判断当前用户是否为当前枪口正在充电的用户
         CfChargingUseLog lastChargingUseLog = cfChargingUseLogService.getCharingUseLogByDevcieSerialNumber(cfChargingStationDevice.getBarCode(), cfChargingStationDeviceForm.getChargingPort().toString());
-        if(lastChargingUseLog==null || !lastChargingUseLog.getId().equals(chargingUseLog.getId())){
+        if (lastChargingUseLog == null || !lastChargingUseLog.getId().equals(chargingUseLog.getId())) {
             ExceptionCast.cast(ChargingCode.NON_CHARGING_USERS);
         }
 
-        switch (cfChargingStationDeviceForm.getBrand()){
+        switch (cfChargingStationDeviceForm.getBrand()) {
             case "lv_chong_chong":
                 //停止充电
                 break;
@@ -315,7 +314,7 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
         CfChargingStationDeviceQuery cfChargingStationDeviceQuery = new CfChargingStationDeviceQuery();
         cfChargingStationDeviceQuery.setId(cfChargingStationDeviceForm.getId());
         List<CfChargingStationDevice> cfChargingStationDevices = cfChargingStationDeviceService.getListByQuery(cfChargingStationDeviceQuery);
-        if(cfChargingStationDevices==null || cfChargingStationDevices.size()==0){
+        if (cfChargingStationDevices == null || cfChargingStationDevices.size() == 0) {
             ExceptionCast.cast(ChargingCode.DEVICE_IS_NOT_REGISTERED);
         }
         cfChargingStationDeviceForm.setBrand(cfChargingStationDevices.get(0).getBrand());
@@ -323,8 +322,8 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
 
         //判断该设备是否在本机
         String deviceLinkIp = checkSameServer(cfChargingStationDeviceForm.getBarCode());
-        if(StringUtils.isNotEmpty(deviceLinkIp)){
-            String url = "dubbo://"+deviceLinkIp+":28101/com.cf.charging.service.CfChargingStationBusinessService?version=1.0.0";//更改不同的Dubbo服务暴露的ip地址&端口
+        if (StringUtils.isNotEmpty(deviceLinkIp)) {
+            String url = "dubbo://" + deviceLinkIp + ":28101/com.cf.charging.service.CfChargingStationBusinessService?version=1.0.0";//更改不同的Dubbo服务暴露的ip地址&端口
             ReferenceBean<CfChargingStationBusinessService> referenceBean = new ReferenceBean<CfChargingStationBusinessService>();
             referenceBean.setApplicationContext(applicationContext);
             referenceBean.setInterface(CfChargingStationBusinessService.class);
@@ -334,7 +333,7 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
             return cfChargingStationBusinessService.chargingSettiong(cfChargingStationDeviceForm);
         }
 
-        switch (cfChargingStationDeviceForm.getBrand()){
+        switch (cfChargingStationDeviceForm.getBrand()) {
             case "lv_chong_chong":
                 //设置充电配置
                 break;
@@ -346,12 +345,12 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
 
     @Override
     public CfChargingState getPortRealTimeData(CfChargingStationDeviceForm cfChargingStationDeviceForm) throws Exception {
-        if(StringUtils.isEmpty(cfChargingStationDeviceForm.getBrand())){
+        if (StringUtils.isEmpty(cfChargingStationDeviceForm.getBrand())) {
             //检查该设备状态
             CfChargingStationDeviceQuery cfChargingStationDeviceQuery = new CfChargingStationDeviceQuery();
             cfChargingStationDeviceQuery.setId(cfChargingStationDeviceForm.getId());
             List<CfChargingStationDevice> cfChargingStationDevices = cfChargingStationDeviceService.getListByQuery(cfChargingStationDeviceQuery);
-            if(cfChargingStationDevices==null || cfChargingStationDevices.size()==0){
+            if (cfChargingStationDevices == null || cfChargingStationDevices.size() == 0) {
                 ExceptionCast.cast(ChargingCode.DEVICE_IS_NOT_REGISTERED);
             }
             cfChargingStationDeviceForm.setBrand(cfChargingStationDevices.get(0).getBrand());
@@ -360,8 +359,8 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
 
         //判断该设备是否在本机
         String deviceLinkIp = checkSameServer(cfChargingStationDeviceForm.getBarCode());
-        if(StringUtils.isNotEmpty(deviceLinkIp)){
-            String url = "dubbo://"+deviceLinkIp+":28101/com.cf.charging.service.CfChargingStationBusinessService?version=1.0.0";//更改不同的Dubbo服务暴露的ip地址&端口
+        if (StringUtils.isNotEmpty(deviceLinkIp)) {
+            String url = "dubbo://" + deviceLinkIp + ":28101/com.cf.charging.service.CfChargingStationBusinessService?version=1.0.0";//更改不同的Dubbo服务暴露的ip地址&端口
             ReferenceBean<CfChargingStationBusinessService> referenceBean = new ReferenceBean<CfChargingStationBusinessService>();
             referenceBean.setApplicationContext(applicationContext);
             referenceBean.setInterface(CfChargingStationBusinessService.class);
@@ -371,7 +370,7 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
             return cfChargingStationBusinessService.getPortRealTimeData(cfChargingStationDeviceForm);
         }
 
-        switch (cfChargingStationDeviceForm.getBrand()){
+        switch (cfChargingStationDeviceForm.getBrand()) {
             case "lv_chong_chong":
                 //实时上报充电数据
                 break;
@@ -384,47 +383,47 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
     @Override
     public void finishCharing(CfChargingState cfChargingState) {
 
-        if(StringUtils.isEmpty(cfChargingState.getOrderId())){
+        if (StringUtils.isEmpty(cfChargingState.getOrderId())) {
             return;
         }
 
         CfChargingUseLog cfChargingUseLog = cfChargingUseLogService.findById(cfChargingState.getOrderId());
-        if(cfChargingUseLog==null || cfChargingUseLog.getEndTime()>0){
+        if (cfChargingUseLog == null || cfChargingUseLog.getEndTime() > 0) {
             return;
         }
 
         //修改结束时间
         CfChargingUseLog updateChargingUseLog = new CfChargingUseLog();
         updateChargingUseLog.setId(cfChargingState.getOrderId());
-        if(cfChargingState.getEndTime()==null || cfChargingState.getEndTime()==0){
+        if (cfChargingState.getEndTime() == null || cfChargingState.getEndTime() == 0) {
             updateChargingUseLog.setEndTime(System.currentTimeMillis());
-        }else{
+        } else {
             updateChargingUseLog.setEndTime(cfChargingState.getEndTime());
         }
         updateChargingUseLog.setChargingPower((new Double(cfChargingState.getChargingPower())).intValue());
         updateChargingUseLog.setChargingedKwh(cfChargingState.getChargingedKwh().floatValue());
-        if(cfChargingState.getEndTime()==null){
+        if (cfChargingState.getEndTime() == null) {
             //汽车充电
             updateChargingUseLog.setEndTime(System.currentTimeMillis());
-            updateChargingUseLog.setChargingFee(cfChargingUseLog.getChargingPrice().multiply(new BigDecimal(cfChargingState.getChargingedKwh())).setScale(2,BigDecimal.ROUND_HALF_UP));
-            updateChargingUseLog.setServiceFee(cfChargingUseLog.getServicePrice().multiply(new BigDecimal(cfChargingState.getChargingedKwh())).setScale(2,BigDecimal.ROUND_HALF_UP));
-        }else{
+            updateChargingUseLog.setChargingFee(cfChargingUseLog.getChargingPrice().multiply(new BigDecimal(cfChargingState.getChargingedKwh())).setScale(2, BigDecimal.ROUND_HALF_UP));
+            updateChargingUseLog.setServiceFee(cfChargingUseLog.getServicePrice().multiply(new BigDecimal(cfChargingState.getChargingedKwh())).setScale(2, BigDecimal.ROUND_HALF_UP));
+        } else {
             //两轮充电
-            updateChargingUseLog.setChargingFee(cfChargingUseLog.getChargingPrice().multiply(new BigDecimal((cfChargingState.getEndTime().doubleValue()-cfChargingUseLog.getStartTime().doubleValue())/3600000d)).setScale(2,BigDecimal.ROUND_HALF_UP));
-            updateChargingUseLog.setServiceFee(cfChargingUseLog.getServicePrice().multiply(new BigDecimal((cfChargingState.getEndTime().doubleValue()-cfChargingUseLog.getStartTime().doubleValue())/3600000d)).setScale(2,BigDecimal.ROUND_HALF_UP));
+            updateChargingUseLog.setChargingFee(cfChargingUseLog.getChargingPrice().multiply(new BigDecimal((cfChargingState.getEndTime().doubleValue() - cfChargingUseLog.getStartTime().doubleValue()) / 3600000d)).setScale(2, BigDecimal.ROUND_HALF_UP));
+            updateChargingUseLog.setServiceFee(cfChargingUseLog.getServicePrice().multiply(new BigDecimal((cfChargingState.getEndTime().doubleValue() - cfChargingUseLog.getStartTime().doubleValue()) / 3600000d)).setScale(2, BigDecimal.ROUND_HALF_UP));
         }
 
-        updateChargingUseLog.setChargingStatus((byte)3);
+        updateChargingUseLog.setChargingStatus((byte) 3);
         cfChargingUseLogService.update(updateChargingUseLog);
 
         //如果最终充电金数小于计划充电数(偏差值大于0.05度电时)，退回部分资金
         BigDecimal refundAmount = new BigDecimal("0.00");  //退款金额
-        if( (cfChargingState.getEndTime()==null && (cfChargingUseLog.getPlanChargingKwh()-updateChargingUseLog.getChargingedKwh() > 0.01) && cfChargingUseLog.getPlanChargingFee().doubleValue()>(updateChargingUseLog.getChargingFee().add(updateChargingUseLog.getServiceFee())).doubleValue()) ||
-                (cfChargingState.getEndTime()!=null && (cfChargingUseLog.getPlanChargingTime()-(cfChargingState.getEndTime()-cfChargingUseLog.getStartTime()) >= 300000l))){
+        if ((cfChargingState.getEndTime() == null && (cfChargingUseLog.getPlanChargingKwh() - updateChargingUseLog.getChargingedKwh() > 0.01) && cfChargingUseLog.getPlanChargingFee().doubleValue() > (updateChargingUseLog.getChargingFee().add(updateChargingUseLog.getServiceFee())).doubleValue()) ||
+                (cfChargingState.getEndTime() != null && (cfChargingUseLog.getPlanChargingTime() - (cfChargingState.getEndTime() - cfChargingUseLog.getStartTime()) >= 300000l))) {
             CfAccountQuery cfAccountQuery = new CfAccountQuery();
             cfAccountQuery.setUid(cfChargingUseLog.getUid());
             //计算电费后退回(注意 单价=电费单价+服务费单价)
-            cfAccountQuery.setChangeValue( cfChargingUseLog.getPlanChargingFee().subtract(updateChargingUseLog.getChargingFee().add(updateChargingUseLog.getServiceFee())) );
+            cfAccountQuery.setChangeValue(cfChargingUseLog.getPlanChargingFee().subtract(updateChargingUseLog.getChargingFee().add(updateChargingUseLog.getServiceFee())));
             cfAccountQuery.setScoreType("cny");
             CfAccount cfAccount = cfAccountService.checkAndAddBalance(cfAccountQuery);
             //新增退款账单记录
@@ -460,18 +459,18 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
 
         //归还一个充电口
         CfChargingStationDevice cfChargingStationDevice = cfChargingStationDeviceService.findById(cfChargingUseLog.getChargingDeviceId());
-        if(cfChargingStationDevice!=null){
+        if (cfChargingStationDevice != null) {
             CfChargingStation cfChargingStation = new CfChargingStation();
             cfChargingStation.setId(cfChargingUseLog.getChargingStationId());
-            switch (cfChargingStationDevice.getPowerType()){
-                case (byte)1:
-                    cfChargingStation.setUsedSlowChargeNumber((short)-1);
+            switch (cfChargingStationDevice.getPowerType()) {
+                case (byte) 1:
+                    cfChargingStation.setUsedSlowChargeNumber((short) -1);
                     break;
-                case (byte)2:
-                    cfChargingStation.setUsedFastChargeNumber((short)-1);
+                case (byte) 2:
+                    cfChargingStation.setUsedFastChargeNumber((short) -1);
                     break;
-                case (byte)3:
-                    cfChargingStation.setUsedSuperFastChargeNumber((short)-1);
+                case (byte) 3:
+                    cfChargingStation.setUsedSuperFastChargeNumber((short) -1);
                     break;
             }
             cfChargingStationService.increaseOrreduceFieldValue(cfChargingStation);
@@ -480,6 +479,7 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
 
     /**
      * 获取本服务器的外网ip
+     *
      * @return
      */
     private String getServiceIp() throws Exception {
@@ -488,19 +488,19 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
         //获取配置
         List<CfWeixinConfig> cfWeixinConfigs = cfWeixinConfigService.getWeiXinLoginConfigragtion("server_ip_list");
         CfWeixinConfig cfWeixinConfig = cfWeixinConfigs.get(0);
-        Map<String, String> map = (Map<String, String>)JSONObject.parseObject(cfWeixinConfig.getValue(), Map.class);
+        Map<String, String> map = (Map<String, String>) JSONObject.parseObject(cfWeixinConfig.getValue(), Map.class);
         String ip = "";
         int i = 0;
         String defaultIp = "";
-        for (Map.Entry<String, String> entry:map.entrySet()){
-            if(i==0){
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (i == 0) {
                 defaultIp = entry.getKey();
             }
             i++;
-            if(!map.containsKey(jsonObject.getString("data"))){
+            if (!map.containsKey(jsonObject.getString("data"))) {
                 break;
             }
-            if(jsonObject.getString("data").equals(entry.getKey())){
+            if (jsonObject.getString("data").equals(entry.getKey())) {
                 ip = entry.getKey();
                 break;
             }
@@ -512,11 +512,11 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
     public String checkSameServer(String serialNumber) throws Exception {
 
         String deviceLinkIp = redisTemplate.boundValueOps(CfChargingStationBusinessServiceImpl.DEVICE_LINK_IP + serialNumber).get();
-        if(StringUtils.isEmpty(deviceLinkIp)){
+        if (StringUtils.isEmpty(deviceLinkIp)) {
             //设备未注册到系统中
             ExceptionCast.cast(ChargingCode.DEVICE_OFFLINE);
         }
-        if(InetAddress.getLocalHost().getHostAddress().equals(deviceLinkIp)){
+        if (InetAddress.getLocalHost().getHostAddress().equals(deviceLinkIp)) {
             //说明设备的确已经掉线，不在任何服务器中连接
             return null;
         }
@@ -526,14 +526,14 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
 
     @Override
     public Channel initSocketClientAndSendMessage(String host, String message) throws Exception {
-        if(channelMap==null){
+        if (channelMap == null) {
             channelMap = new HashMap<>();
         }
-        if(groupMap==null){
+        if (groupMap == null) {
             groupMap = new HashMap<>();
         }
 
-        if(channelMap.get(host)==null){
+        if (channelMap.get(host) == null) {
             NioEventLoopGroup group = new NioEventLoopGroup();
             try {
                 Bootstrap b = new Bootstrap();
@@ -563,11 +563,11 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
 //            cf.channel().closeFuture().sync(); // 异步等待关闭连接channel
 //            System.out.println("连接已关闭.."); // 关闭完成
 
-            } catch (Exception e){
+            } catch (Exception e) {
                 group.shutdownGracefully().sync(); // 释放线程池资源
                 return null;
             }
-        }else{
+        } else {
             channelMap.get(host).writeAndFlush(StringTools.hexStringToBytes(message));
             return channelMap.get(host);
         }
@@ -589,7 +589,7 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
         //更新充电记录为正在充电
         CfChargingUseLog updateChargingUseLog = new CfChargingUseLog();
         updateChargingUseLog.setId(cfChargingUseLog.getId());
-        updateChargingUseLog.setChargingStatus((byte)2);
+        updateChargingUseLog.setChargingStatus((byte) 2);
         cfChargingUseLogService.update(updateChargingUseLog);
     }
 
@@ -603,9 +603,9 @@ public class CfChargingStationBusinessServiceImpl implements CfChargingStationBu
         cfUserMessage.setType(messageType);
         cfUserMessage.setIp("");
         try {
-            System.out.println("要发送的消息:"+JSONObject.toJSONString(cfUserMessage));
+            System.out.println("要发送的消息:" + JSONObject.toJSONString(cfUserMessage));
             cfUserMessageService.sendMessage(cfUserMessage);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

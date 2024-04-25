@@ -36,10 +36,10 @@ public class CfUserIdCardServiceImpl implements CfUserIdCardService {
         cfUserIdCard.setId(idWorker.nextLongId());
         cfUserIdCardMapper.insertSelective(cfUserIdCard);
         //修改用户证件证件上传状态
-        if(StringUtils.isNotEmpty(cfUserIdCard.getUid())){
+        if (StringUtils.isNotEmpty(cfUserIdCard.getUid())) {
             CfUser cfUser = new CfUser();
             cfUser.setId(cfUserIdCard.getUid());
-            cfUser.setIdCardStatus((byte)1);
+            cfUser.setIdCardStatus((byte) 1);
             cfUserService.updateByPrimaryKeySelective(cfUser);
         }
 
@@ -51,13 +51,13 @@ public class CfUserIdCardServiceImpl implements CfUserIdCardService {
         checkRepeatByLicenseNumber(cfUserIdCard);
         cfUserIdCardMapper.updateByPrimaryKeySelective(cfUserIdCard);
         //修改用户证件证件上传状态
-        if(StringUtils.isNotEmpty(cfUserIdCard.getUid())){
+        if (StringUtils.isNotEmpty(cfUserIdCard.getUid())) {
             CfUser cfUser = new CfUser();
             cfUser.setId(cfUserIdCard.getUid());
-            if(cfUserIdCard.getCheckStatus()!=null && cfUserIdCard.getCheckStatus()==(byte)1){
-                cfUser.setIdCardStatus((byte)2);
-            }else{
-                cfUser.setIdCardStatus((byte)1);
+            if (cfUserIdCard.getCheckStatus() != null && cfUserIdCard.getCheckStatus() == (byte) 1) {
+                cfUser.setIdCardStatus((byte) 2);
+            } else {
+                cfUser.setIdCardStatus((byte) 1);
             }
             cfUserService.updateByPrimaryKeySelective(cfUser);
         }
@@ -77,10 +77,10 @@ public class CfUserIdCardServiceImpl implements CfUserIdCardService {
     @Override
     public CfUserIdCard findById(Long id, boolean expectEmpty) {
         CfUserIdCard cfUserIdCard = findById(id);
-        if(expectEmpty && cfUserIdCard!=null){
+        if (expectEmpty && cfUserIdCard != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpty && cfUserIdCard==null){
+        if (!expectEmpty && cfUserIdCard == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfUserIdCard;
@@ -99,13 +99,13 @@ public class CfUserIdCardServiceImpl implements CfUserIdCardService {
 
     @Override
     public void checkRepeatByLicenseNumber(CfUserIdCard cfUserIdCard) {
-        if(StringUtils.isEmpty(cfUserIdCard.getIdentityNumber())){
+        if (StringUtils.isEmpty(cfUserIdCard.getIdentityNumber())) {
             return;
         }
         CfUserIdCardQuery cfUserIdCardQuery = new CfUserIdCardQuery();
         cfUserIdCardQuery.setIdentityNumber(cfUserIdCard.getIdentityNumber());
         List<CfUserIdCard> cfUserIdCardList = getListByQuery(cfUserIdCardQuery);
-        if((cfUserIdCard.getId()==null && cfUserIdCardList!=null && cfUserIdCardList.size()>0) || (cfUserIdCard.getId()!=null && cfUserIdCardList!=null && cfUserIdCardList.size()>0 && cfUserIdCard.getId()!=cfUserIdCardList.get(0).getId())){
+        if ((cfUserIdCard.getId() == null && cfUserIdCardList != null && cfUserIdCardList.size() > 0) || (cfUserIdCard.getId() != null && cfUserIdCardList != null && cfUserIdCardList.size() > 0 && cfUserIdCard.getId() != cfUserIdCardList.get(0).getId())) {
             ExceptionCast.cast(UcenterCode.ID_NUMBER_IS_BOUND);
         }
     }
@@ -114,16 +114,16 @@ public class CfUserIdCardServiceImpl implements CfUserIdCardService {
     public CfUserIdCardExample getExampleByQuery(CfUserIdCardQuery cfUserIdCardQuery) {
         CfUserIdCardExample cfUserIdCardExample = new CfUserIdCardExample();
         CfUserIdCardExample.Criteria criteria = cfUserIdCardExample.createCriteria();
-        if(cfUserIdCardQuery.getUid()!=null){
+        if (cfUserIdCardQuery.getUid() != null) {
             criteria.andUidEqualTo(cfUserIdCardQuery.getUid());
         }
-        if(cfUserIdCardQuery.getCheckStatus()!=null){
+        if (cfUserIdCardQuery.getCheckStatus() != null) {
             criteria.andCheckStatusEqualTo(cfUserIdCardQuery.getCheckStatus());
         }
-        if(StringUtils.isNotEmpty(cfUserIdCardQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfUserIdCardQuery.getOrderBy())) {
             cfUserIdCardExample.setOrderByClause(cfUserIdCardQuery.getOrderBy());
         }
-        if(cfUserIdCardQuery.getPage()!=null && cfUserIdCardQuery.getSize()!=null){
+        if (cfUserIdCardQuery.getPage() != null && cfUserIdCardQuery.getSize() != null) {
             PageHelper.startPage(cfUserIdCardQuery.getPage(), cfUserIdCardQuery.getSize());
         }
         return cfUserIdCardExample;

@@ -19,7 +19,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class CarParkApiApplication {
     public static void main(String[] args) {
-        SpringApplication.run(CarParkApiApplication.class,args);
+        SpringApplication.run(CarParkApiApplication.class, args);
     }
 
 }

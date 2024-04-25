@@ -17,8 +17,9 @@ public class BxResp {
 
     /**
      * 由 data pack 解析 BxResp 对象
-     * @param pack  输入的 BxDataPack
-     * @return  BxResp 对象
+     *
+     * @param pack 输入的 BxDataPack
+     * @return BxResp 对象
      */
     private static BxResp parse(BxDataPack pack) {
 
@@ -47,7 +48,7 @@ public class BxResp {
 
         //
         // data
-        resp.data = Arrays.copyOfRange(pack.data, offset, offset+pack.dataLen - 5);
+        resp.data = Arrays.copyOfRange(pack.data, offset, offset + pack.dataLen - 5);
 
         //
         return resp;
@@ -55,9 +56,10 @@ public class BxResp {
 
     /**
      * 由字节数组解析 BxResp
-     * @param src   字节数组
-     * @param len   长度
-     * @return  BxResp 对象
+     *
+     * @param src 字节数组
+     * @param len 长度
+     * @return BxResp 对象
      */
     public static BxResp parse(byte[] src, int len) {
 
@@ -65,10 +67,9 @@ public class BxResp {
         // 解析出 data pack
         BxDataPack rPack = BxDataPack.parse(src, len);
 
-        if(rPack == null) {
+        if (rPack == null) {
             return null;
-        }
-        else {
+        } else {
             return parse(rPack);
         }
     }
@@ -76,14 +77,14 @@ public class BxResp {
 
     /**
      * 判断 response 是否为 ACK
+     *
      * @return is ack or not
      */
     public boolean isAck() {
 
-        if((group == BxCmdCode.CMD_ACK.group) && (cmd == BxCmdCode.CMD_ACK.code)) {
+        if ((group == BxCmdCode.CMD_ACK.group) && (cmd == BxCmdCode.CMD_ACK.code)) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }

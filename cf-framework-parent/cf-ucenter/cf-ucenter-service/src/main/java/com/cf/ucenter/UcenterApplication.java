@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @Version 1.0
  **/
 @EnableAutoConfiguration()
-@ComponentScan(basePackages = {"com.cf.ucenter.service","com.cf.ucenter.dao","com.cf.framework"})
+@ComponentScan(basePackages = {"com.cf.ucenter.service", "com.cf.ucenter.dao", "com.cf.framework"})
 @MapperScan("com.cf.ucenter.dao.mapper")
 public class UcenterApplication {
     public static void main(String[] args) {

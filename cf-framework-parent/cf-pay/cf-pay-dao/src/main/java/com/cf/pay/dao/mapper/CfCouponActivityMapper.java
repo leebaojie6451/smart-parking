@@ -33,6 +33,7 @@ public interface CfCouponActivityMapper {
 
     /**
      * 根据条件查询优惠券活动数据列表
+     *
      * @param conditions
      * @return
      */
@@ -40,6 +41,7 @@ public interface CfCouponActivityMapper {
 
     /**
      * 根据条件查询优惠券活动数据列表数
+     *
      * @param conditions
      * @return
      */
@@ -47,6 +49,7 @@ public interface CfCouponActivityMapper {
 
     /**
      * 更显优惠券活动的已发行量
+     *
      * @param id
      * @param changeValue
      * @return
@@ -55,6 +58,7 @@ public interface CfCouponActivityMapper {
 
     /**
      * 更新自动发送余额
+     *
      * @param id
      * @param changeValue
      * @return
@@ -63,6 +67,7 @@ public interface CfCouponActivityMapper {
 
     /**
      * 更新次数券余额
+     *
      * @param id
      * @param changeValue
      * @return
@@ -71,6 +76,7 @@ public interface CfCouponActivityMapper {
 
     /**
      * 更新时长券余额
+     *
      * @param id
      * @param changeValue
      * @return
@@ -79,6 +85,7 @@ public interface CfCouponActivityMapper {
 
     /**
      * 检查车辆是否还在停车场中
+     *
      * @param numberPlate
      * @return
      */

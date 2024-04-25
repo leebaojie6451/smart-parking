@@ -63,7 +63,7 @@ public class CfUserRoleServiceImpl implements CfUserRoleService {
         CfRoleExample.Criteria criteria1 = cfRoleExample.createCriteria();
         criteria1.andFlagKeyEqualTo(roleFlagKey);
         List<CfRole> cfRoles = cfRoleMapper.selectByExample(cfRoleExample);
-        if(cfRoles==null || cfRoles.size()==0){
+        if (cfRoles == null || cfRoles.size() == 0) {
             return null;
         }
 
@@ -81,7 +81,7 @@ public class CfUserRoleServiceImpl implements CfUserRoleService {
 
     @Override
     public List<CfUserRole> flushUserRoles(List<CfUserRole> cfUserRoles) {
-        if(cfUserRoles==null || cfUserRoles.size()==0){
+        if (cfUserRoles == null || cfUserRoles.size() == 0) {
             ExceptionCast.cast(RoleCode.HAVE_NOT_USER_ROLES);
         }
         deleteUserRoles(cfUserRoles.get(0).getUid());
@@ -96,7 +96,7 @@ public class CfUserRoleServiceImpl implements CfUserRoleService {
         CfRoleExample.Criteria criteria1 = cfRoleExample.createCriteria();
         criteria1.andFlagKeyEqualTo(flagKey);
         List<CfRole> cfRoles = cfRoleMapper.selectByExample(cfRoleExample);
-        if(cfRoles==null || cfRoles.size()==0){
+        if (cfRoles == null || cfRoles.size() == 0) {
             return null;
         }
 
@@ -113,7 +113,7 @@ public class CfUserRoleServiceImpl implements CfUserRoleService {
         CfRoleExample.Criteria criteria1 = cfRoleExample.createCriteria();
         criteria1.andFlagKeyEqualTo(flagKey);
         List<CfRole> cfRoles = cfRoleMapper.selectByExample(cfRoleExample);
-        if(cfRoles==null && cfRoles.size()==0){
+        if (cfRoles == null && cfRoles.size() == 0) {
             return null;
         }
         CfUserRole cfUserRole = new CfUserRole();
@@ -130,16 +130,16 @@ public class CfUserRoleServiceImpl implements CfUserRoleService {
     public CfUserRoleExample getExampleByQuery(CfUserRoleQuery cfUserRoleQuery) {
         CfUserRoleExample cfUserRoleExample = new CfUserRoleExample();
         CfUserRoleExample.Criteria criteria = cfUserRoleExample.createCriteria();
-        if(cfUserRoleQuery.getUid()!=null){
+        if (cfUserRoleQuery.getUid() != null) {
             criteria.andUidEqualTo(cfUserRoleQuery.getUid());
         }
-        if(cfUserRoleQuery.getRoleId()!=null){
+        if (cfUserRoleQuery.getRoleId() != null) {
             criteria.andRoleIdEqualTo(cfUserRoleQuery.getRoleId());
         }
-        if(StringUtils.isNotEmpty(cfUserRoleQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfUserRoleQuery.getOrderBy())) {
             cfUserRoleExample.setOrderByClause(cfUserRoleQuery.getOrderBy());
         }
-        if(cfUserRoleQuery.getPage()!=null && cfUserRoleQuery.getSize()!=null){
+        if (cfUserRoleQuery.getPage() != null && cfUserRoleQuery.getSize() != null) {
             PageHelper.startPage(cfUserRoleQuery.getPage(), cfUserRoleQuery.getSize());
         }
         return cfUserRoleExample;

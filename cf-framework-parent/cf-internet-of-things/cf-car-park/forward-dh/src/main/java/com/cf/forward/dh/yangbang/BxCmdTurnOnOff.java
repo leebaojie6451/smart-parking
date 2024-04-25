@@ -26,17 +26,16 @@ public class BxCmdTurnOnOff extends BxCmd {
 
         //
         // r0, r1
-        array.add((byte)0x00);
-        array.add((byte)0x00);
+        array.add((byte) 0x00);
+        array.add((byte) 0x00);
 
         //
         // 0x01 - on
         // 0x02 - off
-        if(on) {
-            array.add((byte)0x01);
-        }
-        else {
-            array.add((byte)0x02);
+        if (on) {
+            array.add((byte) 0x01);
+        } else {
+            array.add((byte) 0x02);
         }
 
         return array.build();

@@ -18,7 +18,6 @@ public class Utils {
 
     /**
      * 获取系统对应的编码
-     *
      */
     public static String getPlatformEncode() {
         String encode = "";
@@ -27,11 +26,11 @@ public class Utils {
             encode = "GBK";
         } else if (osPrefix.toLowerCase().startsWith("linux")) {
             encode = "UTF-8";
-        }else if(osPrefix.toLowerCase().startsWith("mac")){
-            encode="UTF-8";
+        } else if (osPrefix.toLowerCase().startsWith("mac")) {
+            encode = "UTF-8";
         }
-        if(encode.isEmpty()){
-            encode="UTF-8";
+        if (encode.isEmpty()) {
+            encode = "UTF-8";
         }
         return encode;
     }

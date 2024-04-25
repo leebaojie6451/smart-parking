@@ -6,8 +6,8 @@ import com.cf.carpark.service.vzenith.cloud.http.HttpMethod;
 
 public class FirmwareDownloadRequest extends BaseRequest {
 
-  public FirmwareDownloadRequest(String version) {
-    super(HttpMethod.GET, API.FIRMWARE_DOWNLOAD, version);
-  }
+    public FirmwareDownloadRequest(String version) {
+        super(HttpMethod.GET, API.FIRMWARE_DOWNLOAD, version);
+    }
 
 }

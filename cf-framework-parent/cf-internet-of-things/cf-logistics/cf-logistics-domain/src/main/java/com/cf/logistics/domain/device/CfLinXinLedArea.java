@@ -52,27 +52,26 @@ public class CfLinXinLedArea implements Serializable {
     }
 
     /**
-     *
-     * @param areaNumber    区域编号
-     * @param areaX 区域开始 x 坐标
-     * @param areaY 区域开始 y 坐标
-     * @param areaXX    区域开始 xx 坐标
-     * @param areaYY    区域开始 yy 坐标
-     * @param numberOfPages 页数
-     * @param fontSizeWidth 字体宽，如 16 则表示字体宽为 16
-     * @param fontSizeHigh  字体高，为 24 则表示字体高为 24
-     * @param fontColor 颜色值
-     * @param fontInMode    文字进场特效
-     * @param fontInSpeed   当前页进场移动速度
+     * @param areaNumber        区域编号
+     * @param areaX             区域开始 x 坐标
+     * @param areaY             区域开始 y 坐标
+     * @param areaXX            区域开始 xx 坐标
+     * @param areaYY            区域开始 yy 坐标
+     * @param numberOfPages     页数
+     * @param fontSizeWidth     字体宽，如 16 则表示字体宽为 16
+     * @param fontSizeHigh      字体高，为 24 则表示字体高为 24
+     * @param fontColor         颜色值
+     * @param fontInMode        文字进场特效
+     * @param fontInSpeed       当前页进场移动速度
      * @param fontResidenceTime 文字停留时间
-     * @param pageAreaX 当前页数据有效区域 x 坐标
-     * @param pageAreaY 当前页数据有效区域 y 坐标
-     * @param pageAreaXX    当前页数据有效区域 xx 坐标
-     * @param pageAreaYY    当前页数据有效区域 yy 坐标
-     * @param fontMoveStep  连续移动时的步长
+     * @param pageAreaX         当前页数据有效区域 x 坐标
+     * @param pageAreaY         当前页数据有效区域 y 坐标
+     * @param pageAreaXX        当前页数据有效区域 xx 坐标
+     * @param pageAreaYY        当前页数据有效区域 yy 坐标
+     * @param fontMoveStep      连续移动时的步长
      * @param fontRowSpacing    当前页的行间距，两行之间的点数，自动换行时用
      * @param fontWordSpacing   当前页的字间距
-     * @param textContents  要下发的文字内容(例如 "武汉才风智慧科技有限公司")
+     * @param textContents      要下发的文字内容(例如 "武汉才风智慧科技有限公司")
      */
     public CfLinXinLedArea(Integer areaNumber, Integer areaX, Integer areaY, Integer areaXX, Integer areaYY, Integer numberOfPages, Integer fontSizeWidth, Integer fontSizeHigh, Integer fontColor, Integer fontInMode, Integer fontInSpeed, Integer fontResidenceTime, Integer pageAreaX, Integer pageAreaY, Integer pageAreaXX, Integer pageAreaYY, Integer fontMoveStep, Integer fontRowSpacing, Integer fontWordSpacing, String textContents) throws Exception {
         this.areaNumber = areaNumber;
@@ -94,10 +93,10 @@ public class CfLinXinLedArea implements Serializable {
         this.fontMoveStep = fontMoveStep;
         this.fontRowSpacing = fontRowSpacing;
         this.fontWordSpacing = fontWordSpacing;
-        this.hexContents = StringTools.str2HexStr(textContents,"GB18030");
+        this.hexContents = StringTools.str2HexStr(textContents, "GB18030");
 
         //设置本页数据长度，本系统开发所有都只使用一页，暂时不考虑多页
-        this.pageDataSize = StringTools.strToHexString(textContents).length()/2;
+        this.pageDataSize = StringTools.strToHexString(textContents).length() / 2;
         //设置区域区块大小 76是固定的
         this.areaDataBlockSize = (76 + this.pageDataSize);
     }

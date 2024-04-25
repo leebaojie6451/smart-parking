@@ -34,17 +34,17 @@ public class CfHistoryOrderServiceImpl implements CfHistoryOrderService {
     public CfHistoryOrderExample getExampleByQuery(CfHistoryOrderQuery cfHistoryOrderQuery) {
         CfHistoryOrderExample cfHistoryOrderExample = new CfHistoryOrderExample();
         CfHistoryOrderExample.Criteria criteria = cfHistoryOrderExample.createCriteria();
-        if(cfHistoryOrderQuery.getShopId()!=null){
+        if (cfHistoryOrderQuery.getShopId() != null) {
             criteria.andShopIdEqualTo(cfHistoryOrderQuery.getShopId());
         }
-        if(cfHistoryOrderQuery.getOrderTime()!=null){
+        if (cfHistoryOrderQuery.getOrderTime() != null) {
             criteria.andOrderTimeEqualTo(cfHistoryOrderQuery.getOrderTime());
         }
-        if(StringUtils.isNotEmpty(cfHistoryOrderQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfHistoryOrderQuery.getOrderBy())) {
             cfHistoryOrderExample.setOrderByClause(cfHistoryOrderQuery.getOrderBy());
         }
 
-        if(cfHistoryOrderQuery.getPage()!=null && cfHistoryOrderQuery.getSize()!=null){
+        if (cfHistoryOrderQuery.getPage() != null && cfHistoryOrderQuery.getSize() != null) {
             PageHelper.startPage(cfHistoryOrderQuery.getPage(), cfHistoryOrderQuery.getSize());
         }
 

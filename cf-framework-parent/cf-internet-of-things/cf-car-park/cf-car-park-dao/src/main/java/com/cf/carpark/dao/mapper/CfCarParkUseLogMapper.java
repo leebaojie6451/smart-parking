@@ -40,6 +40,7 @@ public interface CfCarParkUseLogMapper {
 
     /**
      * 根据条件查询停车记录数据列表
+     *
      * @param conditions
      * @return
      */
@@ -47,6 +48,7 @@ public interface CfCarParkUseLogMapper {
 
     /**
      * 根据条件查询停车记录数据列表数
+     *
      * @param conditions
      * @return
      */
@@ -54,6 +56,7 @@ public interface CfCarParkUseLogMapper {
 
     /**
      * 统计前N天每天的停车记录数
+     *
      * @param cfCountCarParkUseLogQuery
      * @return
      */
@@ -61,6 +64,7 @@ public interface CfCarParkUseLogMapper {
 
     /**
      * 获取某个年份某个月数的停车数
+     *
      * @param cfCountCarParkUseLogQuery
      * @return
      */
@@ -68,6 +72,7 @@ public interface CfCarParkUseLogMapper {
 
     /**
      * 获取某个年份每个月份的停车数
+     *
      * @param cfCountCarParkUseLogQuery
      * @return
      */
@@ -75,6 +80,7 @@ public interface CfCarParkUseLogMapper {
 
     /**
      * 统计岗亭值班人员一段时间内各渠道收费情况
+     *
      * @param countPayAmountByDutyQuery
      * @return
      */
@@ -84,6 +90,7 @@ public interface CfCarParkUseLogMapper {
 
     /**
      * 统计某个字段
+     *
      * @param cfCarParkUseLogQuery
      * @return
      */

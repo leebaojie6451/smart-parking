@@ -46,7 +46,7 @@ public class CfChargingUseLogController implements CfChargingUseLogSwagger {
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseResult add(@Validated @RequestBody CfChargingUseLogForm cfChargingUseLogForm) throws Exception {
         CfChargingUseLog cfChargingUseLog = new CfChargingUseLog();
-        BeanUtils.copyProperties(cfChargingUseLogForm,cfChargingUseLog);
+        BeanUtils.copyProperties(cfChargingUseLogForm, cfChargingUseLog);
         CfChargingUseLog lastCfChargingUseLog = cfChargingUseLogService.add(cfChargingUseLog);
         return new ResponseResult(CommonCode.SUCCESS, lastCfChargingUseLog);
     }
@@ -56,7 +56,7 @@ public class CfChargingUseLogController implements CfChargingUseLogSwagger {
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public ResponseResult update(@Validated @RequestBody CfChargingUseLogForm cfChargingUseLogForm) {
         CfChargingUseLog cfChargingUseLog = new CfChargingUseLog();
-        BeanUtils.copyProperties(cfChargingUseLogForm,cfChargingUseLog);
+        BeanUtils.copyProperties(cfChargingUseLogForm, cfChargingUseLog);
         CfChargingUseLog lastCfChargingUseLog = cfChargingUseLogService.update(cfChargingUseLog);
         return new ResponseResult(CommonCode.SUCCESS, lastCfChargingUseLog);
     }
@@ -66,7 +66,7 @@ public class CfChargingUseLogController implements CfChargingUseLogSwagger {
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(String id) throws Exception {
         Integer delete = cfChargingUseLogService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS, delete):new ResponseResult(CommonCode.FAIL, null);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS, delete) : new ResponseResult(CommonCode.FAIL, null);
     }
 
     @PreAuthorize("hasAuthority('charging-CfChargingUseLogController-selectListByCondition')")
@@ -91,39 +91,39 @@ public class CfChargingUseLogController implements CfChargingUseLogSwagger {
         allowFileds.add("order");
         allowFileds.add("limit");
         Map<String, String> allowFiledsMap = new HashMap<String, String>();
-        allowFiledsMap.put("id","cstul");
-        allowFiledsMap.put("charging_station_id","cstul");
-        allowFiledsMap.put("start_time","cstul");
-        allowFiledsMap.put("end_time","cstul");
-        allowFiledsMap.put("uid","cstul");
-        allowFiledsMap.put("id$in","cstul");
-        allowFiledsMap.put("charging_station_id$in","cstul");
-        allowFiledsMap.put("station_name","cst");
-        allowFiledsMap.put("like","");
-        allowFiledsMap.put("group","");
-        allowFiledsMap.put("order","");
-        allowFiledsMap.put("limit","");
+        allowFiledsMap.put("id", "cstul");
+        allowFiledsMap.put("charging_station_id", "cstul");
+        allowFiledsMap.put("start_time", "cstul");
+        allowFiledsMap.put("end_time", "cstul");
+        allowFiledsMap.put("uid", "cstul");
+        allowFiledsMap.put("id$in", "cstul");
+        allowFiledsMap.put("charging_station_id$in", "cstul");
+        allowFiledsMap.put("station_name", "cst");
+        allowFiledsMap.put("like", "");
+        allowFiledsMap.put("group", "");
+        allowFiledsMap.put("order", "");
+        allowFiledsMap.put("limit", "");
 
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0 && StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "finance")<0){
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0 && StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "finance") < 0) {
             CfChargingStationLinkUserQuery cfChargingStationLinkUserQuery = new CfChargingStationLinkUserQuery();
             cfChargingStationLinkUserQuery.setUid(userBasicInfo.getId());
             List<CfChargingStationLinkUser> cfChargingStationLinkUsers = cfCarParkLinkUserQuery.getListByQuery(cfChargingStationLinkUserQuery);
-            if(cfChargingStationLinkUsers==null || cfChargingStationLinkUsers.size()==0){
+            if (cfChargingStationLinkUsers == null || cfChargingStationLinkUsers.size() == 0) {
                 return new ResponseResult(CommonCode.NO_MORE_DATAS);
             }
             String chargingStationIds = "";
-            for (CfChargingStationLinkUser cfChargingStationLinkUser: cfChargingStationLinkUsers){
-                chargingStationIds += ",'"+cfChargingStationLinkUser.getChargingStationId()+"'";
+            for (CfChargingStationLinkUser cfChargingStationLinkUser : cfChargingStationLinkUsers) {
+                chargingStationIds += ",'" + cfChargingStationLinkUser.getChargingStationId() + "'";
             }
             HashMap<String, String> valueMap = new HashMap<>();
-            valueMap.put("operator","in");
-            valueMap.put("value",chargingStationIds.substring(1));
+            valueMap.put("operator", "in");
+            valueMap.put("value", chargingStationIds.substring(1));
             conditionsMap.put("charging_station_id$in", valueMap);
         }
 
-        List<CfChargingPort> cfChargingPortList = cfChargingUseLogService.selectListByCondition(conditionsMap, allowFiledsMap,allowFileds);
+        List<CfChargingPort> cfChargingPortList = cfChargingUseLogService.selectListByCondition(conditionsMap, allowFiledsMap, allowFileds);
 
-        if(cfChargingPortList==null || cfChargingPortList.size()==0){
+        if (cfChargingPortList == null || cfChargingPortList.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null, 0);
         }
         Integer counts = cfChargingUseLogService.selectListByConditionCounts(conditionsMap, allowFiledsMap, allowFileds);

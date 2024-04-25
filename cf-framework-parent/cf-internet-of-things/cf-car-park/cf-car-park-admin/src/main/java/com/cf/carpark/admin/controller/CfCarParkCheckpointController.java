@@ -46,19 +46,19 @@ public class CfCarParkCheckpointController implements CfCarParkCheckpointSwagger
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(CfCarParkCheckpointQuery cfCarParkCheckpointQuery) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0){
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0) {
             CfCarParkLinkUserController cfCarParkLinkUserController = new CfCarParkLinkUserController();
             List<CfCarParkLinkUser> cfCarParkLinkUserList = cfCarParkLinkUserController.getCarParkLinkUser(userBasicInfo, cfCarParkLinkUserService);
-            if(cfCarParkLinkUserList==null){
+            if (cfCarParkLinkUserList == null) {
                 return new ResponseResult(CommonCode.NO_MORE_DATAS);
-            }else{
+            } else {
                 cfCarParkCheckpointQuery.setIds(new ArrayList<>());
-                for (CfCarParkLinkUser cfCarParkLinkUser: cfCarParkLinkUserList){
-                    if(StringUtils.isEmpty(cfCarParkLinkUser.getCheckPointIds())){
+                for (CfCarParkLinkUser cfCarParkLinkUser : cfCarParkLinkUserList) {
+                    if (StringUtils.isEmpty(cfCarParkLinkUser.getCheckPointIds())) {
                         continue;
                     }
                     String[] checkpointIdArray = cfCarParkLinkUser.getCheckPointIds().split(",");
-                    for(int i=0; i<checkpointIdArray.length; i++){
+                    for (int i = 0; i < checkpointIdArray.length; i++) {
                         cfCarParkCheckpointQuery.getIds().add(checkpointIdArray[i]);
                     }
                 }
@@ -66,7 +66,7 @@ public class CfCarParkCheckpointController implements CfCarParkCheckpointSwagger
         }
 
         List<CfCarParkCheckpoint> cfCarParkCheckpoints = cfCarParkCheckpointService.getListByQuery(cfCarParkCheckpointQuery);
-        if(cfCarParkCheckpoints==null || cfCarParkCheckpoints.size()==0){
+        if (cfCarParkCheckpoints == null || cfCarParkCheckpoints.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfCarParkCheckpoints);
@@ -98,13 +98,13 @@ public class CfCarParkCheckpointController implements CfCarParkCheckpointSwagger
     public ResponseResult goOffWorkOrGoToWork(@RequestBody CfCarParkCheckpointForm cfCarParkCheckpointForm) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         CfCarParkCheckpoint parkCheckpoint = cfCarParkCheckpointService.findById(cfCarParkCheckpointForm.getId(), false);
-        if(StringUtils.isNotEmpty(parkCheckpoint.getDutyUid()) && !userBasicInfo.getId().equals(parkCheckpoint.getDutyUid())){
+        if (StringUtils.isNotEmpty(parkCheckpoint.getDutyUid()) && !userBasicInfo.getId().equals(parkCheckpoint.getDutyUid())) {
             //值班通道被占用
             return new ResponseResult(CommonCode.FAIL, "该通道已有其它人员值班");
-        }else if(StringUtils.isNotEmpty(parkCheckpoint.getDutyUid()) && userBasicInfo.getId().equals(parkCheckpoint.getDutyUid())){
+        } else if (StringUtils.isNotEmpty(parkCheckpoint.getDutyUid()) && userBasicInfo.getId().equals(parkCheckpoint.getDutyUid())) {
             //取消值班
             parkCheckpoint.setDutyUid("");
-        }else{
+        } else {
             //值班
             parkCheckpoint.setDutyUid(userBasicInfo.getId());
         }
@@ -118,6 +118,6 @@ public class CfCarParkCheckpointController implements CfCarParkCheckpointSwagger
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(String id) {
         Integer delete = cfCarParkCheckpointService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS, delete):new ResponseResult(CommonCode.FAIL);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS, delete) : new ResponseResult(CommonCode.FAIL);
     }
 }

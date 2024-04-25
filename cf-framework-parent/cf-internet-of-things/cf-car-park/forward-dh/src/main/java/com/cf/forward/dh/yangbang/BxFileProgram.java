@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Program file
  */
-public class BxFileProgram extends BxFile{
+public class BxFileProgram extends BxFile {
 
     //
     // 优先级
@@ -29,7 +29,6 @@ public class BxFileProgram extends BxFile{
     private short span;
 
     /**
-     *
      * @param id    文件id
      * @param areas 区域
      */
@@ -58,26 +57,26 @@ public class BxFileProgram extends BxFile{
         //
         // program life
         // 8 bytes
-        for(int i=0; i<8; i++) {
-            array.add((byte)0xff);
+        for (int i = 0; i < 8; i++) {
+            array.add((byte) 0xff);
         }
 
         //
         // program week
-        array.add((byte)0xff);
+        array.add((byte) 0xff);
 
         //
         // program time
-        array.add((byte)0x00);
-        array.add((byte)0x00);
+        array.add((byte) 0x00);
+        array.add((byte) 0x00);
 
         //
         // area number
-        array.add((byte)areas.size());
+        array.add((byte) areas.size());
 
         //
         // area data
-        for(BxArea area : areas) {
+        for (BxArea area : areas) {
             byte[] adata = area.build();
             array.add(adata.length);
             array.add(adata);
@@ -85,7 +84,7 @@ public class BxFileProgram extends BxFile{
 
         //
         // crc
-        array.add((short)0x00);
+        array.add((short) 0x00);
 
         //
         return array.build();

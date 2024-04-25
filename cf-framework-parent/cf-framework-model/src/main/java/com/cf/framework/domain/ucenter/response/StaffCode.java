@@ -11,11 +11,10 @@ import lombok.ToString;
  */
 @ToString
 public enum StaffCode implements ResultCode {
-    STAFF_DOES_NOT_EXIST(false,26001,"指定的员工不存在！"),
-    STAFF_NOT_BELONG_TO_YOU(false,26002,"指定的员工不属于您！"),
-    CANT_NOT_ADD_YOURSELF(false,26003,"您不能把您自己添加为员工！"),
-    CANT_NOT_REPEAT_ADD_STAFF(false,26004,"不能重复添加员工！")
-    ;
+    STAFF_DOES_NOT_EXIST(false, 26001, "指定的员工不存在！"),
+    STAFF_NOT_BELONG_TO_YOU(false, 26002, "指定的员工不属于您！"),
+    CANT_NOT_ADD_YOURSELF(false, 26003, "您不能把您自己添加为员工！"),
+    CANT_NOT_REPEAT_ADD_STAFF(false, 26004, "不能重复添加员工！");
 
     //操作代码
     @ApiModelProperty(value = "操作是否成功", example = "true", required = true)
@@ -27,11 +26,13 @@ public enum StaffCode implements ResultCode {
     //提示信息
     @ApiModelProperty(value = "操作提示", example = "操作过于频繁！", required = true)
     String message;
-    private StaffCode(boolean success, int code, String message){
+
+    private StaffCode(boolean success, int code, String message) {
         this.success = success;
         this.code = code;
         this.message = message;
     }
+
     private static final ImmutableMap<Integer, StaffCode> CACHE;
 
     static {
@@ -63,6 +64,7 @@ public enum StaffCode implements ResultCode {
     }
 
     String mixMessage;
+
     @Override
     public String mixMessage() {
         return mixMessage;

@@ -3,7 +3,7 @@ package com.cf.logistics.domain.request;
 import java.io.Serializable;
 
 public class CfLogisticsVehicleQuery implements Serializable {
-    
+
     private Long id;
 
     private String numberPlate;

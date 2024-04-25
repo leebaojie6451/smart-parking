@@ -6,6 +6,7 @@ import java.util.Date;
 
 /**
  * 停车信息
+ *
  * @author why
  */
 @Data
@@ -14,7 +15,7 @@ public class StopCarInfo {
     /**
      * 车牌
      */
-    private String numberPlate ;
+    private String numberPlate;
 
     /**
      * 创建时间

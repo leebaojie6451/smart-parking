@@ -83,10 +83,10 @@ public class CfUserDriverLicenseServiceImpl implements CfUserDriverLicenseServic
     @Override
     public CfUserDriverLicense findById(Long id, boolean expectEmpty) {
         CfUserDriverLicense cfUserDriverLicense = findById(id);
-        if(expectEmpty && cfUserDriverLicense!=null){
+        if (expectEmpty && cfUserDriverLicense != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpty && cfUserDriverLicense==null){
+        if (!expectEmpty && cfUserDriverLicense == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfUserDriverLicense;
@@ -105,13 +105,13 @@ public class CfUserDriverLicenseServiceImpl implements CfUserDriverLicenseServic
 
     @Override
     public void checkRepeatByLicenseNumber(CfUserDriverLicense cfUserDriverLicense) {
-        if(StringUtils.isEmpty(cfUserDriverLicense.getCertificateNumber())){
+        if (StringUtils.isEmpty(cfUserDriverLicense.getCertificateNumber())) {
             return;
         }
         CfUserDriverLicenseQuery cfUserDriverLicenseQuery = new CfUserDriverLicenseQuery();
         cfUserDriverLicenseQuery.setCertificateNumber(cfUserDriverLicense.getCertificateNumber());
         List<CfUserDriverLicense> cfUserDriverLicenseList = getListByQuery(cfUserDriverLicenseQuery);
-        if((cfUserDriverLicense.getId()==null && cfUserDriverLicenseList!=null && cfUserDriverLicenseList.size()>0) || (cfUserDriverLicense.getId()!=null && cfUserDriverLicenseList!=null && cfUserDriverLicenseList.size()>0 && cfUserDriverLicense.getId().longValue()!=cfUserDriverLicenseList.get(0).getId().longValue())){
+        if ((cfUserDriverLicense.getId() == null && cfUserDriverLicenseList != null && cfUserDriverLicenseList.size() > 0) || (cfUserDriverLicense.getId() != null && cfUserDriverLicenseList != null && cfUserDriverLicenseList.size() > 0 && cfUserDriverLicense.getId().longValue() != cfUserDriverLicenseList.get(0).getId().longValue())) {
             ExceptionCast.cast(UcenterCode.ID_NUMBER_IS_BOUND);
         }
     }
@@ -120,46 +120,46 @@ public class CfUserDriverLicenseServiceImpl implements CfUserDriverLicenseServic
     public CfUserDriverLicenseExample getExampleByQuery(CfUserDriverLicenseQuery cfUserDriverLicenseQuery) {
         CfUserDriverLicenseExample cfUserDriverLicenseExample = new CfUserDriverLicenseExample();
         CfUserDriverLicenseExample.Criteria criteria = cfUserDriverLicenseExample.createCriteria();
-        if(cfUserDriverLicenseQuery.getUid()!=null){
+        if (cfUserDriverLicenseQuery.getUid() != null) {
             criteria.andUidEqualTo(cfUserDriverLicenseQuery.getUid());
         }
-        if(cfUserDriverLicenseQuery.getCheckStatus()!=null){
+        if (cfUserDriverLicenseQuery.getCheckStatus() != null) {
             criteria.andCheckStatusEqualTo(cfUserDriverLicenseQuery.getCheckStatus());
         }
-        if(cfUserDriverLicenseQuery.getCertificateNumber()!=null){
+        if (cfUserDriverLicenseQuery.getCertificateNumber() != null) {
             criteria.andCertificateNumberEqualTo(cfUserDriverLicenseQuery.getCertificateNumber());
         }
-        if(cfUserDriverLicenseQuery.getPhone()!=null){
+        if (cfUserDriverLicenseQuery.getPhone() != null) {
             criteria.andPhoneEqualTo(cfUserDriverLicenseQuery.getPhone());
         }
-        if(cfUserDriverLicenseQuery.getUserName()!=null){
+        if (cfUserDriverLicenseQuery.getUserName() != null) {
             criteria.andUserNameEqualTo(cfUserDriverLicenseQuery.getUserName());
         }
-        if(StringUtils.isNotEmpty(cfUserDriverLicenseQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfUserDriverLicenseQuery.getOrderBy())) {
             cfUserDriverLicenseExample.setOrderByClause(cfUserDriverLicenseQuery.getOrderBy());
         }
-        if(cfUserDriverLicenseQuery.getPage()!=null && cfUserDriverLicenseQuery.getSize()!=null){
+        if (cfUserDriverLicenseQuery.getPage() != null && cfUserDriverLicenseQuery.getSize() != null) {
             PageHelper.startPage(cfUserDriverLicenseQuery.getPage(), cfUserDriverLicenseQuery.getSize());
         }
         return cfUserDriverLicenseExample;
     }
 
     @Override
-    public List<CfUserDriverLicense> synchronizeTmsDriver()throws Exception {
-        if(StringUtils.isEmpty(tmsUrl)){
+    public List<CfUserDriverLicense> synchronizeTmsDriver() throws Exception {
+        if (StringUtils.isEmpty(tmsUrl)) {
             return null;
         }
         List<CfUserDriverLicense> cfUserDriverLicenseList = new ArrayList<>();
-        JSONObject driverList = HttpClient.doGet(tmsUrl+"/interface/adapter/interface_paidui_driver");
-        if(driverList!=null && driverList.containsKey("messageType") && driverList.get("data")!=null){
+        JSONObject driverList = HttpClient.doGet(tmsUrl + "/interface/adapter/interface_paidui_driver");
+        if (driverList != null && driverList.containsKey("messageType") && driverList.get("data") != null) {
             Object[] data = ((JSONArray) driverList.get("data")).stream().toArray();
             ArrayList<JSONObject> dataList = new ArrayList<>();
             HashMap<String, String> requestHeaders = new HashMap<>();
-            requestHeaders.put("Content-Type","application/json;charset=UTF-8");
+            requestHeaders.put("Content-Type", "application/json;charset=UTF-8");
             CfUserDriverLicenseQuery cfUserDriverLicenseQuery = new CfUserDriverLicenseQuery();
-            for(int i=0; i<data.length; i++){
+            for (int i = 0; i < data.length; i++) {
                 //限制单次同步数据为30条
-                if(i>30){
+                if (i > 30) {
                     break;
                 }
                 CfUserDriverLicense cfUserDriverLicense = new CfUserDriverLicense();
@@ -167,15 +167,15 @@ public class CfUserDriverLicenseServiceImpl implements CfUserDriverLicenseServic
                 JSONObject jsonObject = (JSONObject) data[i];
                 cfUserDriverLicense.setUid("");
                 cfUserDriverLicense.setUserName(jsonObject.getString("name"));
-                cfUserDriverLicense.setSex((byte)2);
+                cfUserDriverLicense.setSex((byte) 2);
                 cfUserDriverLicense.setNationality("");
                 cfUserDriverLicense.setAddress("");
-                cfUserDriverLicense.setBirthdayYear((short)0);
-                cfUserDriverLicense.setBirthdayMonth((byte)0);
-                cfUserDriverLicense.setBirthdayDay((byte)0);
-                cfUserDriverLicense.setFirstIssueYear((short)0);
-                cfUserDriverLicense.setFirstIssueMonth((byte)0);
-                cfUserDriverLicense.setFirstIssueDay((byte)0);
+                cfUserDriverLicense.setBirthdayYear((short) 0);
+                cfUserDriverLicense.setBirthdayMonth((byte) 0);
+                cfUserDriverLicense.setBirthdayDay((byte) 0);
+                cfUserDriverLicense.setFirstIssueYear((short) 0);
+                cfUserDriverLicense.setFirstIssueMonth((byte) 0);
+                cfUserDriverLicense.setFirstIssueDay((byte) 0);
                 cfUserDriverLicense.setCarClass(jsonObject.getString("driverCarType"));
                 cfUserDriverLicense.setStartTime(0l);
                 cfUserDriverLicense.setEndTime(0l);
@@ -183,7 +183,7 @@ public class CfUserDriverLicenseServiceImpl implements CfUserDriverLicenseServic
                 cfUserDriverLicense.setIssuingAuthority("");
                 cfUserDriverLicense.setFileNumber("");
                 cfUserDriverLicense.setInternshipPeriodEnds(0l);
-                cfUserDriverLicense.setCheckStatus((byte)1);
+                cfUserDriverLicense.setCheckStatus((byte) 1);
                 cfUserDriverLicense.setPhone(jsonObject.getString("tel"));
                 cfUserDriverLicense.setQualificationCertificateNumber(jsonObject.getString("certificate"));
 
@@ -192,12 +192,12 @@ public class CfUserDriverLicenseServiceImpl implements CfUserDriverLicenseServic
                 cfUserDriverLicenseQuery.setPhone(jsonObject.getString("tel"));
                 List<CfUserDriverLicense> driverLicenseList = getListByQuery(cfUserDriverLicenseQuery);
                 try {
-                    if(driverLicenseList!=null && driverLicenseList.size()>0){
+                    if (driverLicenseList != null && driverLicenseList.size() > 0) {
                         cfUserDriverLicense.setId(driverLicenseList.get(0).getId());
                         update(cfUserDriverLicense);
-                    }else{
+                    } else {
                         add(cfUserDriverLicense);
-                        if(jsonObject.containsKey("wechatid") && StringUtils.isNotEmpty(jsonObject.getString("wechatid"))){
+                        if (jsonObject.containsKey("wechatid") && StringUtils.isNotEmpty(jsonObject.getString("wechatid"))) {
                             //创建对应的微信公众号用户
                             CfThirdPartyLogin cfThirdPartyLogin = new CfThirdPartyLogin();
                             //TODO 暂时写死，后期动态查询
@@ -212,20 +212,20 @@ public class CfUserDriverLicenseServiceImpl implements CfUserDriverLicenseServic
                     continue;
                 }
                 cfUserDriverLicenseList.add(cfUserDriverLicense);
-                params.put("name",cfUserDriverLicense.getUserName());
-                params.put("tel",cfUserDriverLicense.getPhone());
-                params.put("success","true");
+                params.put("name", cfUserDriverLicense.getUserName());
+                params.put("tel", cfUserDriverLicense.getPhone());
+                params.put("success", "true");
                 dataList.add(params);
             }
-            if(dataList.size()>0){
+            if (dataList.size() > 0) {
                 JSONObject[] paramsList = new JSONObject[dataList.size()];
-                int i  = 0;
-                for(JSONObject params: dataList){
+                int i = 0;
+                for (JSONObject params : dataList) {
                     paramsList[i] = params;
                     i++;
                 }
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("data",paramsList);
+                jsonObject.put("data", paramsList);
                 updateTMSData(jsonObject, requestHeaders);
             }
         }
@@ -235,59 +235,62 @@ public class CfUserDriverLicenseServiceImpl implements CfUserDriverLicenseServic
     /**
      * 告诉TMS系统指定数据已更新
      */
-    private void updateTMSData(JSONObject paramsObject, HashMap<String, String> requestHeaders) throws Exception{
-        if(StringUtils.isEmpty(tmsUrl)){
+    private void updateTMSData(JSONObject paramsObject, HashMap<String, String> requestHeaders) throws Exception {
+        if (StringUtils.isEmpty(tmsUrl)) {
             return;
         }
         try {
-            JSONObject updateResult = (JSONObject)HttpClient.doPostByString(paramsObject.toJSONString(),tmsUrl+"/interface/adapter/paidui_update_driver",requestHeaders, true);
+            JSONObject updateResult = (JSONObject) HttpClient.doPostByString(paramsObject.toJSONString(), tmsUrl + "/interface/adapter/paidui_update_driver", requestHeaders, true);
         } catch (Exception e) {
             e.printStackTrace();
         }
-    };
+    }
+
+    ;
 
     /**
      * 如果手机号用户未注册，创建一个用户
      * 更新指定用户证件状态为正常
+     *
      * @param cfUserDriverLicense
      */
-    private void updateUserDocumentsStatus(CfUserDriverLicense cfUserDriverLicense) throws Exception{
+    private void updateUserDocumentsStatus(CfUserDriverLicense cfUserDriverLicense) throws Exception {
         //先判断该手机号是否存在用户
         CfUser cfUser = cfUserService.findByPhone(cfUserDriverLicense.getPhone());
-        if(cfUser!=null){
+        if (cfUser != null) {
             //更新用户证件状态
             CfUser updateUser = new CfUser();
             updateUser.setId(cfUser.getId());
-            if(cfUserDriverLicense.getCheckStatus()!=null && cfUserDriverLicense.getCheckStatus().byteValue()==(byte)1){
-                updateUser.setDriverLicenseStatus((byte)2);
-            }else{
-                updateUser.setDriverLicenseStatus((byte)1);
+            if (cfUserDriverLicense.getCheckStatus() != null && cfUserDriverLicense.getCheckStatus().byteValue() == (byte) 1) {
+                updateUser.setDriverLicenseStatus((byte) 2);
+            } else {
+                updateUser.setDriverLicenseStatus((byte) 1);
             }
-            updateUser.setNickName("司机-"+cfUserDriverLicense.getUserName());
+            updateUser.setNickName("司机-" + cfUserDriverLicense.getUserName());
             updateUser.setPhone(cfUserDriverLicense.getPhone());
             updateUser.setTrueName(cfUserDriverLicense.getUserName());
             cfUserService.updateByPrimaryKeySelective(updateUser);
             cfUserDriverLicense.setUid(updateUser.getId());
-        }else{
+        } else {
             //创建新用户
             cfUser = new CfUser();
             cfUser.setId(idWorker.nextId());
-            cfUser.setUserName(cfUserService.randomMakeUserName("",0));
+            cfUser.setUserName(cfUserService.randomMakeUserName("", 0));
             cfUser.setAvatar("");
-            cfUser.setNickName("司机-"+cfUserDriverLicense.getUserName());
+            cfUser.setNickName("司机-" + cfUserDriverLicense.getUserName());
             cfUser.setPassword(StringTools.getRandomString("", 0));
-            cfUser.setType((byte)0);
+            cfUser.setType((byte) 0);
             cfUser.setPhone(cfUserDriverLicense.getPhone());
             cfUser.setTrueName(cfUserDriverLicense.getUserName());
             cfUser.setBirthday(0L);
             cfUser.setSign("");
             cfUser.setEmail("");
-            cfUser.setSex((byte)1);
+            cfUser.setSex((byte) 1);
             cfUser.setCreateTime(System.currentTimeMillis());
-            if(cfUserDriverLicense.getCheckStatus()!=null && cfUserDriverLicense.getCheckStatus().byteValue()==(byte)1){
-                cfUser.setDriverLicenseStatus((byte)2);
-            }else{
-                cfUser.setDriverLicenseStatus((byte)1);
+            if (cfUserDriverLicense.getCheckStatus() != null && cfUserDriverLicense.getCheckStatus().byteValue() == (byte) 1) {
+                cfUser.setDriverLicenseStatus((byte) 2);
+            } else {
+                cfUser.setDriverLicenseStatus((byte) 1);
             }
 
             CfUser lastUser = cfUserService.add(cfUser);

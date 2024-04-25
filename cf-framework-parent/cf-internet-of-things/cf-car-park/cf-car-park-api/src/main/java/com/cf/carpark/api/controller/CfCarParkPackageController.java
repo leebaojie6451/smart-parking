@@ -52,9 +52,9 @@ public class CfCarParkPackageController implements CfCarParkPackageSwagger {
     public ResponseResult getMyCarParkPackageByCondition(CfCarParkPackageQuery cfCarParkPackageQuery) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         cfCarParkPackageQuery.setUid(userBasicInfo.getId());
-        cfCarParkPackageQuery.setTransRegional((byte)0);
+        cfCarParkPackageQuery.setTransRegional((byte) 0);
         List<CfCarParkPackage> cfCarParkPackages = cfCarParkPackageService.getListByQueryContainCarParkName(cfCarParkPackageQuery);
-        if(cfCarParkPackages==null || cfCarParkPackages.size()==0){
+        if (cfCarParkPackages == null || cfCarParkPackages.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfCarParkPackages);
@@ -63,9 +63,9 @@ public class CfCarParkPackageController implements CfCarParkPackageSwagger {
     @Override
     @RequestMapping(value = "getCarParkPackagePriceByCondition", method = RequestMethod.GET)
     public ResponseResult getCarParkPackagePriceByCondition(CfCarParkPackagePriceQuery cfCarParkPackagePriceQuery) {
-        cfCarParkPackagePriceQuery.setSpecialGive((byte)0);
+        cfCarParkPackagePriceQuery.setSpecialGive((byte) 0);
         List<CfCarParkPackagePrice> cfCarParkPackagePrices = cfCarParkPackagePriceService.getListByQuery(cfCarParkPackagePriceQuery);
-        if(cfCarParkPackagePrices==null || cfCarParkPackagePrices.size()==0){
+        if (cfCarParkPackagePrices == null || cfCarParkPackagePrices.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfCarParkPackagePrices);
@@ -73,7 +73,7 @@ public class CfCarParkPackageController implements CfCarParkPackageSwagger {
 
     @Override
     @RequestMapping(value = "buyCfCarParkPackage", method = RequestMethod.POST)
-    public ResponseResult buyCfCarParkPackage(HttpServletRequest httpServletRequest,@RequestBody @Validated BuyCfCarParkPackage buyCfCarParkPackage) throws Exception {
+    public ResponseResult buyCfCarParkPackage(HttpServletRequest httpServletRequest, @RequestBody @Validated BuyCfCarParkPackage buyCfCarParkPackage) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         ResultMap resultMap = cfCarParkPackagePriceService.buyCfCarParkPackage(buyCfCarParkPackage.getCfCarParkPackagePriceId(), userBasicInfo.getId(), buyCfCarParkPackage.getPayTypeId(), buyCfCarParkPackage.getNumberPlate(), HttpClient.getIPAddress(httpServletRequest));
         return new ResponseResult(CommonCode.SUCCESS, resultMap);
@@ -84,18 +84,18 @@ public class CfCarParkPackageController implements CfCarParkPackageSwagger {
     public ResponseResult queryCfCarParkPackageRecoverFee(BuyCfCarParkPackage buyCfCarParkPackage) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         CfCarParkPackagePrice cfCarParkPackagePrice = cfCarParkPackagePriceService.findById(buyCfCarParkPackage.getCfCarParkPackagePriceId());
-        if(cfCarParkPackagePrice==null){
+        if (cfCarParkPackagePrice == null) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         CfCarParkOrder cfCarParkOrder = cfCarParkPackagePriceService.queryCfCarParkPackageRecoverFee(cfCarParkPackagePrice, userBasicInfo.getId(), buyCfCarParkPackage.getNumberPlate());
-        return cfCarParkOrder==null ? new ResponseResult(CommonCode.NO_MORE_DATAS) : new ResponseResult(CommonCode.SUCCESS, cfCarParkOrder);
+        return cfCarParkOrder == null ? new ResponseResult(CommonCode.NO_MORE_DATAS) : new ResponseResult(CommonCode.SUCCESS, cfCarParkOrder);
     }
 
     @Override
     @RequestMapping(value = "getCarParkPackagePriceDetail", method = RequestMethod.GET)
     public ResponseResult getCarParkPackagePriceDetail(HttpServletRequest httpServletRequest, String cfCarParkPackagePriceId) throws Exception {
         CfCarParkPackagePrice cfCarParkPackagePrice = cfCarParkPackagePriceService.findByIdContainName(cfCarParkPackagePriceId);
-        if(cfCarParkPackagePrice!=null && cfCarParkPackagePrice.getId()!=null){
+        if (cfCarParkPackagePrice != null && cfCarParkPackagePrice.getId() != null) {
             return new ResponseResult(CommonCode.SUCCESS, cfCarParkPackagePrice);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);

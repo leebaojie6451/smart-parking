@@ -28,7 +28,7 @@ public class CfThirdPartySystemCallKeysServiceImpl implements CfThirdPartySystem
 
     @Override
     public CfThirdPartySystemCallKeys add(CfThirdPartySystemCallKeys cfThirdPartySystemCallKeys) {
-        if(cfThirdPartySystemCallKeys.getKeyId()==null){
+        if (cfThirdPartySystemCallKeys.getKeyId() == null) {
             cfThirdPartySystemCallKeys.setKeyId(idWorker.nextLongId());
         }
         cfThirdPartySystemCallKeysMapper.insertSelective(cfThirdPartySystemCallKeys);
@@ -54,10 +54,10 @@ public class CfThirdPartySystemCallKeysServiceImpl implements CfThirdPartySystem
     @Override
     public CfThirdPartySystemCallKeys findById(Long id, boolean expectEmpty) {
         CfThirdPartySystemCallKeys cfThirdPartySystemCallKeys = findById(id);
-        if(expectEmpty && cfThirdPartySystemCallKeys!=null){
+        if (expectEmpty && cfThirdPartySystemCallKeys != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpty && cfThirdPartySystemCallKeys==null){
+        if (!expectEmpty && cfThirdPartySystemCallKeys == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfThirdPartySystemCallKeys;
@@ -79,17 +79,17 @@ public class CfThirdPartySystemCallKeysServiceImpl implements CfThirdPartySystem
         CfThirdPartySystemCallKeysExample cfThirdPartySystemCallKeysExample = new CfThirdPartySystemCallKeysExample();
         CfThirdPartySystemCallKeysExample.Criteria criteria = cfThirdPartySystemCallKeysExample.createCriteria();
 
-        if(StringUtils.isNotEmpty(cfThirdPartySystemCallKeysQuery.getUseScenes())){
+        if (StringUtils.isNotEmpty(cfThirdPartySystemCallKeysQuery.getUseScenes())) {
             criteria.andUseScenesEqualTo(cfThirdPartySystemCallKeysQuery.getUseScenes());
         }
-        if(StringUtils.isNotEmpty(cfThirdPartySystemCallKeysQuery.getCompanyName())){
-            criteria.andCompanyNameLike("%"+cfThirdPartySystemCallKeysQuery.getCompanyName()+"%");
+        if (StringUtils.isNotEmpty(cfThirdPartySystemCallKeysQuery.getCompanyName())) {
+            criteria.andCompanyNameLike("%" + cfThirdPartySystemCallKeysQuery.getCompanyName() + "%");
         }
 
-        if(StringUtils.isNotEmpty(cfThirdPartySystemCallKeysQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfThirdPartySystemCallKeysQuery.getOrderBy())) {
             cfThirdPartySystemCallKeysExample.setOrderByClause(cfThirdPartySystemCallKeysQuery.getOrderBy());
         }
-        if(cfThirdPartySystemCallKeysQuery.getPage()!=null && cfThirdPartySystemCallKeysQuery.getSize()!=null){
+        if (cfThirdPartySystemCallKeysQuery.getPage() != null && cfThirdPartySystemCallKeysQuery.getSize() != null) {
             PageHelper.startPage(cfThirdPartySystemCallKeysQuery.getPage(), cfThirdPartySystemCallKeysQuery.getSize());
         }
         return cfThirdPartySystemCallKeysExample;

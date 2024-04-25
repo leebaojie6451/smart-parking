@@ -10,6 +10,7 @@ public interface CfCarParkWhitelistIssuedLogService {
 
     /**
      * 批量添加
+     *
      * @param cfCarParkWhitelistIssuedLogList
      * @return
      */
@@ -21,6 +22,7 @@ public interface CfCarParkWhitelistIssuedLogService {
 
     /**
      * 根据条件删除
+     *
      * @param cfCarParkWhitelistIssuedLogQuery
      * @return
      */

@@ -27,10 +27,10 @@ public class CfAreasServiceImpl implements CfAreasService {
     public List<CfAreas> selectAll(Boolean recursive) {
 
         List<CfAreas> cfAreas = null;
-        if(!recursive){
+        if (!recursive) {
             CfAreasExample cfAreasExample = new CfAreasExample();
             cfAreas = cfAreasMapper.selectByExample(cfAreasExample);
-        }else{
+        } else {
             int maxLevelType = cfAreasMapper.getMaxLevelType();
             cfAreas = selectByLevelAndParentId(0, "0", maxLevelType, true);
         }
@@ -42,13 +42,13 @@ public class CfAreasServiceImpl implements CfAreasService {
         CfAreasExample cfAreasExample = new CfAreasExample();
         CfAreasExample.Criteria criteria = cfAreasExample.createCriteria();
         criteria.andLevelTypeEqualTo(level);
-        if(StringUtils.isNotEmpty(parentId)){
+        if (StringUtils.isNotEmpty(parentId)) {
             criteria.andParentIdEqualTo(parentId);
         }
         List<CfAreas> cfAreas = cfAreasMapper.selectByExample(cfAreasExample);
-        if(loop && cfAreas!=null && cfAreas.size()>0 && cfAreas.get(0).getLevelType()<maxLevel){
-            for (CfAreas cfArea: cfAreas){
-                cfArea.setChildren(selectByLevelAndParentId(cfArea.getLevelType()+1, cfArea.getId(), maxLevel, loop));
+        if (loop && cfAreas != null && cfAreas.size() > 0 && cfAreas.get(0).getLevelType() < maxLevel) {
+            for (CfAreas cfArea : cfAreas) {
+                cfArea.setChildren(selectByLevelAndParentId(cfArea.getLevelType() + 1, cfArea.getId(), maxLevel, loop));
             }
         }
         return cfAreas;

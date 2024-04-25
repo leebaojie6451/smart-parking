@@ -52,9 +52,9 @@ public class CfChargingStationDeviceServiceImpl implements CfChargingStationDevi
     @Override
     public CfChargingStationDevice findById(String id, boolean expectEmpty) {
         CfChargingStationDevice cfChargingStationDevice = findById(id);
-        if(expectEmpty && cfChargingStationDevice!=null){
+        if (expectEmpty && cfChargingStationDevice != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
-        }else if(!expectEmpty && cfChargingStationDevice==null){
+        } else if (!expectEmpty && cfChargingStationDevice == null) {
             ExceptionCast.cast(ChargingCode.BIND_LICENSE_PLATES_REPEATEDLY);
         }
         return cfChargingStationDevice;
@@ -65,68 +65,68 @@ public class CfChargingStationDeviceServiceImpl implements CfChargingStationDevi
         CfChargingStationDeviceExample cfChargingStationDeviceExample = new CfChargingStationDeviceExample();
         CfChargingStationDeviceExample.Criteria criteria = cfChargingStationDeviceExample.createCriteria();
 
-        if(cfChargingStationDeviceQuery.getId()!=null){
+        if (cfChargingStationDeviceQuery.getId() != null) {
             criteria.andIdEqualTo(cfChargingStationDeviceQuery.getId());
         }
-        if(cfChargingStationDeviceQuery.getIds()!=null && cfChargingStationDeviceQuery.getIds().size()>0){
+        if (cfChargingStationDeviceQuery.getIds() != null && cfChargingStationDeviceQuery.getIds().size() > 0) {
             criteria.andIdIn(cfChargingStationDeviceQuery.getIds());
         }
-        if(cfChargingStationDeviceQuery.getChargingStationId()!=null){
+        if (cfChargingStationDeviceQuery.getChargingStationId() != null) {
             criteria.andChargingStationIdEqualTo(cfChargingStationDeviceQuery.getChargingStationId());
         }
-        if(cfChargingStationDeviceQuery.getBarCode()!=null){
+        if (cfChargingStationDeviceQuery.getBarCode() != null) {
             criteria.andBarCodeEqualTo(cfChargingStationDeviceQuery.getBarCode());
         }
-        if(cfChargingStationDeviceQuery.getBarCodes()!=null && cfChargingStationDeviceQuery.getBarCodes().size()>0){
+        if (cfChargingStationDeviceQuery.getBarCodes() != null && cfChargingStationDeviceQuery.getBarCodes().size() > 0) {
             criteria.andBarCodeIn(cfChargingStationDeviceQuery.getBarCodes());
         }
-        if(cfChargingStationDeviceQuery.getNoticed()!=null){
+        if (cfChargingStationDeviceQuery.getNoticed() != null) {
             criteria.andNoticedEqualTo(cfChargingStationDeviceQuery.getNoticed());
         }
-        if(cfChargingStationDeviceQuery.getModel()!=null){
+        if (cfChargingStationDeviceQuery.getModel() != null) {
             criteria.andModelEqualTo(cfChargingStationDeviceQuery.getModel());
         }
-        if(cfChargingStationDeviceQuery.getBrand()!=null){
+        if (cfChargingStationDeviceQuery.getBrand() != null) {
             criteria.andBrandEqualTo(cfChargingStationDeviceQuery.getBrand());
         }
-        if(cfChargingStationDeviceQuery.getStatus()!=null){
+        if (cfChargingStationDeviceQuery.getStatus() != null) {
             criteria.andStatusEqualTo(cfChargingStationDeviceQuery.getStatus());
         }
-        if(cfChargingStationDeviceQuery.getMinLastOnlineTime()!=null){
+        if (cfChargingStationDeviceQuery.getMinLastOnlineTime() != null) {
             criteria.andLastOnlineTimeGreaterThanOrEqualTo(cfChargingStationDeviceQuery.getMinLastOnlineTime());
         }
-        if(cfChargingStationDeviceQuery.getMaxLastOnlineTime()!=null){
+        if (cfChargingStationDeviceQuery.getMaxLastOnlineTime() != null) {
             criteria.andLastOnlineTimeLessThanOrEqualTo(cfChargingStationDeviceQuery.getMaxLastOnlineTime());
         }
-        if(StringUtils.isNotEmpty(cfChargingStationDeviceQuery.getLinkMode())){
+        if (StringUtils.isNotEmpty(cfChargingStationDeviceQuery.getLinkMode())) {
             criteria.andLinkModeEqualTo(cfChargingStationDeviceQuery.getLinkMode());
         }
-        if(cfChargingStationDeviceQuery.getType()!=null){
+        if (cfChargingStationDeviceQuery.getType() != null) {
             criteria.andTypeEqualTo(cfChargingStationDeviceQuery.getType());
         }
-        if(StringUtils.isNotEmpty(cfChargingStationDeviceQuery.getCheckpointId())){
+        if (StringUtils.isNotEmpty(cfChargingStationDeviceQuery.getCheckpointId())) {
             criteria.andCheckpointIdEqualTo(cfChargingStationDeviceQuery.getCheckpointId());
         }
-        if(StringUtils.isNotEmpty(cfChargingStationDeviceQuery.getProductId())){
+        if (StringUtils.isNotEmpty(cfChargingStationDeviceQuery.getProductId())) {
             criteria.andProductIdEqualTo(cfChargingStationDeviceQuery.getProductId());
         }
-        if(cfChargingStationDeviceQuery.getUsername()!=null){
+        if (cfChargingStationDeviceQuery.getUsername() != null) {
             criteria.andUsernameEqualTo(cfChargingStationDeviceQuery.getUsername());
         }
-        if(cfChargingStationDeviceQuery.getPassword()!=null){
+        if (cfChargingStationDeviceQuery.getPassword() != null) {
             criteria.andPasswordEqualTo(cfChargingStationDeviceQuery.getPassword());
         }
-        if(cfChargingStationDeviceQuery.getMacAddress()!=null){
+        if (cfChargingStationDeviceQuery.getMacAddress() != null) {
             criteria.andMacAddressEqualTo(cfChargingStationDeviceQuery.getMacAddress());
         }
-        
-        if(StringUtils.isNotEmpty(cfChargingStationDeviceQuery.getOrderBy())){
+
+        if (StringUtils.isNotEmpty(cfChargingStationDeviceQuery.getOrderBy())) {
             cfChargingStationDeviceExample.setOrderByClause(cfChargingStationDeviceQuery.getOrderBy());
         }
-        if(cfChargingStationDeviceQuery.getPage()!=null && cfChargingStationDeviceQuery.getSize()!=null){
+        if (cfChargingStationDeviceQuery.getPage() != null && cfChargingStationDeviceQuery.getSize() != null) {
             PageHelper.startPage(cfChargingStationDeviceQuery.getPage(), cfChargingStationDeviceQuery.getSize());
         }
-        
+
         return cfChargingStationDeviceExample;
     }
 

@@ -20,6 +20,7 @@ public interface CfStaffService {
 
     /**
      * 根据Query条件原生SQL查询
+     *
      * @param cfStaffQuery
      * @return
      */
@@ -27,6 +28,7 @@ public interface CfStaffService {
 
     /**
      * 根据Query条件原生SQL查询，同时包含员工发券统计
+     *
      * @param cfStaffQuery
      * @return
      */
@@ -36,6 +38,7 @@ public interface CfStaffService {
 
     /**
      * 雇主删除员工
+     *
      * @param employerId
      * @param id
      * @return
@@ -44,6 +47,7 @@ public interface CfStaffService {
 
     /**
      * 雇主更新员工
+     *
      * @param cfStaff
      * @return
      */
@@ -51,6 +55,7 @@ public interface CfStaffService {
 
     /**
      * 雇主添加员工
+     *
      * @param cfStaff
      * @return
      */
@@ -58,6 +63,7 @@ public interface CfStaffService {
 
     /**
      * 通过雇主id和员工id判断该雇主是否雇佣了该员工
+     *
      * @param employerId
      * @param staffId
      * @param exceptionScene 抛出异常的场景(传yes：当有数据时会抛出该员工已经存在异常,传no当没有数据时会

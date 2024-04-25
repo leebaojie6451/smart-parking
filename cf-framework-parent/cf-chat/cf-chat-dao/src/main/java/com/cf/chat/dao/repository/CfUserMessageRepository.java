@@ -8,10 +8,11 @@ import org.springframework.data.mongodb.repository.Query;
 
 import java.util.List;
 
-public interface CfUserMessageRepository extends MongoRepository<CfUserMessage,String> {
+public interface CfUserMessageRepository extends MongoRepository<CfUserMessage, String> {
 
     /**
      * 根据接收者和状态查询聊天记录
+     *
      * @param to_uid
      * @param status
      * @param pageable
@@ -21,6 +22,7 @@ public interface CfUserMessageRepository extends MongoRepository<CfUserMessage,S
 
     /**
      * 根据接收者和类型查询聊天记录
+     *
      * @param to_uid
      * @param type
      * @param pageable

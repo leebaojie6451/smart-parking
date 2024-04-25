@@ -30,8 +30,9 @@ public interface CfLogisticsStorehouseLinkUserService {
 
     /**
      * 检查是否有重复添加
+     *
      * @param cfLogisticsStorehouseLinkUser
      */
     void checkRepeat(CfLogisticsStorehouseLinkUser cfLogisticsStorehouseLinkUser);
-    
+
 }

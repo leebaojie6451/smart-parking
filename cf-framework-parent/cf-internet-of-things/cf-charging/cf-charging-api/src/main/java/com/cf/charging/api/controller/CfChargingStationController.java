@@ -50,7 +50,7 @@ public class CfChargingStationController implements CfChargingStationSwagger {
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseResult add(@Validated @RequestBody CfChargingStationForm cfChargingStationForm) throws Exception {
         CfChargingStation cfChargingStation = new CfChargingStation();
-        BeanUtils.copyProperties(cfChargingStationForm,cfChargingStation);
+        BeanUtils.copyProperties(cfChargingStationForm, cfChargingStation);
         CfChargingStation lastCfChargingStation = cfChargingStationService.add(cfChargingStation);
         return new ResponseResult(CommonCode.SUCCESS, lastCfChargingStation);
     }
@@ -59,7 +59,7 @@ public class CfChargingStationController implements CfChargingStationSwagger {
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public ResponseResult update(@Validated @RequestBody CfChargingStationForm cfChargingStationForm) {
         CfChargingStation cfChargingStation = new CfChargingStation();
-        BeanUtils.copyProperties(cfChargingStationForm,cfChargingStation);
+        BeanUtils.copyProperties(cfChargingStationForm, cfChargingStation);
         CfChargingStation update = cfChargingStationService.update(cfChargingStation);
         return new ResponseResult(CommonCode.SUCCESS, update);
     }
@@ -68,7 +68,7 @@ public class CfChargingStationController implements CfChargingStationSwagger {
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(CfChargingStationQuery cfChargingStationQuery) throws Exception {
         List<CfChargingStation> cfChargingStations = cfChargingStationService.getListByQuery(cfChargingStationQuery);
-        if(cfChargingStations==null || cfChargingStations.size()==0){
+        if (cfChargingStations == null || cfChargingStations.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfChargingStations);
@@ -77,14 +77,14 @@ public class CfChargingStationController implements CfChargingStationSwagger {
     @Override
     @RequestMapping(value = "selectContalDistanceListByQuery", method = RequestMethod.GET)
     public ResponseResult selectContalDistanceListByQuery(CfChargingStationQuery cfChargingStationQuery) throws Exception {
-        if(cfChargingStationQuery.getPositionX()==null || cfChargingStationQuery.getPositionY()==null){
+        if (cfChargingStationQuery.getPositionX() == null || cfChargingStationQuery.getPositionY() == null) {
             return new ResponseResult(CommonCode.INVALID_PARAM, null, "请提供经纬度");
         }
-        if(cfChargingStationQuery.getDistance()==null || cfChargingStationQuery.getDistance().doubleValue()<0d || cfChargingStationQuery.getDistance().doubleValue()>8000){
+        if (cfChargingStationQuery.getDistance() == null || cfChargingStationQuery.getDistance().doubleValue() < 0d || cfChargingStationQuery.getDistance().doubleValue() > 8000) {
             return new ResponseResult(CommonCode.INVALID_PARAM, null, "只能拉取附近0-8000米的设备数据");
         }
         List<CfChargingStation> cfChargingStations = cfChargingStationService.selectContalDistanceListByQuery(cfChargingStationQuery);
-        if(cfChargingStations==null || cfChargingStations.size()==0){
+        if (cfChargingStations == null || cfChargingStations.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfChargingStations);

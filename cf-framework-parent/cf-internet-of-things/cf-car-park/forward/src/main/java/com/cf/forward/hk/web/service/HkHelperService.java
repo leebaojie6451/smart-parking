@@ -6,7 +6,6 @@ package com.cf.forward.hk.web.service;
 public interface HkHelperService {
 
     /**
-     *
      * @param isOpen
      * @return
      */

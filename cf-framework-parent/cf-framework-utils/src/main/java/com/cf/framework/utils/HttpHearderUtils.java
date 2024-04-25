@@ -16,17 +16,17 @@ public class HttpHearderUtils {
 
     /**
      * 取出请求头的Authorization数据
+     *
      * @param request
      * @return
      */
-    public static String getAuthorization(HttpServletRequest request)
-    {
+    public static String getAuthorization(HttpServletRequest request) {
         //取出头信息
         String authorization = request.getHeader("Authorization");
-        if(StringUtils.isEmpty(authorization)){
+        if (StringUtils.isEmpty(authorization)) {
             return null;
         }
-        if(!authorization.startsWith("Bearer ")){
+        if (!authorization.startsWith("Bearer ")) {
             return null;
         }
         //取到jwt令牌

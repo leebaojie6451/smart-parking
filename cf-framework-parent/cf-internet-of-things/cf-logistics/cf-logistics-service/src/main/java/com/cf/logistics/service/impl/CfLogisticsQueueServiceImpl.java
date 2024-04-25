@@ -26,7 +26,7 @@ public class CfLogisticsQueueServiceImpl implements CfLogisticsQueueService {
 
     @Override
     public CfLogisticsQueue add(CfLogisticsQueue cfLogisticsQueue) {
-        if(cfLogisticsQueue.getId()==null){
+        if (cfLogisticsQueue.getId() == null) {
             cfLogisticsQueue.setId(idWorker.nextLongId());
         }
         CfLogisticsQueueMapper.insertSelective(cfLogisticsQueue);
@@ -41,7 +41,7 @@ public class CfLogisticsQueueServiceImpl implements CfLogisticsQueueService {
 
     @Override
     public int updateByQuery(CfLogisticsQueue CfLogisticsQueue, CfLogisticsQueueQuery cfLogisticsQueueQuery) {
-        return CfLogisticsQueueMapper.updateByExampleSelective(CfLogisticsQueue,getExampleByQuery(cfLogisticsQueueQuery));
+        return CfLogisticsQueueMapper.updateByExampleSelective(CfLogisticsQueue, getExampleByQuery(cfLogisticsQueueQuery));
     }
 
     @Override
@@ -57,10 +57,10 @@ public class CfLogisticsQueueServiceImpl implements CfLogisticsQueueService {
     @Override
     public CfLogisticsQueue findById(Long id, boolean expectEmpty) {
         CfLogisticsQueue cfLogisticsQueue = findById(id);
-        if(expectEmpty && cfLogisticsQueue!=null){
+        if (expectEmpty && cfLogisticsQueue != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpty && cfLogisticsQueue==null){
+        if (!expectEmpty && cfLogisticsQueue == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfLogisticsQueue;
@@ -83,20 +83,20 @@ public class CfLogisticsQueueServiceImpl implements CfLogisticsQueueService {
         CfLogisticsQueueExample cfLogisticsQueueExample = new CfLogisticsQueueExample();
         CfLogisticsQueueExample.Criteria criteria = cfLogisticsQueueExample.createCriteria();
 
-        if(cfLogisticsQueueQuery.getLogisticsStorehouseId()!=null){
+        if (cfLogisticsQueueQuery.getLogisticsStorehouseId() != null) {
             criteria.andLogisticsStorehouseIdEqualTo(cfLogisticsQueueQuery.getLogisticsStorehouseId());
         }
-        if(cfLogisticsQueueQuery.getLogisticsStorehouseIds()!=null && cfLogisticsQueueQuery.getLogisticsStorehouseIds().size()>0){
+        if (cfLogisticsQueueQuery.getLogisticsStorehouseIds() != null && cfLogisticsQueueQuery.getLogisticsStorehouseIds().size() > 0) {
             criteria.andLogisticsStorehouseIdIn(cfLogisticsQueueQuery.getLogisticsStorehouseIds());
         }
-        if(cfLogisticsQueueQuery.getLogisticsPlatformId()!=null){
+        if (cfLogisticsQueueQuery.getLogisticsPlatformId() != null) {
             criteria.andLogisticsPlatformIdEqualTo(cfLogisticsQueueQuery.getLogisticsPlatformId());
         }
 
-        if(StringUtils.isNotEmpty(cfLogisticsQueueQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfLogisticsQueueQuery.getOrderBy())) {
             cfLogisticsQueueExample.setOrderByClause(cfLogisticsQueueQuery.getOrderBy());
         }
-        if(cfLogisticsQueueQuery.getPage()!=null && cfLogisticsQueueQuery.getSize()!=null){
+        if (cfLogisticsQueueQuery.getPage() != null && cfLogisticsQueueQuery.getSize() != null) {
             PageHelper.startPage(cfLogisticsQueueQuery.getPage(), cfLogisticsQueueQuery.getSize());
         }
         return cfLogisticsQueueExample;

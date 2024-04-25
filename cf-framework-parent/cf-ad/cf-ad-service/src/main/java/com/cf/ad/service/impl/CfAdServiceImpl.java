@@ -55,28 +55,28 @@ public class CfAdServiceImpl implements CfAdService {
     public CfAdExample getExampleByQuery(CfAdQuery cfAdQuery) {
         CfAdExample cfAdExample = new CfAdExample();
         CfAdExample.Criteria criteria = cfAdExample.createCriteria();
-        if(cfAdQuery.getId()!=null){
+        if (cfAdQuery.getId() != null) {
             criteria.andIdEqualTo(cfAdQuery.getId());
         }
-        if(cfAdQuery.getMaterialType()!=null){
+        if (cfAdQuery.getMaterialType() != null) {
             criteria.andMaterialTypeEqualTo(cfAdQuery.getMaterialType());
         }
-        if(cfAdQuery.getMinStartTime()!=null){
+        if (cfAdQuery.getMinStartTime() != null) {
             criteria.andStartTimeGreaterThanOrEqualTo(cfAdQuery.getMinStartTime());
         }
-        if(cfAdQuery.getMaxStartTime()!=null){
+        if (cfAdQuery.getMaxStartTime() != null) {
             criteria.andStartTimeLessThanOrEqualTo(cfAdQuery.getMaxStartTime());
         }
-        if(cfAdQuery.getMinEndTime()!=null){
+        if (cfAdQuery.getMinEndTime() != null) {
             criteria.andEndTimeGreaterThanOrEqualTo(cfAdQuery.getMinEndTime());
         }
-        if(cfAdQuery.getMaxEndTime()!=null){
+        if (cfAdQuery.getMaxEndTime() != null) {
             criteria.andEndTimeLessThanOrEqualTo(cfAdQuery.getMaxEndTime());
         }
-        if(StringUtils.isNotEmpty(cfAdQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfAdQuery.getOrderBy())) {
             cfAdExample.setOrderByClause(cfAdQuery.getOrderBy());
         }
-        if(cfAdQuery.getPage()!=null && cfAdQuery.getSize()!=null){
+        if (cfAdQuery.getPage() != null && cfAdQuery.getSize() != null) {
             PageHelper.startPage(cfAdQuery.getPage(), cfAdQuery.getSize());
         }
         return cfAdExample;

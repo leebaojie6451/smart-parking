@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class CameraInfo {
 
-    private static final SimpleDateFormat FORMAT = new SimpleDateFormat ("yyyyMMddhhmmss");
+    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyyMMddhhmmss");
 
     private static final long serialVersionUID = 1L;
 
@@ -47,8 +47,8 @@ public class CameraInfo {
 
     private String server;  //服务器地址
 
-    public String logFileName(){
-        return "log-"+name+"-"+FORMAT.format(new Date())+".log";
+    public String logFileName() {
+        return "log-" + name + "-" + FORMAT.format(new Date()) + ".log";
     }
 
     public Integer getId() {

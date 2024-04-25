@@ -16,62 +16,62 @@ import com.cf.forward.dh.listener.AlarmListener;
  */
 public class AlarmListenModule {
 
-	private static boolean bListening = false;
+    private static boolean bListening = false;
 
-	// 智能订阅句柄
-	public static NetSDKLib.LLong m_hAttachHandle = new NetSDKLib.LLong(0);
+    // 智能订阅句柄
+    public static NetSDKLib.LLong m_hAttachHandle = new NetSDKLib.LLong(0);
 
-	/**
-	 * \if ENGLISH_LANG
-	 * start alarm listen
-	 * \else
-	 * 向设备订阅报警
-	 * \endif
-	 */
-	public static boolean startListen(AlarmListener.AnalyzerDataCB analyzerDataCB, String uuid) {
+    /**
+     * \if ENGLISH_LANG
+     * start alarm listen
+     * \else
+     * 向设备订阅报警
+     * \endif
+     */
+    public static boolean startListen(AlarmListener.AnalyzerDataCB analyzerDataCB, String uuid) {
 
-		/**
-		 * 说明：
-		 * 	通道数可以在有登录是返回的信息 m_stDeviceInfo.byChanNum 获取
-		 *  下列仅订阅了0通道的智能事件.
-		 */
-		int bNeedPicture = 1; // 是否需要图片
+        /**
+         * 说明：
+         * 	通道数可以在有登录是返回的信息 m_stDeviceInfo.byChanNum 获取
+         *  下列仅订阅了0通道的智能事件.
+         */
+        int bNeedPicture = 1; // 是否需要图片
 
-		m_hAttachHandle = LoginModule.netsdk.CLIENT_RealLoadPictureEx(LoginModule.m_hLoginHandleList.get(uuid), 0,  NetSDKLib.EVENT_IVS_ALL,
-				bNeedPicture , analyzerDataCB , null , null);
-		if( m_hAttachHandle.longValue() != 0  ) {
-			System.out.println("CLIENT_RealLoadPictureEx Success  ChannelId : \n" + 0);
-		} else {
-			System.err.println("CLIENT_RealLoadPictureEx Failed!" + ToolKits.getErrorCodePrint());
-			return false;
-		}
-		LoginModule.uuidTologinHandleList.put(m_hAttachHandle.longValue(),uuid);
-		return true;
-	}
-	
-	/**
-	 * \if ENGLISH_LANG
-	 * stop alarm listen
-	 * \else
-	 * 停止订阅报警
-	 * \endif
-	 */
-	public static boolean stopListen() {
+        m_hAttachHandle = LoginModule.netsdk.CLIENT_RealLoadPictureEx(LoginModule.m_hLoginHandleList.get(uuid), 0, NetSDKLib.EVENT_IVS_ALL,
+                bNeedPicture, analyzerDataCB, null, null);
+        if (m_hAttachHandle.longValue() != 0) {
+            System.out.println("CLIENT_RealLoadPictureEx Success  ChannelId : \n" + 0);
+        } else {
+            System.err.println("CLIENT_RealLoadPictureEx Failed!" + ToolKits.getErrorCodePrint());
+            return false;
+        }
+        LoginModule.uuidTologinHandleList.put(m_hAttachHandle.longValue(), uuid);
+        return true;
+    }
 
-		if (!bListening) {
-			return true;
-		}
-		
+    /**
+     * \if ENGLISH_LANG
+     * stop alarm listen
+     * \else
+     * 停止订阅报警
+     * \endif
+     */
+    public static boolean stopListen() {
+
+        if (!bListening) {
+            return true;
+        }
+
 //	   	if (!LoginModule.netsdk.CLIENT_StopListen(LoginModule.m_hLoginHandle)) {
 //			System.err.printf("CLIENT_StopListen Failed!");
 //			return false;
 //		} else {
 //			System.out.println("CLIENT_StopListen success.");
 //		}
-	   	
-	   	bListening = false;	
-		return true;
-	}
+
+        bListening = false;
+        return true;
+    }
 
 }	
 	

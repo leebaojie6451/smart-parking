@@ -54,17 +54,17 @@ public class CfCarParkCarLimitServiceImpl implements CfCarParkCarLimitService {
     public CfCarParkCarLimitExample getExampleByQuery(CfCarParkCarLimitQuery cfCarParkCarLimitQuery) {
         CfCarParkCarLimitExample cfCarParkCarLimitExample = new CfCarParkCarLimitExample();
         CfCarParkCarLimitExample.Criteria criteria = cfCarParkCarLimitExample.createCriteria();
-        if(cfCarParkCarLimitQuery.getId()!=null){
+        if (cfCarParkCarLimitQuery.getId() != null) {
             criteria.andIdEqualTo(cfCarParkCarLimitQuery.getId());
         }
-        if(cfCarParkCarLimitQuery.getCarParkId()!=null){
+        if (cfCarParkCarLimitQuery.getCarParkId() != null) {
             criteria.andCarParkIdEqualTo(cfCarParkCarLimitQuery.getCarParkId());
         }
-        if(cfCarParkCarLimitQuery.getCarTypeKey()!=null){
+        if (cfCarParkCarLimitQuery.getCarTypeKey() != null) {
             criteria.andCarTypeKeyEqualTo(cfCarParkCarLimitQuery.getCarTypeKey());
         }
 
-        if(cfCarParkCarLimitQuery.getPage()!=null && cfCarParkCarLimitQuery.getSize()!=null){
+        if (cfCarParkCarLimitQuery.getPage() != null && cfCarParkCarLimitQuery.getSize() != null) {
             PageHelper.startPage(cfCarParkCarLimitQuery.getPage(), cfCarParkCarLimitQuery.getSize());
         }
         return cfCarParkCarLimitExample;
@@ -86,8 +86,7 @@ public class CfCarParkCarLimitServiceImpl implements CfCarParkCarLimitService {
         return cfCarParkCarLimitMapper.countByExample(getExampleByQuery(cfCarParkCarLimitQuery));
     }
 
-    public CfCarParkCarLimit getCarTypeLimit(String numberPlate, String carParkId)
-    {
+    public CfCarParkCarLimit getCarTypeLimit(String numberPlate, String carParkId) {
         String carTypeKey = "temporary_car";
 
         CfCarParkSpecialCarQuery cfCarParkSpecialCarQuery = new CfCarParkSpecialCarQuery();
@@ -98,7 +97,7 @@ public class CfCarParkCarLimitServiceImpl implements CfCarParkCarLimitService {
         cfCarParkSpecialCarQuery.setPage(1);
         cfCarParkSpecialCarQuery.setSize(1);
         List<CfCarParkSpecialCar> cfCarParkSpecialCars = cfCarParkSpecialCarService.getListByQuery(cfCarParkSpecialCarQuery);
-        if(cfCarParkSpecialCars!=null && cfCarParkSpecialCars.size()>0){
+        if (cfCarParkSpecialCars != null && cfCarParkSpecialCars.size() > 0) {
             carTypeKey = cfCarParkSpecialCars.get(0).getTypeKey();
         }
         CfCarParkCarLimitQuery cfCarParkCarLimitQuery = new CfCarParkCarLimitQuery();
@@ -107,10 +106,10 @@ public class CfCarParkCarLimitServiceImpl implements CfCarParkCarLimitService {
         cfCarParkCarLimitQuery.setPage(1);
         cfCarParkCarLimitQuery.setSize(1);
         List<CfCarParkCarLimit> cfCarParkCarLimits = getListByQuery(cfCarParkCarLimitQuery);
-        if(cfCarParkCarLimits==null || cfCarParkCarLimits.size()==0){
+        if (cfCarParkCarLimits == null || cfCarParkCarLimits.size() == 0) {
             return null;
         }
-        if(cfCarParkSpecialCars!=null && cfCarParkSpecialCars.size()>0){
+        if (cfCarParkSpecialCars != null && cfCarParkSpecialCars.size() > 0) {
             cfCarParkCarLimits.get(0).setCfCarParkSpecialCar(cfCarParkSpecialCars.get(0));
         }
         return cfCarParkCarLimits.get(0);

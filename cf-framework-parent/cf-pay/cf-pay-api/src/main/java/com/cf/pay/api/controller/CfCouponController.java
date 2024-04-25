@@ -7,9 +7,7 @@ import com.cf.framework.utils.HttpHearderUtils;
 import com.cf.pay.api.config.AuthenticationInterceptor;
 import com.cf.pay.api.swagger.CfCouponSwagger;
 import com.cf.pay.domain.CfCoupon;
-import com.cf.pay.domain.request.CfCouponForm;
 import com.cf.pay.domain.request.CfCouponQuery;
-import com.cf.pay.domain.type.CouponScenes;
 import com.cf.pay.domain.type.CouponStatus;
 import com.cf.pay.service.CfCouponService;
 import com.cf.pay.service.CfTaxAccountService;
@@ -41,11 +39,11 @@ public class CfCouponController implements CfCouponSwagger {
     @RequestMapping(value = "orderList", method = RequestMethod.GET)
     public ResponseResult orderList(CfCouponQuery cfCouponQuery) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        if(StringUtils.isEmpty(cfCouponQuery.getGoodsId())){
+        if (StringUtils.isEmpty(cfCouponQuery.getGoodsId())) {
             cfCouponQuery.setToUid(userBasicInfo.getId());
         }
         List<CfCoupon> cfCouponList = cfCouponService.getListByQuery(cfCouponQuery);
-        if(cfCouponList==null || cfCouponList.size()==0){
+        if (cfCouponList == null || cfCouponList.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfCouponList);
@@ -54,8 +52,8 @@ public class CfCouponController implements CfCouponSwagger {
     @Override
     @RequestMapping(value = "bindGoodsId", method = RequestMethod.PUT)
     public ResponseResult bindGoodsId(@RequestBody CfCouponQuery cfCouponQuery) throws Exception {
-        if(StringUtils.isEmpty(cfCouponQuery.getId())){
-            return new ResponseResult(CommonCode.INVALID_PARAM,null,"请提供优惠券id");
+        if (StringUtils.isEmpty(cfCouponQuery.getId())) {
+            return new ResponseResult(CommonCode.INVALID_PARAM, null, "请提供优惠券id");
         }
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         CfCoupon cfCoupon = new CfCoupon();
@@ -64,6 +62,6 @@ public class CfCouponController implements CfCouponSwagger {
         cfCouponQuery.setGoodsId("");
         cfCouponQuery.setStatus(CouponStatus.NOT_USED);
         int i = cfCouponService.updateByQuery(cfCouponQuery, cfCoupon);
-        return i>0?new ResponseResult(CommonCode.SUCCESS):new ResponseResult(CommonCode.FAIL);
+        return i > 0 ? new ResponseResult(CommonCode.SUCCESS) : new ResponseResult(CommonCode.FAIL);
     }
 }

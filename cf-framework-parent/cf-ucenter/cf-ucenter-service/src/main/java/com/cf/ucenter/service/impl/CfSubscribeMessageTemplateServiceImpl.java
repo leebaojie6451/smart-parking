@@ -52,10 +52,10 @@ public class CfSubscribeMessageTemplateServiceImpl implements CfSubscribeMessage
     @Override
     public CfSubscribeMessageTemplate findById(Long id, boolean expectEmpty) {
         CfSubscribeMessageTemplate cfSubscribeMessageTemplate = findById(id);
-        if(expectEmpty && cfSubscribeMessageTemplate!=null){
+        if (expectEmpty && cfSubscribeMessageTemplate != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpty && cfSubscribeMessageTemplate==null){
+        if (!expectEmpty && cfSubscribeMessageTemplate == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfSubscribeMessageTemplate;
@@ -76,16 +76,16 @@ public class CfSubscribeMessageTemplateServiceImpl implements CfSubscribeMessage
     public CfSubscribeMessageTemplateExample getExampleByQuery(CfSubscribeMessageTemplateQuery cfSubscribeMessageTemplateQuery) {
         CfSubscribeMessageTemplateExample cfSubscribeMessageTemplateExample = new CfSubscribeMessageTemplateExample();
         CfSubscribeMessageTemplateExample.Criteria criteria = cfSubscribeMessageTemplateExample.createCriteria();
-        if(cfSubscribeMessageTemplateQuery.getAppid()!=null){
+        if (cfSubscribeMessageTemplateQuery.getAppid() != null) {
             criteria.andAppidEqualTo(cfSubscribeMessageTemplateQuery.getAppid());
         }
-        if(cfSubscribeMessageTemplateQuery.getMessageScenes()!=null){
+        if (cfSubscribeMessageTemplateQuery.getMessageScenes() != null) {
             criteria.andMessageScenesEqualTo(cfSubscribeMessageTemplateQuery.getMessageScenes());
         }
-        if(StringUtils.isNotEmpty(cfSubscribeMessageTemplateQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfSubscribeMessageTemplateQuery.getOrderBy())) {
             cfSubscribeMessageTemplateExample.setOrderByClause(cfSubscribeMessageTemplateQuery.getOrderBy());
         }
-        if(cfSubscribeMessageTemplateQuery.getPage()!=null && cfSubscribeMessageTemplateQuery.getSize()!=null){
+        if (cfSubscribeMessageTemplateQuery.getPage() != null && cfSubscribeMessageTemplateQuery.getSize() != null) {
             PageHelper.startPage(cfSubscribeMessageTemplateQuery.getPage(), cfSubscribeMessageTemplateQuery.getSize());
         }
         return cfSubscribeMessageTemplateExample;

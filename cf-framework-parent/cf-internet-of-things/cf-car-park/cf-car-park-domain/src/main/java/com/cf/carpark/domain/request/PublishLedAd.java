@@ -6,8 +6,7 @@ import java.util.List;
 /**
  * 广告下发实体
  */
-public class PublishLedAd implements Serializable
-{
+public class PublishLedAd implements Serializable {
     private String serialNumber;
 
     private List<String> adList;

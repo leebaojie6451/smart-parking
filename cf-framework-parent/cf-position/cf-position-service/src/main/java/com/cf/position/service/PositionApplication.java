@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @Version 1.0
  **/
 @EnableAutoConfiguration()
-@ComponentScan(basePackages = {"com.cf.position.service","com.cf.position.dao","com.cf.framework"})
+@ComponentScan(basePackages = {"com.cf.position.service", "com.cf.position.dao", "com.cf.framework"})
 @MapperScan("com.cf.position.dao.mapper")
 public class PositionApplication {
     public static void main(String[] args) {

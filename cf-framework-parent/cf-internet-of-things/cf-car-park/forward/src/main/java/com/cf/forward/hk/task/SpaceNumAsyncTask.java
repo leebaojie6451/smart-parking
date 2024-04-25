@@ -42,7 +42,7 @@ public class SpaceNumAsyncTask {
     /**
      * 扫到当前车牌信息
      */
-    public static final  StopCarInfo stopCarInfo = new StopCarInfo();
+    public static final StopCarInfo stopCarInfo = new StopCarInfo();
 
 
     @Autowired

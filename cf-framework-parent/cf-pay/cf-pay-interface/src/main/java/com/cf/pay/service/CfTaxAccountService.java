@@ -29,24 +29,27 @@ public interface CfTaxAccountService {
 
     /**
      * 根据条件查询税务账号列表
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public List<CfTaxAccount> selectListByCondition(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);
 
     /**
      * 根据条件查询税务账号列表数
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public Integer selectListByConditionCounts(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);
 
     /**
      * 开具电子发票
+     *
      * @param uid
      * @param cfOrder
      * @param platform baiwang-百望云  nuonuo-诺诺
@@ -57,6 +60,7 @@ public interface CfTaxAccountService {
     /**
      * https://open.jss.com.cn/#/api-doc/common-api?id=100208
      * 通过诺诺开具电子发票
+     *
      * @param uid
      * @param cfOrder
      * @param cfTaxAccount
@@ -66,8 +70,9 @@ public interface CfTaxAccountService {
 
     /**
      * 获取电子发票平台账号
+     *
      * @param uid
-     * @param platform  baiwang-百望云  nuonuo-诺诺
+     * @param platform baiwang-百望云  nuonuo-诺诺
      * @return
      */
     CfTaxAccount getCfTaxAccount(String uid, String platform) throws Exception;

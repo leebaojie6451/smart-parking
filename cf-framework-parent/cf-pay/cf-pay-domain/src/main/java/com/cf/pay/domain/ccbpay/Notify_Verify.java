@@ -26,7 +26,7 @@ class Notify_Verify {
     private final byte[] hexStrToBytes(String s) {
         byte[] bytes = new byte[s.length() / 2];
         for (int i = 0; i < bytes.length; i++)
-            bytes[i] = (byte)Integer.parseInt(
+            bytes[i] = (byte) Integer.parseInt(
                     s.substring(2 * i, 2 * i + 2), 16);
         return bytes;
     }

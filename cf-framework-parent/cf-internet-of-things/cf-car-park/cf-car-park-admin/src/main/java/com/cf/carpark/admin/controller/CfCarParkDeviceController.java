@@ -80,54 +80,54 @@ public class CfCarParkDeviceController implements CfCarParkDeviceSwagger {
         allowFileds.add("order");
         allowFileds.add("limit");
         Map<String, String> allowFiledsMap = new HashMap<String, String>();
-        allowFiledsMap.put("id","cpdv");
-        allowFiledsMap.put("car_park_id","cpdv");
-        allowFiledsMap.put("bar_code","cpdv");
-        allowFiledsMap.put("model","cpdv");
-        allowFiledsMap.put("brand","cpdv");
-        allowFiledsMap.put("vendor_id","cpdv");
-        allowFiledsMap.put("status","cpdv");
-        allowFiledsMap.put("last_online_time","cpdv");
-        allowFiledsMap.put("link_mode","cpdv");
-        allowFiledsMap.put("type","cpdv");
-        allowFiledsMap.put("checkpoint_id","cpdv");
-        allowFiledsMap.put("direction","cpdv");
-        allowFiledsMap.put("id$in","cpdv");
-        allowFiledsMap.put("like","");
-        allowFiledsMap.put("order","");
-        allowFiledsMap.put("limit","");
+        allowFiledsMap.put("id", "cpdv");
+        allowFiledsMap.put("car_park_id", "cpdv");
+        allowFiledsMap.put("bar_code", "cpdv");
+        allowFiledsMap.put("model", "cpdv");
+        allowFiledsMap.put("brand", "cpdv");
+        allowFiledsMap.put("vendor_id", "cpdv");
+        allowFiledsMap.put("status", "cpdv");
+        allowFiledsMap.put("last_online_time", "cpdv");
+        allowFiledsMap.put("link_mode", "cpdv");
+        allowFiledsMap.put("type", "cpdv");
+        allowFiledsMap.put("checkpoint_id", "cpdv");
+        allowFiledsMap.put("direction", "cpdv");
+        allowFiledsMap.put("id$in", "cpdv");
+        allowFiledsMap.put("like", "");
+        allowFiledsMap.put("order", "");
+        allowFiledsMap.put("limit", "");
 
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0){
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0) {
             CfCarParkDeviceLinkUserQuery cfCarParkDeviceLinkUserQuery = new CfCarParkDeviceLinkUserQuery();
             cfCarParkDeviceLinkUserQuery.setUid(userBasicInfo.getId());
             List<CfCarParkDeviceLinkUser> cfCarParkDeviceLinkUserList = cfCarParkDeviceLinkUserService.getListByQuery(cfCarParkDeviceLinkUserQuery);
-            if(cfCarParkDeviceLinkUserList==null || cfCarParkDeviceLinkUserList.size()==0){
+            if (cfCarParkDeviceLinkUserList == null || cfCarParkDeviceLinkUserList.size() == 0) {
                 ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
             }
             String deviceIds = "";
-            for (CfCarParkDeviceLinkUser cfCarParkDeviceLinkUser: cfCarParkDeviceLinkUserList){
-                if(StringUtils.isEmpty(cfCarParkDeviceLinkUser.getDeviceId())){
+            for (CfCarParkDeviceLinkUser cfCarParkDeviceLinkUser : cfCarParkDeviceLinkUserList) {
+                if (StringUtils.isEmpty(cfCarParkDeviceLinkUser.getDeviceId())) {
                     continue;
                 }
-                deviceIds += ",'"+cfCarParkDeviceLinkUser.getDeviceId()+"'";
+                deviceIds += ",'" + cfCarParkDeviceLinkUser.getDeviceId() + "'";
             }
-            if(StringUtils.isNotEmpty(deviceIds)){
+            if (StringUtils.isNotEmpty(deviceIds)) {
                 deviceIds = deviceIds.substring(1);
             }
 
-            if(StringUtils.isNotEmpty(deviceIds)){
+            if (StringUtils.isNotEmpty(deviceIds)) {
                 HashMap<String, String> valueMap = new HashMap<>();
-                valueMap.put("operator","in");
-                valueMap.put("value",deviceIds);
+                valueMap.put("operator", "in");
+                valueMap.put("value", deviceIds);
                 conditionsMap.put("id$in", valueMap);
-            }else{
+            } else {
                 return new ResponseResult(CommonCode.NO_MORE_DATAS);
             }
         }
 
-        List<CfCarParkDevice> cfCarParkDevices = cfCarParkDeviceService.selectListByCondition(conditionsMap, allowFiledsMap,allowFileds);
+        List<CfCarParkDevice> cfCarParkDevices = cfCarParkDeviceService.selectListByCondition(conditionsMap, allowFiledsMap, allowFileds);
         Integer counts = cfCarParkDeviceService.selectListByConditionCounts(conditionsMap, allowFiledsMap, allowFileds);
-        if(cfCarParkDevices!=null && cfCarParkDevices.size()>0){
+        if (cfCarParkDevices != null && cfCarParkDevices.size() > 0) {
             return new ResponseResult(CommonCode.SUCCESS, cfCarParkDevices, null, counts);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);
@@ -158,7 +158,7 @@ public class CfCarParkDeviceController implements CfCarParkDeviceSwagger {
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(String id) {
         Integer delete = cfCarParkDeviceService.delete(id);
-        if(delete>0){
+        if (delete > 0) {
             return new ResponseResult(CommonCode.SUCCESS);
         }
         return new ResponseResult(CommonCode.FAIL);
@@ -169,7 +169,7 @@ public class CfCarParkDeviceController implements CfCarParkDeviceSwagger {
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(CfCarParkDeviceQuery cfCarParkDeviceQuery) {
         List<CfCarParkDevice> cfCarParkDevices = cfCarParkDeviceService.getListByQuery(cfCarParkDeviceQuery);
-        if(cfCarParkDevices!=null && cfCarParkDevices.size()>0){
+        if (cfCarParkDevices != null && cfCarParkDevices.size() > 0) {
             return new ResponseResult(CommonCode.SUCCESS, cfCarParkDevices);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);
@@ -178,13 +178,13 @@ public class CfCarParkDeviceController implements CfCarParkDeviceSwagger {
     @Override
     @RequestMapping(value = "getListByMacAddress", method = RequestMethod.GET)
     public ResponseResult getListByMacAddress(String macAddress) {
-        if(StringUtils.isEmpty(macAddress)){
+        if (StringUtils.isEmpty(macAddress)) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         CfCarParkDeviceQuery cfCarParkDeviceQuery = new CfCarParkDeviceQuery();
         cfCarParkDeviceQuery.setMacAddress(macAddress);
         List<CfCarParkDevice> cfCarParkDevices = cfCarParkDeviceService.getListByQuery(cfCarParkDeviceQuery);
-        if(cfCarParkDevices!=null && cfCarParkDevices.size()>0){
+        if (cfCarParkDevices != null && cfCarParkDevices.size() > 0) {
             return new ResponseResult(CommonCode.SUCCESS, cfCarParkDevices);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);
@@ -198,7 +198,7 @@ public class CfCarParkDeviceController implements CfCarParkDeviceSwagger {
         cfCarParkDeviceQuery.setPassword(cfCarParkDeviceLogin.getPassword());
         cfCarParkDeviceQuery.setBarCode(cfCarParkDeviceLogin.getSn());
         List<CfCarParkDevice> cfCarParkDevices = cfCarParkDeviceService.getListByQuery(cfCarParkDeviceQuery);
-        if(cfCarParkDevices==null || cfCarParkDevices.size()==0){
+        if (cfCarParkDevices == null || cfCarParkDevices.size() == 0) {
             return new ResponseResult(CommonCode.FAIL);
         }
 
@@ -214,7 +214,7 @@ public class CfCarParkDeviceController implements CfCarParkDeviceSwagger {
     @Override
     @RequestMapping(value = "controlledLockUpAndDown", method = RequestMethod.GET)
     public ResponseResult controlledLockUpAndDown(String action, String serialNumber) throws Exception {
-        cfCarParkDeviceService.controlledLockUpAndDown(action,serialNumber);
+        cfCarParkDeviceService.controlledLockUpAndDown(action, serialNumber);
         return new ResponseResult(CommonCode.SUCCESS, null);
     }
 
@@ -222,7 +222,7 @@ public class CfCarParkDeviceController implements CfCarParkDeviceSwagger {
     @Override
     @RequestMapping(value = "publishLedAd", method = RequestMethod.PUT)
     public ResponseResult publishLedAd(@RequestBody PublishLedAd publishLedAd) throws Exception {
-        cfCarParkDeviceService.publishLedAd(publishLedAd.getSerialNumber(),publishLedAd.getAdList(),publishLedAd.getValidityPeriod());
+        cfCarParkDeviceService.publishLedAd(publishLedAd.getSerialNumber(), publishLedAd.getAdList(), publishLedAd.getValidityPeriod());
         return new ResponseResult(CommonCode.SUCCESS, null);
     }
 
@@ -235,29 +235,29 @@ public class CfCarParkDeviceController implements CfCarParkDeviceSwagger {
         CfCarParkDeviceQuery cfCarParkDeviceQuery = new CfCarParkDeviceQuery();
         cfCarParkDeviceQuery.setType(DeviceType.LICENSE_PLATE_RECOGNITION_CAMERA);
         Integer counts = cfCarParkDeviceService.countByQuery(cfCarParkDeviceQuery);
-        result.put("license_plate_recognition_camera",counts);
+        result.put("license_plate_recognition_camera", counts);
 
         cfCarParkDeviceQuery.setType(DeviceType.FLOOR_LOCK);
         counts = cfCarParkDeviceService.countByQuery(cfCarParkDeviceQuery);
-        result.put("floor_lock",counts);
+        result.put("floor_lock", counts);
 
         cfCarParkDeviceQuery.setType(DeviceType.HIGH_POSITION_CAMERA);
         counts = cfCarParkDeviceService.countByQuery(cfCarParkDeviceQuery);
-        result.put("high_position_camera",counts);
+        result.put("high_position_camera", counts);
 
         //获取在线数量
         cfCarParkDeviceQuery.setType(DeviceType.LICENSE_PLATE_RECOGNITION_CAMERA);
-        cfCarParkDeviceQuery.setStatus((byte)1);
+        cfCarParkDeviceQuery.setStatus((byte) 1);
         counts = cfCarParkDeviceService.countByQuery(cfCarParkDeviceQuery);
-        result.put("license_plate_recognition_camera_online",counts);
+        result.put("license_plate_recognition_camera_online", counts);
 
         cfCarParkDeviceQuery.setType(DeviceType.FLOOR_LOCK);
         counts = cfCarParkDeviceService.countByQuery(cfCarParkDeviceQuery);
-        result.put("floor_lock_online",counts);
+        result.put("floor_lock_online", counts);
 
         cfCarParkDeviceQuery.setType(DeviceType.HIGH_POSITION_CAMERA);
         counts = cfCarParkDeviceService.countByQuery(cfCarParkDeviceQuery);
-        result.put("high_position_camera_online",counts);
+        result.put("high_position_camera_online", counts);
         return new ResponseResult(CommonCode.SUCCESS, result);
     }
 }

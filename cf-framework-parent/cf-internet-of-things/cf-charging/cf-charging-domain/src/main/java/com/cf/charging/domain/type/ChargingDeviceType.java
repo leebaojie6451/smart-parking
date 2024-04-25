@@ -14,5 +14,5 @@ import java.io.Serializable;
  */
 public class ChargingDeviceType implements Serializable {
 
-    public static final Byte CHARGING_DEVICE = (byte)1; //充电桩设备
+    public static final Byte CHARGING_DEVICE = (byte) 1; //充电桩设备
 }

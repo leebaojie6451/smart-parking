@@ -77,13 +77,14 @@ public class WxPayServiceImpl implements WxPayService {
 
     private static Logger logger = LoggerFactory.getLogger(Snowflake.class);
 
-    public WxPayServiceImpl(){}
+    public WxPayServiceImpl() {
+    }
 
-    public WxPayServiceImpl(CfUserPaymentAgency cfUserPaymentAgency){
+    public WxPayServiceImpl(CfUserPaymentAgency cfUserPaymentAgency) {
         this._initWxPayAppConfig(cfUserPaymentAgency);
     }
 
-    private WxPayAppConfig _initWxPayAppConfig(CfUserPaymentAgency cfUserPaymentAgency){
+    private WxPayAppConfig _initWxPayAppConfig(CfUserPaymentAgency cfUserPaymentAgency) {
         WxPayAppConfig _wxPayAppConfig = new WxPayAppConfig();
         _wxPayAppConfig.setKey(cfUserPaymentAgency.getPayKey());
         _wxPayAppConfig.setAppID(cfUserPaymentAgency.getAppid());
@@ -98,42 +99,42 @@ public class WxPayServiceImpl implements WxPayService {
     }
 
     @Override
-    public ResultMap unifiedOrder(String orderNo, double amount, String body, String ip, String openid, CfUserPaymentAgency cfUserPaymentAgency) throws Exception{
+    public ResultMap unifiedOrder(String orderNo, double amount, String body, String ip, String openid, CfUserPaymentAgency cfUserPaymentAgency) throws Exception {
         Map<String, String> returnMap = new HashMap<>();
         //微信支付处理  自己生成预支付信息
         return ResultMap.ok().put("data", returnMap);
     }
 
     @Override
-    public String notify(String notifyStr) throws Exception{
+    public String notify(String notifyStr) throws Exception {
         String xmlBack = "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[报文为空]]></return_msg></xml> ";
         // 转换成map
         Map<String, String> resultMap = WXPayUtil.xmlToMap(notifyStr);
-        if(StringUtils.isEmpty(resultMap.get("out_trade_no"))){
+        if (StringUtils.isEmpty(resultMap.get("out_trade_no"))) {
             ExceptionCast.cast(PayCode.WECHAT_PAY_NOTIFY_FAIL, "weixin_XML missing out_trade_no");
         }
-        if(!resultMap.get("result_code").equals("SUCCESS")){
+        if (!resultMap.get("result_code").equals("SUCCESS")) {
             ExceptionCast.cast(PayCode.WECHAT_PAY_NOTIFY_FAIL, "pay fail");
         }
 
-        CfOrder cfOrder = cfOrderService.findById(resultMap.get("out_trade_no"),false);
-        if(cfOrder==null){
+        CfOrder cfOrder = cfOrderService.findById(resultMap.get("out_trade_no"), false);
+        if (cfOrder == null) {
             ExceptionCast.cast(PayCode.ORDER_DOES_NOT_EXIST, notifyStr);
         }
-        if(cfOrder.getStatus()==PayStatus.PAID){
+        if (cfOrder.getStatus() == PayStatus.PAID) {
             return null;
         }
         //如果支付方式为套餐，设置为微信支付
-        if(cfOrder.getPaymentAgencyShortName().equals("package")){
+        if (cfOrder.getPaymentAgencyShortName().equals("package")) {
             CfUserPaymentAgency cfUserPaymentAgency = cfUserPaymentAgencyService.findById(cfOrder.getId());
-            if(cfUserPaymentAgency!=null){
+            if (cfUserPaymentAgency != null) {
                 cfOrder.setPaymentAgencyShortName(cfUserPaymentAgency.getPaymentAgencyShortName());
-            }else{
+            } else {
                 cfOrder.setPaymentAgencyShortName("wei_xin_pay_cny");
             }
         }
         CfUserPaymentAgency cfUserPaymentAgency = cfUserPaymentAgencyService.findById(cfOrder.getUserPaymentAgencyId());
-        if(cfUserPaymentAgency==null){
+        if (cfUserPaymentAgency == null) {
             ExceptionCast.cast(PayCode.MERCHANT_PAYMENT_ACCOUNT_DOES_NOT_EXIST, notifyStr);
         }
         WxPayAppConfig _wxPayAppConfig = this._initWxPayAppConfig(cfUserPaymentAgency);
@@ -142,7 +143,7 @@ public class WxPayServiceImpl implements WxPayService {
             if (resultMap.get("return_code").equals("SUCCESS")) {
                 if (StringUtils.isNotEmpty(resultMap.get("out_trade_no"))) {
                     cfOrder.setThirdPartyOrderId(resultMap.get("transaction_id"));
-                    cfOrder.setPayTime(DateUtil.dateToStamp(resultMap.get("time_end"),"yyyyMMddHHmmss"));
+                    cfOrder.setPayTime(DateUtil.dateToStamp(resultMap.get("time_end"), "yyyyMMddHHmmss"));
                     cfOrderService.paySuccessAndupdateOrder(cfOrder, (new BigDecimal(resultMap.get("total_fee"))).divide(new BigDecimal(100)));
                     xmlBack = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
                 }
@@ -152,12 +153,12 @@ public class WxPayServiceImpl implements WxPayService {
     }
 
     @Override
-    public ResultMap refund(String orderNo, BigDecimal totalFee, BigDecimal amount, String refundReason) throws Exception{
+    public ResultMap refund(String orderNo, BigDecimal totalFee, BigDecimal amount, String refundReason) throws Exception {
 
-        if(StringUtils.isBlank(orderNo)){
+        if (StringUtils.isBlank(orderNo)) {
             ExceptionCast.cast(PayCode.ORDER_NUMBER_CANNOT_BE_EMPTY);
         }
-        if(amount.doubleValue() <= 0){
+        if (amount.doubleValue() <= 0) {
             ExceptionCast.cast(PayCode.THE_REFUND_AMOUNT_TOO_SMALL);
         }
 
@@ -167,7 +168,7 @@ public class WxPayServiceImpl implements WxPayService {
         requestMap.put("out_trade_no", orderNo);
         requestMap.put("out_refund_no", orderNo);
         requestMap.put("total_fee", totalFee.toString());
-        requestMap.put("refund_fee", String.valueOf((amount.doubleValue()*100)));//所需退款金额
+        requestMap.put("refund_fee", String.valueOf((amount.doubleValue() * 100)));//所需退款金额
         requestMap.put("refund_desc", refundReason);
         responseMap = wxpay.refund(requestMap);
         String return_code = responseMap.get("return_code");   //返回状态码
@@ -181,11 +182,11 @@ public class WxPayServiceImpl implements WxPayService {
                 //
                 return ResultMap.ok("success");
             } else {
-                ExceptionCast.cast(PayCode.WECHAT_REFUND_FAILED, "["+orderNo+"]:"+return_msg);
+                ExceptionCast.cast(PayCode.WECHAT_REFUND_FAILED, "[" + orderNo + "]:" + return_msg);
                 return ResultMap.error(err_code_des);
             }
         } else {
-            ExceptionCast.cast(PayCode.THE_REFUND_AMOUNT_TOO_SMALL, "["+orderNo+"]:"+return_msg);
+            ExceptionCast.cast(PayCode.THE_REFUND_AMOUNT_TOO_SMALL, "[" + orderNo + "]:" + return_msg);
         }
         return null;
     }
@@ -194,26 +195,26 @@ public class WxPayServiceImpl implements WxPayService {
     public String yiShengNotify(String notifyStr) throws Exception {
         Map<String, String> parse = (Map<String, String>) JSONObject.parse(notifyStr);
 
-        CfOrder cfOrder = cfOrderService.findById(parse.get("tradetrace"),false);
-        if(cfOrder==null){
+        CfOrder cfOrder = cfOrderService.findById(parse.get("tradetrace"), false);
+        if (cfOrder == null) {
             ExceptionCast.cast(PayCode.ORDER_DOES_NOT_EXIST, notifyStr);
         }
-        if(cfOrder.getStatus()==PayStatus.PAID){
+        if (cfOrder.getStatus() == PayStatus.PAID) {
             return null;
         }
 
         CfUserPaymentAgency cfUserPaymentAgency = cfUserPaymentAgencyService.findById(cfOrder.getUserPaymentAgencyId());
-        if(cfUserPaymentAgency==null){
+        if (cfUserPaymentAgency == null) {
             ExceptionCast.cast(PayCode.MERCHANT_PAYMENT_ACCOUNT_DOES_NOT_EXIST, notifyStr);
         }
 
         boolean checksign = SignUtil.checksign(notifyStr, cfUserPaymentAgency.getSecret());
-        if(!checksign){
+        if (!checksign) {
             return null;
         }
 
         cfOrder.setThirdPartyOrderId(parse.get("wxtransactionid"));
-        cfOrder.setPayTime(DateUtil.dateToStamp(parse.get("wxtimeend"),"yyyyMMddHHmmss"));
+        cfOrder.setPayTime(DateUtil.dateToStamp(parse.get("wxtimeend"), "yyyyMMddHHmmss"));
         cfOrderService.paySuccessAndupdateOrder(cfOrder, (new BigDecimal(parse.get("payamt"))).divide(new BigDecimal(100)));
 
         return "{\"resultcode\":\"00\"}";
@@ -221,29 +222,29 @@ public class WxPayServiceImpl implements WxPayService {
 
     @Override
     public String duoLaBaoNotify(Map<String, String> notifyMap) throws Exception {
-        if(!notifyMap.containsKey("timestamp") || !notifyMap.containsKey("token") || notifyMap.get("status")==null || !notifyMap.get("status").equals("SUCCESS")){
+        if (!notifyMap.containsKey("timestamp") || !notifyMap.containsKey("token") || notifyMap.get("status") == null || !notifyMap.get("status").equals("SUCCESS")) {
             return null;
         }
-        CfOrder cfOrder = cfOrderService.findById(notifyMap.get("requestNum"),false);
-        if(cfOrder==null){
+        CfOrder cfOrder = cfOrderService.findById(notifyMap.get("requestNum"), false);
+        if (cfOrder == null) {
             ExceptionCast.cast(PayCode.ORDER_DOES_NOT_EXIST, notifyMap.toString());
         }
-        if(cfOrder.getStatus()==PayStatus.PAID){
+        if (cfOrder.getStatus() == PayStatus.PAID) {
             return null;
         }
 
         CfUserPaymentAgency cfUserPaymentAgency = cfUserPaymentAgencyService.findById(cfOrder.getUserPaymentAgencyId());
-        if(cfUserPaymentAgency==null){
+        if (cfUserPaymentAgency == null) {
             ExceptionCast.cast(PayCode.MERCHANT_PAYMENT_ACCOUNT_DOES_NOT_EXIST, notifyMap.toString());
         }
 
         String token = BCryptUtil.SHA1("secretKey=" + cfUserPaymentAgency.getSecret() + "&timestamp=" + notifyMap.get("timestamp"));
-        if(!token.toUpperCase().equals(notifyMap.get("token"))){
+        if (!token.toUpperCase().equals(notifyMap.get("token"))) {
             return null;
         }
 
         cfOrder.setThirdPartyOrderId(notifyMap.get("orderNum"));
-        cfOrder.setPayTime(DateUtil.dateToStamp(notifyMap.get("completeTime"),"yyyyMMddHHmmss"));
+        cfOrder.setPayTime(DateUtil.dateToStamp(notifyMap.get("completeTime"), "yyyyMMddHHmmss"));
         cfOrderService.paySuccessAndupdateOrder(cfOrder, (new BigDecimal(notifyMap.get("orderAmount"))));
 
         return "ok";

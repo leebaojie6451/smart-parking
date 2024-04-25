@@ -33,7 +33,7 @@ public class CfChargingStationLinkUserController implements CfChargingStationLin
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseResult add(@Validated @RequestBody CfChargingStationLinkUserForm cfChargingStationLinkUserForm) throws Exception {
         CfChargingStationLinkUser cfChargingStationLinkUser = new CfChargingStationLinkUser();
-        BeanUtils.copyProperties(cfChargingStationLinkUserForm,cfChargingStationLinkUser);
+        BeanUtils.copyProperties(cfChargingStationLinkUserForm, cfChargingStationLinkUser);
         CfChargingStationLinkUser lastCfChargingStationLinkUser = cfChargingStationLinkUserService.add(cfChargingStationLinkUser);
         return new ResponseResult(CommonCode.SUCCESS, lastCfChargingStationLinkUser);
     }
@@ -43,7 +43,7 @@ public class CfChargingStationLinkUserController implements CfChargingStationLin
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public ResponseResult update(@Validated @RequestBody CfChargingStationLinkUserForm cfChargingStationLinkUserForm) {
         CfChargingStationLinkUser cfChargingStationLinkUser = new CfChargingStationLinkUser();
-        BeanUtils.copyProperties(cfChargingStationLinkUserForm,cfChargingStationLinkUser);
+        BeanUtils.copyProperties(cfChargingStationLinkUserForm, cfChargingStationLinkUser);
         CfChargingStationLinkUser newCfChargingStationLinkUser = cfChargingStationLinkUserService.update(cfChargingStationLinkUser);
         return new ResponseResult(CommonCode.SUCCESS, newCfChargingStationLinkUser);
     }
@@ -53,7 +53,7 @@ public class CfChargingStationLinkUserController implements CfChargingStationLin
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(CfChargingStationLinkUserQuery cfChargingStationLinkUserQuery) throws Exception {
         List<CfChargingStationLinkUser> cfChargingStationLinkUserList = cfChargingStationLinkUserService.getListByQuery(cfChargingStationLinkUserQuery);
-        if(cfChargingStationLinkUserList==null || cfChargingStationLinkUserList.size()==0){
+        if (cfChargingStationLinkUserList == null || cfChargingStationLinkUserList.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfChargingStationLinkUserList);
@@ -64,6 +64,6 @@ public class CfChargingStationLinkUserController implements CfChargingStationLin
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(String id) throws Exception {
         Integer delete = cfChargingStationLinkUserService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS, delete):new ResponseResult(CommonCode.FAIL, null);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS, delete) : new ResponseResult(CommonCode.FAIL, null);
     }
 }

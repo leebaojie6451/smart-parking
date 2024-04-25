@@ -69,10 +69,10 @@ public class CfCarParkSpecialCarServiceImpl implements CfCarParkSpecialCarServic
     @Override
     public CfCarParkSpecialCar findById(String id, boolean expectEmpty) {
         CfCarParkSpecialCar carParkSpecialCar = findById(id);
-        if(expectEmpty && carParkSpecialCar!=null){
+        if (expectEmpty && carParkSpecialCar != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpty && carParkSpecialCar==null){
+        if (!expectEmpty && carParkSpecialCar == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return carParkSpecialCar;
@@ -82,62 +82,62 @@ public class CfCarParkSpecialCarServiceImpl implements CfCarParkSpecialCarServic
     public CfCarParkSpecialCarExample getExampleByQuery(CfCarParkSpecialCarQuery cfCarParkSpecialCarQuery) {
         CfCarParkSpecialCarExample cfCarParkSpecialCarExample = new CfCarParkSpecialCarExample();
         CfCarParkSpecialCarExample.Criteria criteria = cfCarParkSpecialCarExample.createCriteria();
-        if(cfCarParkSpecialCarQuery.getId()!=null){
+        if (cfCarParkSpecialCarQuery.getId() != null) {
             criteria.andIdEqualTo(cfCarParkSpecialCarQuery.getId());
         }
-        if(cfCarParkSpecialCarQuery.getCarParkId()!=null){
+        if (cfCarParkSpecialCarQuery.getCarParkId() != null) {
             criteria.andCarParkIdEqualTo(cfCarParkSpecialCarQuery.getCarParkId());
         }
-        if(cfCarParkSpecialCarQuery.getCarParkIds()!=null){
+        if (cfCarParkSpecialCarQuery.getCarParkIds() != null) {
             criteria.andCarParkIdIn(cfCarParkSpecialCarQuery.getCarParkIds());
         }
-        if(cfCarParkSpecialCarQuery.getPhone()!=null){
+        if (cfCarParkSpecialCarQuery.getPhone() != null) {
             criteria.andPhoneEqualTo(cfCarParkSpecialCarQuery.getPhone());
         }
-        if(cfCarParkSpecialCarQuery.getNumberPlate()!=null){
+        if (cfCarParkSpecialCarQuery.getNumberPlate() != null) {
             criteria.andNumberPlateEqualTo(cfCarParkSpecialCarQuery.getNumberPlate());
         }
-        if(cfCarParkSpecialCarQuery.getUid()!=null){
+        if (cfCarParkSpecialCarQuery.getUid() != null) {
             criteria.andUidEqualTo(cfCarParkSpecialCarQuery.getUid());
         }
-        if(cfCarParkSpecialCarQuery.getTypeKey()!=null){
+        if (cfCarParkSpecialCarQuery.getTypeKey() != null) {
             criteria.andTypeKeyEqualTo(cfCarParkSpecialCarQuery.getTypeKey());
         }
-        if(cfCarParkSpecialCarQuery.getStatus()!=null){
+        if (cfCarParkSpecialCarQuery.getStatus() != null) {
             criteria.andStatusEqualTo(cfCarParkSpecialCarQuery.getStatus());
         }
-        if(cfCarParkSpecialCarQuery.getMinStartTime()!=null){
+        if (cfCarParkSpecialCarQuery.getMinStartTime() != null) {
             criteria.andStartTimeGreaterThanOrEqualTo(cfCarParkSpecialCarQuery.getMinStartTime());
         }
-        if(cfCarParkSpecialCarQuery.getMaxStartTime()!=null){
+        if (cfCarParkSpecialCarQuery.getMaxStartTime() != null) {
             criteria.andStartTimeLessThanOrEqualTo(cfCarParkSpecialCarQuery.getMaxStartTime());
         }
-        if(cfCarParkSpecialCarQuery.getMinEndTime()!=null){
+        if (cfCarParkSpecialCarQuery.getMinEndTime() != null) {
             criteria.andEndTimeGreaterThanOrEqualTo(cfCarParkSpecialCarQuery.getMinEndTime());
         }
-        if(cfCarParkSpecialCarQuery.getMaxEndTime()!=null){
+        if (cfCarParkSpecialCarQuery.getMaxEndTime() != null) {
             criteria.andEndTimeLessThanOrEqualTo(cfCarParkSpecialCarQuery.getMaxEndTime());
         }
-        if(cfCarParkSpecialCarQuery.getMinCreateTime()!=null){
+        if (cfCarParkSpecialCarQuery.getMinCreateTime() != null) {
             criteria.andCreateTimeGreaterThanOrEqualTo(cfCarParkSpecialCarQuery.getMinCreateTime());
         }
-        if(cfCarParkSpecialCarQuery.getMaxCreateTime()!=null){
+        if (cfCarParkSpecialCarQuery.getMaxCreateTime() != null) {
             criteria.andCreateTimeLessThanOrEqualTo(cfCarParkSpecialCarQuery.getMaxCreateTime());
         }
-        if(cfCarParkSpecialCarQuery.getMaxAutoGiveAwayTime()!=null){
+        if (cfCarParkSpecialCarQuery.getMaxAutoGiveAwayTime() != null) {
             criteria.andAutoGiveAwayTimeLessThanOrEqualTo(cfCarParkSpecialCarQuery.getMaxAutoGiveAwayTime());
         }
-        if(cfCarParkSpecialCarQuery.getAutoGiveAway()!=null){
+        if (cfCarParkSpecialCarQuery.getAutoGiveAway() != null) {
             criteria.andAutoGiveAwayEqualTo(cfCarParkSpecialCarQuery.getAutoGiveAway());
         }
-        if(cfCarParkSpecialCarQuery.getAutoGiveAwayDate()!=null){
+        if (cfCarParkSpecialCarQuery.getAutoGiveAwayDate() != null) {
             criteria.andAutoGiveAwayDateEqualTo(cfCarParkSpecialCarQuery.getAutoGiveAwayDate());
         }
 
-        if(StringUtils.isNotEmpty(cfCarParkSpecialCarQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfCarParkSpecialCarQuery.getOrderBy())) {
             cfCarParkSpecialCarExample.setOrderByClause(cfCarParkSpecialCarQuery.getOrderBy());
         }
-        if(cfCarParkSpecialCarQuery.getPage()!=null && cfCarParkSpecialCarQuery.getSize()!=null){
+        if (cfCarParkSpecialCarQuery.getPage() != null && cfCarParkSpecialCarQuery.getSize() != null) {
             PageHelper.startPage(cfCarParkSpecialCarQuery.getPage(), cfCarParkSpecialCarQuery.getSize());
         }
         return cfCarParkSpecialCarExample;
@@ -166,26 +166,26 @@ public class CfCarParkSpecialCarServiceImpl implements CfCarParkSpecialCarServic
         //获取今天要自动赠送的停车时长
         CfCarParkSpecialCarQuery cfCarParkSpecialCarQuery = new CfCarParkSpecialCarQuery();
         cfCarParkSpecialCarQuery.setAutoGiveAwayDate(todayStr);
-        cfCarParkSpecialCarQuery.setAutoGiveAway((byte)1);
+        cfCarParkSpecialCarQuery.setAutoGiveAway((byte) 1);
         cfCarParkSpecialCarQuery.setMaxAutoGiveAwayTime(DateUtil.getSameDayMinOrMaxTimestamp("min"));
         cfCarParkSpecialCarQuery.setPage(1);
         cfCarParkSpecialCarQuery.setSize(300);
         CfCarParkSpecialCar cfCarParkSpecialCar = new CfCarParkSpecialCar();
         List<CfCarParkSpecialCar> cfCarParkSpecialCarList = getListByQuery(cfCarParkSpecialCarQuery);
-        if(cfCarParkSpecialCarList!=null && cfCarParkSpecialCarList.size()>0){
-            for(CfCarParkSpecialCar carParkSpecialCar: cfCarParkSpecialCarList){
+        if (cfCarParkSpecialCarList != null && cfCarParkSpecialCarList.size() > 0) {
+            for (CfCarParkSpecialCar carParkSpecialCar : cfCarParkSpecialCarList) {
                 //设置自动赠送时间
                 cfCarParkSpecialCar.setId(carParkSpecialCar.getId());
                 cfCarParkSpecialCar.setAutoGiveAwayTime(System.currentTimeMillis());
-                if(carParkSpecialCar.getAutoGiveAwayAmount().doubleValue()<=0){
+                if (carParkSpecialCar.getAutoGiveAwayAmount().doubleValue() <= 0) {
                     update(cfCarParkSpecialCar);
                     continue;
                 }
-                if(carParkSpecialCar.getAutoCleared()==(byte)1){
+                if (carParkSpecialCar.getAutoCleared() == (byte) 1) {
                     cfCarParkSpecialCar.setRemainingParkTime(carParkSpecialCar.getAutoGiveAwayAmount().longValue());
-                }else{
+                } else {
                     Long remainingParkTime = carParkSpecialCar.getRemainingParkTime();
-                    cfCarParkSpecialCar.setRemainingParkTime(remainingParkTime+carParkSpecialCar.getAutoGiveAwayAmount().longValue());
+                    cfCarParkSpecialCar.setRemainingParkTime(remainingParkTime + carParkSpecialCar.getAutoGiveAwayAmount().longValue());
                 }
                 update(cfCarParkSpecialCar);
             }

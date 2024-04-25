@@ -39,7 +39,7 @@ public class CfAdLinksServiceImpl implements CfAdLinksService {
 
     @Override
     public Integer add(CfAdLinks cfAdLinks) {
-        if(cfAdLinks.getCarrierIds()==null || cfAdLinks.getCarrierIds().size()==0 || StringUtils.isEmpty(cfAdLinks.getAdId())){
+        if (cfAdLinks.getCarrierIds() == null || cfAdLinks.getCarrierIds().size() == 0 || StringUtils.isEmpty(cfAdLinks.getAdId())) {
             return null;
         }
         //先清除掉原来的
@@ -54,29 +54,29 @@ public class CfAdLinksServiceImpl implements CfAdLinksService {
         CfAdQuery cfAdQuery = new CfAdQuery();
         cfAdQuery.setId(cfAdLinks.getAdId());
         List<CfAd> cfAdList = cfAdService.getListByQuery(cfAdQuery);
-        if(cfAdList==null || cfAdList.size()==0){
+        if (cfAdList == null || cfAdList.size() == 0) {
             ExceptionCast.cast(AdCode.AD_NOT_EXIST);
         }
         //批量添加
-        for (String carrierId: cfAdLinks.getCarrierIds()){
+        for (String carrierId : cfAdLinks.getCarrierIds()) {
             cfAdLinks.setCarrierId(carrierId);
             cfAdLinks.setPlatform(cfAdList.get(0).getPlatform());
             cfAdLinks.setSortIndex(cfAdList.get(0).getSortIndex());
             cfAdLinks.setStartTime(cfAdList.get(0).getStartTime());
             cfAdLinks.setEndTime(cfAdList.get(0).getEndTime());
-            if(cfAdLinks.getCreateTime()==null){
+            if (cfAdLinks.getCreateTime() == null) {
                 cfAdLinks.setCreateTime(System.currentTimeMillis());
             }
-            if(cfAdLinks.getStartTime()==null){
+            if (cfAdLinks.getStartTime() == null) {
                 cfAdLinks.setStartTime(System.currentTimeMillis());
             }
-            if(cfAdLinks.getEndTime()==null){
+            if (cfAdLinks.getEndTime() == null) {
                 cfAdLinks.setEndTime(System.currentTimeMillis());
             }
-            if(cfAdLinks.getShowCounts()==null){
+            if (cfAdLinks.getShowCounts() == null) {
                 cfAdLinks.setShowCounts(0);
             }
-            if(cfAdLinks.getClickCounts()==null){
+            if (cfAdLinks.getClickCounts() == null) {
                 cfAdLinks.setClickCounts(0);
             }
 
@@ -113,41 +113,41 @@ public class CfAdLinksServiceImpl implements CfAdLinksService {
     public CfAdLinksExample getExampleByQuery(CfAdLinksQuery cfAdLinksQuery) {
         CfAdLinksExample cfAdLinksExample = new CfAdLinksExample();
         CfAdLinksExample.Criteria criteria = cfAdLinksExample.createCriteria();
-        if(cfAdLinksQuery.getId()!=null){
+        if (cfAdLinksQuery.getId() != null) {
             criteria.andIdEqualTo(cfAdLinksQuery.getId());
         }
-        if(cfAdLinksQuery.getAdId()!=null){
+        if (cfAdLinksQuery.getAdId() != null) {
             criteria.andAdIdEqualTo(cfAdLinksQuery.getAdId());
         }
-        if(cfAdLinksQuery.getScenes()!=null){
+        if (cfAdLinksQuery.getScenes() != null) {
             criteria.andScenesEqualTo(cfAdLinksQuery.getScenes());
         }
-        if(cfAdLinksQuery.getPlatform()!=null){
+        if (cfAdLinksQuery.getPlatform() != null) {
             criteria.andPlatformEqualTo(cfAdLinksQuery.getPlatform());
         }
-        if(cfAdLinksQuery.getCarrierId()!=null){
+        if (cfAdLinksQuery.getCarrierId() != null) {
             criteria.andCarrierIdEqualTo(cfAdLinksQuery.getCarrierId());
         }
-        if(cfAdLinksQuery.getCarrierIds()!=null){
+        if (cfAdLinksQuery.getCarrierIds() != null) {
             criteria.andCarrierIdIn(cfAdLinksQuery.getCarrierIds());
         }
-        if(cfAdLinksQuery.getMinStartTime()!=null){
+        if (cfAdLinksQuery.getMinStartTime() != null) {
             criteria.andStartTimeGreaterThanOrEqualTo(cfAdLinksQuery.getMinStartTime());
         }
-        if(cfAdLinksQuery.getMaxStartTime()!=null){
+        if (cfAdLinksQuery.getMaxStartTime() != null) {
             criteria.andStartTimeLessThanOrEqualTo(cfAdLinksQuery.getMaxStartTime());
         }
-        if(cfAdLinksQuery.getMinEndTime()!=null){
+        if (cfAdLinksQuery.getMinEndTime() != null) {
             criteria.andEndTimeGreaterThanOrEqualTo(cfAdLinksQuery.getMinEndTime());
         }
-        if(cfAdLinksQuery.getMaxEndTime()!=null){
+        if (cfAdLinksQuery.getMaxEndTime() != null) {
             criteria.andEndTimeLessThanOrEqualTo(cfAdLinksQuery.getMaxEndTime());
         }
 
-        if(StringUtils.isNotEmpty(cfAdLinksQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfAdLinksQuery.getOrderBy())) {
             cfAdLinksExample.setOrderByClause(cfAdLinksQuery.getOrderBy());
         }
-        if(cfAdLinksQuery.getPage()!=null && cfAdLinksQuery.getSize()!=null){
+        if (cfAdLinksQuery.getPage() != null && cfAdLinksQuery.getSize() != null) {
             PageHelper.startPage(cfAdLinksQuery.getPage(), cfAdLinksQuery.getSize());
         }
         return cfAdLinksExample;
@@ -171,11 +171,11 @@ public class CfAdLinksServiceImpl implements CfAdLinksService {
 
     @Override
     public Integer adCounts(AdCounts adCounts) {
-        if(!adCounts.getField().equals("show_counts") && !adCounts.getField().equals("click_counts")){
+        if (!adCounts.getField().equals("show_counts") && !adCounts.getField().equals("click_counts")) {
             ExceptionCast.cast(CommonCode.INVALID_PARAM, "统计的字段不支持");
         }
         Integer integer = cfAdLinksMapper.adCounts(adCounts);
-        if(integer>0){
+        if (integer > 0) {
             CfAdLinks cfAdLinks = cfAdLinksMapper.selectByPrimaryKey(adCounts.getId());
             adCounts.setId(cfAdLinks.getAdId());
             return cfAdMapper.adCounts(adCounts);

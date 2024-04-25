@@ -25,5 +25,5 @@ public interface CfLogisticsCarTypeService {
     Integer countByQuery(CfLogisticsCarTypeQuery CfLogisticsCarTypeQuery);
 
     CfLogisticsCarTypeExample getExampleByQuery(CfLogisticsCarTypeQuery CfLogisticsCarTypeQuery);
-    
+
 }

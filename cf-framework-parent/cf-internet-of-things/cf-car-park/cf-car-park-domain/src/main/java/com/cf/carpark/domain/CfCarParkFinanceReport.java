@@ -30,7 +30,7 @@ public class CfCarParkFinanceReport implements Serializable {
 
     private Double parkCouponActivityRechargeTotalAmountActuallyPaid;    //优惠券活动充值总实付金额
 
-    private Map<String,Double> paymentChannel;  //支付渠道统计
+    private Map<String, Double> paymentChannel;  //支付渠道统计
 
     private Double total;
 

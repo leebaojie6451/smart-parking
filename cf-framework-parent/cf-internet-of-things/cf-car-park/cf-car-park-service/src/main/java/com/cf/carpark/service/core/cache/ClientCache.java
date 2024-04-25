@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author gebilaowang
  * @date 2021/3/11 11:51
  */
-public class ClientCache implements IClientCache{
+public class ClientCache implements IClientCache {
     // 客户端id:客户端
     public static ConcurrentHashMap<String, ClientDTO> channels = new ConcurrentHashMap<>();
 
@@ -26,15 +26,15 @@ public class ClientCache implements IClientCache{
     }
 
     @Override
-    public void add(Channel channel,MqttConnectMessage message) {
+    public void add(Channel channel, MqttConnectMessage message) {
         String sn = "";
-        if(message.payload().clientIdentifier().indexOf("_")>=0){
+        if (message.payload().clientIdentifier().indexOf("_") >= 0) {
             sn = message.payload().clientIdentifier().substring(0, message.payload().clientIdentifier().indexOf("_"));
-        }else{
+        } else {
             sn = message.payload().clientIdentifier();
         }
         ClientDTO build = ClientDTO.build(channel.id().asShortText(), channel, sn, 0);
-        channels.put(channel.id().asShortText(),build);
+        channels.put(channel.id().asShortText(), build);
     }
 
     @Override

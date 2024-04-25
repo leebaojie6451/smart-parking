@@ -46,7 +46,7 @@ public class CfAccountController implements CfAccountSwagger {
     @RequestMapping(value = "selectByQuery", method = {RequestMethod.GET})
     public ResponseResult getListByQuery(CfAccountQuery cfAccountQuery) {
         List<CfAccount> cfAccountList = cfAccountService.getListByQuery(cfAccountQuery);
-        if(cfAccountList==null || cfAccountList.size()==0){
+        if (cfAccountList == null || cfAccountList.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         Integer count = cfAccountService.countByQuery(cfAccountQuery);
@@ -70,7 +70,7 @@ public class CfAccountController implements CfAccountSwagger {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         cfAccountQuery.setHandleUid(userBasicInfo.getId());
         Integer integer = cfAccountService.checkAndAddBalanceByQuery(cfAccountQuery);
-        return integer>0?new ResponseResult(CommonCode.SUCCESS): new ResponseResult(CommonCode.FAIL);
+        return integer > 0 ? new ResponseResult(CommonCode.SUCCESS) : new ResponseResult(CommonCode.FAIL);
     }
 
     @Override
@@ -80,6 +80,6 @@ public class CfAccountController implements CfAccountSwagger {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         cfAccountQuery.setHandleUid(userBasicInfo.getId());
         Integer integer = cfAccountService.checkAndReduceBalanceByQuery(cfAccountQuery);
-        return integer>0?new ResponseResult(CommonCode.SUCCESS): new ResponseResult(CommonCode.FAIL);
+        return integer > 0 ? new ResponseResult(CommonCode.SUCCESS) : new ResponseResult(CommonCode.FAIL);
     }
 }

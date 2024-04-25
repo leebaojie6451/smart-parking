@@ -23,7 +23,7 @@ public class BaseRequestParam implements Serializable {
     private String carType;
 
     /**
-     *  区域  ------> 省份
+     * 区域  ------> 省份
      */
     private String carCountry;
 

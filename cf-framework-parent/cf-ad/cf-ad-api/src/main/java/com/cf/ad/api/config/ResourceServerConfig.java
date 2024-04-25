@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -42,8 +41,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         converter.setVerifierKey(getPubKey());
         return converter;
     }
+
     /**
      * 获取非对称加密公钥 Key
+     *
      * @return 公钥 Key
      */
     private String getPubKey() {
@@ -56,6 +57,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
             return null;
         }
     }
+
     //Http安全配置，对每个到达系统的http请求链接进行校验
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -63,8 +65,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http.authorizeRequests()
                 //下边的路径放行
                 .antMatchers("/v2/api-docs", "/swagger-resources/configuration/ui",
-                        "/swagger-resources","/swagger-resources/configuration/security",
-                        "/swagger-ui.html","/webjars/**","/adlinks/getListByQuery","/ad/findById","/adlinks/selectContainAdByQuery").permitAll()
+                        "/swagger-resources", "/swagger-resources/configuration/security",
+                        "/swagger-ui.html", "/webjars/**", "/adlinks/getListByQuery", "/ad/findById", "/adlinks/selectContainAdByQuery").permitAll()
                 .anyRequest().authenticated().and()
                 .cors()
                 .and()

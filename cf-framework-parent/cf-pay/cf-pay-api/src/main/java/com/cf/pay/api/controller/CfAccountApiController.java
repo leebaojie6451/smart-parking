@@ -43,7 +43,7 @@ public class CfAccountApiController implements CfAccountApiSwagger {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         cfAccountQuery.setUid(userBasicInfo.getId());
         List<CfAccount> cfAccounts = cfAccountService.myAccountList(cfAccountQuery);
-        if(cfAccounts==null || cfAccounts.size()==0){
+        if (cfAccounts == null || cfAccounts.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfAccounts);
@@ -63,7 +63,7 @@ public class CfAccountApiController implements CfAccountApiSwagger {
     @RequestMapping(value = "getScoreTypeListByQuery", method = {RequestMethod.GET})
     public ResponseResult getScoreTypeListByQuery(CfScoreTypeQuery cfScoreTypeQuery) throws Exception {
         List<CfScoreType> cfScoreTypes = cfScoreTypeService.getListByQuery(cfScoreTypeQuery);
-        if(cfScoreTypes==null || cfScoreTypes.size()==0){
+        if (cfScoreTypes == null || cfScoreTypes.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfScoreTypes);

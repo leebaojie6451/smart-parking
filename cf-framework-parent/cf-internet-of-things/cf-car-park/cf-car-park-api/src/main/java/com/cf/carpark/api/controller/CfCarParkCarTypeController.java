@@ -33,7 +33,7 @@ public class CfCarParkCarTypeController implements CfCarParkCarTypeSwagger {
     @RequestMapping(value = "getAllList", method = RequestMethod.GET)
     public ResponseResult getAllList() {
         List<CfCarParkCarType> cfCarParkCarTypes = cfCarParkCarTypeService.getAllList();
-        if(cfCarParkCarTypes==null || cfCarParkCarTypes.size()==0){
+        if (cfCarParkCarTypes == null || cfCarParkCarTypes.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfCarParkCarTypes);

@@ -45,7 +45,7 @@ public class CfChargingStationDeviceController implements CfChargingStationDevic
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(CfChargingStationDeviceQuery cfChargingStationDeviceQuery) throws Exception {
         List<CfChargingStationDevice> cfChargingStationDeviceList = cfChargingStationDeviceService.getListByQuery(cfChargingStationDeviceQuery);
-        if(cfChargingStationDeviceList==null || cfChargingStationDeviceList.size()==0){
+        if (cfChargingStationDeviceList == null || cfChargingStationDeviceList.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfChargingStationDeviceList);
@@ -54,7 +54,7 @@ public class CfChargingStationDeviceController implements CfChargingStationDevic
     @Override
     @RequestMapping(value = "startCharging", method = RequestMethod.POST)
     public ResponseResult startCharging(@Validated @RequestBody CfChargingStationDeviceForm cfChargingStationDeviceForm) throws Exception {
-        if(StringUtils.isEmpty(cfChargingStationDeviceForm.getId())){
+        if (StringUtils.isEmpty(cfChargingStationDeviceForm.getId())) {
             return new ResponseResult(CommonCode.INVALID_PARAM, null, "请提供设备id");
         }
 

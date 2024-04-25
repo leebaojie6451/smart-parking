@@ -45,18 +45,18 @@ public class CfTaxAccountController implements CfTaxAccountSwagger {
         allowFileds.add("order");
         allowFileds.add("limit");
         Map<String, String> allowFiledsMap = new HashMap<String, String>();
-        allowFiledsMap.put("id","ta");
-        allowFiledsMap.put("tax_agency","ta");
-        allowFiledsMap.put("uid","ta");
-        allowFiledsMap.put("create_time","ta");
-        allowFiledsMap.put("update_time","ta");
-        allowFiledsMap.put("like","");
-        allowFiledsMap.put("group","");
-        allowFiledsMap.put("order","");
-        allowFiledsMap.put("limit","");
+        allowFiledsMap.put("id", "ta");
+        allowFiledsMap.put("tax_agency", "ta");
+        allowFiledsMap.put("uid", "ta");
+        allowFiledsMap.put("create_time", "ta");
+        allowFiledsMap.put("update_time", "ta");
+        allowFiledsMap.put("like", "");
+        allowFiledsMap.put("group", "");
+        allowFiledsMap.put("order", "");
+        allowFiledsMap.put("limit", "");
         List<CfTaxAccount> cfPaymentAgencies = cfTaxAccountService.selectListByCondition(conditionsMap, allowFiledsMap, allowFileds);
         Integer counts = cfTaxAccountService.selectListByConditionCounts(conditionsMap, allowFiledsMap, allowFileds);
-        if(cfPaymentAgencies!=null && cfPaymentAgencies.size()>0){
+        if (cfPaymentAgencies != null && cfPaymentAgencies.size() > 0) {
             return new ResponseResult(CommonCode.SUCCESS, cfPaymentAgencies, null, counts);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);
@@ -87,6 +87,6 @@ public class CfTaxAccountController implements CfTaxAccountSwagger {
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(String id) {
         Integer delete = cfTaxAccountService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS):new ResponseResult(CommonCode.FAIL);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS) : new ResponseResult(CommonCode.FAIL);
     }
 }

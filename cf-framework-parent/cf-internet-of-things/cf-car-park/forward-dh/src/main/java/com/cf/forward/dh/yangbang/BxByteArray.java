@@ -31,10 +31,10 @@ public class BxByteArray {
     // 向字节数组中PUSH入一个字节
     public void add(byte data) {
 
-        if(next == list.length) {
+        if (next == list.length) {
             // 如果写指针超过 list 长度
             // 将数组长度控大一倍
-            list = Arrays.copyOf(list, list.length*2);
+            list = Arrays.copyOf(list, list.length * 2);
         }
 
         list[next++] = data;
@@ -50,15 +50,14 @@ public class BxByteArray {
     // 向字节数组中 push 入一个short
     public void add(short data, Endian endian) {
 
-        if((next + 1) >= list.length) {
-            list = Arrays.copyOf(list, list.length*2);
+        if ((next + 1) >= list.length) {
+            list = Arrays.copyOf(list, list.length * 2);
         }
 
-        if(endian == Endian.LITTLE) {
+        if (endian == Endian.LITTLE) {
             list[next++] = (byte) data;
             list[next++] = (byte) (data >> 8);
-        }
-        else {
+        } else {
             list[next++] = (byte) (data >> 8);
             list[next++] = (byte) data;
         }
@@ -72,17 +71,16 @@ public class BxByteArray {
     // 向字节数组中 push 入一个 int
     public void add(int data, Endian endian) {
 
-        if((next + 3) >= list.length) {
-            list = Arrays.copyOf(list, list.length*2);
+        if ((next + 3) >= list.length) {
+            list = Arrays.copyOf(list, list.length * 2);
         }
 
-        if(endian == Endian.LITTLE) {
+        if (endian == Endian.LITTLE) {
             list[next++] = (byte) data;
             list[next++] = (byte) (data >> 8);
             list[next++] = (byte) (data >> 16);
             list[next++] = (byte) (data >> 24);
-        }
-        else {
+        } else {
             list[next++] = (byte) (data >> 24);
             list[next++] = (byte) (data >> 16);
             list[next++] = (byte) (data >> 8);
@@ -94,7 +92,7 @@ public class BxByteArray {
     // 向字节数组中 push 入一个 byte[] 数组
     public void add(byte[] src) {
 
-        if(src != null) {
+        if (src != null) {
 
             if ((next + src.length - 1) >= list.length) {
                 list = Arrays.copyOf(list, list.length + src.length);
@@ -110,7 +108,7 @@ public class BxByteArray {
     // 向字节数组中 push 入一个 byte[] 数组
     public void add(byte[] src, int offset, int length) {
 
-        if(src != null) {
+        if (src != null) {
             if ((next + length - 1) >= list.length) {
                 list = Arrays.copyOf(list, list.length + length);
             }
@@ -124,7 +122,7 @@ public class BxByteArray {
     //
     // 设置某个位置的数据
     public void set(int index, byte data) {
-        if(index <= list.length) {
+        if (index <= list.length) {
             list[index] = data;
         }
     }

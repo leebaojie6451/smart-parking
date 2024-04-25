@@ -66,9 +66,9 @@ public class CfStaffControllerApi implements CfStaffSwagger {
         CfCouponActivityQuery cfCouponActivityQuery = new CfCouponActivityQuery();
         cfCouponActivityQuery.setMainBodyId(userBasicInfo.getId());
         List<CfCouponActivity> cfCouponActivityList = cfCouponActivityService.getListByQuery(cfCouponActivityQuery);
-        if(cfCouponActivityList!=null && cfCouponActivityList.size()>0){
+        if (cfCouponActivityList != null && cfCouponActivityList.size() > 0) {
             ArrayList<String> couponActivityIds = new ArrayList<>();
-            for (CfCouponActivity cfCouponActivity: cfCouponActivityList){
+            for (CfCouponActivity cfCouponActivity : cfCouponActivityList) {
                 couponActivityIds.add(cfCouponActivity.getImage());
             }
             CfStaffCouponSettingQuery cfStaffCouponSettingQuery = new CfStaffCouponSettingQuery();
@@ -83,10 +83,10 @@ public class CfStaffControllerApi implements CfStaffSwagger {
     @RequestMapping(value = "employerUpdateStaff", method = RequestMethod.PUT)
     public ResponseResult employerUpdateStaff(@RequestBody CfStaffForm cfStaffForm) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        if(userBasicInfo.getId().equals(cfStaffForm.getStaffId())){
+        if (userBasicInfo.getId().equals(cfStaffForm.getStaffId())) {
             return new ResponseResult(StaffCode.CANT_NOT_ADD_YOURSELF);
         }
-        if(cfStaffForm.getNote()==null){
+        if (cfStaffForm.getNote() == null) {
             cfStaffForm.setNote("");
         }
         CfStaff cfStaff = new CfStaff();
@@ -101,10 +101,10 @@ public class CfStaffControllerApi implements CfStaffSwagger {
     @RequestMapping(value = "employerAddStaff", method = RequestMethod.POST)
     public ResponseResult employerAddStaff(@RequestBody CfStaffForm cfStaffForm) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        if(userBasicInfo.getId().equals(cfStaffForm.getStaffId())){
+        if (userBasicInfo.getId().equals(cfStaffForm.getStaffId())) {
             return new ResponseResult(StaffCode.CANT_NOT_ADD_YOURSELF);
         }
-        if(cfStaffForm.getNote()==null){
+        if (cfStaffForm.getNote() == null) {
             cfStaffForm.setNote("");
         }
         CfStaff cfStaff = new CfStaff();
@@ -115,16 +115,16 @@ public class CfStaffControllerApi implements CfStaffSwagger {
         CfCouponActivityQuery cfCouponActivityQuery = new CfCouponActivityQuery();
         cfCouponActivityQuery.setMainBodyId(userBasicInfo.getId());
         List<CfCouponActivity> cfCouponActivities = cfCouponActivityService.getListByQuery(cfCouponActivityQuery);
-        if(cfCouponActivities!=null && cfCouponActivities.size()>0){
+        if (cfCouponActivities != null && cfCouponActivities.size() > 0) {
             ArrayList<CfStaffCouponSetting> cfStaffCouponSettingArrayList = new ArrayList<>();
-            for(CfCouponActivity cfCouponActivity: cfCouponActivities){
+            for (CfCouponActivity cfCouponActivity : cfCouponActivities) {
                 CfStaffCouponSettingQuery cfStaffCouponSettingQuery = new CfStaffCouponSettingQuery();
                 cfStaffCouponSettingQuery.setCouponActivityId(cfCouponActivity.getId());
                 cfStaffCouponSettingQuery.setStaffId(cfStaffForm.getStaffId());
                 //删掉原来的，再添加
                 cfStaffCouponSettingService.deleteByQuery(cfStaffCouponSettingQuery);
                 //直接添加一个默认的
-                for(byte i=(byte)0; i<(byte)3; i++){
+                for (byte i = (byte) 0; i < (byte) 3; i++) {
                     CfStaffCouponSetting cfStaffCouponSetting = new CfStaffCouponSetting();
                     cfStaffCouponSetting.setId(idWorker.nextId());
                     cfStaffCouponSetting.setSameDayQuota(new BigDecimal(0.00));
@@ -145,18 +145,18 @@ public class CfStaffControllerApi implements CfStaffSwagger {
     public ResponseResult getMyStaffList(CfStaffQuery cfStaffQuery) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         cfStaffQuery.setEmployerId(userBasicInfo.getId());
-        if(cfStaffQuery.getCountStartTime()==null){
+        if (cfStaffQuery.getCountStartTime() == null) {
             cfStaffQuery.setCountStartTime(DateUtil.getSameDayMinOrMaxTimestamp("min"));
         }
-        if(cfStaffQuery.getCountEndTime()==null){
+        if (cfStaffQuery.getCountEndTime() == null) {
             cfStaffQuery.setCountEndTime(DateUtil.getSameDayMinOrMaxTimestamp("max"));
         }
         List<CfStaff> cfStaffs = cfStaffService.selectByQueryContainCouponCount(cfStaffQuery);
-        if (cfStaffs==null || cfStaffs.size()==0){
+        if (cfStaffs == null || cfStaffs.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         String fileSourceAddress = cfSystemConfigService.getValueByKey("file_source_address", "http://file.cfeng.wang/");
-        for(CfStaff cfStaff: cfStaffs){
+        for (CfStaff cfStaff : cfStaffs) {
             FileUtils.handleFileSourcePrefix(cfStaff, "", "staffAvatar");
         }
         return new ResponseResult(CommonCode.SUCCESS, cfStaffs);

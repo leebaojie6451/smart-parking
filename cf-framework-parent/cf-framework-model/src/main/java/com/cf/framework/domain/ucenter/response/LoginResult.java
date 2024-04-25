@@ -16,5 +16,6 @@ public class LoginResult extends ResponseResult {
         super(resultCode);
         this.token = token;
     }
+
     private AuthToken token;
 }

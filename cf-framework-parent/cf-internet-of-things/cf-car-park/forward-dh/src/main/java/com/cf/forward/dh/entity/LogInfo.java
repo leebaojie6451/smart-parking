@@ -84,16 +84,16 @@ public class LogInfo {
      */
     private String resMsg;
 
-   public LogInfo getConnectLog(String method,String dealResult,String ip,String port){
-       LogInfo logInfo = new LogInfo();
-       logInfo.setType("2");
-       logInfo.setDescription("监控断线重连");
-       logInfo.setLogType("INFO");
-       logInfo.setMethod(method);
-       logInfo.setRequestIp(ip+":"+port);
-       logInfo.setDealResult(dealResult);
-       return logInfo;
-   }
+    public LogInfo getConnectLog(String method, String dealResult, String ip, String port) {
+        LogInfo logInfo = new LogInfo();
+        logInfo.setType("2");
+        logInfo.setDescription("监控断线重连");
+        logInfo.setLogType("INFO");
+        logInfo.setMethod(method);
+        logInfo.setRequestIp(ip + ":" + port);
+        logInfo.setDealResult(dealResult);
+        return logInfo;
+    }
 
     public Long getId() {
         return id;

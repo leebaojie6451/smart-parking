@@ -28,6 +28,6 @@ public interface CfDailyParkingStatistcsService {
 
     Integer countByQuery(CfDailyParkingStatistcsQuery cfDailyParkingStatistcsQuery);
 
-    void statisticsDatas(String dateStr,Long startTime,Long endTime, boolean countMonth) throws Exception;
+    void statisticsDatas(String dateStr, Long startTime, Long endTime, boolean countMonth) throws Exception;
 
 }

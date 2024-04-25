@@ -82,56 +82,56 @@ public class CfCarParkReleaseLogServiceImpl implements CfCarParkReleaseLogServic
 
     @Override
     public CfCarParkReleaseLog add(CfCarParkReleaseLog cfCarParkReleaseLog, String redisPreFix) throws Exception {
-        if(cfCarParkReleaseLog.getUid()==null){
+        if (cfCarParkReleaseLog.getUid() == null) {
             cfCarParkReleaseLog.setUid("");
         }
         cfCarParkReleaseLog.setId(idWorker.nextId());
         cfCarParkReleaseLog.setApplicationTime(System.currentTimeMillis());
         cfCarParkReleaseLogMapper.insert(cfCarParkReleaseLog);
-        if(cfCarParkReleaseLog.getCfCarParkDevice()!=null && cfCarParkReleaseLog.getCfCarParkDevice().getLinkMode().equals("mqtt") && cfCarParkReleaseLog.getCfCarParkDevice().getType().byteValue()==(byte)2){
+        if (cfCarParkReleaseLog.getCfCarParkDevice() != null && cfCarParkReleaseLog.getCfCarParkDevice().getLinkMode().equals("mqtt") && cfCarParkReleaseLog.getCfCarParkDevice().getType().byteValue() == (byte) 2) {
             Object o = executeRelease(cfCarParkReleaseLog, cfCarParkReleaseLog.getCfCarParkDevice().getBrand(), 0);
             //判断是否在本机，在本机直接mqtt与客户端交互，否则动态寻找
             boolean local = false;
-            if(ClientCache.channels.size()>0){
+            if (ClientCache.channels.size() > 0) {
                 ConcurrentHashMap<String, ClientDTO> channels = ClientCache.channels;
-                for (Map.Entry channelEntry: channels.entrySet()) {
-                    ClientDTO clientDTO = (ClientDTO)channelEntry.getValue();
-                    if(!clientDTO.getFlagKey().equals(cfCarParkReleaseLog.getCfCarParkDevice().getBarCode())){
+                for (Map.Entry channelEntry : channels.entrySet()) {
+                    ClientDTO clientDTO = (ClientDTO) channelEntry.getValue();
+                    if (!clientDTO.getFlagKey().equals(cfCarParkReleaseLog.getCfCarParkDevice().getBarCode())) {
                         continue;
                     }
                     local = true;
-                    switch (cfCarParkReleaseLog.getCfCarParkDevice().getBrand()){
+                    switch (cfCarParkReleaseLog.getCfCarParkDevice().getBrand()) {
                         case "zhen_shi":
-                            iMqttDataService.pushTopics(cfCarParkReleaseLog.getCfCarParkDevice().getBarCode(), JSON.toJSONString(o),"/device/" + cfCarParkReleaseLog.getCfCarParkDevice().getBarCode() + "/command");
+                            iMqttDataService.pushTopics(cfCarParkReleaseLog.getCfCarParkDevice().getBarCode(), JSON.toJSONString(o), "/device/" + cfCarParkReleaseLog.getCfCarParkDevice().getBarCode() + "/command");
                             break;
                         case "hua_xia":
-                            iMqttDataService.pushTopics(cfCarParkReleaseLog.getDeviceSerialNumber(), JSON.toJSONString(o), "/device/"+cfCarParkReleaseLog.getDeviceSerialNumber()+"/get");
+                            iMqttDataService.pushTopics(cfCarParkReleaseLog.getDeviceSerialNumber(), JSON.toJSONString(o), "/device/" + cfCarParkReleaseLog.getDeviceSerialNumber() + "/get");
                             break;
                     }
 
                     break;
                 }
             }
-            if(!local){
+            if (!local) {
                 //使用mqtt客户端进行操作
 //                mqttClient.startMQTTClient(cfCarParkReleaseLog.getCfCarParkDevice().getBarCode(), JSON.toJSONString(o));
                 //改用Dubbo内置RPC远程服务调用
                 String deviceLinkIp = getDeviceLinkLocalServerIp(cfCarParkReleaseLog.getCfCarParkDevice().getBarCode());
-                if(StringUtils.isNotEmpty(deviceLinkIp)){
-                    String url = "dubbo://"+deviceLinkIp+":20890/com.cf.carpark.service.IMqttDataService?version=1.0.0";//更改不同的Dubbo服务暴露的ip地址&端口
+                if (StringUtils.isNotEmpty(deviceLinkIp)) {
+                    String url = "dubbo://" + deviceLinkIp + ":20890/com.cf.carpark.service.IMqttDataService?version=1.0.0";//更改不同的Dubbo服务暴露的ip地址&端口
                     ReferenceBean<IMqttDataService> referenceBean = new ReferenceBean<IMqttDataService>();
                     referenceBean.setApplicationContext(applicationContext);
                     referenceBean.setInterface(IMqttDataService.class);
                     referenceBean.setUrl(url);
                     referenceBean.afterPropertiesSet();
                     IMqttDataService iMqttDataService = referenceBean.get();
-                    iMqttDataService.pushTopics(cfCarParkReleaseLog.getCfCarParkDevice().getBarCode(), JSON.toJSONString(o),"/device/" + cfCarParkReleaseLog.getCfCarParkDevice().getBarCode() + "/command");
+                    iMqttDataService.pushTopics(cfCarParkReleaseLog.getCfCarParkDevice().getBarCode(), JSON.toJSONString(o), "/device/" + cfCarParkReleaseLog.getCfCarParkDevice().getBarCode() + "/command");
                 }
             }
-        }else if(cfCarParkReleaseLog.getCfCarParkDevice()!=null && cfCarParkReleaseLog.getCfCarParkDevice().getType().byteValue()==(byte)3){
+        } else if (cfCarParkReleaseLog.getCfCarParkDevice() != null && cfCarParkReleaseLog.getCfCarParkDevice().getType().byteValue() == (byte) 3) {
             //通知地锁开闸
-            cfCarParkDeviceService.controlledLockUpAndDown("down",cfCarParkReleaseLog.getCfCarParkDevice().getBarCode());
-        }else{
+            cfCarParkDeviceService.controlledLockUpAndDown("down", cfCarParkReleaseLog.getCfCarParkDevice().getBarCode());
+        } else {
             //放入http协议轮询redis高频缓存数据区
             updateRedisCache(cfCarParkReleaseLog, redisPreFix);
         }
@@ -139,22 +139,22 @@ public class CfCarParkReleaseLogServiceImpl implements CfCarParkReleaseLogServic
     }
 
     @Override
-    public String getDeviceLinkLocalServerIp(String sn) throws Exception{
-        String deviceLinkIp = redisTemplate.boundValueOps( sn).get();
-        if(StringUtils.isEmpty(deviceLinkIp)){
+    public String getDeviceLinkLocalServerIp(String sn) throws Exception {
+        String deviceLinkIp = redisTemplate.boundValueOps(sn).get();
+        if (StringUtils.isEmpty(deviceLinkIp)) {
             //设备未注册到系统中
             ExceptionCast.cast(CarParkCode.DEVICE_IS_NOT_REGISTERED);
         }
-        if(InetAddress.getLocalHost().getHostAddress().equals(deviceLinkIp)){
+        if (InetAddress.getLocalHost().getHostAddress().equals(deviceLinkIp)) {
             //说明设备的确已经掉线，不在任何服务器中连接
             ConcurrentHashMap<String, ClientDTO> channels = ClientCache.channels;
-            for (Map.Entry channelEntry: channels.entrySet()) {
-                ClientDTO clientDTO = (ClientDTO)channelEntry.getValue();
-                if(clientDTO.getFlagKey().equals(sn)){
+            for (Map.Entry channelEntry : channels.entrySet()) {
+                ClientDTO clientDTO = (ClientDTO) channelEntry.getValue();
+                if (clientDTO.getFlagKey().equals(sn)) {
                     break;
                 }
             }
-            throw new Exception("设备已经掉线："+sn+"，请检查网络或重启设备1分钟后再次观察和重试，若重启后依旧无法正常工作请联系技术人员");
+            throw new Exception("设备已经掉线：" + sn + "，请检查网络或重启设备1分钟后再次观察和重试，若重启后依旧无法正常工作请联系技术人员");
         }
 
         return deviceLinkIp;
@@ -169,20 +169,20 @@ public class CfCarParkReleaseLogServiceImpl implements CfCarParkReleaseLogServic
 
     @Override
     public void updateRedisCache(CfCarParkReleaseLog cfCarParkReleaseLog, String redisPreFix) {
-        if(StringUtils.isEmpty(redisPreFix)){
+        if (StringUtils.isEmpty(redisPreFix)) {
             return;
         }
         String key = redisPreFix + cfCarParkReleaseLog.getDeviceSerialNumber();
-        key = key.replace(" ","");
-        redisTemplate.boundZSetOps(key).add(JSONObject.toJSONString(cfCarParkReleaseLog),cfCarParkReleaseLog.getExecutionTime());
+        key = key.replace(" ", "");
+        redisTemplate.boundZSetOps(key).add(JSONObject.toJSONString(cfCarParkReleaseLog), cfCarParkReleaseLog.getExecutionTime());
         //设置有效期为30秒
-        redisTemplate.expire(key,30, TimeUnit.SECONDS);
+        redisTemplate.expire(key, 30, TimeUnit.SECONDS);
     }
 
     @Override
     public Integer delete(String id) {
         CfCarParkReleaseLog cfCarParkReleaseLog = findById(id, false);
-        redisTemplate.boundZSetOps(REDIS_PRE+cfCarParkReleaseLog.getDeviceSerialNumber()).remove(cfCarParkReleaseLog.getExecutionTime());
+        redisTemplate.boundZSetOps(REDIS_PRE + cfCarParkReleaseLog.getDeviceSerialNumber()).remove(cfCarParkReleaseLog.getExecutionTime());
         return cfCarParkReleaseLogMapper.deleteByPrimaryKey(id);
     }
 
@@ -199,10 +199,10 @@ public class CfCarParkReleaseLogServiceImpl implements CfCarParkReleaseLogServic
     @Override
     public CfCarParkReleaseLog findById(String id, boolean exceptEmpty) {
         CfCarParkReleaseLog cfCarParkReleaseLog = findById(id);
-        if(exceptEmpty && cfCarParkReleaseLog!=null){
+        if (exceptEmpty && cfCarParkReleaseLog != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!exceptEmpty && cfCarParkReleaseLog==null){
+        if (!exceptEmpty && cfCarParkReleaseLog == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfCarParkReleaseLog;
@@ -212,40 +212,40 @@ public class CfCarParkReleaseLogServiceImpl implements CfCarParkReleaseLogServic
     public CfCarParkReleaseLogExample getExampleByQuery(CfCarParkReleaseLogQuery cfCarParkReleaseLogQuery) {
         CfCarParkReleaseLogExample cfCarParkReleaseLogExample = new CfCarParkReleaseLogExample();
         CfCarParkReleaseLogExample.Criteria criteria = cfCarParkReleaseLogExample.createCriteria();
-        if(StringUtils.isNotEmpty(cfCarParkReleaseLogQuery.getCarparkId())){
+        if (StringUtils.isNotEmpty(cfCarParkReleaseLogQuery.getCarparkId())) {
             criteria.andCarparkIdEqualTo(cfCarParkReleaseLogQuery.getCarparkId());
         }
-        if(StringUtils.isNotEmpty(cfCarParkReleaseLogQuery.getCarparkUseLogId())){
+        if (StringUtils.isNotEmpty(cfCarParkReleaseLogQuery.getCarparkUseLogId())) {
             criteria.andCarparkUseLogIdEqualTo(cfCarParkReleaseLogQuery.getCarparkUseLogId());
         }
-        if(StringUtils.isNotEmpty(cfCarParkReleaseLogQuery.getUid())){
+        if (StringUtils.isNotEmpty(cfCarParkReleaseLogQuery.getUid())) {
             criteria.andUidEqualTo(cfCarParkReleaseLogQuery.getUid());
         }
-        if(StringUtils.isNotEmpty(cfCarParkReleaseLogQuery.getDeviceSerialNumber())){
+        if (StringUtils.isNotEmpty(cfCarParkReleaseLogQuery.getDeviceSerialNumber())) {
             criteria.andDeviceSerialNumberEqualTo(cfCarParkReleaseLogQuery.getDeviceSerialNumber());
         }
-        if(cfCarParkReleaseLogQuery.getStatus()!=null){
+        if (cfCarParkReleaseLogQuery.getStatus() != null) {
             criteria.andStatusEqualTo(cfCarParkReleaseLogQuery.getStatus());
         }
-        if(cfCarParkReleaseLogQuery.getType()!=null){
+        if (cfCarParkReleaseLogQuery.getType() != null) {
             criteria.andTypeEqualTo(cfCarParkReleaseLogQuery.getType());
         }
-        if(cfCarParkReleaseLogQuery.getMinApplicationTime()!=null){
+        if (cfCarParkReleaseLogQuery.getMinApplicationTime() != null) {
             criteria.andApplicationTimeGreaterThanOrEqualTo(cfCarParkReleaseLogQuery.getMinApplicationTime());
         }
-        if(cfCarParkReleaseLogQuery.getMaxApplicationTime()!=null){
+        if (cfCarParkReleaseLogQuery.getMaxApplicationTime() != null) {
             criteria.andApplicationTimeLessThanOrEqualTo(cfCarParkReleaseLogQuery.getMaxApplicationTime());
         }
-        if(cfCarParkReleaseLogQuery.getMinExecutionTime()!=null){
+        if (cfCarParkReleaseLogQuery.getMinExecutionTime() != null) {
             criteria.andExecutionTimeGreaterThanOrEqualTo(cfCarParkReleaseLogQuery.getMinExecutionTime());
         }
-        if(cfCarParkReleaseLogQuery.getMaxExecutionTime()!=null){
+        if (cfCarParkReleaseLogQuery.getMaxExecutionTime() != null) {
             criteria.andExecutionTimeLessThanOrEqualTo(cfCarParkReleaseLogQuery.getMaxExecutionTime());
         }
-        if(StringUtils.isNotEmpty(cfCarParkReleaseLogQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfCarParkReleaseLogQuery.getOrderBy())) {
             cfCarParkReleaseLogExample.setOrderByClause(cfCarParkReleaseLogQuery.getOrderBy());
         }
-        if(cfCarParkReleaseLogQuery.getPage()!=null && cfCarParkReleaseLogQuery.getSize()!=null){
+        if (cfCarParkReleaseLogQuery.getPage() != null && cfCarParkReleaseLogQuery.getSize() != null) {
             PageHelper.startPage(cfCarParkReleaseLogQuery.getPage(), cfCarParkReleaseLogQuery.getSize());
         }
         return cfCarParkReleaseLogExample;
@@ -298,31 +298,31 @@ public class CfCarParkReleaseLogServiceImpl implements CfCarParkReleaseLogServic
         //更新设备
 //        cfCarParkDeviceService.updateLastOnLineTime(deviceSerialNumber);
         Set<String> cfCarParkReleaseLogStringList = redisTemplate.boundZSetOps(REDIS_PRE + deviceSerialNumber).rangeByScore(System.currentTimeMillis() - 604800000, System.currentTimeMillis());
-        if(cfCarParkReleaseLogStringList!=null && cfCarParkReleaseLogStringList.size()>0){
+        if (cfCarParkReleaseLogStringList != null && cfCarParkReleaseLogStringList.size() > 0) {
             channel = 0;
-            for (String cfCarParkReleaseLogString: cfCarParkReleaseLogStringList){
+            for (String cfCarParkReleaseLogString : cfCarParkReleaseLogStringList) {
                 CfCarParkReleaseLog carParkReleaseLog = JSON.toJavaObject(JSONObject.parseObject(cfCarParkReleaseLogString), CfCarParkReleaseLog.class);
 //                redisTemplate.boundZSetOps(REDIS_PRE + deviceSerialNumber).removeRangeByScore(carParkReleaseLog.getExecutionTime(), carParkReleaseLog.getExecutionTime());
-                map.put("carParkReleaseLog",carParkReleaseLog);
-                map.put("prefix",REDIS_PRE + deviceSerialNumber);
+                map.put("carParkReleaseLog", carParkReleaseLog);
+                map.put("prefix", REDIS_PRE + deviceSerialNumber);
 
 
                 CfCarParkReleaseLog cfCarParkReleaseLog = new CfCarParkReleaseLog();
                 cfCarParkReleaseLog.setId(carParkReleaseLog.getId());
                 cfCarParkReleaseLog.setStatus((byte) 1);
                 cfCarParkReleaseLogMapper.update(cfCarParkReleaseLog);
-                if(StringUtils.isNotEmpty(cfCarParkReleaseLog.getCarparkUseLogId())){
+                if (StringUtils.isNotEmpty(cfCarParkReleaseLog.getCarparkUseLogId())) {
                     CfCarParkUseLog cfCarParkUseLog = cfCarParkUseLogService.findById(cfCarParkReleaseLog.getCarparkUseLogId());
-                    if(cfCarParkReleaseLog!=null){
+                    if (cfCarParkReleaseLog != null) {
                         CfCarParkDeviceQuery cfCarParkDeviceQuery = new CfCarParkDeviceQuery();
                         cfCarParkDeviceQuery.setBarCode(deviceSerialNumber);
-                        cfCarParkDeviceQuery.setStatus((byte)1);
+                        cfCarParkDeviceQuery.setStatus((byte) 1);
                         List<CfCarParkDevice> cfCarParkDevices = cfCarParkDeviceService.getListByQuery(cfCarParkDeviceQuery);
-                        if(cfCarParkDevices!=null && cfCarParkDevices.size()>0){
-                            if(cfCarParkDevices.get(0).getDirection().equals(CarDirection.IN)){
+                        if (cfCarParkDevices != null && cfCarParkDevices.size() > 0) {
+                            if (cfCarParkDevices.get(0).getDirection().equals(CarDirection.IN)) {
                                 cfCarParkUseLog.setInReleaseType(ReleaseType.AUTO);
                                 cfCarParkUseLog.setInTime(System.currentTimeMillis());
-                            }else{
+                            } else {
                                 cfCarParkUseLog.setOutReleaseType(ReleaseType.AUTO);
                                 cfCarParkUseLog.setOutTime(System.currentTimeMillis());
                             }
@@ -333,58 +333,58 @@ public class CfCarParkReleaseLogServiceImpl implements CfCarParkReleaseLogServic
                 response = executeRelease(carParkReleaseLog, deviceBrand, channel);
                 break;
             }
-            if(response!=null){
-                map.put("object",response);
+            if (response != null) {
+                map.put("object", response);
                 return map;
             }
 
-        }else{
+        } else {
             channel = 1;
             cfCarParkReleaseLogStringList = redisTemplate.boundZSetOps(REDIS_PRE_OFF + deviceSerialNumber).rangeByScore(System.currentTimeMillis() - 604800000, System.currentTimeMillis());
-            if(cfCarParkReleaseLogStringList==null || cfCarParkReleaseLogStringList.size()==0){
+            if (cfCarParkReleaseLogStringList == null || cfCarParkReleaseLogStringList.size() == 0) {
 
                 //判断是否有抓拍命令
                 Set<String> captureList = redisTemplate.boundZSetOps(REDIS_PRE_CAPTURE + deviceSerialNumber).rangeByScore(System.currentTimeMillis() - 604800000, System.currentTimeMillis());
-                if(captureList!=null && captureList.size()>0){
+                if (captureList != null && captureList.size() > 0) {
                     ZhenShiResponse911202002050 zhenShiResponse911202002050 = new ZhenShiResponse911202002050();
-                    for (String captureString: captureList){
-                        if(captureString.indexOf("captureFrequency")>-1){
+                    for (String captureString : captureList) {
+                        if (captureString.indexOf("captureFrequency") > -1) {
                             //海康和大华
-                            map.put("prefix",REDIS_PRE_CAPTURE + deviceSerialNumber);
-                            map.put("object",captureString);
-                            map.put("capture",1);
-                        }else{
+                            map.put("prefix", REDIS_PRE_CAPTURE + deviceSerialNumber);
+                            map.put("object", captureString);
+                            map.put("capture", 1);
+                        } else {
                             //默认为臻识
-                            map.put("prefix",REDIS_PRE_CAPTURE + deviceSerialNumber);
-                            map.put("object",JSONObject.parseObject(captureString, zhenShiResponse911202002050.getClass()));
-                            map.put("capture",1);
+                            map.put("prefix", REDIS_PRE_CAPTURE + deviceSerialNumber);
+                            map.put("object", JSONObject.parseObject(captureString, zhenShiResponse911202002050.getClass()));
+                            map.put("capture", 1);
                         }
                     }
                 }
                 return map;
             }
-            for (String cfCarParkReleaseLogString: cfCarParkReleaseLogStringList){
+            for (String cfCarParkReleaseLogString : cfCarParkReleaseLogStringList) {
                 CfCarParkReleaseLog carParkReleaseLog = JSON.toJavaObject(JSONObject.parseObject(cfCarParkReleaseLogString), CfCarParkReleaseLog.class);
 //                redisTemplate.boundZSetOps(REDIS_PRE_OFF + deviceSerialNumber).removeRangeByScore(carParkReleaseLog.getExecutionTime(), carParkReleaseLog.getExecutionTime());
-                map.put("prefix",REDIS_PRE_OFF + deviceSerialNumber);
-                map.put("carParkReleaseLog",carParkReleaseLog);
+                map.put("prefix", REDIS_PRE_OFF + deviceSerialNumber);
+                map.put("carParkReleaseLog", carParkReleaseLog);
 
                 CfCarParkReleaseLog cfCarParkReleaseLog = new CfCarParkReleaseLog();
                 cfCarParkReleaseLog.setId(carParkReleaseLog.getId());
                 cfCarParkReleaseLog.setStatus((byte) 1);
                 cfCarParkReleaseLogMapper.update(cfCarParkReleaseLog);
-                if(StringUtils.isNotEmpty(cfCarParkReleaseLog.getCarparkUseLogId())){
+                if (StringUtils.isNotEmpty(cfCarParkReleaseLog.getCarparkUseLogId())) {
                     CfCarParkUseLog cfCarParkUseLog = cfCarParkUseLogService.findById(cfCarParkReleaseLog.getCarparkUseLogId());
-                    if(cfCarParkReleaseLog!=null){
+                    if (cfCarParkReleaseLog != null) {
                         CfCarParkDeviceQuery cfCarParkDeviceQuery = new CfCarParkDeviceQuery();
                         cfCarParkDeviceQuery.setBarCode(deviceSerialNumber);
-                        cfCarParkDeviceQuery.setStatus((byte)1);
+                        cfCarParkDeviceQuery.setStatus((byte) 1);
                         List<CfCarParkDevice> cfCarParkDevices = cfCarParkDeviceService.getListByQuery(cfCarParkDeviceQuery);
-                        if(cfCarParkDevices!=null && cfCarParkDevices.size()>0){
-                            if(cfCarParkDevices.get(0).getDirection().equals(CarDirection.IN)){
+                        if (cfCarParkDevices != null && cfCarParkDevices.size() > 0) {
+                            if (cfCarParkDevices.get(0).getDirection().equals(CarDirection.IN)) {
                                 cfCarParkUseLog.setInReleaseType(ReleaseType.AUTO);
                                 cfCarParkUseLog.setInTime(System.currentTimeMillis());
-                            }else{
+                            } else {
                                 cfCarParkUseLog.setOutReleaseType(ReleaseType.AUTO);
                                 cfCarParkUseLog.setOutTime(System.currentTimeMillis());
                             }
@@ -396,7 +396,7 @@ public class CfCarParkReleaseLogServiceImpl implements CfCarParkReleaseLogServic
                 break;
             }
         }
-        map.put("object",response);
+        map.put("object", response);
         return map;
     }
 
@@ -407,49 +407,49 @@ public class CfCarParkReleaseLogServiceImpl implements CfCarParkReleaseLogServic
 
     @Override
     public void cleanCaptureRedis(String redisPreFix) {
-        redisTemplate.boundZSetOps(redisPreFix).removeRangeByScore(System.currentTimeMillis()-30000, System.currentTimeMillis());
+        redisTemplate.boundZSetOps(redisPreFix).removeRangeByScore(System.currentTimeMillis() - 30000, System.currentTimeMillis());
     }
 
     @Override
     public Object executeRelease(CfCarParkReleaseLog cfCarParkReleaseLog, String deviceBrand, Integer channel) {
 
         Object response = null;
-        switch (deviceBrand){
+        switch (deviceBrand) {
             case DeviceBrand.ZHEN_SHI:
                 String model = null;
                 ZhenShiResponse911202002050 zhenShiResponse911202002050 = null;
-                if(cfCarParkReleaseLog.getCfCarParkDevice()!=null){
+                if (cfCarParkReleaseLog.getCfCarParkDevice() != null) {
                     model = cfCarParkReleaseLog.getCfCarParkDevice().getModel();
                 }
-                if( model!=null && cfCarParkReleaseLog.getCfCarParkDevice().getLinkMode().equals("mqtt") && StringUtils.isNumeric(model.substring((model.indexOf("-"))+1)) && new Integer(model.substring((model.indexOf("-"))+1)).intValue()>=202210285 ){
+                if (model != null && cfCarParkReleaseLog.getCfCarParkDevice().getLinkMode().equals("mqtt") && StringUtils.isNumeric(model.substring((model.indexOf("-")) + 1)) && new Integer(model.substring((model.indexOf("-")) + 1)).intValue() >= 202210285) {
                     //说明是较新的SDK版本，mqtt要单独做处理
                     JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("id", StringTools.getRandomString(null,16));
+                    jsonObject.put("id", StringTools.getRandomString(null, 16));
                     jsonObject.put("sn", cfCarParkReleaseLog.getCfCarParkDevice().getBarCode());
                     jsonObject.put("name", "gpio_out");
                     jsonObject.put("version", "1.0");
-                    jsonObject.put("timestamp", System.currentTimeMillis()/1000);
+                    jsonObject.put("timestamp", System.currentTimeMillis() / 1000);
                     JSONObject body = new JSONObject();
-                    body.put("delay",500);
-                    body.put("io",channel);
-                    body.put("value",2);
+                    body.put("delay", 500);
+                    body.put("io", channel);
+                    body.put("value", 2);
                     JSONObject payload = new JSONObject();
-                    payload.put("type","gpio_out");
-                    payload.put("body",body);
+                    payload.put("type", "gpio_out");
+                    payload.put("body", body);
                     jsonObject.put("payload", payload);
                     return jsonObject;
-                }else{
+                } else {
                     zhenShiResponse911202002050 = new ZhenShiResponse911202002050();
                     zhenShiResponse911202002050.setResponse_AlarmInfoPlate(new Response_AlarmInfoPlate());
                     //如果是支付账单开闸，制作led实时显示内容和语音播报
-                    if(cfCarParkReleaseLog.getCfCarParkUseLog()!=null && cfCarParkReleaseLog.getCfCarParkUseLog().getCfOrder()!=null && cfCarParkReleaseLog.getCfCarParkUseLog().getCfOrder().getStatus()==PayStatus.PAID && cfCarParkReleaseLog.getCfCarParkUseLog().getCfOrder().getAmountActuallyPaid().doubleValue()>0){
+                    if (cfCarParkReleaseLog.getCfCarParkUseLog() != null && cfCarParkReleaseLog.getCfCarParkUseLog().getCfOrder() != null && cfCarParkReleaseLog.getCfCarParkUseLog().getCfOrder().getStatus() == PayStatus.PAID && cfCarParkReleaseLog.getCfCarParkUseLog().getCfOrder().getAmountActuallyPaid().doubleValue() > 0) {
                         try {
                             PlayRule playRule = cfCarParkUseLogService.paySuccessfulPushDeviceMessage(cfCarParkReleaseLog.getCfCarParkUseLog());
-                            if(playRule!=null){
+                            if (playRule != null) {
                                 playRule = cfCarParkUseLogService.showByDeviceRows(playRule, cfCarParkReleaseLog.getCfCarParkUseLog().getCfCarParkDevice(), SeriaDataUtils.FREEOUT);
-                                zhenShiResponse911202002050 = SeriaDataUtils.setSerialDataZhenshiByPlayRule(zhenShiResponse911202002050, playRule, SeriaDataUtils.FREEOUT,"");
+                                zhenShiResponse911202002050 = SeriaDataUtils.setSerialDataZhenshiByPlayRule(zhenShiResponse911202002050, playRule, SeriaDataUtils.FREEOUT, "");
                             }
-                        } catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -470,28 +470,28 @@ public class CfCarParkReleaseLogServiceImpl implements CfCarParkReleaseLogServic
                 break;
             case DeviceBrand.HUA_XIA:
                 //{"error_num":0,"error_str":"noerror","gpio_data":[{"ionum":"io1","action":"on"}]}
-                if(cfCarParkReleaseLog.getCfCarParkDevice()!=null && cfCarParkReleaseLog.getCfCarParkDevice().getLinkMode().equals("mqtt")){
+                if (cfCarParkReleaseLog.getCfCarParkDevice() != null && cfCarParkReleaseLog.getCfCarParkDevice().getLinkMode().equals("mqtt")) {
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("cmd", "ioOutput");
-                    jsonObject.put("msgId", System.currentTimeMillis()+StringTools.getRandomString(null,7));
-                    jsonObject.put("utcTs", System.currentTimeMillis()/1000);
+                    jsonObject.put("msgId", System.currentTimeMillis() + StringTools.getRandomString(null, 7));
+                    jsonObject.put("utcTs", System.currentTimeMillis() / 1000);
                     com.alibaba.fastjson.JSONObject gpioData = new com.alibaba.fastjson.JSONObject();
-                    gpioData.put("ioNum","io1");
-                    gpioData.put("action","on");
+                    gpioData.put("ioNum", "io1");
+                    gpioData.put("action", "on");
                     jsonObject.put("gpioData", gpioData);
                     HuaXiaResponse huaXiaResponse = new HuaXiaResponse();
                     huaXiaResponse.setMqttDatas(jsonObject);
                     response = huaXiaResponse;
 //                    iMqttDataService.pushTopics(cfCarParkReleaseLog.getDeviceSerialNumber(), jsonObject.toString(), "/device/"+cfCarParkReleaseLog.getDeviceSerialNumber()+"/get");
-                }else{
+                } else {
                     HuaXiaResponse huaXiaResponse = new HuaXiaResponse();
                     huaXiaResponse.setError_num(0);
                     huaXiaResponse.setError_str("noerror");
                     GpioData gpioData = new GpioData();
                     //请注意硬件道闸接线配合
-                    if(channel==0){
+                    if (channel == 0) {
                         gpioData.setIonum("io1");
-                    }else{
+                    } else {
                         gpioData.setIonum("io2");
                     }
                     gpioData.setAction("on");
@@ -522,7 +522,7 @@ public class CfCarParkReleaseLogServiceImpl implements CfCarParkReleaseLogServic
         CfCarParkDevice cfCarParkDevice = cfCarParkDeviceService.findByCode(sn, false);
         Object response = null;
         ZhenShiResponse911202002050 zhenShiResponse911202002050 = null;
-        switch (deviceBrand){
+        switch (deviceBrand) {
             case DeviceBrand.ZHEN_SHI:
                 zhenShiResponse911202002050 = new ZhenShiResponse911202002050();
                 zhenShiResponse911202002050.setResponse_AlarmInfoPlate(new Response_AlarmInfoPlate());
@@ -550,55 +550,55 @@ public class CfCarParkReleaseLogServiceImpl implements CfCarParkReleaseLogServic
                 break;
             case DeviceBrand.HK:
                 HkResponse hkResponse = new HkResponse();
-                hkResponse.setCaptureFrequency((byte)1);
+                hkResponse.setCaptureFrequency((byte) 1);
                 response = hkResponse;
                 break;
             case DeviceBrand.DH:
                 hkResponse = new HkResponse();
-                hkResponse.setCaptureFrequency((byte)1);
+                hkResponse.setCaptureFrequency((byte) 1);
                 response = hkResponse;
                 break;
             default:
                 ExceptionCast.cast(CommonCode.INVALID_PARAM, "提供相机硬件品牌暂时不支持");
         }
 
-        if(cfCarParkDevice.getLinkMode().equals("mqtt")){
+        if (cfCarParkDevice.getLinkMode().equals("mqtt")) {
             try {
                 String model = cfCarParkDevice.getModel();
-                switch (cfCarParkDevice.getBrand()){
+                switch (cfCarParkDevice.getBrand()) {
                     case "zhen_shi":
-                        if( StringUtils.isNumeric(model.substring((model.indexOf("-"))+1)) && new Integer(model.substring((model.indexOf("-"))+1)).intValue()>=202210285 ){
+                        if (StringUtils.isNumeric(model.substring((model.indexOf("-")) + 1)) && new Integer(model.substring((model.indexOf("-")) + 1)).intValue() >= 202210285) {
                             //说明是较新的SDK版本，mqtt要单独做处理
                             boolean local = false;
-                            if(ClientCache.channels.size()>0){
+                            if (ClientCache.channels.size() > 0) {
                                 ConcurrentHashMap<String, ClientDTO> channels = ClientCache.channels;
-                                for (Map.Entry channelEntry: channels.entrySet()) {
-                                    ClientDTO clientDTO = (ClientDTO)channelEntry.getValue();
-                                    if(!clientDTO.getFlagKey().equals(sn)){
+                                for (Map.Entry channelEntry : channels.entrySet()) {
+                                    ClientDTO clientDTO = (ClientDTO) channelEntry.getValue();
+                                    if (!clientDTO.getFlagKey().equals(sn)) {
                                         continue;
                                     }
                                     local = true;
                                     JSONObject jsonObject = new JSONObject();
-                                    jsonObject.put("id", StringTools.getRandomString(null,16));
+                                    jsonObject.put("id", StringTools.getRandomString(null, 16));
                                     jsonObject.put("sn", sn);
                                     jsonObject.put("name", "snapshot");
                                     jsonObject.put("version", "1.0");
-                                    jsonObject.put("timestamp", System.currentTimeMillis()/1000);
+                                    jsonObject.put("timestamp", System.currentTimeMillis() / 1000);
                                     JSONObject payload = new JSONObject();
-                                    payload.put("type","snapshot");
+                                    payload.put("type", "snapshot");
                                     JSONObject body = new JSONObject();
-                                    payload.put("body",body);
+                                    payload.put("body", body);
                                     jsonObject.put("payload", payload);
                                     response = jsonObject;
                                     iMqttDataService.pushTopics(sn, jsonObject.toString(), "/device/" + sn + "/command");
                                     break;
                                 }
                             }
-                            if(!local){
+                            if (!local) {
                                 //改用Dubbo内置RPC远程服务调用
                                 String deviceLinkIp = getDeviceLinkLocalServerIp(sn);
-                                if(StringUtils.isNotEmpty(deviceLinkIp)){
-                                    String url = "dubbo://"+deviceLinkIp+":20890/com.cf.carpark.service.IMqttDataService?version=1.0.0";//更改不同的Dubbo服务暴露的ip地址&端口
+                                if (StringUtils.isNotEmpty(deviceLinkIp)) {
+                                    String url = "dubbo://" + deviceLinkIp + ":20890/com.cf.carpark.service.IMqttDataService?version=1.0.0";//更改不同的Dubbo服务暴露的ip地址&端口
                                     ReferenceBean<IMqttDataService> referenceBean = new ReferenceBean<IMqttDataService>();
                                     referenceBean.setApplicationContext(applicationContext);
                                     referenceBean.setInterface(IMqttDataService.class);
@@ -606,21 +606,21 @@ public class CfCarParkReleaseLogServiceImpl implements CfCarParkReleaseLogServic
                                     referenceBean.afterPropertiesSet();
                                     IMqttDataService iMqttDataService = referenceBean.get();
                                     JSONObject jsonObject = new JSONObject();
-                                    jsonObject.put("id", StringTools.getRandomString(null,16));
+                                    jsonObject.put("id", StringTools.getRandomString(null, 16));
                                     jsonObject.put("sn", sn);
                                     jsonObject.put("name", "snapshot");
                                     jsonObject.put("version", "1.0");
-                                    jsonObject.put("timestamp", System.currentTimeMillis()/1000);
+                                    jsonObject.put("timestamp", System.currentTimeMillis() / 1000);
                                     JSONObject payload = new JSONObject();
-                                    payload.put("type","snapshot");
+                                    payload.put("type", "snapshot");
                                     JSONObject body = new JSONObject();
-                                    payload.put("body",body);
+                                    payload.put("body", body);
                                     jsonObject.put("payload", payload);
                                     response = jsonObject;
-                                    iMqttDataService.pushTopics(sn, JSON.toJSONString(jsonObject),"/device/" + sn + "/command");
+                                    iMqttDataService.pushTopics(sn, JSON.toJSONString(jsonObject), "/device/" + sn + "/command");
                                 }
                             }
-                        }else{
+                        } else {
                             mqttClient.startMQTTClient(sn, JSONObject.toJSONString(response));
                         }
                         break;
@@ -630,12 +630,12 @@ public class CfCarParkReleaseLogServiceImpl implements CfCarParkReleaseLogServic
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             //将抓拍命令缓存到redis中去
             String key = REDIS_PRE_CAPTURE + sn;
-            redisTemplate.boundZSetOps(key).add(JSONObject.toJSONString(response),System.currentTimeMillis());
+            redisTemplate.boundZSetOps(key).add(JSONObject.toJSONString(response), System.currentTimeMillis());
             //设置有效期为30秒
-            redisTemplate.expire(key,30, TimeUnit.SECONDS);
+            redisTemplate.expire(key, 30, TimeUnit.SECONDS);
         }
         return response;
     }
@@ -643,7 +643,7 @@ public class CfCarParkReleaseLogServiceImpl implements CfCarParkReleaseLogServic
     @Override
     public CfCarParkReleaseLog executeReleaseByCarParkUseLog(CfCarParkUseLog cfCarParkUseLog, String applicationReason, byte type) throws Exception {
 
-        if(StringUtils.isEmpty(cfCarParkUseLog.getOutCheckPointId())){
+        if (StringUtils.isEmpty(cfCarParkUseLog.getOutCheckPointId())) {
             ExceptionCast.cast(CarParkCode.CAR_NOT_IN_CARPARK_OUT_CHECKPOINT);
         }
 
@@ -652,36 +652,36 @@ public class CfCarParkReleaseLogServiceImpl implements CfCarParkReleaseLogServic
         cfCarParkReleaseLog.setCarparkId(cfCarParkUseLog.getCarParkId());
         cfCarParkReleaseLog.setCarparkUseLogId(cfCarParkUseLog.getId());
         cfCarParkReleaseLog.setNumberPlate(cfCarParkUseLog.getNumberPlate());
-        if(StringUtils.isNotEmpty(cfCarParkUseLog.getUid())){
+        if (StringUtils.isNotEmpty(cfCarParkUseLog.getUid())) {
             cfCarParkReleaseLog.setUid(cfCarParkUseLog.getUid());
-        }else if(cfCarParkUseLog.getOutTime()>0 && StringUtils.isNotEmpty(cfCarParkUseLog.getOutHandleUid())){
+        } else if (cfCarParkUseLog.getOutTime() > 0 && StringUtils.isNotEmpty(cfCarParkUseLog.getOutHandleUid())) {
             cfCarParkReleaseLog.setUid(cfCarParkUseLog.getOutHandleUid());
-        }else if(cfCarParkUseLog.getInTime()>0 && StringUtils.isNotEmpty(cfCarParkUseLog.getInHandleUid())){
+        } else if (cfCarParkUseLog.getInTime() > 0 && StringUtils.isNotEmpty(cfCarParkUseLog.getInHandleUid())) {
             cfCarParkReleaseLog.setUid(cfCarParkUseLog.getInHandleUid());
-        }else{
+        } else {
             cfCarParkReleaseLog.setUid("");
         }
 
         //获取设备
         CfCarParkDeviceQuery cfCarParkDeviceQuery = new CfCarParkDeviceQuery();
         cfCarParkDeviceQuery.setCheckpointId(cfCarParkUseLog.getOutCheckPointId());
-        if(StringUtils.isEmpty(cfCarParkUseLog.getParkingSpaceNumber())){
-            cfCarParkDeviceQuery.setType((byte)2);
+        if (StringUtils.isEmpty(cfCarParkUseLog.getParkingSpaceNumber())) {
+            cfCarParkDeviceQuery.setType((byte) 2);
             cfCarParkDeviceQuery.setDirection("out");
-        }else{
+        } else {
             cfCarParkDeviceQuery.setDeviceNo(cfCarParkUseLog.getParkingSpaceNumber());
         }
 
         List<CfCarParkDevice> cfCarParkDevices = cfCarParkDeviceService.getListByQuery(cfCarParkDeviceQuery);
-        if(cfCarParkDevices==null || cfCarParkDevices.size()==0){
+        if (cfCarParkDevices == null || cfCarParkDevices.size() == 0) {
             ExceptionCast.cast(CarParkCode.DEVICE_IS_NOT_REGISTERED);
         }
         cfCarParkReleaseLog.getCfCarParkUseLog().setCfCarParkDevice(cfCarParkDevices.get(0));
 
-        if(cfCarParkDevices.get(0).getDirection().equals(CarDirection.OUT)){
-            cfCarParkService.updateUsedParkingSpaceNumber(cfCarParkUseLog.getCarParkId(),-1);
-        }else if(cfCarParkDevices.get(0).getDirection().equals(CarDirection.IN)){
-            cfCarParkService.updateUsedParkingSpaceNumber(cfCarParkUseLog.getCarParkId(),1);
+        if (cfCarParkDevices.get(0).getDirection().equals(CarDirection.OUT)) {
+            cfCarParkService.updateUsedParkingSpaceNumber(cfCarParkUseLog.getCarParkId(), -1);
+        } else if (cfCarParkDevices.get(0).getDirection().equals(CarDirection.IN)) {
+            cfCarParkService.updateUsedParkingSpaceNumber(cfCarParkUseLog.getCarParkId(), 1);
             //更新入场放行方式为人工放行
             CfCarParkUseLog parkUseLog = new CfCarParkUseLog();
             parkUseLog.setId(cfCarParkUseLog.getId());
@@ -694,17 +694,17 @@ public class CfCarParkReleaseLogServiceImpl implements CfCarParkReleaseLogServic
         cfCarParkReleaseLog.setApplicationTime(System.currentTimeMillis());
         cfCarParkReleaseLog.setApplicationReason(applicationReason);
         cfCarParkReleaseLog.setExecutionTime(System.currentTimeMillis());
-        cfCarParkReleaseLog.setStatus((byte)0);
+        cfCarParkReleaseLog.setStatus((byte) 0);
         cfCarParkReleaseLog.setType(type);
 
         cfCarParkReleaseLog.setCfCarParkDevice(cfCarParkDevices.get(0));
 
         CfCarParkReleaseLog carParkReleaseLog = add(cfCarParkReleaseLog, REDIS_PRE);
-        if(cfCarParkUseLog.getPayTime()!=null && cfCarParkUseLog.getPayTime().longValue()>0l && cfCarParkUseLog.getCfCarParkDevice()!=null && cfCarParkUseLog.getCfCarParkDevice().getType().byteValue()==(byte)3){
+        if (cfCarParkUseLog.getPayTime() != null && cfCarParkUseLog.getPayTime().longValue() > 0l && cfCarParkUseLog.getCfCarParkDevice() != null && cfCarParkUseLog.getCfCarParkDevice().getType().byteValue() == (byte) 3) {
             //修改地锁设备状态为正常
             CfCarParkDevice cfCarParkDevice = new CfCarParkDevice();
             cfCarParkDevice.setId(cfCarParkUseLog.getCfCarParkDevice().getId());
-            cfCarParkDevice.setStatus((byte)1);
+            cfCarParkDevice.setStatus((byte) 1);
             cfCarParkDeviceService.updateByPrimaryKeySelective(cfCarParkDevice);
         }
         return carParkReleaseLog;

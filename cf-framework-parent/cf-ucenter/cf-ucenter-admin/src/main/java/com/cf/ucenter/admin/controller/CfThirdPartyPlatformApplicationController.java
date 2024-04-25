@@ -38,7 +38,7 @@ public class CfThirdPartyPlatformApplicationController implements CfThirdPartyPl
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(CfThirdPartyPlatformApplicationQuery cfThirdPartyPlatformApplicationQuery) {
         List<CfThirdPartyPlatformApplication> list = cfThirdPartyPlatformApplicationService.getListByQuery(cfThirdPartyPlatformApplicationQuery);
-        if(list!=null && list.size()>0){
+        if (list != null && list.size() > 0) {
             Integer integer = cfThirdPartyPlatformApplicationService.countByQuery(cfThirdPartyPlatformApplicationQuery);
             return new ResponseResult(CommonCode.SUCCESS, list, integer);
         }
@@ -51,9 +51,9 @@ public class CfThirdPartyPlatformApplicationController implements CfThirdPartyPl
     public ResponseResult add(@Validated @RequestBody CfThirdPartyPlatformApplicationForm cfThirdPartyPlatformApplicationForm) {
         CfThirdPartyPlatformApplication cfThirdPartyPlatformApplication = new CfThirdPartyPlatformApplication();
         BeanUtils.copyProperties(cfThirdPartyPlatformApplicationForm, cfThirdPartyPlatformApplication);
-        
+
         CfThirdPartyPlatformApplication department = cfThirdPartyPlatformApplicationService.add(cfThirdPartyPlatformApplication);
-        if(department!=null){
+        if (department != null) {
             return new ResponseResult(CommonCode.SUCCESS, department);
         }
         return new ResponseResult(CommonCode.FAIL);
@@ -67,7 +67,7 @@ public class CfThirdPartyPlatformApplicationController implements CfThirdPartyPl
         BeanUtils.copyProperties(cfThirdPartyPlatformApplicationForm, cfThirdPartyPlatformApplication);
 
         CfThirdPartyPlatformApplication department = cfThirdPartyPlatformApplicationService.update(cfThirdPartyPlatformApplication);
-        if(department!=null){
+        if (department != null) {
             return new ResponseResult(CommonCode.SUCCESS, department);
         }
         return new ResponseResult(CommonCode.FAIL);

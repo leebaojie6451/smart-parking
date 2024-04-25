@@ -33,6 +33,7 @@ public interface CfCouponMapper {
 
     /**
      * 根据条件查询优惠券数据列表
+     *
      * @param conditions
      * @return
      */
@@ -40,6 +41,7 @@ public interface CfCouponMapper {
 
     /**
      * 根据条件查询优惠券数据列表数
+     *
      * @param conditions
      * @return
      */
@@ -47,24 +49,27 @@ public interface CfCouponMapper {
 
     /**
      * 获取指定店铺指定类型的可用优惠券数据列表
+     *
      * @param nowTime
      * @param shopId
      * @param scenes
      * @return
      */
-    List<CfCoupon> getAvailableByShopIdAndScenes(@Param("nowTime") Long nowTime, @Param("shopId") String shopId, @Param("scenes") Byte scenes,@Param("goodsId") String goodsId);
+    List<CfCoupon> getAvailableByShopIdAndScenes(@Param("nowTime") Long nowTime, @Param("shopId") String shopId, @Param("scenes") Byte scenes, @Param("goodsId") String goodsId);
 
     /**
      * 获取指定店铺指定用户的可用优惠券数据列表
+     *
      * @param nowTime
      * @param shopId
      * @param scenes
      * @return
      */
-    List<CfCoupon> getAvailableByShopIdAndScenesAndUid(@Param("nowTime") Long nowTime, @Param("shopId") String shopId, @Param("scenes") Byte scenes,@Param("uid") String uid);
+    List<CfCoupon> getAvailableByShopIdAndScenesAndUid(@Param("nowTime") Long nowTime, @Param("shopId") String shopId, @Param("scenes") Byte scenes, @Param("uid") String uid);
 
     /**
      * 获取指定店铺指定用户或车牌号的可用优惠券数据列表
+     *
      * @param nowTime
      * @param shopId
      * @param scenes
@@ -72,19 +77,21 @@ public interface CfCouponMapper {
      * @param goodsId
      * @return
      */
-    List<CfCoupon> getAvailableByShopIdAndScenesAndUidOrGoodsId(@Param("nowTime") Long nowTime, @Param("shopId") String shopId, @Param("scenes") Byte scenes,@Param("uid") String uid,@Param("goodsId") String goodsId);
+    List<CfCoupon> getAvailableByShopIdAndScenesAndUidOrGoodsId(@Param("nowTime") Long nowTime, @Param("shopId") String shopId, @Param("scenes") Byte scenes, @Param("uid") String uid, @Param("goodsId") String goodsId);
 
     /**
      * 获取指定店铺和绑定车辆人，车牌号的可用优惠券数据列表
+     *
      * @param nowTime
      * @param shopId
      * @param scenes
      * @return
      */
-    List<CfCoupon> getAvailableByShopIdAndScenesAndLinkUids(@Param("nowTime") Long nowTime, @Param("shopId") String shopId, @Param("scenes") Byte scenes,@Param("goodsId") String goodsId);
+    List<CfCoupon> getAvailableByShopIdAndScenesAndLinkUids(@Param("nowTime") Long nowTime, @Param("shopId") String shopId, @Param("scenes") Byte scenes, @Param("goodsId") String goodsId);
 
     /**
      * 根据条件统计对应字段数目
+     *
      * @param cfCouponQuery
      * @return
      */

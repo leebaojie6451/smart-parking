@@ -27,7 +27,7 @@ public class CfLogisticsStorehouseLinkUserServiceImpl implements CfLogisticsStor
     @Override
     public CfLogisticsStorehouseLinkUser add(CfLogisticsStorehouseLinkUser cfLogisticsStorehouseLinkUser) {
         checkRepeat(cfLogisticsStorehouseLinkUser);
-        if(cfLogisticsStorehouseLinkUser.getId()==null){
+        if (cfLogisticsStorehouseLinkUser.getId() == null) {
             cfLogisticsStorehouseLinkUser.setId(idWorker.nextLongId());
         }
         CfLogisticsStorehouseLinkUserMapper.insertSelective(cfLogisticsStorehouseLinkUser);
@@ -43,7 +43,7 @@ public class CfLogisticsStorehouseLinkUserServiceImpl implements CfLogisticsStor
 
     @Override
     public int updateByQuery(CfLogisticsStorehouseLinkUser CfLogisticsStorehouseLinkUser, CfLogisticsStorehouseLinkUserQuery cfLogisticsStorehouseLinkUserQuery) {
-        return CfLogisticsStorehouseLinkUserMapper.updateByExampleSelective(CfLogisticsStorehouseLinkUser,getExampleByQuery(cfLogisticsStorehouseLinkUserQuery));
+        return CfLogisticsStorehouseLinkUserMapper.updateByExampleSelective(CfLogisticsStorehouseLinkUser, getExampleByQuery(cfLogisticsStorehouseLinkUserQuery));
     }
 
     @Override
@@ -59,10 +59,10 @@ public class CfLogisticsStorehouseLinkUserServiceImpl implements CfLogisticsStor
     @Override
     public CfLogisticsStorehouseLinkUser findById(Long id, boolean expectEmpty) {
         CfLogisticsStorehouseLinkUser cfLogisticsStorehouseLinkUser = findById(id);
-        if(expectEmpty && cfLogisticsStorehouseLinkUser!=null){
+        if (expectEmpty && cfLogisticsStorehouseLinkUser != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpty && cfLogisticsStorehouseLinkUser==null){
+        if (!expectEmpty && cfLogisticsStorehouseLinkUser == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfLogisticsStorehouseLinkUser;
@@ -90,20 +90,20 @@ public class CfLogisticsStorehouseLinkUserServiceImpl implements CfLogisticsStor
         CfLogisticsStorehouseLinkUserExample cfLogisticsStorehouseLinkUserExample = new CfLogisticsStorehouseLinkUserExample();
         CfLogisticsStorehouseLinkUserExample.Criteria criteria = cfLogisticsStorehouseLinkUserExample.createCriteria();
 
-        if(cfLogisticsStorehouseLinkUserQuery.getNid()!=null){
+        if (cfLogisticsStorehouseLinkUserQuery.getNid() != null) {
             criteria.andIdNotEqualTo(cfLogisticsStorehouseLinkUserQuery.getNid());
         }
-        if(cfLogisticsStorehouseLinkUserQuery.getLogisticsStorehouseId()!=null){
+        if (cfLogisticsStorehouseLinkUserQuery.getLogisticsStorehouseId() != null) {
             criteria.andLogisticsStorehouseIdEqualTo(cfLogisticsStorehouseLinkUserQuery.getLogisticsStorehouseId());
         }
-        if(cfLogisticsStorehouseLinkUserQuery.getUid()!=null){
+        if (cfLogisticsStorehouseLinkUserQuery.getUid() != null) {
             criteria.andUidEqualTo(cfLogisticsStorehouseLinkUserQuery.getUid());
         }
 
-        if(StringUtils.isNotEmpty(cfLogisticsStorehouseLinkUserQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfLogisticsStorehouseLinkUserQuery.getOrderBy())) {
             cfLogisticsStorehouseLinkUserExample.setOrderByClause(cfLogisticsStorehouseLinkUserQuery.getOrderBy());
         }
-        if(cfLogisticsStorehouseLinkUserQuery.getPage()!=null && cfLogisticsStorehouseLinkUserQuery.getSize()!=null){
+        if (cfLogisticsStorehouseLinkUserQuery.getPage() != null && cfLogisticsStorehouseLinkUserQuery.getSize() != null) {
             PageHelper.startPage(cfLogisticsStorehouseLinkUserQuery.getPage(), cfLogisticsStorehouseLinkUserQuery.getSize());
         }
         return cfLogisticsStorehouseLinkUserExample;
@@ -116,7 +116,7 @@ public class CfLogisticsStorehouseLinkUserServiceImpl implements CfLogisticsStor
         cfLogisticsStorehouseLinkUserQuery.setUid(cfLogisticsStorehouseLinkUser.getUid());
         cfLogisticsStorehouseLinkUserQuery.setLogisticsStorehouseId(cfLogisticsStorehouseLinkUser.getLogisticsStorehouseId());
         Integer integer = countByQuery(cfLogisticsStorehouseLinkUserQuery);
-        if(integer.intValue()>0){
+        if (integer.intValue() > 0) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
     }

@@ -19,7 +19,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class ChargingAdminApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ChargingAdminApplication.class,args);
+        SpringApplication.run(ChargingAdminApplication.class, args);
     }
 
 }

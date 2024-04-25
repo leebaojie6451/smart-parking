@@ -32,6 +32,7 @@ public interface CfCarParkLinkUserMapper {
 
     /**
      * 根据query条件原始sql查询
+     *
      * @param cfCarParkLinkUserQuery
      * @return
      */

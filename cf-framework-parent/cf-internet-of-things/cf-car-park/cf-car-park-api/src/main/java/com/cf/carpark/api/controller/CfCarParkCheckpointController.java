@@ -26,7 +26,7 @@ public class CfCarParkCheckpointController implements CfCarParkCheckpointSwagger
     @RequestMapping(value = "selectNearbyCheckPoint", method = RequestMethod.GET)
     public ResponseResult selectNearbyCheckPoint(CfCarParkCheckpointQuery cfCarParkCheckpointQuery) {
         List<CfCarParkCheckpoint> cfCarParkCheckpoints = cfCarParkCheckpointService.selectNearbyCheckPoint(cfCarParkCheckpointQuery);
-        if(cfCarParkCheckpoints==null || cfCarParkCheckpoints.size()==0){
+        if (cfCarParkCheckpoints == null || cfCarParkCheckpoints.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfCarParkCheckpoints);
@@ -35,14 +35,14 @@ public class CfCarParkCheckpointController implements CfCarParkCheckpointSwagger
     @Override
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(CfCarParkCheckpointQuery cfCarParkCheckpointQuery) {
-        if(cfCarParkCheckpointQuery.getPage()>3 || cfCarParkCheckpointQuery.getSize()>10){
+        if (cfCarParkCheckpointQuery.getPage() > 3 || cfCarParkCheckpointQuery.getSize() > 10) {
             return new ResponseResult(CommonCode.INVALID_PARAM, null, "you got too much data !");
         }
         List<CfCarParkCheckpoint> cfCarParkCheckpoints = cfCarParkCheckpointService.getListByQuery(cfCarParkCheckpointQuery);
-        if(cfCarParkCheckpoints==null || cfCarParkCheckpoints.size()==0){
+        if (cfCarParkCheckpoints == null || cfCarParkCheckpoints.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
-        for(CfCarParkCheckpoint cfCarParkCheckpoint: cfCarParkCheckpoints){
+        for (CfCarParkCheckpoint cfCarParkCheckpoint : cfCarParkCheckpoints) {
             cfCarParkCheckpoint.setPositionX(null);
             cfCarParkCheckpoint.setPositionY(null);
         }

@@ -19,7 +19,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class ChatApiApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ChatApiApplication.class,args);
+        SpringApplication.run(ChatApiApplication.class, args);
     }
 
 }

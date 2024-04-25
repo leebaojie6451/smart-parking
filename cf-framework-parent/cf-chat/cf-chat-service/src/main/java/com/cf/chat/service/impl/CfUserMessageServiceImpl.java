@@ -38,7 +38,11 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.InetAddress;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -76,8 +80,8 @@ public class CfUserMessageServiceImpl implements CfUserMessageService, Applicati
     @Override
     public void recoredUserServerIp(String serverLoaclIp, String uid) throws Exception {
         //将设备在线设备ip记录到redis中去
-        redisTemplate.boundValueOps(CfUserMessage.USER_SERVER_IP+uid).set(serverLoaclIp);
-        redisTemplate.expire(CfUserMessage.USER_SERVER_IP+uid,86400, TimeUnit.SECONDS);
+        redisTemplate.boundValueOps(CfUserMessage.USER_SERVER_IP + uid).set(serverLoaclIp);
+        redisTemplate.expire(CfUserMessage.USER_SERVER_IP + uid, 86400, TimeUnit.SECONDS);
     }
 
     @Override
@@ -87,9 +91,9 @@ public class CfUserMessageServiceImpl implements CfUserMessageService, Applicati
         _cfUserMessage.setReceiveTime(0L);
         _cfUserMessage.setStatus(0);
 //        CfUserMessage cfUserMessage = cfUserMessageRepository.insert(_cfUserMessage);
-        if(StringUtils.isNotEmpty(_cfUserMessage.getGroupId())){
+        if (StringUtils.isNotEmpty(_cfUserMessage.getGroupId())) {
             cfUserGroupMessageService.sendGroupMessageByChannel(_cfUserMessage);
-        }else{
+        } else {
             sendMessageByChannel(_cfUserMessage);
         }
 //        sendMessageResultByChannel(_cfUserMessage);
@@ -111,23 +115,23 @@ public class CfUserMessageServiceImpl implements CfUserMessageService, Applicati
         Message message = new Message();
         message.setType("chat_message");
         message.setCfUserMessage(cfUserMessage);
-        if(channel != null) {
+        if (channel != null) {
             //用户本机在线，实时发送
             channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(message)));
-        }else{
+        } else {
             //用户离线或者不在同一服务区，从redis中找该用户
-            String userLinkIp = redisTemplate.boundValueOps(CfUserMessage.USER_SERVER_IP+cfUserMessage.getToUid()).get();
-            if(StringUtils.isEmpty(userLinkIp)){
+            String userLinkIp = redisTemplate.boundValueOps(CfUserMessage.USER_SERVER_IP + cfUserMessage.getToUid()).get();
+            if (StringUtils.isEmpty(userLinkIp)) {
                 //说明目标用户未上过线
                 return;
             }
-            if(InetAddress.getLocalHost().getHostAddress().equals(userLinkIp)){
+            if (InetAddress.getLocalHost().getHostAddress().equals(userLinkIp)) {
                 //说明目标用户的确已经掉线，不在任何服务器中连接，将其从redis中剔除
-                redisTemplate.delete(CfUserMessage.USER_SERVER_IP+cfUserMessage.getToUid());
+                redisTemplate.delete(CfUserMessage.USER_SERVER_IP + cfUserMessage.getToUid());
                 return;
             }
             //rpc远程调用消息推送服务
-            String url = "dubbo://"+userLinkIp+":20883/com.cf.chat.service.CfUserMessageService?version=1.0.0";//更改不同的Dubbo服务暴露的ip地址&端口
+            String url = "dubbo://" + userLinkIp + ":20883/com.cf.chat.service.CfUserMessageService?version=1.0.0";//更改不同的Dubbo服务暴露的ip地址&端口
             ReferenceBean<CfUserMessageService> referenceBean = new ReferenceBean<CfUserMessageService>();
             referenceBean.setApplicationContext(applicationContext);
             referenceBean.setInterface(CfUserMessageService.class);
@@ -146,7 +150,7 @@ public class CfUserMessageServiceImpl implements CfUserMessageService, Applicati
             message.setType("chat_message");
             message.setCfUserMessage(cfUserMessage);
             channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(message)));
-        }else{
+        } else {
 
         }
     }
@@ -154,17 +158,17 @@ public class CfUserMessageServiceImpl implements CfUserMessageService, Applicati
     @Override
     public Long updateStatus(String uid, String messageId, Integer status) {
         Optional<CfUserMessage> optional = cfUserMessageRepository.findById(messageId);
-        if(!optional.isPresent()){
+        if (!optional.isPresent()) {
             ExceptionCast.cast(MessageCode.MESSAGE_NOT_EXISTSNAME);
         }
         CfUserMessage cfUserMessage = optional.get();
-        if(!cfUserMessage.getToUid().equals(uid)){
+        if (!cfUserMessage.getToUid().equals(uid)) {
             ExceptionCast.cast(MessageCode.NO_AUTH_UPDATE_MESSAGE);
         }
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(messageId));
         Update update = new Update();
-        update.set("status",status);
+        update.set("status", status);
         UpdateResult updateResult = template.updateFirst(query, update, CfUserMessage.class);
         return updateResult.getModifiedCount();
     }
@@ -194,8 +198,8 @@ public class CfUserMessageServiceImpl implements CfUserMessageService, Applicati
     }
 
     @Override
-    public UserBasicInfo getBaseUserInfoByToken(String token)throws Exception {
-        if(StringUtils.isEmpty(token)){
+    public UserBasicInfo getBaseUserInfoByToken(String token) throws Exception {
+        if (StringUtils.isEmpty(token)) {
             ExceptionCast.cast(AuthCode.AUTH_LOGIN_TOKEN_ILLEGAL);
         }
         return authenticationInterceptor.parseJwt(token);
@@ -205,12 +209,12 @@ public class CfUserMessageServiceImpl implements CfUserMessageService, Applicati
     public void getNotReadMessage(String uid) throws Exception {
         List<CfUserMessage> cfUserMessages = null;
         int page = 1;
-        while (true){
+        while (true) {
             cfUserMessages = selectNotReadMessageListByToUid(uid, page, 30);
             page++;
-            if(cfUserMessages!=null && cfUserMessages.size()>0){
+            if (cfUserMessages != null && cfUserMessages.size() > 0) {
                 cfUserMessages.forEach(
-                        item-> {
+                        item -> {
                             try {
                                 sendMessageByChannel(item);
                             } catch (Exception e) {
@@ -219,7 +223,7 @@ public class CfUserMessageServiceImpl implements CfUserMessageService, Applicati
                         }
                 );
 //                batchUpdateStatusByIds(cfUserMessages);
-            }else{
+            } else {
                 break;
             }
         }
@@ -227,18 +231,18 @@ public class CfUserMessageServiceImpl implements CfUserMessageService, Applicati
 
     @Override
     public void getRedisNotReadMessage(String uid) {
-        while (true){
+        while (true) {
             //检查redis是否有临时离线消息
             String messageString = redisTemplate.opsForSet().pop("user_message_" + uid);
-            if(StringUtils.isNotEmpty(messageString)){
-                try{
+            if (StringUtils.isNotEmpty(messageString)) {
+                try {
                     Message message = JSON.parseObject(messageString, Message.class);
                     sendMessageByChannel(message.getCfUserMessage());
-                } catch (Exception e){
-                    System.out.println("解析消息体出错:"+messageString);
+                } catch (Exception e) {
+                    System.out.println("解析消息体出错:" + messageString);
                     e.printStackTrace();
                 }
-            }else{
+            } else {
                 break;
             }
         }
@@ -248,12 +252,12 @@ public class CfUserMessageServiceImpl implements CfUserMessageService, Applicati
     @Override
     public void batchUpdateStatusByIds(List<CfUserMessage> cfUserMessages) {
         Update update = new Update();
-        update.set("status",1);
+        update.set("status", 1);
         Query query = new Query();
         List<String> list = new ArrayList<>();
-        cfUserMessages.forEach(item->list.add(item.getId()));
+        cfUserMessages.forEach(item -> list.add(item.getId()));
         query.addCriteria(Criteria.where("_id").in(list));
-        template.updateMulti(query,update,CfUserMessage.class);
+        template.updateMulti(query, update, CfUserMessage.class);
     }
 
     @Override
@@ -261,18 +265,18 @@ public class CfUserMessageServiceImpl implements CfUserMessageService, Applicati
         Set<String> range = redisTemplate.boundZSetOps(ChatHandler.CHAT_LINK_COUNTS_REDIS_KEY).range(0l, 0l);
 
         //如果数据为空，进行ip组数据初始化
-        if(range==null || range.size()==0){
+        if (range == null || range.size() == 0) {
             //获取配置
             List<CfWeixinConfig> cfWeixinConfigs = cfWeixinConfigService.getWeiXinLoginConfigragtion("server_ip_list");
             CfWeixinConfig cfWeixinConfig = cfWeixinConfigs.get(0);
-            Map<String, Integer> map = (Map<String, Integer>)JSONObject.parseObject(cfWeixinConfig.getValue(), Map.class);
+            Map<String, Integer> map = (Map<String, Integer>) JSONObject.parseObject(cfWeixinConfig.getValue(), Map.class);
             String ip = null;
-            for (Map.Entry<String, Integer> entry:map.entrySet()){
+            for (Map.Entry<String, Integer> entry : map.entrySet()) {
                 redisTemplate.boundZSetOps(ChatHandler.CHAT_LINK_COUNTS_REDIS_KEY).add(entry.getKey(), 0);
                 ip = entry.getKey();
             }
             return ip;
-        }else{
+        } else {
             List<String> strings = new ArrayList<>(range);
             return strings.get(0);
         }

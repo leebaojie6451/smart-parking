@@ -66,10 +66,10 @@ public class CfCarParkCarController implements CfCarParkCarSwagger {
     public ResponseResult getListByQuery(CfCarParkCarQuery cfCarParkCarQuery) throws Exception {
         List<CfCarParkCar> cfCarParkCars = cfCarParkCarService.mapperSelectByQuery(cfCarParkCarQuery);
         Integer total = 0;
-        if(cfCarParkCarQuery.getPage()==1){
+        if (cfCarParkCarQuery.getPage() == 1) {
             total = cfCarParkCarService.countByQuery(cfCarParkCarQuery);
         }
-        if(cfCarParkCars!=null && cfCarParkCars.size()>0){
+        if (cfCarParkCars != null && cfCarParkCars.size() > 0) {
             return new ResponseResult(CommonCode.SUCCESS, cfCarParkCars, total);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);

@@ -31,14 +31,16 @@ public interface CfPaymentAgencyMapper {
 
     /**
      * 获取指定停车场的支付方式(机构)列表
+     *
      * @param carParkId
      * @param useScenes
      * @return
      */
-    public List<CfPaymentAgency> getPaymentAgencyListByCarParkId(@Param("carParkId")String carParkId, @Param("useScenes") String useScenes);
+    public List<CfPaymentAgency> getPaymentAgencyListByCarParkId(@Param("carParkId") String carParkId, @Param("useScenes") String useScenes);
 
     /**
      * 根据条件查询支付机构数据列表
+     *
      * @param conditions
      * @return
      */
@@ -46,6 +48,7 @@ public interface CfPaymentAgencyMapper {
 
     /**
      * 根据条件查询支付机构数据列表数
+     *
      * @param conditions
      * @return
      */

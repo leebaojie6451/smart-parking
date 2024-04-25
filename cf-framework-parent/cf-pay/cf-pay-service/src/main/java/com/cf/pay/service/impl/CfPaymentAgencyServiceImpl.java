@@ -48,9 +48,9 @@ public class CfPaymentAgencyServiceImpl implements CfPaymentAgencyService {
     @Override
     public CfPaymentAgency findByShortName(String shortName, Boolean expectEmpty) {
         List<CfPaymentAgency> cfPaymentAgencies = findByShortName(shortName);
-        if(expectEmpty && cfPaymentAgencies!=null && cfPaymentAgencies.size()>0){
+        if (expectEmpty && cfPaymentAgencies != null && cfPaymentAgencies.size() > 0) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
-        }else if(!expectEmpty && (cfPaymentAgencies==null || cfPaymentAgencies.size()==0)){
+        } else if (!expectEmpty && (cfPaymentAgencies == null || cfPaymentAgencies.size() == 0)) {
             ExceptionCast.cast(PayCode.PAYMENT_INSTITUTION_DOES_NOT_EXIST);
         }
         return cfPaymentAgencies.get(0);
@@ -65,19 +65,19 @@ public class CfPaymentAgencyServiceImpl implements CfPaymentAgencyService {
     public CfPaymentAgencyExample getExampleByQuery(CfPaymentAgencyQuery cfPaymentAgencyQuery) {
         CfPaymentAgencyExample cfPaymentAgencyExample = new CfPaymentAgencyExample();
         CfPaymentAgencyExample.Criteria criteria = cfPaymentAgencyExample.createCriteria();
-        if(StringUtils.isNotEmpty(cfPaymentAgencyQuery.getName())){
+        if (StringUtils.isNotEmpty(cfPaymentAgencyQuery.getName())) {
             criteria.andNameLike(cfPaymentAgencyQuery.getName());
         }
-        if(StringUtils.isNotEmpty(cfPaymentAgencyQuery.getShortName())){
+        if (StringUtils.isNotEmpty(cfPaymentAgencyQuery.getShortName())) {
             criteria.andShortNameEqualTo(cfPaymentAgencyQuery.getShortName());
         }
-        if(StringUtils.isNotEmpty(cfPaymentAgencyQuery.getScoreType())){
+        if (StringUtils.isNotEmpty(cfPaymentAgencyQuery.getScoreType())) {
             criteria.andScoreTypeEqualTo(cfPaymentAgencyQuery.getScoreType());
         }
-        if(StringUtils.isNotEmpty(cfPaymentAgencyQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfPaymentAgencyQuery.getOrderBy())) {
             cfPaymentAgencyExample.setOrderByClause(cfPaymentAgencyQuery.getOrderBy());
         }
-        if(cfPaymentAgencyQuery.getPage()!=null && cfPaymentAgencyQuery.getSize()!=null){
+        if (cfPaymentAgencyQuery.getPage() != null && cfPaymentAgencyQuery.getSize() != null) {
             PageHelper.startPage(cfPaymentAgencyQuery.getPage(), cfPaymentAgencyQuery.getSize());
         }
         return cfPaymentAgencyExample;

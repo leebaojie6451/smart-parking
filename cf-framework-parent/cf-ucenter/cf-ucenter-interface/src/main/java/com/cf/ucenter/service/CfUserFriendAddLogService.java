@@ -17,6 +17,7 @@ public interface CfUserFriendAddLogService {
 
     /**
      * 申请添加好友
+     *
      * @param fromUid
      * @param toUid
      * @param remark
@@ -26,6 +27,7 @@ public interface CfUserFriendAddLogService {
 
     /**
      * 申请添加群
+     *
      * @param fromUid
      * @param groupId
      * @param remark
@@ -35,6 +37,7 @@ public interface CfUserFriendAddLogService {
 
     /**
      * 获取指定用户好友申请列表
+     *
      * @param uid
      * @param page
      * @param limit
@@ -44,8 +47,9 @@ public interface CfUserFriendAddLogService {
 
     /**
      * 处理好友请求
+     *
      * @param addLogId
-     * @param uid 当前处理人id
+     * @param uid      当前处理人id
      * @param status
      * @return
      */
@@ -53,6 +57,7 @@ public interface CfUserFriendAddLogService {
 
     /**
      * 通知
+     *
      * @param cfUserGroup
      * @param cfUserFriendAddLog
      */
@@ -60,6 +65,7 @@ public interface CfUserFriendAddLogService {
 
     /**
      * 获取即时通讯在线人数最少的服务器ip
+     *
      * @return
      */
     String getMinChatLinkCountsServiceIp();

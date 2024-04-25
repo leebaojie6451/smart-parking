@@ -33,7 +33,7 @@ public class CfLogisticsQueuingAreaPlatformController implements CfLogisticsQueu
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseResult add(@Validated @RequestBody CfLogisticsQueuingAreaPlatformForm cfLogisticsQueuingAreaPlatformForm) throws Exception {
         CfLogisticsQueuingAreaPlatform cfLogisticsQueuingAreaPlatform = new CfLogisticsQueuingAreaPlatform();
-        BeanUtils.copyProperties(cfLogisticsQueuingAreaPlatformForm,cfLogisticsQueuingAreaPlatform);
+        BeanUtils.copyProperties(cfLogisticsQueuingAreaPlatformForm, cfLogisticsQueuingAreaPlatform);
         CfLogisticsQueuingAreaPlatform lastCfLogisticsQueuingAreaPlatform = cfLogisticsQueuingAreaPlatformService.add(cfLogisticsQueuingAreaPlatform);
         return new ResponseResult(CommonCode.SUCCESS, lastCfLogisticsQueuingAreaPlatform);
     }
@@ -43,7 +43,7 @@ public class CfLogisticsQueuingAreaPlatformController implements CfLogisticsQueu
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public ResponseResult update(@Validated @RequestBody CfLogisticsQueuingAreaPlatformForm cfLogisticsQueuingAreaPlatformForm) {
         CfLogisticsQueuingAreaPlatform cfLogisticsQueuingAreaPlatform = new CfLogisticsQueuingAreaPlatform();
-        BeanUtils.copyProperties(cfLogisticsQueuingAreaPlatformForm,cfLogisticsQueuingAreaPlatform);
+        BeanUtils.copyProperties(cfLogisticsQueuingAreaPlatformForm, cfLogisticsQueuingAreaPlatform);
         CfLogisticsQueuingAreaPlatform update = cfLogisticsQueuingAreaPlatformService.update(cfLogisticsQueuingAreaPlatform);
         return new ResponseResult(CommonCode.SUCCESS, update);
     }
@@ -53,7 +53,7 @@ public class CfLogisticsQueuingAreaPlatformController implements CfLogisticsQueu
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(Long id) {
         Integer delete = cfLogisticsQueuingAreaPlatformService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS, delete):new ResponseResult(CommonCode.FAIL, null);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS, delete) : new ResponseResult(CommonCode.FAIL, null);
     }
 
     @PreAuthorize("hasAuthority('logistics-CfLogisticsQueuingAreaPlatformController-selectByQuery')")
@@ -62,7 +62,7 @@ public class CfLogisticsQueuingAreaPlatformController implements CfLogisticsQueu
     public ResponseResult selectByQuery(CfLogisticsQueuingAreaPlatformQuery cfLogisticsQueuingAreaPlatformQuery) throws Exception {
         List<CfLogisticsQueuingAreaPlatform> cfLogisticsQueuingAreaPlatforms = cfLogisticsQueuingAreaPlatformService.selectByQuery(cfLogisticsQueuingAreaPlatformQuery);
         Integer countByQuery = cfLogisticsQueuingAreaPlatformService.countByQuery(cfLogisticsQueuingAreaPlatformQuery);
-        if(cfLogisticsQueuingAreaPlatforms==null || cfLogisticsQueuingAreaPlatforms.size()==0){
+        if (cfLogisticsQueuingAreaPlatforms == null || cfLogisticsQueuingAreaPlatforms.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsQueuingAreaPlatforms, countByQuery);

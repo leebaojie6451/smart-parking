@@ -36,13 +36,13 @@ public class CfOrderQuery implements Serializable {
     private List<String> shopIds;
 
     @ApiModelProperty(value = "应付金额", example = "56.58", required = false, notes = "保留12位小数")
-    @Digits(integer = 8,fraction = 2, message = "最多保留12位小数")
+    @Digits(integer = 8, fraction = 2, message = "最多保留12位小数")
     @Min(value = 0, message = "最小值为0")
     @Max(value = 10000000, message = "最小值为10000000")
     private BigDecimal amountsPayable;
 
     @ApiModelProperty(value = "实付金额", example = "56.58", required = false, notes = "保留12位小数")
-    @Digits(integer = 8,fraction = 2, message = "最多保留12位小数")
+    @Digits(integer = 8, fraction = 2, message = "最多保留12位小数")
     @Min(value = 0, message = "最小值为0")
     @Max(value = 10000000, message = "最小值为10000000")
     private BigDecimal amountActuallyPaid;
@@ -52,7 +52,7 @@ public class CfOrderQuery implements Serializable {
     private BigDecimal maxAmountActuallyPaid;
 
     @ApiModelProperty(value = "退款金额", example = "56.58", required = false, notes = "保留12位小数")
-    @Digits(integer = 8,fraction = 2, message = "最多保留12位小数")
+    @Digits(integer = 8, fraction = 2, message = "最多保留12位小数")
     @Min(value = 0, message = "最小值为0")
     @Max(value = 10000000, message = "最小值为10000000")
     private BigDecimal refundAmount;

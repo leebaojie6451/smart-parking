@@ -3,7 +3,6 @@ package com.cf.carpark.device.camera.ZhenShi;
 import java.io.Serializable;
 
 /**
- *
  * @ClassName TriggerImage
  * @Author 隔壁小王子 981011512@qq.com
  * @Date 2020/5/3/003 10:25

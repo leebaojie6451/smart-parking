@@ -20,18 +20,20 @@ public interface AlipayService {
 
     /**
      * 调用支付宝进行支付
+     *
      * @param cfOrder
-     * @param buyerId   支付宝自己的用户id
-     * @param buyerId   alipayConfig
+     * @param buyerId 支付宝自己的用户id
+     * @param buyerId alipayConfig
      * @return
      */
     ResultMap doPay(CfOrder cfOrder, String buyerId, Object alipayConfig) throws Exception;
 
     /**
      * 校验支付宝支付结果
+     *
      * @return
      * @throws Exception
      */
-    boolean rsaCertCheck(Map<String,String> params) throws Exception;
+    boolean rsaCertCheck(Map<String, String> params) throws Exception;
 
 }

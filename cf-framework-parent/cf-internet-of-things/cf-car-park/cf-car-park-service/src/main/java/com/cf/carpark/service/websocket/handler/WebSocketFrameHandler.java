@@ -23,7 +23,7 @@ public class WebSocketFrameHandler extends SimpleChannelInboundHandler<TextWebSo
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-        initParamDTO.getClientCache().add(ctx.channel(),null);
+        initParamDTO.getClientCache().add(ctx.channel(), null);
     }
 
     @Override

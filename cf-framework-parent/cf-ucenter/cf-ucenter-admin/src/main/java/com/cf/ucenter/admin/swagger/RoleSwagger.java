@@ -25,25 +25,25 @@ public interface RoleSwagger {
 
     @ApiOperation(value = "角色列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string")
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string")
     })
     public ResponseResult list();
 
     @ApiOperation(value = "添加角色")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string")
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string")
     })
     public ResponseResult add(CfRoleForm cfRoleForm);
 
     @ApiOperation(value = "更新角色")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string")
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string")
     })
     public ResponseResult update(CfRoleForm cfRoleForm);
 
     @ApiOperation(value = "删除角色")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string")
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string")
     })
     public ResponseResult delete(String id);
 

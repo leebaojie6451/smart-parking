@@ -32,6 +32,7 @@ public interface CfQrCodeService {
 
     /**
      * 员工创建领取优惠券二维码
+     *
      * @param cfQrCode
      * @return
      */

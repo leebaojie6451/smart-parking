@@ -28,6 +28,7 @@ import java.util.List;
 
 /**
  * WS服务
+ *
  * @author gebilaowang
  * @date 2021/3/25 15:53
  */
@@ -60,15 +61,15 @@ public class WebSocketServer extends AbsServer {
 
             ChannelFuture channelFuture = serverBootstrap.bind(new InetSocketAddress(this.initParamDTO.getPort()))
                     .addListener(future -> {
-                     log.info("服务端成功绑定端口号={}", this.initParamDTO.getPort());
+                        log.info("服务端成功绑定端口号={}", this.initParamDTO.getPort());
                     });
-        }catch (Exception e){
+        } catch (Exception e) {
             boosGroup.shutdownGracefully();
             workGroup.shutdownGracefully();
-            log.error("websocketServer启动失败:{}",e);
+            log.error("websocketServer启动失败:{}", e);
         }
         // 将已启动的服务添加到 服务列表，便于以后管理使用
-        IServerListCache.SERVER_LIST_MAP.put(ServerTypeEnum.WS.TYPE,this);
+        IServerListCache.SERVER_LIST_MAP.put(ServerTypeEnum.WS.TYPE, this);
         return this;
     }
 

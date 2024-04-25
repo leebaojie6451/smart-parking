@@ -102,70 +102,70 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
     public CfCouponActivityExample getExampleByQuery(CfCouponActivityQuery cfCouponActivityQuery) {
         CfCouponActivityExample cfCouponActivityExample = new CfCouponActivityExample();
         CfCouponActivityExample.Criteria criteria = cfCouponActivityExample.createCriteria();
-        if(cfCouponActivityQuery.getIds()!=null && cfCouponActivityQuery.getIds().size()>0){
+        if (cfCouponActivityQuery.getIds() != null && cfCouponActivityQuery.getIds().size() > 0) {
             criteria.andIdIn(cfCouponActivityQuery.getIds());
         }
-        if(cfCouponActivityQuery.getMainBodyIds()!=null && cfCouponActivityQuery.getMainBodyIds().size()>0){
+        if (cfCouponActivityQuery.getMainBodyIds() != null && cfCouponActivityQuery.getMainBodyIds().size() > 0) {
             criteria.andMainBodyIdIn(cfCouponActivityQuery.getMainBodyIds());
         }
-        if(cfCouponActivityQuery.getType()!=null){
+        if (cfCouponActivityQuery.getType() != null) {
             criteria.andTypeEqualTo(cfCouponActivityQuery.getType());
         }
-        if(cfCouponActivityQuery.getMinStartTime()!=null){
+        if (cfCouponActivityQuery.getMinStartTime() != null) {
             criteria.andStartTimeGreaterThan(cfCouponActivityQuery.getMinStartTime());
         }
-        if(cfCouponActivityQuery.getMaxStartTime()!=null){
+        if (cfCouponActivityQuery.getMaxStartTime() != null) {
             criteria.andStartTimeLessThan(cfCouponActivityQuery.getMaxStartTime());
         }
-        if(cfCouponActivityQuery.getMinEndTime()!=null){
+        if (cfCouponActivityQuery.getMinEndTime() != null) {
             criteria.andEndTimeGreaterThan(cfCouponActivityQuery.getMinEndTime());
         }
-        if(cfCouponActivityQuery.getMaxEndTime()!=null){
+        if (cfCouponActivityQuery.getMaxEndTime() != null) {
             criteria.andEndTimeLessThan(cfCouponActivityQuery.getMaxEndTime());
         }
-        if(cfCouponActivityQuery.getMinDenomination()!=null){
+        if (cfCouponActivityQuery.getMinDenomination() != null) {
             criteria.andDenominationGreaterThan(cfCouponActivityQuery.getMinDenomination());
         }
-        if(cfCouponActivityQuery.getMaxDenomination()!=null){
+        if (cfCouponActivityQuery.getMaxDenomination() != null) {
             criteria.andDenominationLessThan(cfCouponActivityQuery.getMaxDenomination());
         }
-        if(cfCouponActivityQuery.getMinThresholdPrice()!=null){
+        if (cfCouponActivityQuery.getMinThresholdPrice() != null) {
             criteria.andThresholdPriceGreaterThan(cfCouponActivityQuery.getMinThresholdPrice());
         }
-        if(cfCouponActivityQuery.getMaxThresholdPrice()!=null){
+        if (cfCouponActivityQuery.getMaxThresholdPrice() != null) {
             criteria.andThresholdPriceLessThan(cfCouponActivityQuery.getMaxThresholdPrice());
         }
-        if(cfCouponActivityQuery.getMinTotalIssueQuantity()!=null){
+        if (cfCouponActivityQuery.getMinTotalIssueQuantity() != null) {
             criteria.andTotalIssueQuantityGreaterThan(cfCouponActivityQuery.getMinTotalIssueQuantity());
         }
-        if(cfCouponActivityQuery.getMaxTotalIssueQuantity()!=null){
+        if (cfCouponActivityQuery.getMaxTotalIssueQuantity() != null) {
             criteria.andTotalIssueQuantityLessThan(cfCouponActivityQuery.getMaxTotalIssueQuantity());
         }
-        if(cfCouponActivityQuery.getStatus()!=null){
+        if (cfCouponActivityQuery.getStatus() != null) {
             criteria.andStatusEqualTo(cfCouponActivityQuery.getStatus());
         }
-        if(StringUtils.isNotEmpty(cfCouponActivityQuery.getMainBodyId())){
+        if (StringUtils.isNotEmpty(cfCouponActivityQuery.getMainBodyId())) {
             criteria.andMainBodyIdEqualTo(cfCouponActivityQuery.getMainBodyId());
         }
-        if(StringUtils.isNotEmpty(cfCouponActivityQuery.getPhone())){
+        if (StringUtils.isNotEmpty(cfCouponActivityQuery.getPhone())) {
             criteria.andPhoneEqualTo(cfCouponActivityQuery.getPhone());
         }
-        if(cfCouponActivityQuery.getAutoGiveAway()!=null){
+        if (cfCouponActivityQuery.getAutoGiveAway() != null) {
             criteria.andAutoGiveAwayEqualTo(cfCouponActivityQuery.getAutoGiveAway());
         }
-        if(cfCouponActivityQuery.getMinAutoGiveAwayTime()!=null){
+        if (cfCouponActivityQuery.getMinAutoGiveAwayTime() != null) {
             criteria.andAutoGiveAwayTimeGreaterThanOrEqualTo(cfCouponActivityQuery.getMinAutoGiveAwayTime());
         }
-        if(cfCouponActivityQuery.getMaxAutoGiveAwayTime()!=null){
+        if (cfCouponActivityQuery.getMaxAutoGiveAwayTime() != null) {
             criteria.andAutoGiveAwayTimeLessThanOrEqualTo(cfCouponActivityQuery.getMaxAutoGiveAwayTime());
         }
-        if(StringUtils.isNotEmpty(cfCouponActivityQuery.getAutoGiveAwayDate())){
+        if (StringUtils.isNotEmpty(cfCouponActivityQuery.getAutoGiveAwayDate())) {
             criteria.andAutoGiveAwayDateEqualTo(cfCouponActivityQuery.getAutoGiveAwayDate());
         }
-        if(StringUtils.isNotEmpty(cfCouponActivityQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfCouponActivityQuery.getOrderBy())) {
             cfCouponActivityExample.setOrderByClause(cfCouponActivityQuery.getOrderBy());
         }
-        if(cfCouponActivityQuery.getPage()!=null && cfCouponActivityQuery.getSize()!=null){
+        if (cfCouponActivityQuery.getPage() != null && cfCouponActivityQuery.getSize() != null) {
             PageHelper.startPage(cfCouponActivityQuery.getPage(), cfCouponActivityQuery.getSize());
         }
         return cfCouponActivityExample;
@@ -185,10 +185,10 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
     @Override
     public CfCouponActivity findById(String id, boolean expectEmpty) {
         CfCouponActivity cfCouponActivity = cfCouponActivityMapper.selectByPrimaryKey(id);
-        if(expectEmpty && cfCouponActivity!=null){
+        if (expectEmpty && cfCouponActivity != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpty && cfCouponActivity==null){
+        if (!expectEmpty && cfCouponActivity == null) {
             ExceptionCast.cast(CouponActivityCode.COUPONACTIVITY_DOES_NOT_EXIST);
         }
         return cfCouponActivity;
@@ -219,13 +219,13 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
 
     @Override
     public CfCouponActivity linkUserByPhone(CfCouponActivity cfCouponActivity) {
-        if(StringUtils.isNotEmpty(cfCouponActivity.getPhone())){
+        if (StringUtils.isNotEmpty(cfCouponActivity.getPhone())) {
             CfUser cfUser = cfUserService.findByPhone(cfCouponActivity.getPhone());
-            if(cfUser!=null){
+            if (cfUser != null) {
                 cfCouponActivity.setMainBodyId(cfUser.getId());
                 cfCouponActivityMapper.updateByPrimaryKeySelective(cfCouponActivity);
                 //给最新用户设置店主身份
-                cfUserRoleService.addByUidAndRoleKey(cfUser.getId(),"merchant");
+                cfUserRoleService.addByUidAndRoleKey(cfUser.getId(), "merchant");
             }
         }
         return cfCouponActivity;
@@ -254,10 +254,10 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
     @Override
     public CfCouponActivity checkActivityAscription(String mainBodyId, String activityId) {
         CfCouponActivity cfCouponActivity = cfCouponActivityMapper.selectByPrimaryKey(activityId);
-        if(cfCouponActivity==null || cfCouponActivity.getId()==null){
+        if (cfCouponActivity == null || cfCouponActivity.getId() == null) {
             ExceptionCast.cast(CouponActivityCode.COUPONACTIVITY_DOES_NOT_EXIST);
         }
-        if(!cfCouponActivity.getMainBodyId().equals(mainBodyId)){
+        if (!cfCouponActivity.getMainBodyId().equals(mainBodyId)) {
             ExceptionCast.cast(CouponActivityCode.ACTIVITY_NOT_MATCH_USER);
         }
         return cfCouponActivity;
@@ -266,29 +266,29 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
     @Override
     public CfCoupon staffOrShopkeeperGiveCouponToCar(String uid, String toUid, String numberPlate, Byte couponType, String cfCouponActivityId, Integer quantity, CfCouponActivityCouponType cfCouponActivityCouponType) throws Exception {
 
-        if(quantity.longValue()<=0){
+        if (quantity.longValue() <= 0) {
             ExceptionCast.cast(CouponActivityCode.MISSING_QUANTITY);
         }
 
         //检查该活动状态
         CfCouponActivity cfCouponActivity = findById(cfCouponActivityId, false);
-        if(cfCouponActivity.getStatus()!=(byte)1){
+        if (cfCouponActivity.getStatus() != (byte) 1) {
             ExceptionCast.cast(CouponActivityCode.ACTIVITY_TO_BE_OPENED);
         }
         //判断额度是否足够
-        switch (couponType){
+        switch (couponType) {
             case CouponType.TIMES_COUPON:   //次数券
-                if(cfCouponActivity.getRemainingTimes().intValue()<=0){
+                if (cfCouponActivity.getRemainingTimes().intValue() <= 0) {
                     ExceptionCast.cast(CouponActivityCode.YOU_ACTIVITY_COUPON_BALANCE_INSUFFICIENT);
                 }
                 break;
             case CouponType.AMOUNT_COUPON:  //金额券
-                if(cfCouponActivity.getIssuedQuota().add(new BigDecimal(quantity)).doubleValue()>cfCouponActivity.getTotalIssueQuota().add(cfCouponActivity.getAutoGiveAwayOverageQuota()).doubleValue()){
+                if (cfCouponActivity.getIssuedQuota().add(new BigDecimal(quantity)).doubleValue() > cfCouponActivity.getTotalIssueQuota().add(cfCouponActivity.getAutoGiveAwayOverageQuota()).doubleValue()) {
                     ExceptionCast.cast(CouponActivityCode.YOU_ACTIVITY_COUPON_BALANCE_INSUFFICIENT);
                 }
                 break;
             case CouponType.TIME_COUPON:    //时长券
-                if(quantity.longValue()*3600000>cfCouponActivity.getRemainingTime().longValue()){
+                if (quantity.longValue() * 3600000 > cfCouponActivity.getRemainingTime().longValue()) {
                     ExceptionCast.cast(CouponActivityCode.YOU_ACTIVITY_COUPON_BALANCE_INSUFFICIENT);
                 }
                 break;
@@ -304,14 +304,14 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
         List<CfCouponActivityLinkShop> couponActivityLinkShops = getLinkShop(cfCouponActivity.getType(), cfCouponActivity.getId(), false);
         ArrayList<String> carParkIds = new ArrayList<>();
         ArrayList<String> requireUsingCarParkIds = new ArrayList<>();
-        for (CfCouponActivityLinkShop cfCouponActivityLinkShop: couponActivityLinkShops){
+        for (CfCouponActivityLinkShop cfCouponActivityLinkShop : couponActivityLinkShops) {
             carParkIds.add(cfCouponActivityLinkShop.getShopId());
-            if(cfCouponActivityLinkShop.getRequireUsing().byteValue()==(byte)1){
+            if (cfCouponActivityLinkShop.getRequireUsing().byteValue() == (byte) 1) {
                 requireUsingCarParkIds.add(cfCouponActivityLinkShop.getShopId());
             }
         }
 
-        if(StringUtils.isEmpty(numberPlate) && StringUtils.isNotEmpty(toUid)){
+        if (StringUtils.isEmpty(numberPlate) && StringUtils.isNotEmpty(toUid)) {
 
             //如果只发给用户，不给车牌号，默认按无牌车发券处理
             CfCarParkUseLogQuery cfCarParkUseLogQuery = new CfCarParkUseLogQuery();
@@ -319,21 +319,21 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
             cfCarParkUseLogQuery.setPayTime(0L);
             cfCarParkUseLogQuery.setCarParkIds(carParkIds);
             Integer countByQuery = cfCarParkUseLogService.getCountByQuery(cfCarParkUseLogQuery);
-            if(countByQuery==0){
+            if (countByQuery == 0) {
                 //找到该用户绑定的车辆(强制用户必须至少绑定一个车牌)
                 CfCarParkCarQuery cfCarParkCarQuery = new CfCarParkCarQuery();
                 cfCarParkCarQuery.setUid(toUid);
                 List<CfCarParkCar> cfCarParkCars = cfCarParkCarService.getMyCarsByCondition(cfCarParkCarQuery);
-                if(cfCarParkCars==null || cfCarParkCars.size()==0){
+                if (cfCarParkCars == null || cfCarParkCars.size() == 0) {
                     ExceptionCast.cast(CarParkCode.LICENSE_PLATE_NUMBER_HAS_NOT_BEEN_BOUND_YET);
                 }
                 ArrayList<String> numberPlateList = new ArrayList<>();
-                for(CfCarParkCar cfCarParkCar: cfCarParkCars){
+                for (CfCarParkCar cfCarParkCar : cfCarParkCars) {
                     numberPlateList.add(cfCarParkCar.getNumberPlate());
                 }
                 ArrayList<String> carParkIds2 = new ArrayList<>();
                 inParkNumberPlateList = checkCarIsInPark(numberPlateList, carParkIds2);
-                if(inParkNumberPlateList==null || inParkNumberPlateList.size()==0){
+                if (inParkNumberPlateList == null || inParkNumberPlateList.size() == 0) {
                     ExceptionCast.cast(CarParkCode.CAR_NOT_IN_CARPARK);
                 }
                 numberPlate = inParkNumberPlateList.get(0);
@@ -341,21 +341,21 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
         }
 
         //如果传入车牌检查该车牌是否在停车场中
-        if(StringUtils.isNotEmpty(numberPlate) && (inParkNumberPlateList==null || inParkNumberPlateList.size()==0)){
-            if(requireUsingCarParkIds.size()>0){
+        if (StringUtils.isNotEmpty(numberPlate) && (inParkNumberPlateList == null || inParkNumberPlateList.size() == 0)) {
+            if (requireUsingCarParkIds.size() > 0) {
                 Integer carIsInPark = checkCarIsInPark(numberPlate, requireUsingCarParkIds);
-                if(carIsInPark==0){
+                if (carIsInPark == 0) {
                     ExceptionCast.cast(CarParkCode.CAR_NOT_IN_CARPARK);
                 }
             }
         }
 
-        if(StringUtils.isEmpty(toUid) && StringUtils.isEmpty(numberPlate)){
+        if (StringUtils.isEmpty(toUid) && StringUtils.isEmpty(numberPlate)) {
             ExceptionCast.cast(CouponActivityCode.MISSING_GIFT_GOAL);
         }
 
         String fromUid = null;
-        if(!uid.equals(cfCouponActivity.getMainBodyId())){
+        if (!uid.equals(cfCouponActivity.getMainBodyId())) {
             fromUid = cfCouponActivity.getMainBodyId();
             //校验员工身份
             cfStaffService.checkStaffExistByEmployerIdAndStaffId(cfCouponActivity.getMainBodyId(), uid, "no");
@@ -365,7 +365,7 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
             cfStaffCouponSettingQuery.setStaffId(uid);
             cfStaffCouponSettingQuery.setCouponType(couponType);
             List<CfStaffCouponSetting> cfStaffCouponSettings = cfStaffCouponSettingService.getListByQuery(cfStaffCouponSettingQuery);
-            if(cfStaffCouponSettings==null || cfStaffCouponSettings.size()==0){
+            if (cfStaffCouponSettings == null || cfStaffCouponSettings.size() == 0) {
                 //自动给其创建一个当日额度为0的
                 CfStaffCouponSetting cfStaffCouponSetting = new CfStaffCouponSetting();
                 cfStaffCouponSetting.setStaffId(uid);
@@ -382,15 +382,15 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
             cfStaffCouponLogQuery.setMinCreateTime(DateUtil.getSameDayMinOrMaxTimestamp("min"));
             cfStaffCouponLogQuery.setMaxCreateTime(DateUtil.getSameDayMinOrMaxTimestamp("max"));
             BigDecimal sameDayBalance = cfStaffCouponLogService.countDenominationByQuery(cfStaffCouponLogQuery);
-            if(sameDayBalance==null){
+            if (sameDayBalance == null) {
                 sameDayBalance = new BigDecimal(0.00);
             }
 
             //如果未0则为不限制
-            if( couponType==CouponType.AMOUNT_COUPON && (cfStaffCouponSettings.get(0).getSameDayQuota()).doubleValue()>0 && sameDayBalance.add(new BigDecimal(quantity)).compareTo(cfStaffCouponSettings.get(0).getSameDayQuota())==1){
+            if (couponType == CouponType.AMOUNT_COUPON && (cfStaffCouponSettings.get(0).getSameDayQuota()).doubleValue() > 0 && sameDayBalance.add(new BigDecimal(quantity)).compareTo(cfStaffCouponSettings.get(0).getSameDayQuota()) == 1) {
                 ExceptionCast.cast(CouponActivityCode.YOU_ACTIVITY_COUPON_BALANCE_INSUFFICIENT);
             }
-        }else{
+        } else {
             fromUid = uid;
             //校验店主与活动的合法性
             checkActivityAscription(cfCouponActivity.getMainBodyId(), cfCouponActivityId);
@@ -407,10 +407,10 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
         cfCoupon.setEffectiveTime(System.currentTimeMillis());
         //如果没有传入优惠券类型，券有效期默认都为1个月
         cfCoupon.setEffectiveTime(System.currentTimeMillis());
-        if(cfCouponActivityCouponType==null){
-            cfCoupon.setExpireTime(System.currentTimeMillis()+2592000000l);
-        }else{
-            cfCoupon.setExpireTime(System.currentTimeMillis()+cfCouponActivityCouponType.getFixedExtensionTime());
+        if (cfCouponActivityCouponType == null) {
+            cfCoupon.setExpireTime(System.currentTimeMillis() + 2592000000l);
+        } else {
+            cfCoupon.setExpireTime(System.currentTimeMillis() + cfCouponActivityCouponType.getFixedExtensionTime());
         }
 
         //设置优惠券额度 同时判断是否有设置每日上限，如果有设置每日上限，判断是否有超额发券
@@ -419,43 +419,43 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
         cfCouponQuery.setCouponType(cfCoupon.getCouponType());
         cfCouponQuery.setShopId(cfCoupon.getShopId());
         cfCouponQuery.setCountField("denomination");
-        switch (couponType){
+        switch (couponType) {
             case CouponType.TIMES_COUPON:   //次数券
-                if(cfCouponActivity.getTimesDailyLimit().intValue()>0){
+                if (cfCouponActivity.getTimesDailyLimit().intValue() > 0) {
                     //查询今日的送券总次数是否有超限
                     BigDecimal todaySendTotal = cfCouponMapper.sumByFieldAndQuery(cfCouponQuery);
-                    if(todaySendTotal!=null && (todaySendTotal.intValue()+quantity)>cfCouponActivity.getTimesDailyLimit().intValue()){
+                    if (todaySendTotal != null && (todaySendTotal.intValue() + quantity) > cfCouponActivity.getTimesDailyLimit().intValue()) {
                         ExceptionCast.cast(CouponActivityCode.COUPON_REACHED_UPPER_LIMIT);
                     }
                 }
                 cfCoupon.setDenomination(new BigDecimal(quantity));
                 break;
             case CouponType.AMOUNT_COUPON:  //金额券
-                if(cfCouponActivity.getAmountDailyLimit().doubleValue()>0d){
+                if (cfCouponActivity.getAmountDailyLimit().doubleValue() > 0d) {
                     //查询今日的送券金额是否有超限
                     BigDecimal todaySendTotal = cfCouponMapper.sumByFieldAndQuery(cfCouponQuery);
-                    if(todaySendTotal!=null && (todaySendTotal.doubleValue()+quantity.doubleValue())>cfCouponActivity.getAmountDailyLimit().doubleValue()){
+                    if (todaySendTotal != null && (todaySendTotal.doubleValue() + quantity.doubleValue()) > cfCouponActivity.getAmountDailyLimit().doubleValue()) {
                         ExceptionCast.cast(CouponActivityCode.COUPON_REACHED_UPPER_LIMIT);
                     }
                 }
                 cfCoupon.setDenomination(new BigDecimal(quantity));
                 break;
             case CouponType.TIME_COUPON:    //时长券(毫秒)
-                if(cfCouponActivity.getTimeDailyLimit().longValue()>0l){
+                if (cfCouponActivity.getTimeDailyLimit().longValue() > 0l) {
                     //查询今日的送券金额是否有超限
                     BigDecimal todaySendTotal = cfCouponMapper.sumByFieldAndQuery(cfCouponQuery);
-                    if(todaySendTotal!=null && (todaySendTotal.longValue()+quantity.longValue())>cfCouponActivity.getTimeDailyLimit().longValue()){
+                    if (todaySendTotal != null && (todaySendTotal.longValue() + quantity.longValue()) > cfCouponActivity.getTimeDailyLimit().longValue()) {
                         ExceptionCast.cast(CouponActivityCode.COUPON_REACHED_UPPER_LIMIT);
                     }
                 }
-                cfCoupon.setDenomination(new BigDecimal(quantity.longValue()*3600000l));
+                cfCoupon.setDenomination(new BigDecimal(quantity.longValue() * 3600000l));
                 break;
             default:
                 ExceptionCast.cast(CouponActivityCode.ACTIVITY_NOT_MATCH_COUPON_TYPE);
                 break;
         }
 
-        cfCoupon.setStatus((byte)1);
+        cfCoupon.setStatus((byte) 1);
         cfCoupon.setUseTime(0l);
         cfCoupon.setAmountUsed(new BigDecimal(0.00));
         cfCoupon.setCouponType(couponType);
@@ -465,9 +465,9 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
         cfCouponActivityLinkShopQuery.setCouponActivityId(cfCouponActivityId);
         cfCouponActivityLinkShopQuery.setScene("carpark");
         List<CfCouponActivityLinkShop> cfCouponActivityLinkShops = cfCouponActivityLinkShopService.getListByQuery(cfCouponActivityLinkShopQuery);
-        if(cfCouponActivityLinkShops!=null && cfCouponActivityLinkShops.size()>0){
+        if (cfCouponActivityLinkShops != null && cfCouponActivityLinkShops.size() > 0) {
             ArrayList<CfCouponLinkShop> cfCouponLinkShops = new ArrayList<CfCouponLinkShop>();
-            for(CfCouponActivityLinkShop cfCouponActivityLinkShop: cfCouponActivityLinkShops){
+            for (CfCouponActivityLinkShop cfCouponActivityLinkShop : cfCouponActivityLinkShops) {
                 CfCouponLinkShop cfCouponLinkShop = new CfCouponLinkShop();
                 cfCouponLinkShop.setCouponId(coupon.getId());
                 cfCouponLinkShop.setScene("carpark");
@@ -487,22 +487,22 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
         cfStaffCouponLog.setCouponType(couponType);
         cfStaffCouponLogService.add(cfStaffCouponLog);
         //更新活动额度
-        switch (couponType){
+        switch (couponType) {
             case CouponType.TIMES_COUPON:   //次数券
                 updateRemainingTimesById(cfCouponActivity.getId(), cfCoupon.getDenomination().negate());
                 break;
             case CouponType.AMOUNT_COUPON:  //金额券
                 //优先扣自动赠送的额度
-                if(cfCouponActivity.getAutoGiveAwayOverageQuota().compareTo(cfCoupon.getDenomination()) == -1){
-                    if(cfCouponActivity.getAutoGiveAwayOverageQuota().doubleValue()<=0){
+                if (cfCouponActivity.getAutoGiveAwayOverageQuota().compareTo(cfCoupon.getDenomination()) == -1) {
+                    if (cfCouponActivity.getAutoGiveAwayOverageQuota().doubleValue() <= 0) {
                         //从可用正常余额中扣
                         updateIssuedQuotaById(cfCouponActivity.getId(), cfCoupon.getDenomination());
-                    }else{
+                    } else {
                         //先扣可用自动赠送的，再扣部分 正常可用余额
                         updateAutoGiveAwayOverageQuotaById(cfCouponActivity.getId(), cfCouponActivity.getAutoGiveAwayOverageQuota().negate());
                         updateIssuedQuotaById(cfCouponActivity.getId(), cfCoupon.getDenomination().subtract(cfCouponActivity.getAutoGiveAwayOverageQuota()));
                     }
-                }else{
+                } else {
                     //更新自动赠送余额
                     updateAutoGiveAwayOverageQuotaById(cfCouponActivity.getId(), cfCoupon.getDenomination().negate());
                 }
@@ -517,44 +517,44 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
 
 
         //判断车辆5分钟内是否有被摄像头扫描到，若被扫码到,自动开闸
-        if(StringUtils.isNotEmpty(numberPlate)){
+        if (StringUtils.isNotEmpty(numberPlate)) {
             CfCarParkUseLogQuery cfCarParkUseLogQuery = new CfCarParkUseLogQuery();
             cfCarParkUseLogQuery.setNumberPlate(numberPlate);
             cfCarParkUseLogQuery.setPayTime(0l);
             cfCarParkUseLogQuery.setMinInTime(1l);
-            cfCarParkUseLogQuery.setMinOutTime(System.currentTimeMillis()-300000);
+            cfCarParkUseLogQuery.setMinOutTime(System.currentTimeMillis() - 300000);
             cfCarParkUseLogQuery.setOrderBy("cpul.out_time desc");
             cfCarParkUseLogQuery.setPage(1);
             cfCarParkUseLogQuery.setSize(1);
             List<CfCarParkUseLog> cfCarParkUseLogs = cfCarParkUseLogService.selectByQuery(cfCarParkUseLogQuery);
-            if(cfCarParkUseLogs!=null && cfCarParkUseLogs.size()>0 && cfCarParkUseLogs.get(0).getPayTime().longValue()==0l){
+            if (cfCarParkUseLogs != null && cfCarParkUseLogs.size() > 0 && cfCarParkUseLogs.get(0).getPayTime().longValue() == 0l) {
                 CfCarParkOrder cfCarParkOrder = cfCarParkChargingRulesService.calculateTheAmounPayable(cfCarParkUseLogs.get(0).getId(), "", FeeQueryMode.QUERY_MODE_QUERY_ONLY);
-                if(System.currentTimeMillis()-cfCarParkOrder.getCfOrder().getUpdateTime()>=5000){
+                if (System.currentTimeMillis() - cfCarParkOrder.getCfOrder().getUpdateTime() >= 5000) {
                     boolean useDirectly = false;
 
                     //优惠券金额大于等应付金额直接开闸
-                    if(couponType==CouponType.AMOUNT_COUPON && cfCoupon.getDenomination().compareTo(cfCarParkOrder.getCfOrder().getAmountsPayable())>-1){
+                    if (couponType == CouponType.AMOUNT_COUPON && cfCoupon.getDenomination().compareTo(cfCarParkOrder.getCfOrder().getAmountsPayable()) > -1) {
                         useDirectly = true;
 
                         //时长券满足直接抵扣
-                    }else if(couponType==CouponType.TIME_COUPON){
+                    } else if (couponType == CouponType.TIME_COUPON) {
                         useDirectly = true;
                     }
 
-                    if(useDirectly){
+                    if (useDirectly) {
                         //更新相关数据
                         cfCarParkUseLogs.get(0).setPayTime(System.currentTimeMillis());
                         CfOrderQuery cfOrderQuery = new CfOrderQuery();
                         cfOrderQuery.setGoodsId(cfCarParkUseLogs.get(0).getId());
                         List<CfOrder> cfOrders = cfOrderService.getListByQuery(cfOrderQuery);
-                        if(cfOrders!=null && cfOrders.size()>0){
+                        if (cfOrders != null && cfOrders.size() > 0) {
                             //更新订单
                             cfOrders.get(0).setPayTime(System.currentTimeMillis());
                             cfOrders.get(0).setStatus(PayStatus.PAID);
                             cfOrders.get(0).setPaymentAgencyShortName("coupon");
                             cfOrders.get(0).setCouponId(coupon.getId());
                             cfOrders.get(0).setUpdateTime(System.currentTimeMillis());
-                            if(couponType==CouponType.AMOUNT_COUPON){
+                            if (couponType == CouponType.AMOUNT_COUPON) {
                                 cfOrders.get(0).setCouponPaid(coupon.getDenomination());
                             }
                             cfOrderService.update(cfOrders.get(0));
@@ -570,7 +570,7 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
                         coupon.setUseTime(System.currentTimeMillis());
                         coupon.setAmountUsed(coupon.getDenomination());
                         coupon = cfCouponService.update(coupon);
-                        cfCarParkReleaseLogService.executeReleaseByCarParkUseLog(cfCarParkUseLogs.get(0),"商户发电子券满减开闸" ,(byte)1);
+                        cfCarParkReleaseLogService.executeReleaseByCarParkUseLog(cfCarParkUseLogs.get(0), "商户发电子券满减开闸", (byte) 1);
 
                         //通知岗亭人员该账单已支付
                         cfCarParkUseLogs.get(0).setPayTime(System.currentTimeMillis());
@@ -606,17 +606,17 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
     public CfCoupon getCouponByQrCode(String uid, String qrCodeId, String numberPlate, CfCouponActivityCouponType cfCouponActivityCouponType) throws Exception {
         CfQrCode cfQrCode = cfQrCodeService.findById(qrCodeId, false);
         CfCouponActivity cfCouponActivity = findById(cfQrCode.getSourceId(), false);
-        if(StringUtils.isNotEmpty(cfQrCode.getToUid()) || cfQrCode.getEffectiveTime()<=System.currentTimeMillis()){
+        if (StringUtils.isNotEmpty(cfQrCode.getToUid()) || cfQrCode.getEffectiveTime() <= System.currentTimeMillis()) {
             ExceptionCast.cast(QrCode.QR_CODE_INVALID);
         }
         cfQrCode.setToUid(uid);
-        if(cfCouponActivity.getRepeatTimes().byteValue()==(byte)0){
+        if (cfCouponActivity.getRepeatTimes().byteValue() == (byte) 0) {
             cfQrCodeService.update(cfQrCode);
         }
         //开始发券
         Long quantity = cfQrCode.getQuantity();
-        if(cfQrCode.getSourceType()==(byte)3){
-            quantity = cfQrCode.getQuantity()/3600000;
+        if (cfQrCode.getSourceType() == (byte) 3) {
+            quantity = cfQrCode.getQuantity() / 3600000;
         }
         return staffOrShopkeeperGiveCouponToCar(cfQrCode.getFromUid(), uid, numberPlate, cfQrCode.getSourceType(), cfQrCode.getSourceId(), quantity.intValue(), cfCouponActivityCouponType);
     }
@@ -628,7 +628,7 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
         cfCarParkUseLogQuery.setNumberPlate(numberPlate);
         cfCarParkUseLogQuery.setCarParkIds(carParkIds);
         List<CfCarParkUseLog> cfCarParkUseLogs = checkCarIsInPark(cfCarParkUseLogQuery);
-        if(cfCarParkUseLogs!=null && cfCarParkUseLogs.size()>0 && cfCarParkUseLogs.get(0).getPayTime()==0){
+        if (cfCarParkUseLogs != null && cfCarParkUseLogs.size() > 0 && cfCarParkUseLogs.get(0).getPayTime() == 0) {
             return 1;
         }
         return 0;
@@ -641,11 +641,11 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
         cfCarParkUseLogQuery.setNumberPlates(numberPlates);
         cfCarParkUseLogQuery.setCarParkIds(carParkIds);
         List<CfCarParkUseLog> cfCarParkUseLogs = checkCarIsInPark(cfCarParkUseLogQuery);
-        if(cfCarParkUseLogs==null || cfCarParkUseLogs.size()==0){
+        if (cfCarParkUseLogs == null || cfCarParkUseLogs.size() == 0) {
             return null;
         }
         ArrayList<String> numberPlateList = new ArrayList<>();
-        for(CfCarParkUseLog cfCarParkUseLog: cfCarParkUseLogs){
+        for (CfCarParkUseLog cfCarParkUseLog : cfCarParkUseLogs) {
             numberPlateList.add(cfCarParkUseLog.getNumberPlate());
         }
         return numberPlateList;
@@ -658,9 +658,9 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
         cfCarParkUseLogQuery.setSize(1);
         cfCarParkUseLogQuery.setOrderBy("out_time DESC");
         List<CfCarParkUseLog> cfCarParkUseLogs = cfCarParkUseLogService.getListByQuery(cfCarParkUseLogQuery);
-        if(cfCarParkUseLogs!=null && cfCarParkUseLogs.size()>0){
+        if (cfCarParkUseLogs != null && cfCarParkUseLogs.size() > 0) {
             cfCarParkUseLogQuery.setMinInTime(cfCarParkUseLogs.get(0).getOutTime());
-        }else{
+        } else {
             cfCarParkUseLogQuery.setMinInTime(1L);
         }
         cfCarParkUseLogQuery.setMinPayTime(null);
@@ -680,11 +680,11 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
         //获取主店铺，和支付账号
         String shopId = getCouponActivityMainShopId(cfCouponActivity.getType(), cfCouponActivity.getId());
 
-        if(cfCouponActivity.getType()==(byte)1){
+        if (cfCouponActivity.getType() == (byte) 1) {
             List<CarParkPaymentAgency> carParkPaymentAgencies = cfUserPaymentAgencyMapper.findCarParkPaymentAgencyByCarParkIdAndScenes(shopId, useScenes);
-            if(carParkPaymentAgencies==null || carParkPaymentAgencies.size()==0){
+            if (carParkPaymentAgencies == null || carParkPaymentAgencies.size() == 0) {
                 ExceptionCast.cast(PayCode.NO_PARKING_PAYMENT_CONFIGURATION_FOUND);
-            }else{
+            } else {
                 payTypeId = carParkPaymentAgencies.get(0).getUserPaymentAgency();
             }
         }
@@ -696,36 +696,36 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
         cfOrderQuery.setGoodsType(GoodsType.COUPON_ACTIVITY_RECHARGE);
         cfOrderQuery.setGoodsId(couponActivityId);
         cfOrderQuery.setStatus(PayStatus.TO_BE_PAID);
-        cfOrderQuery.setMinCreateTime(System.currentTimeMillis()-600000);
+        cfOrderQuery.setMinCreateTime(System.currentTimeMillis() - 600000);
         List<CfOrder> cfOrderList = cfOrderService.getListByQuery(cfOrderQuery);
-        if(cfOrderList!=null && cfOrderList.size()>0){
+        if (cfOrderList != null && cfOrderList.size() > 0) {
             cfOrder = cfOrderList.get(0);
-        }else {
+        } else {
             //创建新的订单
             cfOrder = new CfOrder();
         }
         cfOrder.setEffectObject(couponType.toString());
-        switch (couponType){
+        switch (couponType) {
             case CouponType.TIMES_COUPON:   //次数券
                 cfOrder.setPurchaseQuantity(amountOfMoney.intValue());
-                cfOrder.setAmountsPayable(amountOfMoney.multiply(cfCouponActivity.getTimesCouponPrice().setScale(2,BigDecimal.ROUND_HALF_UP)));
+                cfOrder.setAmountsPayable(amountOfMoney.multiply(cfCouponActivity.getTimesCouponPrice().setScale(2, BigDecimal.ROUND_HALF_UP)));
                 break;
             case CouponType.AMOUNT_COUPON:  //金额券
                 cfOrder.setAmountsPayable(amountOfMoney);
                 break;
             case CouponType.TIME_COUPON:    //时长券
                 cfOrder.setPurchaseQuantity(amountOfMoney.intValue());
-                cfOrder.setAmountsPayable(amountOfMoney.multiply(cfCouponActivity.getTimeCouponPrice().setScale(2,BigDecimal.ROUND_HALF_UP)));
+                cfOrder.setAmountsPayable(amountOfMoney.multiply(cfCouponActivity.getTimeCouponPrice().setScale(2, BigDecimal.ROUND_HALF_UP)));
                 break;
             default:
                 ExceptionCast.cast(CouponActivityCode.ACTIVITY_NOT_MATCH_COUPON_TYPE);
                 break;
         }
 
-        if(cfOrderList==null || cfOrderList.size()==0){
+        if (cfOrderList == null || cfOrderList.size() == 0) {
             cfOrder.setRandomId(idWorker.nextId());
             cfOrder.setUid(uid);
-            cfOrder.setGoodsName(cfCouponActivity.getTitle()+"-优惠券充值");
+            cfOrder.setGoodsName(cfCouponActivity.getTitle() + "-优惠券充值");
             cfOrder.setGoodsId(cfCouponActivity.getId());
             cfOrder.setGoodsImage(cfCouponActivity.getImage());
             cfOrder.setGoodsType(GoodsType.COUPON_ACTIVITY_RECHARGE);
@@ -756,23 +756,23 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
         return couponActivityLinkShops.get(0).getShopId();   //主店铺id
     }
 
-    private List<CfCouponActivityLinkShop> getLinkShop(byte couponActivityType, String couponActivityId, boolean isMainShop){
+    private List<CfCouponActivityLinkShop> getLinkShop(byte couponActivityType, String couponActivityId, boolean isMainShop) {
         List<CfCouponActivityLinkShop> cfCouponActivityLinkShops = null;
-        switch (couponActivityType){
-            case (byte)1:   //停车场
+        switch (couponActivityType) {
+            case (byte) 1:   //停车场
                 CfCouponActivityLinkShopQuery activityLinkShopQuery = new CfCouponActivityLinkShopQuery();
                 activityLinkShopQuery.setCouponActivityId(couponActivityId);
                 activityLinkShopQuery.setScene("carpark");
-                if(isMainShop){
-                    activityLinkShopQuery.setMainShop((byte)1);
+                if (isMainShop) {
+                    activityLinkShopQuery.setMainShop((byte) 1);
                 }
                 cfCouponActivityLinkShops = cfCouponActivityLinkShopService.getListByQuery(activityLinkShopQuery);
-                if(cfCouponActivityLinkShops==null || cfCouponActivityLinkShops.size()==0){
+                if (cfCouponActivityLinkShops == null || cfCouponActivityLinkShops.size() == 0) {
                     ExceptionCast.cast(CarParkCode.CAR_PARK_NOT_EXISTS);
                 }
                 break;
             default:
-                ExceptionCast.cast(CarParkCode.MISS_MIAN_SHOP,"该活动未设置主店铺");
+                ExceptionCast.cast(CarParkCode.MISS_MIAN_SHOP, "该活动未设置主店铺");
         }
         return cfCouponActivityLinkShops;
     }
@@ -789,24 +789,24 @@ public class CfCouponActivityServiceImpl implements CfCouponActivityService {
         //获取今天要自动发券的数据
         CfCouponActivityQuery cfCouponActivityQuery = new CfCouponActivityQuery();
         cfCouponActivityQuery.setAutoGiveAwayDate(todayStr);
-        cfCouponActivityQuery.setAutoGiveAway((byte)1);
+        cfCouponActivityQuery.setAutoGiveAway((byte) 1);
         cfCouponActivityQuery.setMaxAutoGiveAwayTime(DateUtil.getSameDayMinOrMaxTimestamp("min"));
         cfCouponActivityQuery.setPage(1);
         cfCouponActivityQuery.setSize(300);
         CfCouponActivity couponActivity = new CfCouponActivity();
         List<CfCouponActivity> cfCouponActivities = getListByQuery(cfCouponActivityQuery);
-        if(cfCouponActivities!=null && cfCouponActivities.size()>0){
-            for(CfCouponActivity cfCouponActivity: cfCouponActivities){
+        if (cfCouponActivities != null && cfCouponActivities.size() > 0) {
+            for (CfCouponActivity cfCouponActivity : cfCouponActivities) {
                 //设置自动发券时间
                 couponActivity.setId(cfCouponActivity.getId());
                 couponActivity.setAutoGiveAwayTime(System.currentTimeMillis());
-                if(cfCouponActivity.getAutoGiveAwayQuota().doubleValue()<=0){
+                if (cfCouponActivity.getAutoGiveAwayQuota().doubleValue() <= 0) {
                     updateByPrimaryKeySelective(couponActivity);
                     continue;
                 }
-                if(cfCouponActivity.getAutoCleared()==(byte)1){
+                if (cfCouponActivity.getAutoCleared() == (byte) 1) {
                     couponActivity.setAutoGiveAwayOverageQuota(cfCouponActivity.getAutoGiveAwayQuota());
-                }else{
+                } else {
                     BigDecimal autoGiveAwayOverageQuota = cfCouponActivity.getAutoGiveAwayOverageQuota();
                     couponActivity.setAutoGiveAwayOverageQuota(autoGiveAwayOverageQuota.add(cfCouponActivity.getAutoGiveAwayQuota()));
                 }

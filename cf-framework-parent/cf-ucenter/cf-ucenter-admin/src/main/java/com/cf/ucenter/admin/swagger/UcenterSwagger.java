@@ -24,11 +24,11 @@ import javax.validation.constraints.*;
 public interface UcenterSwagger {
     @ApiOperation(value = "创建用户")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string"),
-            @ApiImplicitParam(name="phone",value = "手机号",required=true,paramType="query",dataType="string"),
-            @ApiImplicitParam(name="sms_code",value = "短信验证码",required=true,paramType="query",dataType="string"),
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string"),
+            @ApiImplicitParam(name = "phone", value = "手机号", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "sms_code", value = "短信验证码", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "username", value = "用户名", required = true, paramType = "query", dataType = "string"),
-            @ApiImplicitParam(name="password",value = "密码",required=true,paramType="query",dataType="string"),
+            @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query", dataType = "string"),
             @ApiImplicitParam(name = "nick_name", value = "昵称", required = true, paramType = "query", dataType = "string")
     })
     public ResponseResult create(
@@ -40,54 +40,54 @@ public interface UcenterSwagger {
 
     @ApiOperation(value = "根据手机号/用户id/用户名查询用户")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string"),
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string"),
             @ApiImplicitParam(name = "key", value = "搜索关键字", required = true, paramType = "query", dataType = "string")
     })
     public ResponseResult findByKey(String key);
 
     @ApiOperation(value = "根据用户id获取用户信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string"),
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string"),
             @ApiImplicitParam(name = "uid", value = "用户id", required = true, paramType = "query", dataType = "string")
     })
     public ResponseResult findById(String uid);
 
     @ApiOperation(value = "获取我的信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string")
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string")
     })
-    public ResponseResult getMyInfo() throws Exception ;
+    public ResponseResult getMyInfo() throws Exception;
 
     @ApiOperation(value = "根据条件查询用户数据列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string"),
-            @ApiImplicitParam(name="conditions",
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string"),
+            @ApiImplicitParam(name = "conditions",
                     value = "条件,例子{\"id\":{\"operator\":\"=\",\"value\":200},\"province_id\":{\"operator\":\"between\",\"min\":200,\"max\":300},\"order\":" +
                             "{\"operator\":\"order\",\"list\":{\"id\":{\"type\":\"DESC\",\"alias\":\"cp\"},\"country_id\":{\"type\":\"ASC\",\"alias\":\"cp\"}}}," +
                             "\"limit\":{\"operator\":\"limit\",\"page\":1,\"limit\":10},\"like\":{\"operator\":\"like\",\"list\":{\"name\":{\"0\":{\"value\":\"绿地国博\"," +
                             "\"alias\":\"cp\"},\"1\":{\"value\":\"财富中心\",\"alias\":\"cp\"}},\"country_id\":{\"0\":{\"value\":\"1111\",\"alias\":\"cp\"},\"1\":{\"value\":\"2222\"," +
                             "\"alias\":\"cp\"}}}}}解析出的sql为：SELECT cp.* FROM cf_car_park cp WHERE cp.id=200 AND cp.province_id>=200 AND cp.province_id<=300 AND (cp.name LIKE '%绿地国博%'" +
                             " OR cp.name LIKE '%财富中心%')  AND (cp.country_id LIKE '%1111%' OR cp.country_id LIKE '%2222%') ORDER BY cp.id DESC,cp.country_id ASC LIMIT 0,10",
-                    required=true,paramType="query",dataType="string")
+                    required = true, paramType = "query", dataType = "string")
     })
     public ResponseResult selectListByCondition(String conditions);
 
     @ApiOperation(value = "更新用户信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string")
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string")
     })
     public ResponseResult update(CfUserForm cfUserForm);
 
     @ApiOperation(value = "创建用户")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string")
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string")
     })
     public ResponseResult add(@RequestBody CfUserForm cfUserForm);
 
     @ApiOperation(value = "统计用户新增记录数")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string"),
-            @ApiImplicitParam(name="lang",value = "语言(zh-中文[默认]/en-英文...更多见官网文档)",required=false,paramType="header",dataType="string")
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string"),
+            @ApiImplicitParam(name = "lang", value = "语言(zh-中文[默认]/en-英文...更多见官网文档)", required = false, paramType = "header", dataType = "string")
     })
     public ResponseResult countAddLogs(CfCountUserQuery cfCountUserQuery);
 

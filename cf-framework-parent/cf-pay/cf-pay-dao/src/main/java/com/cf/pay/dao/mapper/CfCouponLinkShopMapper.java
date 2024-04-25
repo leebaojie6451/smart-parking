@@ -31,6 +31,7 @@ public interface CfCouponLinkShopMapper {
 
     /**
      * 批量插入
+     *
      * @param batchAddSQL
      * @return
      */

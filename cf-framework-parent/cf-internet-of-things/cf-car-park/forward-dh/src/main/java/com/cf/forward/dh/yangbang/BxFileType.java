@@ -6,7 +6,7 @@ package com.cf.forward.dh.yangbang;
 public enum BxFileType {
 
 
-    PROGRAM((byte)0x00, "P", "Program file");
+    PROGRAM((byte) 0x00, "P", "Program file");
 
 
     private byte code;

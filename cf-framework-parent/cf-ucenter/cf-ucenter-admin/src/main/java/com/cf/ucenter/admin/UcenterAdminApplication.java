@@ -19,7 +19,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class UcenterAdminApplication {
     public static void main(String[] args) {
-        SpringApplication.run(UcenterAdminApplication.class,args);
+        SpringApplication.run(UcenterAdminApplication.class, args);
     }
 
 }

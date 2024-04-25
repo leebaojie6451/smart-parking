@@ -14,25 +14,25 @@ public interface CfCarParkCarSwagger {
 
     @ApiOperation(value = "添加车辆")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string")
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string")
     })
     public ResponseResult add(@RequestBody CfCarParkCarForm cfCarParkCarForm) throws Exception;
 
     @ApiOperation(value = "更新车辆")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string")
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string")
     })
     public ResponseResult update(@RequestBody CfCarParkCarForm cfCarParkCarForm) throws Exception;
 
     @ApiOperation(value = "删除车辆")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string")
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string")
     })
     public ResponseResult delete(String id) throws Exception;
 
     @ApiOperation(value = "根据Query查询车辆列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="authorization",value = "jwt串(请加\"Bearer \"前缀，注意有空格)",required=true,paramType="header",dataType="string")
+            @ApiImplicitParam(name = "authorization", value = "jwt串(请加\"Bearer \"前缀，注意有空格)", required = true, paramType = "header", dataType = "string")
     })
     public ResponseResult getListByQuery(CfCarParkCarQuery cfCarParkCarQuery) throws Exception;
 }

@@ -26,10 +26,10 @@ public interface CfWeixinConfigService {
     Integer countByQuery(CfWeixinConfigQuery cfWeixinConfigQuery);
 
 
-
     /**
      * 获取AccessToken
-     * @param scenes 请传(h5-网页/mp-小程序/app-手机应用)
+     *
+     * @param scenes      请传(h5-网页/mp-小程序/app-手机应用)
      * @param weixinAppId
      * @param appSecret
      * @return
@@ -38,7 +38,8 @@ public interface CfWeixinConfigService {
 
     /**
      * 获取海康AccessToken
-     * @param scenes  例如 hk
+     *
+     * @param scenes    例如 hk
      * @param appKey
      * @param appSecret
      * @return
@@ -48,6 +49,7 @@ public interface CfWeixinConfigService {
 
     /**
      * 向微信请求accessToken
+     *
      * @param weixinAppId
      * @param appSecret
      * @return
@@ -57,6 +59,7 @@ public interface CfWeixinConfigService {
 
     /**
      * 获取微信配置
+     *
      * @param scenes 场景
      * @return
      */
@@ -64,6 +67,7 @@ public interface CfWeixinConfigService {
 
     /**
      * 获取微信小程序二维码
+     *
      * @param unlimitedForm
      * @return
      * @throws Exception
@@ -72,6 +76,7 @@ public interface CfWeixinConfigService {
 
     /**
      * 返回获取ip的url地址
+     *
      * @return
      */
     String returnGetIpUrl();

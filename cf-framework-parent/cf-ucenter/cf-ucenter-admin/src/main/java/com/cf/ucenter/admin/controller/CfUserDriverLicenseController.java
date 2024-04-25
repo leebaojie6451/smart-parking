@@ -48,7 +48,7 @@ public class CfUserDriverLicenseController implements CfUserDriverLicenseSwagger
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(CfUserDriverLicenseQuery cfUserDriverLicenseQuery) {
         List<CfUserDriverLicense> list = cfUserDriverLicenseService.getListByQuery(cfUserDriverLicenseQuery);
-        if(list!=null && list.size()>0){
+        if (list != null && list.size() > 0) {
             Integer integer = cfUserDriverLicenseService.countByQuery(cfUserDriverLicenseQuery);
             return new ResponseResult(CommonCode.SUCCESS, list, integer);
         }
@@ -61,9 +61,9 @@ public class CfUserDriverLicenseController implements CfUserDriverLicenseSwagger
     public ResponseResult add(@Validated @RequestBody CfUserDriverLicenseForm cfUserDriverLicenseForm) throws Exception {
         CfUserDriverLicense cfUserDriverLicense = new CfUserDriverLicense();
         BeanUtils.copyProperties(cfUserDriverLicenseForm, cfUserDriverLicense);
-        
+
         CfUserDriverLicense department = cfUserDriverLicenseService.add(cfUserDriverLicense);
-        if(department!=null){
+        if (department != null) {
             return new ResponseResult(CommonCode.SUCCESS, department);
         }
         return new ResponseResult(CommonCode.FAIL);
@@ -77,7 +77,7 @@ public class CfUserDriverLicenseController implements CfUserDriverLicenseSwagger
         BeanUtils.copyProperties(cfUserDriverLicenseForm, cfUserDriverLicense);
 
         CfUserDriverLicense department = cfUserDriverLicenseService.update(cfUserDriverLicense);
-        if(department!=null){
+        if (department != null) {
             return new ResponseResult(CommonCode.SUCCESS, department);
         }
         return new ResponseResult(CommonCode.FAIL);
@@ -126,131 +126,131 @@ public class CfUserDriverLicenseController implements CfUserDriverLicenseSwagger
             try {
                 Row row = sheet1.getRow(i);
                 Cell cell1 = row.getCell(0);
-                if(i>0 && cell1==null){
+                if (i > 0 && cell1 == null) {
                     break;
                 }
-                if(cell1!=null){
+                if (cell1 != null) {
                     cell1.setCellType(CellType.STRING);
                     String cell1Value = cell1.getStringCellValue();
-                    if(i==0 && !cell1Value.equals("NAME")){
+                    if (i == 0 && !cell1Value.equals("NAME")) {
                         ExceptionCast.cast(CommonCode.INVALID_PARAM, "表头第1例标题名称应为\"NAME\"");
-                    }else{
+                    } else {
                         cfUserDriverLicense.setUserName(cell1Value);
                     }
-                }else{
+                } else {
                     cfUserDriverLicense.setUserName("");
                 }
 
 
                 Cell cell2 = row.getCell(1);
-                if(cell2!=null){
+                if (cell2 != null) {
                     cell2.setCellType(CellType.STRING);
                     String cell2Value = cell2.getStringCellValue();
-                    if(i==0 && !cell2Value.equals("TEL")){
+                    if (i == 0 && !cell2Value.equals("TEL")) {
                         ExceptionCast.cast(CommonCode.INVALID_PARAM, "表头第2例标题名称应为\"TEL\"");
-                    }else{
+                    } else {
                         cfUserDriverLicense.setPhone(cell2Value);
                     }
-                }else{
+                } else {
                     cfUserDriverLicense.setPhone("");
                 }
 
 
                 Cell cell3 = row.getCell(2);
-                if(cell3!=null){
+                if (cell3 != null) {
                     cell3.setCellType(CellType.STRING);
                     String cell3Value = cell3.getStringCellValue();
-                    if(i==0 && !cell3Value.equals("GENDER")){
+                    if (i == 0 && !cell3Value.equals("GENDER")) {
                         ExceptionCast.cast(CommonCode.INVALID_PARAM, "表头第3例标题名称应为\"GENDER\"");
-                    }else{
-                        if(StringUtils.isEmpty(cell3Value)){
-                            cfUserDriverLicense.setSex((byte)3);
-                        }else if(cell3Value.equals("男")){
-                            cfUserDriverLicense.setSex((byte)1);
-                        }else{
-                            cfUserDriverLicense.setSex((byte)2);
+                    } else {
+                        if (StringUtils.isEmpty(cell3Value)) {
+                            cfUserDriverLicense.setSex((byte) 3);
+                        } else if (cell3Value.equals("男")) {
+                            cfUserDriverLicense.setSex((byte) 1);
+                        } else {
+                            cfUserDriverLicense.setSex((byte) 2);
                         }
                     }
-                }else{
-                    cfUserDriverLicense.setSex((byte)3);
+                } else {
+                    cfUserDriverLicense.setSex((byte) 3);
                 }
 
 
                 Cell cell4 = row.getCell(3);
-                if(cell4!=null){
+                if (cell4 != null) {
                     cell4.setCellType(CellType.STRING);
                     String cell4Value = cell4.getStringCellValue();
-                    if(i==0 && !cell4Value.equals("IDCARD")){
+                    if (i == 0 && !cell4Value.equals("IDCARD")) {
                         ExceptionCast.cast(CommonCode.INVALID_PARAM, "表头第4例标题名称应为\"IDCARD\"");
-                    }else{
+                    } else {
                         cfUserDriverLicense.setCertificateNumber(cell4Value);
                     }
-                }else{
+                } else {
                     cfUserDriverLicense.setCertificateNumber("");
                 }
 
 
                 Cell cell5 = row.getCell(4);
-                if(cell5!=null){
+                if (cell5 != null) {
                     cell5.setCellType(CellType.STRING);
                     String cell5Value = cell5.getStringCellValue();
-                    if(i==0 && !cell5Value.equals("CERTIFICATE")){
+                    if (i == 0 && !cell5Value.equals("CERTIFICATE")) {
                         ExceptionCast.cast(CommonCode.INVALID_PARAM, "表头第5例标题名称应为\"CERTIFICATE\"");
-                    }else{
+                    } else {
                         cfUserDriverLicense.setQualificationCertificateNumber(cell5Value);
                     }
-                }else{
+                } else {
                     cfUserDriverLicense.setQualificationCertificateNumber("");
                 }
 
 
                 Cell cell6 = row.getCell(5);
-                if(cell6!=null){
+                if (cell6 != null) {
                     cell6.setCellType(CellType.STRING);
                     String cell6Value = cell6.getStringCellValue();
-                    if(i==0 && !cell6Value.equals("DRIVER_CAR_TYPE")){
+                    if (i == 0 && !cell6Value.equals("DRIVER_CAR_TYPE")) {
                         ExceptionCast.cast(CommonCode.INVALID_PARAM, "表头第6例标题名称应为\"DRIVER_CAR_TYPE\"");
-                    }else{
+                    } else {
                         cfUserDriverLicense.setCarClass(cell6Value);
                     }
                 }
                 Cell cell7 = row.getCell(6);
                 String openid = "";
-                if(cell7!=null){
+                if (cell7 != null) {
                     cell7.setCellType(CellType.STRING);
                     String cell7Value = cell7.getStringCellValue();
-                    if(i==0 && !cell7Value.equals("WECHATID")){
+                    if (i == 0 && !cell7Value.equals("WECHATID")) {
                         ExceptionCast.cast(CommonCode.INVALID_PARAM, "表头第7例标题名称应为\"WECHATID\"");
-                    }else{
+                    } else {
                         openid = cell7Value;
                     }
                 }
 
-                if(i>0){
+                if (i > 0) {
                     cfUserDriverLicense.setUid("");
                     cfUserDriverLicense.setNationality("");
                     cfUserDriverLicense.setAddress("");
-                    cfUserDriverLicense.setBirthdayYear((short)0);
-                    cfUserDriverLicense.setBirthdayMonth((byte)0);
-                    cfUserDriverLicense.setBirthdayDay((byte)0);
-                    cfUserDriverLicense.setFirstIssueYear((short)0);
-                    cfUserDriverLicense.setFirstIssueMonth((byte)0);
-                    cfUserDriverLicense.setFirstIssueDay((byte)0);
+                    cfUserDriverLicense.setBirthdayYear((short) 0);
+                    cfUserDriverLicense.setBirthdayMonth((byte) 0);
+                    cfUserDriverLicense.setBirthdayDay((byte) 0);
+                    cfUserDriverLicense.setFirstIssueYear((short) 0);
+                    cfUserDriverLicense.setFirstIssueMonth((byte) 0);
+                    cfUserDriverLicense.setFirstIssueDay((byte) 0);
                     cfUserDriverLicense.setStartTime(0l);
                     cfUserDriverLicense.setEndTime(0l);
                     cfUserDriverLicense.setIssuingAuthority("");
                     cfUserDriverLicense.setFileNumber("");
                     cfUserDriverLicense.setInternshipPeriodEnds(0l);
-                    cfUserDriverLicense.setCheckStatus((byte)1);
+                    cfUserDriverLicense.setCheckStatus((byte) 1);
                     //判断是否存在重复的手机号
                     cfUserDriverLicenseQuery.setPhone(cfUserDriverLicense.getPhone());
                     List<CfUserDriverLicense> driverLicenseList = cfUserDriverLicenseService.getListByQuery(cfUserDriverLicenseQuery);
-                    if(driverLicenseList!=null && driverLicenseList.size()>0){
+                    if (driverLicenseList != null && driverLicenseList.size() > 0) {
                         cfUserDriverLicense.setId(driverLicenseList.get(0).getId());
                         cfUserDriverLicenseService.update(cfUserDriverLicense);
-                    }else{
+                    } else {
                         cfUserDriverLicenseService.add(cfUserDriverLicense);
-                        if(StringUtils.isNotEmpty(openid)){
+                        if (StringUtils.isNotEmpty(openid)) {
                             //创建对应的微信公众号用户
                             CfThirdPartyLogin cfThirdPartyLogin = new CfThirdPartyLogin();
                             //TODO 暂时写死，后期动态查询
@@ -264,8 +264,8 @@ public class CfUserDriverLicenseController implements CfUserDriverLicenseSwagger
                         }
                     }
                 }
-            } catch (Exception e){
-                errorMessageList.add("第"+i+"行:"+e.getMessage());
+            } catch (Exception e) {
+                errorMessageList.add("第" + i + "行:" + e.getMessage());
                 continue;
             }
         }

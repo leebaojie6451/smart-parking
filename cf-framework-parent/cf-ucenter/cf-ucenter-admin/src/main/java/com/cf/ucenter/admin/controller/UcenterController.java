@@ -50,13 +50,13 @@ public class UcenterController implements UcenterSwagger {
     @RequestMapping(value = "create", method = RequestMethod.PUT)
     public ResponseResult create(
             @RequestParam("phone")
-        @Pattern(regexp = "^(1[3-9])[0-9]{9}$", message = "手机号不合法") String phone,
+            @Pattern(regexp = "^(1[3-9])[0-9]{9}$", message = "手机号不合法") String phone,
             @RequestParam("sms_code")
-        @NotEmpty String smsCode,
+            @NotEmpty String smsCode,
             @RequestParam("username")
-        @Pattern(regexp = "^[a-zA-Z0-9_]{5,32}$", message = "用户名长度5-32位") String userName,
+            @Pattern(regexp = "^[a-zA-Z0-9_]{5,32}$", message = "用户名长度5-32位") String userName,
             @RequestParam("password")
-        @Size(min = 10, max = 32, message = "密码长度10-32位") String password,
+            @Size(min = 10, max = 32, message = "密码长度10-32位") String password,
             @RequestParam("nick_name")
             @Size(min = 1, max = 20, message = "昵称长度1-20位") String nickName) {
         return new ResponseResult(CommonCode.SUCCESS, cfUserService.register(phone, smsCode, userName, password, nickName));
@@ -64,7 +64,7 @@ public class UcenterController implements UcenterSwagger {
 
     @Override
     @RequestMapping(value = "findByKey", method = RequestMethod.GET)
-    public ResponseResult findByKey(@RequestParam("key")String key) {
+    public ResponseResult findByKey(@RequestParam("key") String key) {
         List<CfUser> cfUsers = cfUserService.findByPhoneOrUidOrName(key);
         return cfUsers != null ? new ResponseResult(CommonCode.SUCCESS, cfUsers) : new ResponseResult(CommonCode.NO_MORE_DATAS);
     }
@@ -113,20 +113,20 @@ public class UcenterController implements UcenterSwagger {
         allowFileds.add("order");
         allowFileds.add("limit");
         Map<String, String> allowFiledsMap = new HashMap<String, String>();
-        allowFiledsMap.put("id","u");
-        allowFiledsMap.put("user_name","u");
-        allowFiledsMap.put("type","u");
-        allowFiledsMap.put("nick_name","u");
-        allowFiledsMap.put("true_name","u");
-        allowFiledsMap.put("phone","u");
-        allowFiledsMap.put("sex","u");
-        allowFiledsMap.put("create_time","u");
-        allowFiledsMap.put("like","");
-        allowFiledsMap.put("order","");
-        allowFiledsMap.put("limit","");
-        List<CfUser> cfCarParks = cfUserService.selectListByCondition(conditionsMap, allowFiledsMap,allowFileds);
+        allowFiledsMap.put("id", "u");
+        allowFiledsMap.put("user_name", "u");
+        allowFiledsMap.put("type", "u");
+        allowFiledsMap.put("nick_name", "u");
+        allowFiledsMap.put("true_name", "u");
+        allowFiledsMap.put("phone", "u");
+        allowFiledsMap.put("sex", "u");
+        allowFiledsMap.put("create_time", "u");
+        allowFiledsMap.put("like", "");
+        allowFiledsMap.put("order", "");
+        allowFiledsMap.put("limit", "");
+        List<CfUser> cfCarParks = cfUserService.selectListByCondition(conditionsMap, allowFiledsMap, allowFileds);
         Integer counts = cfUserService.selectListByConditionCounts(conditionsMap, allowFiledsMap, allowFileds);
-        if(cfCarParks!=null && cfCarParks.size()>0){
+        if (cfCarParks != null && cfCarParks.size() > 0) {
             return new ResponseResult(CommonCode.SUCCESS, cfCarParks, null, counts);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);
@@ -138,7 +138,7 @@ public class UcenterController implements UcenterSwagger {
     public ResponseResult update(@Validated @RequestBody CfUserForm cfUserForm) {
         CfUser cfUser = new CfUser();
         BeanUtils.copyProperties(cfUserForm, cfUser);
-        if(cfUser.getAvatar()==null){
+        if (cfUser.getAvatar() == null) {
             cfUser.setAvatar("");
         }
         CfUser newCfUser = cfUserService.update(cfUser, cfUserForm.getCfRoles());
@@ -151,7 +151,7 @@ public class UcenterController implements UcenterSwagger {
     public ResponseResult add(@Validated @RequestBody CfUserForm cfUserForm) {
         CfUser cfUser = new CfUser();
         BeanUtils.copyProperties(cfUserForm, cfUser);
-        if(cfUser.getAvatar()==null){
+        if (cfUser.getAvatar() == null) {
             cfUser.setAvatar("");
         }
         CfUser user = cfUserService.add(cfUser, cfUserForm.getCfRoles());
@@ -162,23 +162,23 @@ public class UcenterController implements UcenterSwagger {
     @Override
     @RequestMapping(value = "countAddLogs", method = RequestMethod.GET)
     public ResponseResult countAddLogs(CfCountUserQuery cfCountUserQuery) {
-        if(cfCountUserQuery.getDate().equals("") || cfCountUserQuery.getDate().equals("null")){
+        if (cfCountUserQuery.getDate().equals("") || cfCountUserQuery.getDate().equals("null")) {
             cfCountUserQuery.setDate(null);
         }
-        if(cfCountUserQuery.getEndDate().equals("") || cfCountUserQuery.getEndDate().equals("null")){
+        if (cfCountUserQuery.getEndDate().equals("") || cfCountUserQuery.getEndDate().equals("null")) {
             cfCountUserQuery.setEndDate(null);
         }
-        if(cfCountUserQuery.getYear().equals("") || cfCountUserQuery.getYear().equals("null")){
+        if (cfCountUserQuery.getYear().equals("") || cfCountUserQuery.getYear().equals("null")) {
             cfCountUserQuery.setYear(null);
         }
-        if(cfCountUserQuery.getMonth().equals("") || cfCountUserQuery.getMonth().equals("null")){
+        if (cfCountUserQuery.getMonth().equals("") || cfCountUserQuery.getMonth().equals("null")) {
             cfCountUserQuery.setMonth(null);
         }
-        if(cfCountUserQuery.getDay().equals("") || cfCountUserQuery.getDay().equals("null")){
+        if (cfCountUserQuery.getDay().equals("") || cfCountUserQuery.getDay().equals("null")) {
             cfCountUserQuery.setDay(null);
         }
         List<CountByDay> list = null;
-        switch (cfCountUserQuery.getCountType()){
+        switch (cfCountUserQuery.getCountType()) {
             case "before_day_count_by_day":
                 list = cfUserService.limitDaysCountByDay(cfCountUserQuery);
                 break;
@@ -190,7 +190,7 @@ public class UcenterController implements UcenterSwagger {
                 break;
         }
 
-        if(list==null || list.size()==0){
+        if (list == null || list.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, list, cfUserService.getCountByQuery(new CfUserQuery()));

@@ -8,8 +8,8 @@ package com.cf.forward.dh.lib.enumeration;
  */
 public enum EM_DOWNLOAD_FILE_TYPE {
 
-    EM_DOWNLOAD_BY_FILENAME(0,"按文件名下载"),
-    EM_DOWNLOAD_BY_CONDITION(1,"按条件下载");
+    EM_DOWNLOAD_BY_FILENAME(0, "按文件名下载"),
+    EM_DOWNLOAD_BY_CONDITION(1, "按条件下载");
 
     private final int value;
     private final String note;

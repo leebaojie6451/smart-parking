@@ -21,12 +21,14 @@ public interface CfRoleService {
 
     /**
      * 获取权限列表
+     *
      * @return
      */
     List<CfRole> list();
 
     /**
      * 添加角色
+     *
      * @param cfRole
      * @return
      */
@@ -34,6 +36,7 @@ public interface CfRoleService {
 
     /**
      * 更新角色
+     *
      * @param cfRoleForm
      * @return
      */
@@ -41,6 +44,7 @@ public interface CfRoleService {
 
     /**
      * 删除角色
+     *
      * @param id
      * @return
      */
@@ -48,6 +52,7 @@ public interface CfRoleService {
 
     /**
      * 删除角色对应的权限
+     *
      * @param roleId
      * @return
      */
@@ -55,6 +60,7 @@ public interface CfRoleService {
 
     /**
      * 更新角色的权限
+     *
      * @param cfRoleAuths
      * @param roleId
      * @return
@@ -63,6 +69,7 @@ public interface CfRoleService {
 
     /**
      * 获取指定用所拥有的角色
+     *
      * @param uid
      * @return
      */

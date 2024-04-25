@@ -18,7 +18,7 @@ import io.swagger.annotations.ApiOperation;
 public interface CfCarParkCarTypeSwagger {
     @ApiOperation(value = "获取车辆类型列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="lang",value = "语言(zh-中文[默认]/en-英文...更多见官网文档)",required=false,paramType="header",dataType="string")
+            @ApiImplicitParam(name = "lang", value = "语言(zh-中文[默认]/en-英文...更多见官网文档)", required = false, paramType = "header", dataType = "string")
     })
     public ResponseResult getAllList();
 }

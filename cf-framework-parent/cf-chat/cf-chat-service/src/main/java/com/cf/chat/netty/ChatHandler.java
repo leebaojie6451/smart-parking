@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.cf.chat.domain.CfUserMessage;
 import com.cf.chat.domain.Message;
-import com.cf.chat.service.CfUserGroupMessageService;
 import com.cf.chat.service.CfUserMessageService;
 import com.cf.framework.domain.ucenter.ext.UserBasicInfo;
 import com.cf.framework.utils.HttpClient;
@@ -17,13 +16,6 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.concurrent.GlobalEventExecutor;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.dubbo.config.annotation.Reference;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.net.InetAddress;
@@ -73,14 +65,14 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
                 _message.setFromUid(userBasicInfo.getId());
                 SocketAddress socketAddress = ctx.channel().remoteAddress();
                 String ip = socketAddress.toString();
-                ip = ip.substring(1,ip.indexOf(":"));
+                ip = ip.substring(1, ip.indexOf(":"));
                 _message.setIp(ip);
                 cfUserMessageService.sendMessage(_message);
                 break;
             case "change_status":
                 try {
 //                    cfUserMessageService.updateStatus(userBasicInfo.getId(), message.getCfUserMessage().getId(),1);
-                }catch (Exception e){
+                } catch (Exception e) {
                     //mongodb会无端报错，但是不影响更新状态，后期检查
                 }
                 break;
@@ -110,7 +102,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
         System.out.println("关闭WebSocket通道");
         UserChannelMap.removeByChannelId(ctx.channel().id().asLongText());
         clients.remove(ctx.channel());
-        if(ctx.channel().isActive()){
+        if (ctx.channel().isActive()) {
             ctx.channel().close();
         }
         setChatLinkerCounts();
@@ -119,6 +111,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
 
     /**
      * 获取本服务器的外网ip
+     *
      * @return
      */
     private String getServiceIp() throws Exception {
@@ -128,19 +121,19 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
         //获取配置
         List<CfWeixinConfig> cfWeixinConfigs = cfWeixinConfigService.getWeiXinLoginConfigragtion("server_ip_list");
         CfWeixinConfig cfWeixinConfig = cfWeixinConfigs.get(0);
-        Map<String, String> map = (Map<String, String>)JSONObject.parseObject(cfWeixinConfig.getValue(), Map.class);
+        Map<String, String> map = (Map<String, String>) JSONObject.parseObject(cfWeixinConfig.getValue(), Map.class);
         String ip = "";
         int i = 0;
         String defaultIp = "";
-        for (Map.Entry<String, String> entry:map.entrySet()){
-            if(i==0){
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (i == 0) {
                 defaultIp = entry.getKey();
             }
             i++;
-            if(!map.containsKey(jsonObject.getString("data"))){
+            if (!map.containsKey(jsonObject.getString("data"))) {
                 break;
             }
-            if(jsonObject.getString("data").equals(entry.getKey())){
+            if (jsonObject.getString("data").equals(entry.getKey())) {
                 ip = entry.getKey();
                 break;
             }
@@ -151,14 +144,14 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
     /**
      * 设置当前服务器的在线人数
      */
-    private void setChatLinkerCounts() throws Exception{
+    private void setChatLinkerCounts() throws Exception {
         String serviceIp = getServiceIp();
-        if(serviceIp==null){
+        if (serviceIp == null) {
             return;
         }
         // 通过SpringUtil工具类获取Spring上下文容器
         StringRedisTemplate redisTemplate = SpringUtil.getBean(StringRedisTemplate.class);
-        System.out.println("当前在线人数:"+clients.size());
+        System.out.println("当前在线人数:" + clients.size());
         redisTemplate.boundZSetOps(ChatHandler.CHAT_LINK_COUNTS_REDIS_KEY).add(serviceIp, clients.size());
     }
 

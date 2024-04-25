@@ -14,9 +14,9 @@ import java.io.Serializable;
  */
 public class DeviceType implements Serializable {
 
-    public static final Byte ROAD_GATE = (byte)1;   //道闸
-    public static final Byte LICENSE_PLATE_RECOGNITION_CAMERA = (byte)2;    //车牌识别相机
-    public static final Byte FLOOR_LOCK = (byte)3;    //地锁
-    public static final Byte HIGH_POSITION_CAMERA = (byte)4;    //高位相机
+    public static final Byte ROAD_GATE = (byte) 1;   //道闸
+    public static final Byte LICENSE_PLATE_RECOGNITION_CAMERA = (byte) 2;    //车牌识别相机
+    public static final Byte FLOOR_LOCK = (byte) 3;    //地锁
+    public static final Byte HIGH_POSITION_CAMERA = (byte) 4;    //高位相机
 
 }

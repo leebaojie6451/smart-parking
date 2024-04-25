@@ -25,5 +25,5 @@ public interface CfLogisticsQueueService {
     Integer countByQuery(CfLogisticsQueueQuery cfLogisticsQueueQuery);
 
     CfLogisticsQueueExample getExampleByQuery(CfLogisticsQueueQuery cfLogisticsQueueQuery);
-    
+
 }

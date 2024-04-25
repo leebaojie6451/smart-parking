@@ -32,28 +32,28 @@ public class CCBpayServiceImpl implements CCBpayService {
         ccbScannedChargebackForm.setPROINFO("");
         ccbScannedChargebackForm.setORDERID("");
 
-        String merInfo = "MERCHANTID="+cfUserPaymentAgency.getMchId()+"&POSID="+cfUserPaymentAgency.getPayKey()+"&BRANCHID="+cfUserPaymentAgency.getAppid();
+        String merInfo = "MERCHANTID=" + cfUserPaymentAgency.getMchId() + "&POSID=" + cfUserPaymentAgency.getPayKey() + "&BRANCHID=" + cfUserPaymentAgency.getAppid();
 
         String urlParmas = StringTools.pojoToURLParams(ccbScannedChargebackForm);
 
         //加密原串
         String param = merInfo;
 
-        logger.info("urlParmas:"+urlParmas);
-        logger.info("加密前的请求参数:"+param);
+        logger.info("urlParmas:" + urlParmas);
+        logger.info("加密前的请求参数:" + param);
 
         CCBPayUtil ccbPayUtil = new CCBPayUtil();
-        String ccbParam = ccbPayUtil.makeCCBParam(param+urlParmas, cfUserPaymentAgency.getSecret());
+        String ccbParam = ccbPayUtil.makeCCBParam(param + urlParmas, cfUserPaymentAgency.getSecret());
         //拼接请求串
         String url = host + merInfo + "&ccbParam=" + ccbParam;
 
-        logger.error("完整的请求地址(加密处理后的):"+url);
+        logger.error("完整的请求地址(加密处理后的):" + url);
 
         //向建行网关发送请求交易...
-        if(requestType.equals("get")){
+        if (requestType.equals("get")) {
             JSONObject payResulJson = HttpClient.doGet(url);
             System.out.println(payResulJson);
-        }else{
+        } else {
             HashMap<String, String> requestHeaders = new HashMap<>();
 //            requestHeaders.put("Content-Type","text/html; charset=utf-8");
             ccbScannedChargebackForm.setMERCHANTID(cfUserPaymentAgency.getMchId());
@@ -62,7 +62,7 @@ public class CCBpayServiceImpl implements CCBpayService {
             ccbScannedChargebackForm.setCcbParam(ccbParam);
             JSONObject jsonObject = StringTools.pojoToJSONObject(ccbScannedChargebackForm);
 
-            JSONObject payResulJson = (JSONObject)HttpClient.doPost(jsonObject,url,requestHeaders, true);
+            JSONObject payResulJson = (JSONObject) HttpClient.doPost(jsonObject, url, requestHeaders, true);
             System.out.println(payResulJson);
         }
 

@@ -59,32 +59,33 @@ public class CfCarParkDeviceTask {
      * 0 15 10 ? * MON-FRI 每月的周一到周五10点 15分执行
      * 0 15 10 ? * MON,FRI 每月的周一和周五10点 15分执行
      */
-    @Scheduled(cron="0 0/1 * * * *")
-    public void monitorDeviceStatus() throws Exception{
+    @Scheduled(cron = "0 0/1 * * * *")
+    public void monitorDeviceStatus() throws Exception {
         cfCarParkDeviceService.monitorDeviceStatus();
     }
 
     /**
      * 短信通知即将过期的套餐
+     *
      * @throws Exception
      */
-    @Scheduled(cron="0/60 * * * * *")
-    public void noticeExpiringSoonCarParkPackageTask() throws Exception{
+    @Scheduled(cron = "0/60 * * * * *")
+    public void noticeExpiringSoonCarParkPackageTask() throws Exception {
         CfCarParkPackageQuery cfCarParkPackageQuery = new CfCarParkPackageQuery();
-        cfCarParkPackageQuery.setNoticeExpiringSoon((byte)0);
+        cfCarParkPackageQuery.setNoticeExpiringSoon((byte) 0);
         cfCarParkPackageQuery.setMinEndTime(System.currentTimeMillis());
-        cfCarParkPackageQuery.setMaxEndTime(System.currentTimeMillis()+86400000l);
+        cfCarParkPackageQuery.setMaxEndTime(System.currentTimeMillis() + 86400000l);
         cfCarParkPackageQuery.setPage(1);
         cfCarParkPackageQuery.setSize(100);
         List<CfCarParkPackage> cfCarParkPackageList = cfCarParkPackageService.selectByQuery(cfCarParkPackageQuery);
-        if(cfCarParkPackageList==null || cfCarParkPackageList.size()==0){
+        if (cfCarParkPackageList == null || cfCarParkPackageList.size() == 0) {
             return;
         }
         List<CfWeixinConfig> cfWeixinConfigs = cfWeixinConfigService.getWeiXinLoginConfigragtion("ali_sms");
         String signName = null;
         try {
             signName = WeiXinConfigUtils.getWeiXinConfigragtionByEnName("notice_expiring_soon_car_park_package_sign_name", cfWeixinConfigs);
-        } catch (Exception e){
+        } catch (Exception e) {
             return;
         }
         String templateCode = WeiXinConfigUtils.getWeiXinConfigragtionByEnName("notice_expiring_soon_car_park_package_code", cfWeixinConfigs);
@@ -93,12 +94,12 @@ public class CfCarParkDeviceTask {
         String secret = WeiXinConfigUtils.getWeiXinConfigragtionByEnName("secret", cfWeixinConfigs);
 
         List<String> IdList = new ArrayList<>();
-        for(CfCarParkPackage cfCarParkPackage: cfCarParkPackageList){
+        for (CfCarParkPackage cfCarParkPackage : cfCarParkPackageList) {
             IdList.add(cfCarParkPackage.getId());
         }
         //更新挑选已经被选中的数据通知状态
         CfCarParkPackage cfCarParkPackage = new CfCarParkPackage();
-        cfCarParkPackage.setNoticeExpiringSoon((byte)1);
+        cfCarParkPackage.setNoticeExpiringSoon((byte) 1);
 
         cfCarParkPackageQuery.setIds(IdList);
         cfCarParkPackageQuery.setNoticeExpiringSoon(null);
@@ -108,43 +109,45 @@ public class CfCarParkDeviceTask {
         cfCarParkPackageQuery.setSize(null);
 
         cfCarParkPackageService.updateByQuery(cfCarParkPackage, cfCarParkPackageQuery);
-        for(CfCarParkPackage carParkPackage: cfCarParkPackageList){
+        for (CfCarParkPackage carParkPackage : cfCarParkPackageList) {
             IdList.add(carParkPackage.getId());
-            if(carParkPackage.getPhone().length()==11){
+            if (carParkPackage.getPhone().length() == 11) {
                 //发送阿里云短信
                 smsService.sendSmsByAli(carParkPackage.getPhone(),
-                        "{\"number_plate\":\""+carParkPackage.getNumberPlate()+
-                                "\",\"goods_name\":\""+carParkPackage.getCfCarParkCarType().getName()+
-                                "\",\"end_time\":\""+ DateUtil.stampToDate(carParkPackage.getEndTime(),"yyyy-MM-dd HH:mm:ss") +"\"}",
-                        signName,templateCode,regionId,accessKeyId,secret,"","");
+                        "{\"number_plate\":\"" + carParkPackage.getNumberPlate() +
+                                "\",\"goods_name\":\"" + carParkPackage.getCfCarParkCarType().getName() +
+                                "\",\"end_time\":\"" + DateUtil.stampToDate(carParkPackage.getEndTime(), "yyyy-MM-dd HH:mm:ss") + "\"}",
+                        signName, templateCode, regionId, accessKeyId, secret, "", "");
             }
         }
     }
 
     /**
      * 自动给特殊车辆定期赠送免费时长任务
+     *
      * @throws Exception
      */
-    @Scheduled(cron="0 0/10 * * * *")
-    public void autoGiveAwayCarParkSpecialCarTimeTask() throws Exception{
+    @Scheduled(cron = "0 0/10 * * * *")
+    public void autoGiveAwayCarParkSpecialCarTimeTask() throws Exception {
         cfCarParkSpecialCarService.handleAutoGiveAway();
     }
 
     /**
      * 统计昨日和本周停车数据
+     *
      * @throws Exception
      */
-    @Scheduled(cron="0 30 03 * * *")
-    public void statisticsParkgingDataTask() throws Exception{
+    @Scheduled(cron = "0 30 03 * * *")
+    public void statisticsParkgingDataTask() throws Exception {
         String key = "statisticsParkgingDataTask";
         boolean action = false;
         String hostAddress = InetAddress.getLocalHost().getHostAddress();
         String actionHost = stringRedisTemplate.boundValueOps(key).get();
-        if(StringUtils.isNotEmpty(actionHost) && hostAddress.equals(actionHost)){
+        if (StringUtils.isNotEmpty(actionHost) && hostAddress.equals(actionHost)) {
             action = true;
         }
 
-        if(action) {
+        if (action) {
             Long current = System.currentTimeMillis();
             String dateStr = DateUtil.stampToDate(DateUtil.minMillisecondBaseOnTheDayToTimestamp(current) - 2000l, "yyyy-MM-dd");
             Long startTime = DateUtil.minMillisecondBaseOnTheDayToTimestamp(DateUtil.minMillisecondBaseOnTheDayToTimestamp(current) - 2000l);
@@ -158,19 +161,20 @@ public class CfCarParkDeviceTask {
 
     /**
      * 统计今日停车数据
+     *
      * @throws Exception
      */
-    @Scheduled(cron="0 0/30 * * * *")
-    public void statisticsTodayParkgingDataTask() throws Exception{
+    @Scheduled(cron = "0 0/30 * * * *")
+    public void statisticsTodayParkgingDataTask() throws Exception {
         String key = "statisticsTodayParkgingDataTask";
         boolean action = false;
         String hostAddress = InetAddress.getLocalHost().getHostAddress();
         String actionHost = stringRedisTemplate.boundValueOps(key).get();
-        if(StringUtils.isNotEmpty(actionHost) && hostAddress.equals(actionHost)){
+        if (StringUtils.isNotEmpty(actionHost) && hostAddress.equals(actionHost)) {
             action = true;
         }
 
-        if(action) {
+        if (action) {
             String dateStr = DateUtil.stampToDate(System.currentTimeMillis(), "yyyy-MM-dd");
             Long startTime = DateUtil.minMillisecondBaseOnTheDayToTimestamp(System.currentTimeMillis());
             Long endTime = System.currentTimeMillis();

@@ -506,9 +506,9 @@ public class HkHelper implements HkHelperInterface {
         //int NET_DVR_StartRemoteConfig(int lUserID, int dwCommand, Pointer lpInBuffer, int dwInBufferLen, FRemoteConfigCallBack cbStateCallBack, Pointer pUserData);
         fVehicleCrtlCB = new DevInfoCallBack();
 
-        int lhand = hCNetSDK.NET_DVR_StartRemoteConfig(lUserID,hCNetSDK.NET_DVR_VEHICLELIST_CTRL_START,null,0,fVehicleCrtlCB,Pointer.NULL);
-        for(CfCarParkPackage cfCarParkPackage :cfCarParkPackageList){
-            HCNetSDK.NET_DVR_VEHICLE_CONTROL_LIST_INFO info  =new  HCNetSDK.NET_DVR_VEHICLE_CONTROL_LIST_INFO();
+        int lhand = hCNetSDK.NET_DVR_StartRemoteConfig(lUserID, hCNetSDK.NET_DVR_VEHICLELIST_CTRL_START, null, 0, fVehicleCrtlCB, Pointer.NULL);
+        for (CfCarParkPackage cfCarParkPackage : cfCarParkPackageList) {
+            HCNetSDK.NET_DVR_VEHICLE_CONTROL_LIST_INFO info = new HCNetSDK.NET_DVR_VEHICLE_CONTROL_LIST_INFO();
             info.read();
             info.dwSize = info.size();
             info.dwChannel = 1; //通道号，出入口设备默认1
@@ -558,16 +558,16 @@ public class HkHelper implements HkHelperInterface {
             info.struStopTime.byMinute = new Byte(DateUtil.stampToDate(cfCarParkPackage.getEndTime(), "mm")).byteValue();
             info.struStopTime.bySecond = new Byte(DateUtil.stampToDate(cfCarParkPackage.getEndTime(), "ss")).byteValue();
             info.write();
-            hCNetSDK.NET_DVR_SendRemoteConfig(lhand,hCNetSDK.ENUM_SENDDATA,info.getPointer(),info.size());
+            hCNetSDK.NET_DVR_SendRemoteConfig(lhand, hCNetSDK.ENUM_SENDDATA, info.getPointer(), info.size());
 
-            System.out.println("ip==="+m_sDeviceIP+"\t车牌\t"+cfCarParkPackage.getNumberPlate()+"\t添加白名单成功");
+            System.out.println("ip===" + m_sDeviceIP + "\t车牌\t" + cfCarParkPackage.getNumberPlate() + "\t添加白名单成功");
         }
     }
 
     /**
      * 设置静态LED
      */
-    private void setStaticFree(){
+    private void setStaticFree() {
         long now = System.currentTimeMillis();
         int time = 60;
         if (now > (staticOutTime - 1000L)) {

@@ -63,12 +63,12 @@ public class CfChargingUseLogController implements CfChargingUseLogSwagger {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         cfChargingUseLogQuery.setUid(userBasicInfo.getId());
         //排序按开始时间倒序取
-            cfChargingUseLogQuery.setOrderBy("start_time desc");
-        if(cfChargingUseLogQuery.getSize()>20){
+        cfChargingUseLogQuery.setOrderBy("start_time desc");
+        if (cfChargingUseLogQuery.getSize() > 20) {
             cfChargingUseLogQuery.setSize(5);
         }
         List<CfChargingUseLog> cfChargingUseLogList = cfChargingUseLogService.selectListByQuery(cfChargingUseLogQuery);
-        if(cfChargingUseLogList==null || cfChargingUseLogList.size()==0){
+        if (cfChargingUseLogList == null || cfChargingUseLogList.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfChargingUseLogList);
@@ -81,11 +81,11 @@ public class CfChargingUseLogController implements CfChargingUseLogSwagger {
         CfOrderQuery cfOrderQuery = new CfOrderQuery();
         cfOrderQuery.setGoodsId(cfChargingUseLog.getId());
         List<CfOrder> cfOrderList = cfOrderService.getListByQuery(cfOrderQuery);
-        if(cfOrderList==null || cfOrderList.size()==0){
+        if (cfOrderList == null || cfOrderList.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         cfChargingUseLog.setCfOrder(cfOrderList.get(0));
-        if(StringUtils.isNotEmpty(cfChargingUseLog.getChargingStationId())){
+        if (StringUtils.isNotEmpty(cfChargingUseLog.getChargingStationId())) {
             cfChargingUseLog.setCfChargingStation(cfChargingStationService.findById(cfChargingUseLog.getChargingStationId(), false));
         }
 
@@ -97,13 +97,13 @@ public class CfChargingUseLogController implements CfChargingUseLogSwagger {
         Map carLogMap = null;
         String sb = getHttpData(httpServletRequest);
 
-        if(StringUtils.isNotEmpty(sb)){
+        if (StringUtils.isNotEmpty(sb)) {
             carLogMap = (JSONObject.parseObject(sb));
-        }else{
-            if(carLogMap==null || carLogMap.get("AlarmInfoPlate")==null){
+        } else {
+            if (carLogMap == null || carLogMap.get("AlarmInfoPlate") == null) {
                 carLogMap = new HashMap<String, Object>();
                 Map<String, String[]> parameterMap = request.getParameterMap();
-                for(Map.Entry<String, String[]> map:parameterMap.entrySet()){
+                for (Map.Entry<String, String[]> map : parameterMap.entrySet()) {
                     carLogMap.put(map.getKey(), map.getValue()[0]);
                 }
             }
@@ -115,7 +115,7 @@ public class CfChargingUseLogController implements CfChargingUseLogSwagger {
         BufferedReader bufferedReader = null;
         InputStream inputStream = null;
         StringBuffer sb = null;
-        try{
+        try {
             inputStream = httpServletRequest.getInputStream();
             bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             sb = new StringBuffer();
@@ -123,13 +123,13 @@ public class CfChargingUseLogController implements CfChargingUseLogSwagger {
             while ((line = bufferedReader.readLine()) != null) {
                 sb.append(line);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             throw e;
-        }finally {
-            try{
+        } finally {
+            try {
                 bufferedReader.close();
                 inputStream.close();
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw e;
             }
 

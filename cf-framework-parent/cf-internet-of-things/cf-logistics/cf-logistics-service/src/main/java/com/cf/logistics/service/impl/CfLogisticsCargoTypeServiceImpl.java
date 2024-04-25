@@ -27,7 +27,7 @@ public class CfLogisticsCargoTypeServiceImpl implements CfLogisticsCargoTypeServ
 
     @Override
     public CfLogisticsCargoType add(CfLogisticsCargoType cfLogisticsCargoType) {
-        if(cfLogisticsCargoType.getId()==null){
+        if (cfLogisticsCargoType.getId() == null) {
             cfLogisticsCargoType.setId(idWorker.nextLongId());
         }
         CfLogisticsCargoTypeMapper.insertSelective(cfLogisticsCargoType);
@@ -42,7 +42,7 @@ public class CfLogisticsCargoTypeServiceImpl implements CfLogisticsCargoTypeServ
 
     @Override
     public int updateByQuery(CfLogisticsCargoType CfLogisticsCargoType, CfLogisticsCargoTypeQuery cfLogisticsCargoTypeQuery) {
-        return CfLogisticsCargoTypeMapper.updateByExampleSelective(CfLogisticsCargoType,getExampleByQuery(cfLogisticsCargoTypeQuery));
+        return CfLogisticsCargoTypeMapper.updateByExampleSelective(CfLogisticsCargoType, getExampleByQuery(cfLogisticsCargoTypeQuery));
     }
 
     @Override
@@ -58,10 +58,10 @@ public class CfLogisticsCargoTypeServiceImpl implements CfLogisticsCargoTypeServ
     @Override
     public CfLogisticsCargoType findById(Long id, boolean expectEmpty) {
         CfLogisticsCargoType cfLogisticsCargoType = findById(id);
-        if(expectEmpty && cfLogisticsCargoType!=null){
+        if (expectEmpty && cfLogisticsCargoType != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpty && cfLogisticsCargoType==null){
+        if (!expectEmpty && cfLogisticsCargoType == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfLogisticsCargoType;
@@ -84,10 +84,10 @@ public class CfLogisticsCargoTypeServiceImpl implements CfLogisticsCargoTypeServ
         CfLogisticsCargoTypeExample cfLogisticsCargoTypeExample = new CfLogisticsCargoTypeExample();
         CfLogisticsCargoTypeExample.Criteria criteria = cfLogisticsCargoTypeExample.createCriteria();
 
-        if(StringUtils.isNotEmpty(cfLogisticsCargoTypeQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfLogisticsCargoTypeQuery.getOrderBy())) {
             cfLogisticsCargoTypeExample.setOrderByClause(cfLogisticsCargoTypeQuery.getOrderBy());
         }
-        if(cfLogisticsCargoTypeQuery.getPage()!=null && cfLogisticsCargoTypeQuery.getSize()!=null){
+        if (cfLogisticsCargoTypeQuery.getPage() != null && cfLogisticsCargoTypeQuery.getSize() != null) {
             PageHelper.startPage(cfLogisticsCargoTypeQuery.getPage(), cfLogisticsCargoTypeQuery.getSize());
         }
         return cfLogisticsCargoTypeExample;

@@ -28,11 +28,11 @@ public class CfCarParkPackageLogController implements CfCarParkPackageLogSwagger
     @RequestMapping(value = "selectByQuery", method = RequestMethod.GET)
     public ResponseResult selectByQuery(CfCarParkPackageLogQuery cfCarParkPackageLogQuery) throws Exception {
         List<CfCarParkPackageLog> cfCarParkPackageLogs = cfCarParkPackageLogService.selectByQuery(cfCarParkPackageLogQuery);
-        if(cfCarParkPackageLogs==null || cfCarParkPackageLogs.size()==0){
+        if (cfCarParkPackageLogs == null || cfCarParkPackageLogs.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         Integer total = 0;
-        if(cfCarParkPackageLogQuery.getPage()==1){
+        if (cfCarParkPackageLogQuery.getPage() == 1) {
             total = cfCarParkPackageLogService.countByQuery(cfCarParkPackageLogQuery);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfCarParkPackageLogs, total);

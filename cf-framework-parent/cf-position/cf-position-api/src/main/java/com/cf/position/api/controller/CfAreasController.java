@@ -27,7 +27,7 @@ public class CfAreasController implements CfAreasSwagger {
     @RequestMapping(value = "selectAll", method = RequestMethod.GET)
     public ResponseResult selectAll() {
         List<CfAreas> cfAreas = cfAreasService.selectAll(true);
-        if(cfAreas!=null){
+        if (cfAreas != null) {
             return new ResponseResult(CommonCode.SUCCESS, cfAreas);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);
@@ -37,7 +37,7 @@ public class CfAreasController implements CfAreasSwagger {
     @RequestMapping(value = "selectByLevelAndParentId", method = RequestMethod.GET)
     public ResponseResult selectByLevelAndParentId(Integer level, String parentId) {
         List<CfAreas> cfAreas = cfAreasService.selectByLevelAndParentId(level, parentId, 0, false);
-        if(cfAreas!=null){
+        if (cfAreas != null) {
             return new ResponseResult(CommonCode.SUCCESS, cfAreas);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);

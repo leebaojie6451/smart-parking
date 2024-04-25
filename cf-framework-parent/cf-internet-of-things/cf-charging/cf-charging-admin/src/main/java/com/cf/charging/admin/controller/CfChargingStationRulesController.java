@@ -32,7 +32,7 @@ public class CfChargingStationRulesController implements CfChargingStationRulesS
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseResult add(@Validated @RequestBody CfChargingStationRulesForm cfChargingStationRulesForm) throws Exception {
         CfChargingStationRules cfChargingStationRules = new CfChargingStationRules();
-        BeanUtils.copyProperties(cfChargingStationRulesForm,cfChargingStationRules);
+        BeanUtils.copyProperties(cfChargingStationRulesForm, cfChargingStationRules);
         CfChargingStationRules lastCfChargingStationRules = cfChargingStationRulesService.add(cfChargingStationRules);
         return new ResponseResult(CommonCode.SUCCESS, lastCfChargingStationRules);
     }
@@ -42,7 +42,7 @@ public class CfChargingStationRulesController implements CfChargingStationRulesS
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public ResponseResult update(@Validated @RequestBody CfChargingStationRulesForm cfChargingStationRulesForm) throws Exception {
         CfChargingStationRules cfChargingStationRules = new CfChargingStationRules();
-        BeanUtils.copyProperties(cfChargingStationRulesForm,cfChargingStationRules);
+        BeanUtils.copyProperties(cfChargingStationRulesForm, cfChargingStationRules);
         CfChargingStationRules lastCfChargingStationRules = cfChargingStationRulesService.update(cfChargingStationRules);
         return new ResponseResult(CommonCode.SUCCESS, lastCfChargingStationRules);
     }
@@ -52,7 +52,7 @@ public class CfChargingStationRulesController implements CfChargingStationRulesS
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(String id) throws Exception {
         Integer delete = cfChargingStationRulesService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS, delete):new ResponseResult(CommonCode.FAIL, null);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS, delete) : new ResponseResult(CommonCode.FAIL, null);
     }
 
     @PreAuthorize("hasAuthority('charging-CfChargingStationRulesController-getListByQuery')")
@@ -60,7 +60,7 @@ public class CfChargingStationRulesController implements CfChargingStationRulesS
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(CfChargingStationRulesQuery cfChargingStationRulesQuery) throws Exception {
         List<CfChargingStationRules> cfChargingStationRulesList = cfChargingStationRulesService.getListByQuery(cfChargingStationRulesQuery);
-        if(cfChargingStationRulesList==null || cfChargingStationRulesList.size()==0){
+        if (cfChargingStationRulesList == null || cfChargingStationRulesList.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfChargingStationRulesList);

@@ -45,19 +45,19 @@ public class CfCouponActivityLinkShopServiceImpl implements CfCouponActivityLink
     public CfCouponActivityLinkShopExample getExampleByQuery(CfCouponActivityLinkShopQuery cfCouponActivityLinkShopQuery) {
         CfCouponActivityLinkShopExample cfCouponActivityLinkShopExample = new CfCouponActivityLinkShopExample();
         CfCouponActivityLinkShopExample.Criteria criteria = cfCouponActivityLinkShopExample.createCriteria();
-        if(StringUtils.isNotEmpty(cfCouponActivityLinkShopQuery.getCouponActivityId())){
+        if (StringUtils.isNotEmpty(cfCouponActivityLinkShopQuery.getCouponActivityId())) {
             criteria.andCouponActivityIdEqualTo(cfCouponActivityLinkShopQuery.getCouponActivityId());
         }
-        if(StringUtils.isNotEmpty(cfCouponActivityLinkShopQuery.getShopId())){
+        if (StringUtils.isNotEmpty(cfCouponActivityLinkShopQuery.getShopId())) {
             criteria.andShopIdEqualTo(cfCouponActivityLinkShopQuery.getShopId());
         }
-        if(StringUtils.isNotEmpty(cfCouponActivityLinkShopQuery.getScene())){
+        if (StringUtils.isNotEmpty(cfCouponActivityLinkShopQuery.getScene())) {
             criteria.andSceneEqualTo(cfCouponActivityLinkShopQuery.getScene());
         }
-        if(cfCouponActivityLinkShopQuery.getRequireUsing()!=null){
+        if (cfCouponActivityLinkShopQuery.getRequireUsing() != null) {
             criteria.andRequireUsingEqualTo(cfCouponActivityLinkShopQuery.getRequireUsing());
         }
-        if(cfCouponActivityLinkShopQuery.getPage()!=null && cfCouponActivityLinkShopQuery.getSize()!=null){
+        if (cfCouponActivityLinkShopQuery.getPage() != null && cfCouponActivityLinkShopQuery.getSize() != null) {
             PageHelper.startPage(cfCouponActivityLinkShopQuery.getPage(), cfCouponActivityLinkShopQuery.getSize());
         }
         return cfCouponActivityLinkShopExample;

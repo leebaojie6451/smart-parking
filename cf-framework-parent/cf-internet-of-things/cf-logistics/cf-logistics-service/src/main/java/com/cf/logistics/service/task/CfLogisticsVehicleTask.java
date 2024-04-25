@@ -27,13 +27,13 @@ public class CfLogisticsVehicleTask {
      * 0 15 10 ? * MON-FRI 每月的周一到周五10点 15分执行
      */
 //    @Scheduled(cron="0 0/120 * * * *")
-    @Scheduled(cron="0/5 * * * * *")
-    public void handleLogisticsVehicleTask() throws Exception{
+    @Scheduled(cron = "0/5 * * * * *")
+    public void handleLogisticsVehicleTask() throws Exception {
         cfLogisticsVehicleService.synchronizeTmsVehicle();
     }
 
-    @Scheduled(cron="0 0/5 * * * *")
-    public void handleCfUserDriverLicenseTask() throws Exception{
+    @Scheduled(cron = "0 0/5 * * * *")
+    public void handleCfUserDriverLicenseTask() throws Exception {
         cfUserDriverLicenseService.synchronizeTmsDriver();
     }
 }

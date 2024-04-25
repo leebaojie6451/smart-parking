@@ -20,12 +20,14 @@ public interface CfCarParkCarLimitService {
 
     List<CfCarParkCarLimit> getListByQuery(CfCarParkCarLimitQuery cfCarParkCarLimitQuery)
             ;
+
     List<CfCarParkCarLimit> selectContinCarParkByQuery(CfCarParkCarLimitQuery cfCarParkCarLimitQuery);
 
     Integer countByQuery(CfCarParkCarLimitQuery cfCarParkCarLimitQuery);
 
     /**
      * 获取车辆限制类型
+     *
      * @param numberPlate
      * @param carParkId
      * @return

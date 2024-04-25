@@ -3,7 +3,7 @@ package com.cf.ucenter.domain;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class CfStaff implements Serializable{
+public class CfStaff implements Serializable {
 
     private String id;
 

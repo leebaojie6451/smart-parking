@@ -32,13 +32,13 @@ public class CfCarParkWhitelistIssuedLogServiceImpl implements CfCarParkWhitelis
     public CfCarParkWhitelistIssuedLogExample getExampleByQuery(CfCarParkWhitelistIssuedLogQuery cfCarParkWhitelistIssuedLogQuery) {
         CfCarParkWhitelistIssuedLogExample cfCarParkWhitelistIssuedLogExample = new CfCarParkWhitelistIssuedLogExample();
         CfCarParkWhitelistIssuedLogExample.Criteria criteria = cfCarParkWhitelistIssuedLogExample.createCriteria();
-        if(cfCarParkWhitelistIssuedLogQuery.getDeviceSn()!=null){
+        if (cfCarParkWhitelistIssuedLogQuery.getDeviceSn() != null) {
             criteria.andDeviceSnEqualTo(cfCarParkWhitelistIssuedLogQuery.getDeviceSn());
         }
-        if(cfCarParkWhitelistIssuedLogQuery.getNumberPlate()!=null){
+        if (cfCarParkWhitelistIssuedLogQuery.getNumberPlate() != null) {
             criteria.andNumberPlateEqualTo(cfCarParkWhitelistIssuedLogQuery.getNumberPlate());
         }
-        if(cfCarParkWhitelistIssuedLogQuery.getNumberPlates()!=null && cfCarParkWhitelistIssuedLogQuery.getNumberPlates().size()>0){
+        if (cfCarParkWhitelistIssuedLogQuery.getNumberPlates() != null && cfCarParkWhitelistIssuedLogQuery.getNumberPlates().size() > 0) {
             criteria.andNumberPlateIn(cfCarParkWhitelistIssuedLogQuery.getNumberPlates());
         }
         return cfCarParkWhitelistIssuedLogExample;

@@ -13,30 +13,25 @@ public class NetworkUtil {
 
     /**
      * 获取本地ip列表  列出所有网卡的ip
+     *
      * @return
      */
-    public static ArrayList<String> getLocalIpAddr()
-    {
+    public static ArrayList<String> getLocalIpAddr() {
         ArrayList<String> ipList = new ArrayList<String>();
         InetAddress[] addrList;
-        try
-        {
-            Enumeration interfaces= NetworkInterface.getNetworkInterfaces();
-            while(interfaces.hasMoreElements())
-            {
-                NetworkInterface ni=(NetworkInterface)interfaces.nextElement();
+        try {
+            Enumeration interfaces = NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                NetworkInterface ni = (NetworkInterface) interfaces.nextElement();
                 Enumeration ipAddrEnum = ni.getInetAddresses();
-                while(ipAddrEnum.hasMoreElements())
-                {
-                    InetAddress addr = (InetAddress)ipAddrEnum.nextElement();
-                    if (addr.isLoopbackAddress() == true)
-                    {
+                while (ipAddrEnum.hasMoreElements()) {
+                    InetAddress addr = (InetAddress) ipAddrEnum.nextElement();
+                    if (addr.isLoopbackAddress() == true) {
                         continue;
                     }
 
                     String ip = addr.getHostAddress();
-                    if (ip.indexOf(":") != -1)
-                    {
+                    if (ip.indexOf(":") != -1) {
                         //skip the IPv6 addr
                         continue;
                     }
@@ -45,9 +40,7 @@ public class NetworkUtil {
             }
 
             Collections.sort(ipList);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw new RuntimeException("Failed to get local ip list");
         }
         return ipList;

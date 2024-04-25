@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  * @date 2018-3-31
  **/
 @Component
-public class SmsIntegrationAuthenticator extends AbstractPreparableIntegrationAuthenticator implements  ApplicationEventPublisherAware {
+public class SmsIntegrationAuthenticator extends AbstractPreparableIntegrationAuthenticator implements ApplicationEventPublisherAware {
 
     @Reference(version = "1.0.0", retries = 0, timeout = 5000, check = false)
     private CfUserService cfUserService;
@@ -54,7 +54,7 @@ public class SmsIntegrationAuthenticator extends AbstractPreparableIntegrationAu
         String smsToken = integrationAuthentication.getAuthParameter("sms_token");
         String smsCode = integrationAuthentication.getAuthParameter("password");
         String username = integrationAuthentication.getAuthParameter("username");
-        smsService.checkCode(username,smsCode,2);
+        smsService.checkCode(username, smsCode, 2);
     }
 
     @Override

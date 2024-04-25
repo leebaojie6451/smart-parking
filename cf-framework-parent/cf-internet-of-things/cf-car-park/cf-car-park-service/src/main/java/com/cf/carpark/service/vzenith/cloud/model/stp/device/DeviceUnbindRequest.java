@@ -7,24 +7,24 @@ import org.json.JSONArray;
 
 public class DeviceUnbindRequest extends BaseRequest {
 
-  private JSONArray unbinds = null;
+    private JSONArray unbinds = null;
 
-  public DeviceUnbindRequest(HttpMethod httpMethod, String path) {
-    super(HttpMethod.DELETE, API.DEVICE_UNBIND);
-    unbinds = new JSONArray();
-  }
+    public DeviceUnbindRequest(HttpMethod httpMethod, String path) {
+        super(HttpMethod.DELETE, API.DEVICE_UNBIND);
+        unbinds = new JSONArray();
+    }
 
-  public void addUnbind(String sn) {
-    unbinds.put(sn);
-  }
+    public void addUnbind(String sn) {
+        unbinds.put(sn);
+    }
 
-  @Override
-  @Deprecated
-  public void setBody(String body) {
-  }
+    @Override
+    @Deprecated
+    public void setBody(String body) {
+    }
 
-  @Override
-  public String getBody() {
-    return unbinds.toString();
-  }
+    @Override
+    public String getBody() {
+        return unbinds.toString();
+    }
 }

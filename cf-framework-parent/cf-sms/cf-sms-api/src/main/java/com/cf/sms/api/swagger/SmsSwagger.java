@@ -15,5 +15,5 @@ import javax.validation.constraints.Pattern;
 @Api(tags = {"短信模块"})
 public interface SmsSwagger {
     @ApiOperation(value = "发送短信")
-    public ResponseResult sendSms(HttpServletRequest httpServletRequest, SendSms sendSms)throws Exception;
+    public ResponseResult sendSms(HttpServletRequest httpServletRequest, SendSms sendSms) throws Exception;
 }

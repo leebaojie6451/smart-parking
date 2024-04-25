@@ -8,17 +8,16 @@ import java.util.List;
 
 public class WeiXinConfigUtils {
 
-    public static String getWeiXinConfigragtionByEnName(String enName, List<CfWeixinConfig> cfWeixinConfigs)
-    {
+    public static String getWeiXinConfigragtionByEnName(String enName, List<CfWeixinConfig> cfWeixinConfigs) {
         String value = null;
-        for(CfWeixinConfig cfWeixinConfig: cfWeixinConfigs){
-            if(cfWeixinConfig.getEnName().equals(enName)){
+        for (CfWeixinConfig cfWeixinConfig : cfWeixinConfigs) {
+            if (cfWeixinConfig.getEnName().equals(enName)) {
                 value = cfWeixinConfig.getValue();
                 break;
             }
         }
-        if(value==null){
-            ExceptionCast.cast(UcenterCode.WECHAT_CONFIGURATION_DOES_NOT_EXIST, "miss configragtion: "+enName);
+        if (value == null) {
+            ExceptionCast.cast(UcenterCode.WECHAT_CONFIGURATION_DOES_NOT_EXIST, "miss configragtion: " + enName);
         }
         return value;
     }

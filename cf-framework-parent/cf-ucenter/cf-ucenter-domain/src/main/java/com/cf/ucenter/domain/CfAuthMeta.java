@@ -5,8 +5,8 @@ import java.io.Serializable;
 /**
  * 权限路由mete数据
  * title: '首页',
- *       icon: 'home-2-line',
- *       breadcrumbHidden: true,
+ * icon: 'home-2-line',
+ * breadcrumbHidden: true,
  */
 public class CfAuthMeta implements Serializable {
 

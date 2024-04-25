@@ -40,7 +40,7 @@ public class BaseClient {
     /**
      * 加密工具
      */
-    private final AES    AES    = new AES();
+    private final AES AES = new AES();
     /**
      * SHA256WithRSA签名器
      */

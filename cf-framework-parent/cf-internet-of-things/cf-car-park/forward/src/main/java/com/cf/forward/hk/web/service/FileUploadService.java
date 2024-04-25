@@ -31,7 +31,7 @@ public class FileUploadService {
      */
     @Async
     public void uploadImage(String carLogId, String smallImagePath, String bigImagePath, String direction) {
-        String url = properties.getBaseUrl()+"/carparklog/update";
+        String url = properties.getBaseUrl() + "/carparklog/update";
         byte[] bytes1 = FileUtil.readBytes(smallImagePath);
         byte[] bytes2 = FileUtil.readBytes(bigImagePath);
         String smallImageBase64 = Base64Utils.encodeToString(bytes1);

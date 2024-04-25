@@ -39,7 +39,7 @@ public class CfStaffCouponSettingServiceImpl implements CfStaffCouponSettingServ
         cfStaffCouponSettingQuery.setCouponActivityId(cfStaffCouponSetting.getCouponActivityId());
         cfStaffCouponSettingQuery.setStaffId(cfStaffCouponSetting.getStaffId());
         List<CfStaffCouponSetting> cfStaffCouponSettings = getListByQuery(cfStaffCouponSettingQuery);
-        if(cfStaffCouponSettings!=null && cfStaffCouponSettings.size()>0){
+        if (cfStaffCouponSettings != null && cfStaffCouponSettings.size() > 0) {
             cfStaffCouponSettings.get(0).setSameDayQuota(cfStaffCouponSetting.getSameDayQuota());
             return update(cfStaffCouponSettings.get(0));
         }
@@ -76,7 +76,7 @@ public class CfStaffCouponSettingServiceImpl implements CfStaffCouponSettingServ
         //检查优惠券活动是否存在，以及该活动是否属于当前店主
         cfCouponActivityService.checkActivityAscription(employerId, cfStaffCouponSetting.getCouponActivityId());
         CfStaffCouponSetting staffCouponSetting = cfStaffCouponSettingMapper.selectByPrimaryKey(cfStaffCouponSetting.getId());
-        if(staffCouponSetting==null || staffCouponSetting.getId()==null){
+        if (staffCouponSetting == null || staffCouponSetting.getId() == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         staffCouponSetting.setSameDayQuota(cfStaffCouponSetting.getSameDayQuota());
@@ -102,19 +102,19 @@ public class CfStaffCouponSettingServiceImpl implements CfStaffCouponSettingServ
     public CfStaffCouponSettingExample getExampleByQuery(CfStaffCouponSettingQuery cfStaffCouponSettingQuery) {
         CfStaffCouponSettingExample cfStaffCouponSettingExample = new CfStaffCouponSettingExample();
         CfStaffCouponSettingExample.Criteria criteria = cfStaffCouponSettingExample.createCriteria();
-        if(StringUtils.isNotEmpty(cfStaffCouponSettingQuery.getCouponActivityId())){
+        if (StringUtils.isNotEmpty(cfStaffCouponSettingQuery.getCouponActivityId())) {
             criteria.andCouponActivityIdEqualTo(cfStaffCouponSettingQuery.getCouponActivityId());
         }
-        if(cfStaffCouponSettingQuery.getCouponType()!=null){
+        if (cfStaffCouponSettingQuery.getCouponType() != null) {
             criteria.andCouponTypeEqualTo(cfStaffCouponSettingQuery.getCouponType());
         }
-        if(cfStaffCouponSettingQuery.getStaffId()!=null){
+        if (cfStaffCouponSettingQuery.getStaffId() != null) {
             criteria.andStaffIdEqualTo(cfStaffCouponSettingQuery.getStaffId());
         }
-        if(cfStaffCouponSettingQuery.getCouponActivityId()!=null){
+        if (cfStaffCouponSettingQuery.getCouponActivityId() != null) {
             criteria.andCouponActivityIdEqualTo(cfStaffCouponSettingQuery.getCouponActivityId());
         }
-        if(cfStaffCouponSettingQuery.getCouponActivityIds()!=null && cfStaffCouponSettingQuery.getCouponActivityIds().size()>0){
+        if (cfStaffCouponSettingQuery.getCouponActivityIds() != null && cfStaffCouponSettingQuery.getCouponActivityIds().size() > 0) {
             criteria.andCouponActivityIdIn(cfStaffCouponSettingQuery.getCouponActivityIds());
         }
         return cfStaffCouponSettingExample;

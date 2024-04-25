@@ -12,7 +12,7 @@ import com.alipay.api.CertAlipayRequest;
  **/
 public class AlipayConfig {
 
-    private String serverUrl="https://openapi.alipay.com/gateway.do";   //网关地址
+    private String serverUrl = "https://openapi.alipay.com/gateway.do";   //网关地址
 
     private String appId;
 

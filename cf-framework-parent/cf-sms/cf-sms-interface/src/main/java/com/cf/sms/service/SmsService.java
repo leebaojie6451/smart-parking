@@ -13,6 +13,7 @@ import com.cf.framework.domain.response.ResponseResult;
 public interface SmsService {
     /**
      * 发送短信
+     *
      * @param phone
      * @param type
      */
@@ -20,6 +21,7 @@ public interface SmsService {
 
     /**
      * 检查是否频繁发送
+     *
      * @param phone
      * @param type
      */
@@ -27,6 +29,7 @@ public interface SmsService {
 
     /**
      * 通过阿里云发送短信
+     *
      * @param PhoneNumbers
      * @param TemplateParam
      * @param signName
@@ -41,6 +44,7 @@ public interface SmsService {
 
     /**
      * 校验短信验证码
+     *
      * @param phone
      * @param code
      * @param type
@@ -49,6 +53,7 @@ public interface SmsService {
 
     /**
      * 校验腾讯图形验证码(微信小程序专用)
+     *
      * @param ip
      * @param ticket
      * @param platform

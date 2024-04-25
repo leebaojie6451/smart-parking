@@ -60,14 +60,14 @@ public class CfRoleAuthServiceImpl implements CfRoleAuthService {
         CfRoleAuthExample cfRoleAuthExample = new CfRoleAuthExample();
         CfRoleAuthExample.Criteria criteria = cfRoleAuthExample.createCriteria();
 
-        if(cfRoleAuthQuery.getAuthId()!=null){
+        if (cfRoleAuthQuery.getAuthId() != null) {
             criteria.andAuthIdEqualTo(cfRoleAuthQuery.getAuthId());
         }
-        if(cfRoleAuthQuery.getRoleId()!=null){
+        if (cfRoleAuthQuery.getRoleId() != null) {
             criteria.andRoleIdEqualTo(cfRoleAuthQuery.getRoleId());
         }
 
-        if(cfRoleAuthQuery.getPage()!=null && cfRoleAuthQuery.getSize()!=null){
+        if (cfRoleAuthQuery.getPage() != null && cfRoleAuthQuery.getSize() != null) {
             PageHelper.startPage(cfRoleAuthQuery.getPage(), cfRoleAuthQuery.getSize());
         }
 

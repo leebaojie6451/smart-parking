@@ -32,6 +32,7 @@ public interface CfLogisticsQueuingAreaMapper {
 
     /**
      * 根据Query返回数据，会返回工厂信息
+     *
      * @param cfLogisticsQueuingAreaQuery
      * @return
      */

@@ -66,7 +66,7 @@ public class WxPayAppConfig implements WXPayConfig {
      */
     @Override
     public InputStream getCertStream() {
-        InputStream certStream  =getClass().getClassLoader().getResourceAsStream(certPath);
+        InputStream certStream = getClass().getClassLoader().getResourceAsStream(certPath);
         return certStream;
     }
 

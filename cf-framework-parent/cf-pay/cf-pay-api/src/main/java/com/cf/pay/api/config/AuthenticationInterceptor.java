@@ -29,11 +29,11 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object object) throws Exception {
         //取出头信息
         String authorization = httpServletRequest.getHeader("Authorization");
-        if(StringUtils.isEmpty(authorization)){
+        if (StringUtils.isEmpty(authorization)) {
             ExceptionCast.cast(AuthCode.AUTH_LOGIN_TOKEN_ILLEGAL);
             return false;
         }
-        if(!authorization.startsWith("Bearer ")){
+        if (!authorization.startsWith("Bearer ")) {
             ExceptionCast.cast(AuthCode.AUTH_LOGIN_TOKEN_ILLEGAL);
             return false;
         }
@@ -42,7 +42,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(jwt);
 
-        if(!stringRedisTemplate.boundSetOps("user:"+userBasicInfo.getUsername()).isMember(jwt)){
+        if (!stringRedisTemplate.boundSetOps("user:" + userBasicInfo.getUsername()).isMember(jwt)) {
             ExceptionCast.cast(AuthCode.AUTH_LOGIN_TOKEN_EXPIRED);
             return false;
         }
@@ -55,15 +55,15 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                            Object o, ModelAndView modelAndView) throws Exception {
 
     }
+
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest,
                                 HttpServletResponse httpServletResponse,
                                 Object o, Exception e) throws Exception {
     }
 
-    public static UserBasicInfo parseJwt(String jwt) throws Exception
-    {
-        if(StringUtils.isEmpty(jwt)){
+    public static UserBasicInfo parseJwt(String jwt) throws Exception {
+        if (StringUtils.isEmpty(jwt)) {
             return new UserBasicInfo();
         }
         Resource resource = new ClassPathResource("publickey.txt");

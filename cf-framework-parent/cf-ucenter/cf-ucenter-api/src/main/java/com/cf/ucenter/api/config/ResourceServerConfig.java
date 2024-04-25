@@ -43,8 +43,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         converter.setVerifierKey(getPubKey());
         return converter;
     }
+
     /**
      * 获取非对称加密公钥 Key
+     *
      * @return 公钥 Key
      */
     private String getPubKey() {
@@ -57,6 +59,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
             return null;
         }
     }
+
     //Http安全配置，对每个到达系统的http请求链接进行校验
     @Override
     public void configure(HttpSecurity http) throws Exception {
@@ -64,14 +67,14 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http.authorizeRequests()
                 //下边的路径放行
                 .antMatchers("/v2/api-docs", "/swagger-resources/configuration/ui",
-                        "/swagger-resources","/swagger-resources/configuration/security",
-                        "/swagger-ui.html","/webjars/**","/course/coursepic/list/**","/auth/login",
-                        "/ucenter/register","/ucenter/recoverPasswordByPhoneAndCode",
-                        "/auth/loginByPhone","/appVersion/checkVersion","/auth/createJwt",
-                        "/auth/wxLogin","/auth/testWxin","/auth/getWxBaseUserInfoByCode",
-                        "/auth/getWxBaseUserInfoByCodeAndLoginType","/ucenter/updateCustomerByWxUser",
-                        "/ucenter/getUserInfoByUnionIdAndApiToken","/ucenter/getClientIp","/auth/getAliBaseUserInfoByCode",
-                        "/auth/createJumpToWxMinData","/auth/getAliMinBaseUserInfoByCode").permitAll()
+                        "/swagger-resources", "/swagger-resources/configuration/security",
+                        "/swagger-ui.html", "/webjars/**", "/course/coursepic/list/**", "/auth/login",
+                        "/ucenter/register", "/ucenter/recoverPasswordByPhoneAndCode",
+                        "/auth/loginByPhone", "/appVersion/checkVersion", "/auth/createJwt",
+                        "/auth/wxLogin", "/auth/testWxin", "/auth/getWxBaseUserInfoByCode",
+                        "/auth/getWxBaseUserInfoByCodeAndLoginType", "/ucenter/updateCustomerByWxUser",
+                        "/ucenter/getUserInfoByUnionIdAndApiToken", "/ucenter/getClientIp", "/auth/getAliBaseUserInfoByCode",
+                        "/auth/createJumpToWxMinData", "/auth/getAliMinBaseUserInfoByCode").permitAll()
                 .anyRequest().authenticated().and()
                 .cors()
                 .and()

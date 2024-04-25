@@ -25,11 +25,11 @@ public class CfLinXinLedProgram implements Serializable {
         this.cyclePlaybackTimes = cyclePlaybackTimes;
         this.cfLinXinLedAreaList = cfLinXinLedAreaList;
         //设置节目区块数据
-        if(cfLinXinLedAreaList==null || cfLinXinLedAreaList.size()==0){
+        if (cfLinXinLedAreaList == null || cfLinXinLedAreaList.size() == 0) {
             throw new Exception("请至少传入一个区域");
         }
         int areaDataSizeCount = 0;
-        for(CfLinXinLedArea cfLinXinLedArea: cfLinXinLedAreaList){
+        for (CfLinXinLedArea cfLinXinLedArea : cfLinXinLedAreaList) {
             areaDataSizeCount += cfLinXinLedArea.getAreaDataBlockSize();
         }
         this.programDataBlockSize = 26 + areaDataSizeCount;

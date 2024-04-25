@@ -19,7 +19,7 @@ public class HkForwardProperties {
      */
     private String localIP;
     /**
-     *  设备IP 地址
+     * 设备IP 地址
      */
     private String deviceIP;
     /**

@@ -34,6 +34,7 @@ public interface CfUserMapper {
 
     /**
      * 根据条件查询用户数据列表
+     *
      * @param conditions
      * @return
      */
@@ -41,6 +42,7 @@ public interface CfUserMapper {
 
     /**
      * 根据条件查询用户数据列表数
+     *
      * @param conditions
      * @return
      */
@@ -48,6 +50,7 @@ public interface CfUserMapper {
 
     /**
      * 根据id获取指定管理员信息
+     *
      * @param id
      * @return
      */
@@ -55,6 +58,7 @@ public interface CfUserMapper {
 
     /**
      * 统计前N天每天的用户注册录数
+     *
      * @param cfCountUserQuery
      * @return
      */
@@ -62,6 +66,7 @@ public interface CfUserMapper {
 
     /**
      * 获取某个年份某个月数的用户注册录数
+     *
      * @param cfCountUserQuery
      * @return
      */
@@ -69,6 +74,7 @@ public interface CfUserMapper {
 
     /**
      * 获取某个年份每个月份的用户注册录数
+     *
      * @param cfCountUserQuery
      * @return
      */

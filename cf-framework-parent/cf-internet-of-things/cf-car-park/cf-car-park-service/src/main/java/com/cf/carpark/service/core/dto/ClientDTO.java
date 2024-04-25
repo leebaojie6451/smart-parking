@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * 客户端对象
+ *
  * @author gebilaowang
  * @date 2021/3/11 9:58
  */
@@ -25,10 +26,11 @@ public class ClientDTO {
 
     private Long lastOnLineTime;    //最近在线时间
 
-    public static ClientDTO build(String id, Channel channel, String flagKey, Integer packetId){
-        return build(id,channel,null, flagKey, packetId);
+    public static ClientDTO build(String id, Channel channel, String flagKey, Integer packetId) {
+        return build(id, channel, null, flagKey, packetId);
     }
-    public static ClientDTO build(String id, Channel channel, List<String> topic, String flagKey, Integer packetId){
+
+    public static ClientDTO build(String id, Channel channel, List<String> topic, String flagKey, Integer packetId) {
         ClientDTO clientDTO = new ClientDTO();
         clientDTO.setId(id);
         clientDTO.setChannel(channel);

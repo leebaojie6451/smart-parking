@@ -32,20 +32,20 @@ class Base64 implements Serializable {
         for (i = 0; i < 255; i++)
             base64Alphabet[i] = -1;
         for (i = 90; i >= 65; i--)
-            base64Alphabet[i] = (byte)(i - 65);
+            base64Alphabet[i] = (byte) (i - 65);
         for (i = 122; i >= 97; i--)
-            base64Alphabet[i] = (byte)(i - 97 + 26);
+            base64Alphabet[i] = (byte) (i - 97 + 26);
         for (i = 57; i >= 48; i--)
-            base64Alphabet[i] = (byte)(i - 48 + 52);
+            base64Alphabet[i] = (byte) (i - 48 + 52);
         base64Alphabet[43] = 62;
         base64Alphabet[47] = 63;
         for (i = 0; i <= 25; i++)
-            lookUpBase64Alphabet[i] = (byte)(65 + i);
+            lookUpBase64Alphabet[i] = (byte) (65 + i);
         int j;
         for (i = 26, j = 0; i <= 51; i++, j++)
-            lookUpBase64Alphabet[i] = (byte)(97 + j);
+            lookUpBase64Alphabet[i] = (byte) (97 + j);
         for (i = 52, j = 0; i <= 61; i++, j++)
-            lookUpBase64Alphabet[i] = (byte)(48 + j);
+            lookUpBase64Alphabet[i] = (byte) (48 + j);
         lookUpBase64Alphabet[62] = 43;
         lookUpBase64Alphabet[63] = 47;
     }
@@ -86,7 +86,7 @@ class Base64 implements Serializable {
         int lengthDataBits = binaryData.length * 8;
         int fewerThan24bits = lengthDataBits % 24;
         int numberTriplets = lengthDataBits / 24;
-        byte[] encodedData = (byte[])null;
+        byte[] encodedData = (byte[]) null;
         int encodedDataLength = 0;
         int nbrChunks = 0;
         if (fewerThan24bits != 0) {
@@ -96,7 +96,7 @@ class Base64 implements Serializable {
         }
         if (isChunked) {
             nbrChunks =
-                    (CHUNK_SEPARATOR.length == 0) ? 0 : (int)Math.ceil((encodedDataLength / 76.0F));
+                    (CHUNK_SEPARATOR.length == 0) ? 0 : (int) Math.ceil((encodedDataLength / 76.0F));
             encodedDataLength += nbrChunks * CHUNK_SEPARATOR.length;
         }
         encodedData = new byte[encodedDataLength];
@@ -111,14 +111,14 @@ class Base64 implements Serializable {
             b1 = binaryData[dataIndex];
             b2 = binaryData[dataIndex + 1];
             b3 = binaryData[dataIndex + 2];
-            l = (byte)(b2 & 0xF);
-            k = (byte)(b1 & 0x3);
+            l = (byte) (b2 & 0xF);
+            k = (byte) (b1 & 0x3);
             byte val1 =
-                    ((b1 & Byte.MIN_VALUE) == 0) ? (byte)(b1 >> 2) : (byte)(b1 >> 2 ^ 0xC0);
+                    ((b1 & Byte.MIN_VALUE) == 0) ? (byte) (b1 >> 2) : (byte) (b1 >> 2 ^ 0xC0);
             byte val2 =
-                    ((b2 & Byte.MIN_VALUE) == 0) ? (byte)(b2 >> 4) : (byte)(b2 >> 4 ^ 0xF0);
+                    ((b2 & Byte.MIN_VALUE) == 0) ? (byte) (b2 >> 4) : (byte) (b2 >> 4 ^ 0xF0);
             byte val3 =
-                    ((b3 & Byte.MIN_VALUE) == 0) ? (byte)(b3 >> 6) : (byte)(b3 >> 6 ^ 0xFC);
+                    ((b3 & Byte.MIN_VALUE) == 0) ? (byte) (b3 >> 6) : (byte) (b3 >> 6 ^ 0xFC);
             encodedData[encodedIndex] = lookUpBase64Alphabet[val1];
             encodedData[encodedIndex + 1] =
                     lookUpBase64Alphabet[val2 | k << 4];
@@ -144,9 +144,9 @@ class Base64 implements Serializable {
         dataIndex = i * 3;
         if (fewerThan24bits == 8) {
             b1 = binaryData[dataIndex];
-            k = (byte)(b1 & 0x3);
+            k = (byte) (b1 & 0x3);
             byte val1 =
-                    ((b1 & Byte.MIN_VALUE) == 0) ? (byte)(b1 >> 2) : (byte)(b1 >> 2 ^ 0xC0);
+                    ((b1 & Byte.MIN_VALUE) == 0) ? (byte) (b1 >> 2) : (byte) (b1 >> 2 ^ 0xC0);
             encodedData[encodedIndex] = lookUpBase64Alphabet[val1];
             encodedData[encodedIndex + 1] = lookUpBase64Alphabet[k << 4];
             encodedData[encodedIndex + 2] = 61;
@@ -154,12 +154,12 @@ class Base64 implements Serializable {
         } else if (fewerThan24bits == 16) {
             b1 = binaryData[dataIndex];
             b2 = binaryData[dataIndex + 1];
-            l = (byte)(b2 & 0xF);
-            k = (byte)(b1 & 0x3);
+            l = (byte) (b2 & 0xF);
+            k = (byte) (b1 & 0x3);
             byte val1 =
-                    ((b1 & Byte.MIN_VALUE) == 0) ? (byte)(b1 >> 2) : (byte)(b1 >> 2 ^ 0xC0);
+                    ((b1 & Byte.MIN_VALUE) == 0) ? (byte) (b1 >> 2) : (byte) (b1 >> 2 ^ 0xC0);
             byte val2 =
-                    ((b2 & Byte.MIN_VALUE) == 0) ? (byte)(b2 >> 4) : (byte)(b2 >> 4 ^ 0xF0);
+                    ((b2 & Byte.MIN_VALUE) == 0) ? (byte) (b2 >> 4) : (byte) (b2 >> 4 ^ 0xF0);
             encodedData[encodedIndex] = lookUpBase64Alphabet[val1];
             encodedData[encodedIndex + 1] =
                     lookUpBase64Alphabet[val2 | k << 4];
@@ -182,7 +182,7 @@ class Base64 implements Serializable {
         if (base64Data.length == 0)
             return new byte[0];
         int numberQuadruple = base64Data.length / 4;
-        byte[] decodedData = (byte[])null;
+        byte[] decodedData = (byte[]) null;
         byte b1 = 0, b2 = 0, b3 = 0, b4 = 0, marker0 = 0, marker1 = 0;
         int encodedIndex = 0;
         int dataIndex = 0;
@@ -201,17 +201,17 @@ class Base64 implements Serializable {
             if (marker0 != 61 && marker1 != 61) {
                 b3 = base64Alphabet[marker0];
                 b4 = base64Alphabet[marker1];
-                decodedData[encodedIndex] = (byte)(b1 << 2 | b2 >> 4);
+                decodedData[encodedIndex] = (byte) (b1 << 2 | b2 >> 4);
                 decodedData[encodedIndex + 1] =
-                        (byte)((b2 & 0xF) << 4 | b3 >> 2 & 0xF);
-                decodedData[encodedIndex + 2] = (byte)(b3 << 6 | b4);
+                        (byte) ((b2 & 0xF) << 4 | b3 >> 2 & 0xF);
+                decodedData[encodedIndex + 2] = (byte) (b3 << 6 | b4);
             } else if (marker0 == 61) {
-                decodedData[encodedIndex] = (byte)(b1 << 2 | b2 >> 4);
+                decodedData[encodedIndex] = (byte) (b1 << 2 | b2 >> 4);
             } else if (marker1 == 61) {
                 b3 = base64Alphabet[marker0];
-                decodedData[encodedIndex] = (byte)(b1 << 2 | b2 >> 4);
+                decodedData[encodedIndex] = (byte) (b1 << 2 | b2 >> 4);
                 decodedData[encodedIndex + 1] =
-                        (byte)((b2 & 0xF) << 4 | b3 >> 2 & 0xF);
+                        (byte) ((b2 & 0xF) << 4 | b3 >> 2 & 0xF);
             }
             encodedIndex += 3;
         }

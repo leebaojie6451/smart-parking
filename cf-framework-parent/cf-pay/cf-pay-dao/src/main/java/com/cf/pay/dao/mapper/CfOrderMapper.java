@@ -35,6 +35,7 @@ public interface CfOrderMapper {
 
     /**
      * 根据条件查询订单数据列表
+     *
      * @param conditions
      * @return
      */
@@ -42,6 +43,7 @@ public interface CfOrderMapper {
 
     /**
      * 根据条件查询订单数据列表数
+     *
      * @param conditions
      * @return
      */
@@ -49,6 +51,7 @@ public interface CfOrderMapper {
 
     /**
      * 统计前N天每天的停车记录数(支持传入地区或停车场)
+     *
      * @param cfCountFinanceQuery
      * @return
      */
@@ -56,6 +59,7 @@ public interface CfOrderMapper {
 
     /**
      * 统计前N天每天已支付金额(支持传入地区或停车场)
+     *
      * @param cfCountFinanceQuery
      * @return
      */
@@ -63,6 +67,7 @@ public interface CfOrderMapper {
 
     /**
      * 获取某个年份某个月数的停车数(支持传入地区或停车场)
+     *
      * @param cfCountFinanceQuery
      * @return
      */
@@ -70,6 +75,7 @@ public interface CfOrderMapper {
 
     /**
      * 获取某个年份每个月份的停车数
+     *
      * @param cfCountFinanceQuery
      * @return
      */
@@ -77,6 +83,7 @@ public interface CfOrderMapper {
 
     /**
      * 刷新订单id
+     *
      * @param newOrderId
      * @param oldOrderId
      * @return

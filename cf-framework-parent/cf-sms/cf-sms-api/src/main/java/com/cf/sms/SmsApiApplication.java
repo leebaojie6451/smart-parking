@@ -23,7 +23,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SmsApiApplication {
     public static void main(String[] args) {
-        SpringApplication.run(SmsApiApplication.class,args);
+        SpringApplication.run(SmsApiApplication.class, args);
     }
 
     @Bean

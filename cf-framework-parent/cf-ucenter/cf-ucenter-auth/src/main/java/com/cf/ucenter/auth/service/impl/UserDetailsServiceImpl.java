@@ -52,12 +52,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         //取出身份，如果身份为空说明没有认证
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         //没有认证统一采用httpbasic认证，httpbasic中存储了client_id和client_secret，开始认证client_id和client_secret
-        if(authentication==null){
+        if (authentication == null) {
             ClientDetails clientDetails = clientDetailsService.loadClientByClientId(username);
-            if(clientDetails!=null){
+            if (clientDetails != null) {
                 //密码
                 String clientSecret = clientDetails.getClientSecret();
-                return new User(username,clientSecret, AuthorityUtils.commaSeparatedStringToAuthorityList(""));
+                return new User(username, clientSecret, AuthorityUtils.commaSeparatedStringToAuthorityList(""));
             }
         }
 
@@ -73,14 +73,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         //远程调用用户中心根据账号查询用户信息
         CfUser cfUser = cfUserService.findByUserName(username);
-        if(cfUser==null){
+        if (cfUser == null) {
             cfUser = cfUserService.findByPhone(username);
-            if(cfUser!=null){
+            if (cfUser != null) {
                 cfUser.setUserName(username);
                 cfUser.setPassword(new BCryptPasswordEncoder().encode(integrationAuthentication.getAuthParameter("password")));
             }
         }
-        if(cfUser == null){
+        if (cfUser == null) {
             //返回空给spring security表示用户不存在
             return null;
         }
@@ -90,27 +90,26 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return getUserDetails(cfUser);
     }
 
-    UserJwt getUserDetails(CfUser cfUser)
-    {
+    UserJwt getUserDetails(CfUser cfUser) {
         List<CfAuth> cfAuths = authService.selectByUidAndLevel(cfUser.getId(), (byte) 2, false);
         String authorityString = "";
-        if(cfAuths!=null && cfAuths.size()>0){
-            for(CfAuth cfAuth: cfAuths){
-                authorityString += ","+cfAuth.getPath();
+        if (cfAuths != null && cfAuths.size() > 0) {
+            for (CfAuth cfAuth : cfAuths) {
+                authorityString += "," + cfAuth.getPath();
             }
             authorityString = authorityString.substring(1);
         }
 
-        UserJwt userDetails = new UserJwt(cfUser.getUserName(), cfUser.getPassword(),AuthorityUtils.commaSeparatedStringToAuthorityList(authorityString));
+        UserJwt userDetails = new UserJwt(cfUser.getUserName(), cfUser.getPassword(), AuthorityUtils.commaSeparatedStringToAuthorityList(authorityString));
         userDetails.setId(cfUser.getId());
-        userDetails.setUtype(cfUser.getType()+"");//用户类型
+        userDetails.setUtype(cfUser.getType() + "");//用户类型
         userDetails.setName(cfUser.getUserName());//用户名称
         userDetails.setUserpic(cfUser.getAvatar());//用户头像
         List<CfRole> cfRoles = cfRoleService.getRolesByUid(cfUser.getId());
         String roleFlagKeyString = "";
-        if(cfRoles!=null && cfRoles.size()>0){
-            for(CfRole cfRole: cfRoles){
-                roleFlagKeyString += ","+cfRole.getFlagKey();
+        if (cfRoles != null && cfRoles.size() > 0) {
+            for (CfRole cfRole : cfRoles) {
+                roleFlagKeyString += "," + cfRole.getFlagKey();
             }
             roleFlagKeyString = roleFlagKeyString.substring(1);
         }
@@ -121,9 +120,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     /**
      * 更新用户最近登录时间
+     *
      * @param uid
      */
-    public void updateUserLastLoginTime(String uid){
+    public void updateUserLastLoginTime(String uid) {
         CfUser cfUser = new CfUser();
         cfUser.setId(uid);
         cfUser.setLastLoginTime(System.currentTimeMillis());

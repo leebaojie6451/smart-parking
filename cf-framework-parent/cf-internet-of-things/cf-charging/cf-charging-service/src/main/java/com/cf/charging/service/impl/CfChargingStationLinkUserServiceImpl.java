@@ -54,7 +54,7 @@ public class CfChargingStationLinkUserServiceImpl implements CfChargingStationLi
         CfChargingStationLinkUserQuery cfChargingStationLinkUserQuery = new CfChargingStationLinkUserQuery();
         cfChargingStationLinkUserQuery.setId(id);
         List<CfChargingStationLinkUser> cfChargingStationLinkUsers = getListByQuery(cfChargingStationLinkUserQuery);
-        if(cfChargingStationLinkUsers==null || cfChargingStationLinkUsers.size()==0){
+        if (cfChargingStationLinkUsers == null || cfChargingStationLinkUsers.size() == 0) {
             return 0;
         }
         cfChargingStationLinkUsers.get(0).setId(null);
@@ -67,23 +67,23 @@ public class CfChargingStationLinkUserServiceImpl implements CfChargingStationLi
         CfChargingStationLinkUserExample cfChargingStationLinkUserExample = new CfChargingStationLinkUserExample();
         CfChargingStationLinkUserExample.Criteria criteria = cfChargingStationLinkUserExample.createCriteria();
 
-        if(StringUtils.isNotEmpty(cfChargingStationLinkUserQuery.getChargingStationId())){
+        if (StringUtils.isNotEmpty(cfChargingStationLinkUserQuery.getChargingStationId())) {
             criteria.andChargingStationIdEqualTo(cfChargingStationLinkUserQuery.getChargingStationId());
         }
-        if(StringUtils.isNotEmpty(cfChargingStationLinkUserQuery.getUid())){
+        if (StringUtils.isNotEmpty(cfChargingStationLinkUserQuery.getUid())) {
             criteria.andUidEqualTo(cfChargingStationLinkUserQuery.getUid());
         }
-        if(cfChargingStationLinkUserQuery.getAllowDelete()!=null){
+        if (cfChargingStationLinkUserQuery.getAllowDelete() != null) {
             criteria.andAllowDeleteEqualTo(cfChargingStationLinkUserQuery.getAllowDelete());
         }
-        if(cfChargingStationLinkUserQuery.getAllowEdit()!=null){
+        if (cfChargingStationLinkUserQuery.getAllowEdit() != null) {
             criteria.andAllowEditEqualTo(cfChargingStationLinkUserQuery.getAllowEdit());
         }
 
-        if(StringUtils.isNotEmpty(cfChargingStationLinkUserQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfChargingStationLinkUserQuery.getOrderBy())) {
             cfChargingStationLinkUserExample.setOrderByClause(cfChargingStationLinkUserQuery.getOrderBy());
         }
-        if(cfChargingStationLinkUserQuery.getPage()!=null && cfChargingStationLinkUserQuery.getSize()!=null){
+        if (cfChargingStationLinkUserQuery.getPage() != null && cfChargingStationLinkUserQuery.getSize() != null) {
             PageHelper.startPage(cfChargingStationLinkUserQuery.getPage(), cfChargingStationLinkUserQuery.getSize());
         }
         return cfChargingStationLinkUserExample;
@@ -100,14 +100,14 @@ public class CfChargingStationLinkUserServiceImpl implements CfChargingStationLi
         return cfChargingStationLinkUserMapper.countByExample(getExampleByQuery(cfChargingStationLinkUserQuery));
     }
 
-    private void updateDeviceLinkers(CfChargingStationLinkUser cfChargingStationLinkUser){
+    private void updateDeviceLinkers(CfChargingStationLinkUser cfChargingStationLinkUser) {
         //先删掉所有
         CfChargingStationDeviceLinkUserQuery cfChargingStationDeviceLinkUserQuery = new CfChargingStationDeviceLinkUserQuery();
         cfChargingStationDeviceLinkUserQuery.setChargingStationId(cfChargingStationLinkUser.getChargingStationId());
         cfChargingStationDeviceLinkUserQuery.setUid(cfChargingStationLinkUser.getUid());
         cfChargingStationDeviceLinkUserService.deleteByQuery(cfChargingStationDeviceLinkUserQuery);
 
-        if(cfChargingStationLinkUser.getId()==null){
+        if (cfChargingStationLinkUser.getId() == null) {
             //表示删除
             return;
         }
@@ -117,10 +117,10 @@ public class CfChargingStationLinkUserServiceImpl implements CfChargingStationLi
         cfChargingStationDeviceQuery.setChargingStationId(cfChargingStationLinkUser.getChargingStationId());
         List<CfChargingStationDevice> cfChargingStationDevices = cfChargingStationDeviceService.getListByQuery(cfChargingStationDeviceQuery);
 
-        if(cfChargingStationDevices!=null && cfChargingStationDevices.size()>0){
+        if (cfChargingStationDevices != null && cfChargingStationDevices.size() > 0) {
             //重新增加
             List<CfChargingStationDeviceLinkUser> cfChargingStationDeviceLinkUserList = new ArrayList<>();
-            for (CfChargingStationDevice cfChargingStationDevice: cfChargingStationDevices){
+            for (CfChargingStationDevice cfChargingStationDevice : cfChargingStationDevices) {
                 CfChargingStationDeviceLinkUser cfChargingStationDeviceLinkUser = new CfChargingStationDeviceLinkUser();
                 cfChargingStationDeviceLinkUser.setDeviceId(cfChargingStationDevice.getId());
                 cfChargingStationDeviceLinkUser.setChargingStationId(cfChargingStationDevice.getChargingStationId());

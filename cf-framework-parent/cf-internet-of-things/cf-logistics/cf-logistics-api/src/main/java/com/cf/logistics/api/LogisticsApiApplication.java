@@ -19,7 +19,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class LogisticsApiApplication {
     public static void main(String[] args) {
-        SpringApplication.run(LogisticsApiApplication.class,args);
+        SpringApplication.run(LogisticsApiApplication.class, args);
     }
 
 }

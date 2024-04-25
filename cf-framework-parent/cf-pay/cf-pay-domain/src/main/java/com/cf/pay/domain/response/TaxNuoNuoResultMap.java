@@ -15,7 +15,7 @@ public class TaxNuoNuoResultMap {
     private String describe;
     private Object result;
 
-    public TaxNuoNuoResultMap(String code, String describe, Object result){
+    public TaxNuoNuoResultMap(String code, String describe, Object result) {
         this.code = code;
         this.describe = describe;
         this.result = result;

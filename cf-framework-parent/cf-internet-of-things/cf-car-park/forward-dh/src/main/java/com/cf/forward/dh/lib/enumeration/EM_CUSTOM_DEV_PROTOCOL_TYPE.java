@@ -70,7 +70,7 @@ public enum EM_CUSTOM_DEV_PROTOCOL_TYPE {
 
     public static int getValueByNote(String givenNote) {
         for (EM_CUSTOM_DEV_PROTOCOL_TYPE enumType : EM_CUSTOM_DEV_PROTOCOL_TYPE.values()) {
-            if (givenNote.equals(enumType.getNote()) ) {
+            if (givenNote.equals(enumType.getNote())) {
                 return enumType.getValue();
             }
         }

@@ -51,10 +51,10 @@ public class CfLogisticsFactoryServiceImpl implements CfLogisticsFactoryService 
     @Override
     public CfLogisticsFactory findById(Long id, boolean expectEmpty) {
         CfLogisticsFactory cfLogisticsFactory = findById(id);
-        if(expectEmpty && cfLogisticsFactory!=null){
+        if (expectEmpty && cfLogisticsFactory != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpty && cfLogisticsFactory==null){
+        if (!expectEmpty && cfLogisticsFactory == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfLogisticsFactory;
@@ -64,14 +64,14 @@ public class CfLogisticsFactoryServiceImpl implements CfLogisticsFactoryService 
     public CfLogisticsFactoryExample getExampleByQuery(CfLogisticsFactoryQuery cfLogisticsFactoryQuery) {
         CfLogisticsFactoryExample cfLogisticsFactoryExample = new CfLogisticsFactoryExample();
         CfLogisticsFactoryExample.Criteria criteria = cfLogisticsFactoryExample.createCriteria();
-        if(StringUtils.isNotEmpty(cfLogisticsFactoryQuery.getFactoryName())){
-            criteria.andFactoryNameLike("%"+cfLogisticsFactoryQuery.getFactoryName()+"%");
+        if (StringUtils.isNotEmpty(cfLogisticsFactoryQuery.getFactoryName())) {
+            criteria.andFactoryNameLike("%" + cfLogisticsFactoryQuery.getFactoryName() + "%");
         }
 
-        if(StringUtils.isNotEmpty(cfLogisticsFactoryQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfLogisticsFactoryQuery.getOrderBy())) {
             cfLogisticsFactoryExample.setOrderByClause(cfLogisticsFactoryQuery.getOrderBy());
         }
-        if(cfLogisticsFactoryQuery.getPage()!=null && cfLogisticsFactoryQuery.getSize()!=null){
+        if (cfLogisticsFactoryQuery.getPage() != null && cfLogisticsFactoryQuery.getSize() != null) {
             PageHelper.startPage(cfLogisticsFactoryQuery.getPage(), cfLogisticsFactoryQuery.getSize());
         }
         return cfLogisticsFactoryExample;

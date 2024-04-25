@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 /**
  * 建行被扫码扣款回复
  */
-public class CCBScannedChargeback  implements Serializable {
+public class CCBScannedChargeback implements Serializable {
 
     /**
      * 订单结果
@@ -94,7 +94,7 @@ public class CCBScannedChargeback  implements Serializable {
     BigDecimal PAID_AMOUNT;
 
     /**
-     *商 户 实 收 金额
+     * 商 户 实 收 金额
      * 商户实收金额。 当 RETURN_FIELD 字段第
      * 二位上送 1 时返回。
      * 当客户使用银联支付且享

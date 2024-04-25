@@ -13,7 +13,7 @@ public class CfUserIdCardForm implements Serializable {
     @ApiModelProperty(value = "", example = "无需提供，系统会自动维护", required = false)
     private String uid;
     @ApiModelProperty(value = "", example = "用户姓名", required = true)
-    @Size(min=2, max=20, message = "用户姓名长度2-20位数")
+    @Size(min = 2, max = 20, message = "用户姓名长度2-20位数")
     private String userName;
     @ApiModelProperty(value = "", example = "性别0-女/1-男/2-未知", required = true)
     @Min(value = 0, message = "性别最小值0")
@@ -36,7 +36,7 @@ public class CfUserIdCardForm implements Serializable {
     @ApiModelProperty(value = "", example = "地址", required = true)
     private String address;
     @ApiModelProperty(value = "", example = "身份证号", required = true)
-    @Size(min=16, max=20, message = "身份证号长度16-20位数")
+    @Size(min = 16, max = 20, message = "身份证号长度16-20位数")
     private String identityNumber;
     @ApiModelProperty(value = "", example = "签发机关", required = true)
     private String issuingAuthority;

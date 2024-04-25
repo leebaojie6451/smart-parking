@@ -6,11 +6,11 @@ public class CameraConfig {
 
     private static String dllPath;
 
-    public static void setDllPath(String path){
+    public static void setDllPath(String path) {
         dllPath = path;
     }
 
-    public static String getDllPath(){
+    public static String getDllPath() {
         return dllPath;
     }
 

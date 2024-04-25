@@ -27,9 +27,9 @@ public class SmsController implements SmsSwagger {
 
     @Override
     @RequestMapping(value = "sendSms", method = RequestMethod.POST)
-    public ResponseResult sendSms(HttpServletRequest httpServletRequest, @RequestBody @Validated SendSms sendSms)throws Exception {
+    public ResponseResult sendSms(HttpServletRequest httpServletRequest, @RequestBody @Validated SendSms sendSms) throws Exception {
         smsService.checkTencentMpCaptcha(HttpClient.getIPAddress(httpServletRequest), sendSms.getTicket(), sendSms.getPlatform(), sendSms.getRandstr());
-        smsService.sendSms(sendSms.getPhone(),sendSms.getType());
+        smsService.sendSms(sendSms.getPhone(), sendSms.getType());
         return new ResponseResult(CommonCode.SUCCESS);
     }
 }

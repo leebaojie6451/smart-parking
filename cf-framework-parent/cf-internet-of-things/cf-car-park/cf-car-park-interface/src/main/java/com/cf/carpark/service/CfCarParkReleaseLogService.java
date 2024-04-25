@@ -22,6 +22,7 @@ public interface CfCarParkReleaseLogService {
 
     /**
      * 更新放行记录中对应的redis数据缓存
+     *
      * @param cfCarParkReleaseLog
      * @param redisPreFix
      */
@@ -43,32 +44,36 @@ public interface CfCarParkReleaseLogService {
 
     /**
      * 根据条件查询放行记录数据列表
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public List<CfCarParkReleaseLog> selectListByCondition(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);
 
     /**
      * 根据条件查询放行记录数据列表数
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public Integer selectListByConditionCounts(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);
 
     /**
      * 监听放行
+     *
      * @param deviceSerialNumber 硬件序列号
-     * @param deviceBrand 硬件品牌
+     * @param deviceBrand        硬件品牌
      * @return
      */
     public Map<String, Object> releaseMonitoring(String deviceSerialNumber, String deviceBrand);
 
     /**
      * 移除redis中放行代码
+     *
      * @param redisPreFix
      * @param cfCarParkReleaseLog
      */
@@ -76,30 +81,34 @@ public interface CfCarParkReleaseLogService {
 
     /**
      * 移除redis中抓拍代码
+     *
      * @param redisPreFix
      */
     void cleanCaptureRedis(String redisPreFix);
 
     /**
      * 执行开闸
+     *
      * @param cfCarParkReleaseLog
      * @param deviceBrand
-     * @param channel   通道
+     * @param channel             通道
      * @return
      */
     public Object executeRelease(CfCarParkReleaseLog cfCarParkReleaseLog, String deviceBrand, Integer channel);
 
     /**
      * 相机抓拍
-     * @param sn    相机序列号
+     *
+     * @param sn          相机序列号
      * @param deviceBrand
-     * @param channel   通道
+     * @param channel     通道
      * @return
      */
     public Object capture(String sn, String deviceBrand, Integer channel);
 
     /**
      * 给指定停车记录放行
+     *
      * @param cfCarParkUseLog
      * @param applicationReason
      * @param type
@@ -109,6 +118,7 @@ public interface CfCarParkReleaseLogService {
 
     /**
      * 统计N天前的放行次数，并按倒序排序
+     *
      * @param day
      * @param carParkIds
      * @return

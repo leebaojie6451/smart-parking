@@ -61,9 +61,9 @@ public class CfTaxAccountServiceImpl implements CfTaxAccountService {
     @Override
     public CfTaxAccount findById(String id, Boolean expectEmpty) {
         CfTaxAccount cfTaxAccount = findById(id);
-        if(expectEmpty && cfTaxAccount!=null){
+        if (expectEmpty && cfTaxAccount != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
-        }else if(!expectEmpty && cfTaxAccount==null){
+        } else if (!expectEmpty && cfTaxAccount == null) {
             ExceptionCast.cast(PayCode.TAX_ACCOUNT_NOT_EXIST);
         }
         return cfTaxAccount;
@@ -73,22 +73,22 @@ public class CfTaxAccountServiceImpl implements CfTaxAccountService {
     public CfTaxAccountExample getExampleByQuery(CfTaxAccountQuery cfTaxAccountQuery) {
         CfTaxAccountExample cfTaxAccountExample = new CfTaxAccountExample();
         CfTaxAccountExample.Criteria criteria = cfTaxAccountExample.createCriteria();
-        if(StringUtils.isNotEmpty(cfTaxAccountQuery.getTaxAgency())){
+        if (StringUtils.isNotEmpty(cfTaxAccountQuery.getTaxAgency())) {
             criteria.andTaxAgencyEqualTo(cfTaxAccountQuery.getTaxAgency());
         }
-        if(StringUtils.isNotEmpty(cfTaxAccountQuery.getUid())){
+        if (StringUtils.isNotEmpty(cfTaxAccountQuery.getUid())) {
             criteria.andUidEqualTo(cfTaxAccountQuery.getUid());
         }
-        if(cfTaxAccountQuery.getMinCreateTime()!=null){
+        if (cfTaxAccountQuery.getMinCreateTime() != null) {
             criteria.andCreateTimeGreaterThanOrEqualTo(cfTaxAccountQuery.getCreateTime());
         }
-        if(cfTaxAccountQuery.getMaxCreateTime()!=null){
+        if (cfTaxAccountQuery.getMaxCreateTime() != null) {
             criteria.andCreateTimeLessThanOrEqualTo(cfTaxAccountQuery.getMaxCreateTime());
         }
-        if(cfTaxAccountQuery.getMinUpdateTime()!=null){
+        if (cfTaxAccountQuery.getMinUpdateTime() != null) {
             criteria.andUpdateTimeGreaterThanOrEqualTo(cfTaxAccountQuery.getUpdateTime());
         }
-        if(cfTaxAccountQuery.getMaxUpdateTime()!=null){
+        if (cfTaxAccountQuery.getMaxUpdateTime() != null) {
             criteria.andUpdateTimeLessThanOrEqualTo(cfTaxAccountQuery.getMaxUpdateTime());
         }
         return cfTaxAccountExample;
@@ -122,7 +122,7 @@ public class CfTaxAccountServiceImpl implements CfTaxAccountService {
     @Override
     public Object invoice(String uid, CfOrder cfOrder, String platform) throws Exception {
         CfTaxAccount cfTaxAccount = getCfTaxAccount(uid, platform);
-        switch (platform){
+        switch (platform) {
             case "nuonuo":
                 InvoiceByNuoNuo(uid, cfOrder, cfTaxAccount);
                 break;
@@ -148,26 +148,26 @@ public class CfTaxAccountServiceImpl implements CfTaxAccountService {
         cfTaxAccountQuery.setUid(uid);
         cfTaxAccountQuery.setTaxAgency(platform);
         List<CfTaxAccount> cfTaxAccounts = getListByQuery(cfTaxAccountQuery);
-        if(cfTaxAccounts==null || cfTaxAccounts.size()==0){
+        if (cfTaxAccounts == null || cfTaxAccounts.size() == 0) {
             ExceptionCast.cast(PayCode.TAX_ACCOUNT_NOT_EXIST);
         }
-        if(cfTaxAccounts.get(0).getAccessTokenExpiredTime()>System.currentTimeMillis()){
+        if (cfTaxAccounts.get(0).getAccessTokenExpiredTime() > System.currentTimeMillis()) {
             return cfTaxAccounts.get(0);
         }
         JSONObject requestParams = getConfigParams(cfTaxAccounts.get(0));
-        switch (platform){
+        switch (platform) {
             case "nuonuo"://诺诺电子发票平台
                 HashMap<String, String> requestHeaders = new HashMap<>();
-                requestHeaders.put("Content-Type","application/x-www-form-urlencoded;charset=UTF-8");
-                JSONObject result = (JSONObject)HttpClient.doPost(requestParams, requestParams.getString("get_access_token_url"), requestHeaders, true);
-                if(result.containsKey("access_token")){
+                requestHeaders.put("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+                JSONObject result = (JSONObject) HttpClient.doPost(requestParams, requestParams.getString("get_access_token_url"), requestHeaders, true);
+                if (result.containsKey("access_token")) {
                     cfTaxAccounts.get(0).setAccessToken(result.getString("access_token"));
                     Long expiresIn = new Long(result.getString("expires_in"));
-                    cfTaxAccounts.get(0).setAccessTokenExpiredTime(System.currentTimeMillis()+(expiresIn*1000)-60000);
+                    cfTaxAccounts.get(0).setAccessTokenExpiredTime(System.currentTimeMillis() + (expiresIn * 1000) - 60000);
                     update(cfTaxAccounts.get(0));
                     return cfTaxAccounts.get(0);
                 }
-                ExceptionCast.cast(CommonCode.FAIL,result.getString("error_description"));
+                ExceptionCast.cast(CommonCode.FAIL, result.getString("error_description"));
                 break;
             default:
                 ExceptionCast.cast(PayCode.TAX_PLATFORM_NOT_EXIST);
@@ -177,14 +177,14 @@ public class CfTaxAccountServiceImpl implements CfTaxAccountService {
 
     /**
      * 请求诺诺开票业务
+     *
      * @param content
      * @param cfTaxAccount
      * @param url
      * @param method
      * @return
      */
-    private Object nuonuoTaxBusinessRequest(String content, CfTaxAccount cfTaxAccount, String url, String method)
-    {
+    private Object nuonuoTaxBusinessRequest(String content, CfTaxAccount cfTaxAccount, String url, String method) {
         JSONObject configParams = getConfigParams(cfTaxAccount);
         NNOpenSDK nnSDK = NNOpenSDK.getIntance();
         String senid = UUID.randomUUID().toString().replace("-", ""); // 唯一标识，32位随机码，无需修改，保持默认即可
@@ -194,35 +194,35 @@ public class CfTaxAccountServiceImpl implements CfTaxAccountService {
 
     /**
      * 读取电子税务账号配置项参数
+     *
      * @param cfTaxAccount
      * @return
      */
-    private JSONObject getConfigParams(CfTaxAccount cfTaxAccount)
-    {
+    private JSONObject getConfigParams(CfTaxAccount cfTaxAccount) {
         JSONObject configParams = JSONObject.parseObject(cfTaxAccount.getConfigParams());
         JSONObject requestParams = new JSONObject();
-        switch (cfTaxAccount.getTaxAgency()){
+        switch (cfTaxAccount.getTaxAgency()) {
             case "nuonuo":
-                if(!configParams.containsKey("client_id")){
+                if (!configParams.containsKey("client_id")) {
                     ExceptionCast.cast(PayCode.TAX_ACCOUNT_MISSING_CONFIGURATION, "missing param: client_id");
                 }
-                requestParams.put("client_id",configParams.getString("client_id"));
-                if(!configParams.containsKey("client_secret")){
+                requestParams.put("client_id", configParams.getString("client_id"));
+                if (!configParams.containsKey("client_secret")) {
                     ExceptionCast.cast(PayCode.TAX_ACCOUNT_MISSING_CONFIGURATION, "missing param: client_secret");
                 }
-                requestParams.put("client_secret",configParams.getString("client_secret"));
-                if(!configParams.containsKey("get_access_token_url")){
+                requestParams.put("client_secret", configParams.getString("client_secret"));
+                if (!configParams.containsKey("get_access_token_url")) {
                     ExceptionCast.cast(PayCode.TAX_ACCOUNT_MISSING_CONFIGURATION, "missing param: get_access_token_url");
                 }
-                requestParams.put("get_access_token_url",configParams.getString("get_access_token_url"));
-                if(!configParams.containsKey("taxnum ")){
+                requestParams.put("get_access_token_url", configParams.getString("get_access_token_url"));
+                if (!configParams.containsKey("taxnum ")) {
                     ExceptionCast.cast(PayCode.TAX_ACCOUNT_MISSING_CONFIGURATION, "missing param: taxnum ");
                 }
-                requestParams.put("taxnum ",configParams.getString("taxnum "));
-                if(!configParams.containsKey("grant_type ")){
+                requestParams.put("taxnum ", configParams.getString("taxnum "));
+                if (!configParams.containsKey("grant_type ")) {
                     ExceptionCast.cast(PayCode.TAX_ACCOUNT_MISSING_CONFIGURATION, "missing param: grant_type ");
                 }
-                requestParams.put("grant_type ",configParams.getString("grant_type "));
+                requestParams.put("grant_type ", configParams.getString("grant_type "));
                 break;
             default:
                 ExceptionCast.cast(PayCode.TAX_PLATFORM_NOT_EXIST);

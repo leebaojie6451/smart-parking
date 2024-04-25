@@ -8,19 +8,19 @@ public enum EM_TRIGGER_TYPE {
     /**
      * 未知类型
      */
-    EM_TRIGGER_TYPE_UNKNOWN(-1,"未知类型"),
+    EM_TRIGGER_TYPE_UNKNOWN(-1, "未知类型"),
     /**
      * 车检器
      */
-    EM_TRIGGER_TYPE_CAR_INSPECTION_DEV(0,"车检器"),	   // 车检器
+    EM_TRIGGER_TYPE_CAR_INSPECTION_DEV(0, "车检器"),       // 车检器
     /**
      * 雷达
      */
-    EM_TRIGGER_TYPE_DADAR(1,"雷达"),
+    EM_TRIGGER_TYPE_DADAR(1, "雷达"),
     /**
      * 视频
      */
-    EM_TRIGGER_TYPE_VIDEO(2,"视频");
+    EM_TRIGGER_TYPE_VIDEO(2, "视频");
 
     private int value;
     private String note;
@@ -49,7 +49,7 @@ public enum EM_TRIGGER_TYPE {
 
     public static int getValueByNote(String givenNote) {
         for (EM_TRIGGER_TYPE enumType : EM_TRIGGER_TYPE.values()) {
-            if (givenNote.equals(enumType.getNote()) ) {
+            if (givenNote.equals(enumType.getNote())) {
                 return enumType.getValue();
             }
         }

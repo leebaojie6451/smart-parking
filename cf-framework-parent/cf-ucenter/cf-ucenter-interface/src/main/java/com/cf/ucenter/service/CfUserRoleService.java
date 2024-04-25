@@ -18,6 +18,7 @@ public interface CfUserRoleService {
 
     /**
      * 删除指定用户的所有角色
+     *
      * @param uid
      * @return
      */
@@ -25,6 +26,7 @@ public interface CfUserRoleService {
 
     /**
      * 根据角色id删除用户角色表中的数据
+     *
      * @param roleId
      * @return
      */
@@ -32,6 +34,7 @@ public interface CfUserRoleService {
 
     /**
      * 根据角色key删除用户角色表中的数据
+     *
      * @param uid
      * @param roleFlagKey
      * @return
@@ -40,6 +43,7 @@ public interface CfUserRoleService {
 
     /**
      * 添加用户角色(批量添加)
+     *
      * @param cfUserRoles
      * @return
      */
@@ -47,6 +51,7 @@ public interface CfUserRoleService {
 
     /**
      * 刷新用户角色(先全部删除后再添加)
+     *
      * @param cfUserRoles
      * @return
      */
@@ -54,6 +59,7 @@ public interface CfUserRoleService {
 
     /**
      * 根据用户和权限关键字查找数据
+     *
      * @param cfUserRoles
      * @param uid
      * @param flagKey
@@ -63,6 +69,7 @@ public interface CfUserRoleService {
 
     /**
      * 添加指定用户的指定权限数据
+     *
      * @param uid
      * @param flagKey
      * @return

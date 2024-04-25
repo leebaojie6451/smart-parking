@@ -37,12 +37,12 @@ public class CfUserGroupApi implements CfUserGroupSwagger {
     @Override
     @RequestMapping(value = "createGroup", method = RequestMethod.POST)
     public ResponseResult createGroup(
-        @RequestParam("name")
-        @NotEmpty String name,
-        @RequestParam("people_cap")
-        @Pattern(regexp = "^(200|500|1000|2000){1}$", message = "暂时只支持200|500|1000|2000人群") String peopleCap) throws Exception {
+            @RequestParam("name")
+            @NotEmpty String name,
+            @RequestParam("people_cap")
+            @Pattern(regexp = "^(200|500|1000|2000){1}$", message = "暂时只支持200|500|1000|2000人群") String peopleCap) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        return cfUserGroupService.createGroup(new CfUserGroup(idWorker.nextId(),name,"",(short)0,Short.parseShort(peopleCap),(byte)0,(byte)0,userBasicInfo.getId(),
-            System.currentTimeMillis(),""));
+        return cfUserGroupService.createGroup(new CfUserGroup(idWorker.nextId(), name, "", (short) 0, Short.parseShort(peopleCap), (byte) 0, (byte) 0, userBasicInfo.getId(),
+                System.currentTimeMillis(), ""));
     }
 }

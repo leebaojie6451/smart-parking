@@ -81,20 +81,20 @@ public class CfCarParkOrderController implements CfCarParkOrderSwagger {
     @RequestMapping(value = "queryOrderByUseId", method = RequestMethod.GET)
     public ResponseResult queryOrderByUseId(String id, String mode) throws Exception {
         CfCarParkOrder cfCarParkOrder = null;
-        if(StringUtils.isEmpty(mode)){
+        if (StringUtils.isEmpty(mode)) {
             mode = "realTime";
         }
 
         CfCarParkUseLog cfCarParkUseLog = cfCarParkUseLogService.findById(id, false);
-        if(mode.equals("realTime")){
+        if (mode.equals("realTime")) {
             cfCarParkOrder = cfCarParkChargingRulesService.calculateTheAmounPayable(cfCarParkUseLog, "", FeeQueryMode.QUERY_MODE_QUERY_ONLY);
-        }else{
-            cfCarParkUseLog.setCountFeeStatus((byte)1);
+        } else {
+            cfCarParkUseLog.setCountFeeStatus((byte) 1);
             cfCarParkOrder = cfCarParkChargingRulesService.calculateTheAmounPayable(cfCarParkUseLog, "", FeeQueryMode.QUERY_MODE_QUERY_ONLY);
         }
 
         String fileSourceAddress = cfSystemConfigService.getValueByKey("file_source_address", "http://file.cfeng.wang/");
-        if(cfCarParkOrder.getCfCarParkUseLog()!=null){
+        if (cfCarParkOrder.getCfCarParkUseLog() != null) {
             FileUtils.handleFileSourcePrefix(cfCarParkOrder.getCfCarParkUseLog(), fileSourceAddress, "inSmallImage");
             FileUtils.handleFileSourcePrefix(cfCarParkOrder.getCfCarParkUseLog(), fileSourceAddress, "outSmallImage");
             FileUtils.handleFileSourcePrefix(cfCarParkOrder.getCfCarParkUseLog(), fileSourceAddress, "inBigImage");
@@ -102,7 +102,7 @@ public class CfCarParkOrderController implements CfCarParkOrderSwagger {
         }
 
         //更新应付金额
-        if(cfCarParkOrder.getCfOrder().getStatus()== PayStatus.TO_BE_PAID){
+        if (cfCarParkOrder.getCfOrder().getStatus() == PayStatus.TO_BE_PAID) {
             CfOrder order = new CfOrder();
             order.setId(cfCarParkOrder.getCfOrder().getId());
             order.setAmountsPayable(cfCarParkOrder.getCfOrder().getAmountsPayable());
@@ -119,26 +119,26 @@ public class CfCarParkOrderController implements CfCarParkOrderSwagger {
         cfCarParkPackageQuery.setPage(1);
         cfCarParkPackageQuery.setSize(1);
         List<CfCarParkPackage> cfCarParkPackageList = cfCarParkPackageService.getListByQuery(cfCarParkPackageQuery);
-        if(cfCarParkPackageList!=null && cfCarParkPackageList.size()>0){
+        if (cfCarParkPackageList != null && cfCarParkPackageList.size() > 0) {
             //填充套餐名称
             CfCarParkCarType cfCarParkCarType = cfCarParkCarTypeService.findByKey(cfCarParkPackageList.get(0).getTypeKey(), false);
             cfCarParkOrder.setCfCarParkCarType(cfCarParkCarType);
             cfCarParkPackageList.get(0).setName(cfCarParkCarType.getName());
             cfCarParkOrder.setCfCarParkPackage(cfCarParkPackageList.get(0));
-            if(cfCarParkPackageList.get(0).getEndTime()>System.currentTimeMillis() && cfCarParkPackageList.get(0).getStatus()==(byte)1){
+            if (cfCarParkPackageList.get(0).getEndTime() > System.currentTimeMillis() && cfCarParkPackageList.get(0).getStatus() == (byte) 1) {
                 cfCarParkOrder.getCfOrder().setAmountsPayable(new BigDecimal("0.00"));
                 cfCarParkOrder.getCfOrder().setAmountActuallyPaid(new BigDecimal("0.00"));
             }
-        }else{
+        } else {
             CfCarParkSpecialCarQuery cfCarParkSpecialCarQuery = new CfCarParkSpecialCarQuery();
             cfCarParkSpecialCarQuery.setCarParkId(cfCarParkUseLog.getCarParkId());
             cfCarParkSpecialCarQuery.setNumberPlate(cfCarParkUseLog.getNumberPlate());
             List<CfCarParkSpecialCar> cfCarParkSpecialCars = cfCarParkSpecialCarService.getListByQuery(cfCarParkSpecialCarQuery);
-            if(cfCarParkSpecialCars!=null && cfCarParkSpecialCars.size()>0){
+            if (cfCarParkSpecialCars != null && cfCarParkSpecialCars.size() > 0) {
                 cfCarParkOrder.setCfCarParkSpecialCar(cfCarParkSpecialCars.get(0));
                 CfCarParkCarType cfCarParkCarType = cfCarParkCarTypeService.findByKey(cfCarParkSpecialCars.get(0).getTypeKey(), false);
                 cfCarParkOrder.setCfCarParkCarType(cfCarParkCarType);
-            }else{
+            } else {
                 //没有数据这设置为临时车
                 CfCarParkCarType cfCarParkCarType = cfCarParkCarTypeService.findByKey("temporary_car", false);
                 cfCarParkOrder.setCfCarParkCarType(cfCarParkCarType);
@@ -156,7 +156,7 @@ public class CfCarParkOrderController implements CfCarParkOrderSwagger {
         cfOrderQuery.setGoodsType(GoodsType.CARPARK_PAYMENT);
         cfOrderQuery.setGoodsId(carParkUseLogId);
         List<CfOrder> listByCondition = cfOrderService.getListByQuery(cfOrderQuery);
-        if(listByCondition==null || listByCondition.size()==0){
+        if (listByCondition == null || listByCondition.size() == 0) {
             ExceptionCast.cast(PayCode.ORDER_DOES_NOT_EXIST);
         }
         return listByCondition.get(0);
@@ -167,18 +167,18 @@ public class CfCarParkOrderController implements CfCarParkOrderSwagger {
     @RequestMapping(value = "countByQuery", method = RequestMethod.GET)
     public ResponseResult countByQuery(CfCountFinanceQuery cfCountFinanceQuery) throws Exception {
 
-        if(StringUtils.isEmpty(cfCountFinanceQuery.getDate())){
+        if (StringUtils.isEmpty(cfCountFinanceQuery.getDate())) {
             cfCountFinanceQuery.setDate("2018-01-01 00:00:00");
         }
-        if(StringUtils.isEmpty(cfCountFinanceQuery.getEndDate())){
+        if (StringUtils.isEmpty(cfCountFinanceQuery.getEndDate())) {
             cfCountFinanceQuery.setEndDate(DateUtil.stampToDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"));
         }
 
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         List<CfCarParkLinkUser> linkUsers = carParkController.getLinkUsersAndCheck(userBasicInfo);
-        if(linkUsers!=null && linkUsers.size()>0){
+        if (linkUsers != null && linkUsers.size() > 0) {
             cfCountFinanceQuery.setShopIds(new ArrayList<>());
-            for (CfCarParkLinkUser cfCarParkLinkUser: linkUsers){
+            for (CfCarParkLinkUser cfCarParkLinkUser : linkUsers) {
                 cfCountFinanceQuery.getShopIds().add(cfCarParkLinkUser.getCarParkId());
             }
         }

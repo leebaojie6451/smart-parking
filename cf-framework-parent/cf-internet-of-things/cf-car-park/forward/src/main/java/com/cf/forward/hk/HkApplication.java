@@ -24,7 +24,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  **/
 @Slf4j
 @EnableAutoConfiguration(exclude = {MultipartAutoConfiguration.class})
-@ComponentScan(basePackages = {"com.cf.forward.hk","com.cf.framework"})
+@ComponentScan(basePackages = {"com.cf.forward.hk", "com.cf.framework"})
 @EnableAsync
 @EnableScheduling
 public class HkApplication {

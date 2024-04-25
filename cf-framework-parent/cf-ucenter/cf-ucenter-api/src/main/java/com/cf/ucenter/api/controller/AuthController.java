@@ -35,12 +35,22 @@ import com.cf.pay.service.CfAccountService;
 import com.cf.pay.service.CfCouponActivityService;
 import com.cf.ucenter.api.config.AuthenticationInterceptor;
 import com.cf.ucenter.api.swagger.AuthSwagger;
-import com.cf.ucenter.domain.*;
+import com.cf.ucenter.domain.CfRole;
+import com.cf.ucenter.domain.CfThirdPartyLogin;
+import com.cf.ucenter.domain.CfThirdPartyPlatformApplication;
+import com.cf.ucenter.domain.CfUser;
+import com.cf.ucenter.domain.CfWeixinConfig;
+import com.cf.ucenter.domain.WxUser;
 import com.cf.ucenter.request.CfThirdPartyLoginQuery;
 import com.cf.ucenter.request.CfWeixinConfigQuery;
-import com.cf.ucenter.service.*;
+import com.cf.ucenter.service.AuthService;
+import com.cf.ucenter.service.CfAccessTokenManageService;
+import com.cf.ucenter.service.CfThirdPartyLoginService;
+import com.cf.ucenter.service.CfThirdPartyPlatformApplicationService;
+import com.cf.ucenter.service.CfUserRoleService;
+import com.cf.ucenter.service.CfUserService;
+import com.cf.ucenter.service.CfWeixinConfigService;
 import com.cf.ucenter.type.ThirdPartyPlatformType;
-import com.cf.ucenter.wxtools.CheckUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.Reference;
@@ -63,14 +73,22 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.Pattern;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.security.AlgorithmParameters;
 import java.security.Security;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 请在此填写描述
@@ -125,10 +143,10 @@ public class AuthController implements AuthSwagger {
     @Override
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public ResponseResult login(@RequestBody LoginRequest loginRequest) throws Exception {
-        if(loginRequest==null || StringUtils.isEmpty(loginRequest.getUsername())){
+        if (loginRequest == null || StringUtils.isEmpty(loginRequest.getUsername())) {
             ExceptionCast.cast(AuthCode.AUTH_USERNAME_NONE);
         }
-        if(StringUtils.isEmpty(loginRequest.getPassword())){
+        if (StringUtils.isEmpty(loginRequest.getPassword())) {
             ExceptionCast.cast(AuthCode.AUTH_PASSWORD_NONE);
         }
         AuthToken authToken = authService.login(loginRequest.getUsername(), loginRequest.getPassword(), clientId, clientSecret);
@@ -139,9 +157,9 @@ public class AuthController implements AuthSwagger {
         cfAccountQuery.setUid(cfUser.getId());
         cfAccountQuery.setScoreType("common_use");
         List<CfAccount> cfAccounts = cfAccountService.getListByQuery(cfAccountQuery);
-        if(cfAccounts!=null && cfAccounts.size()>0){
+        if (cfAccounts != null && cfAccounts.size() > 0) {
             cfUser.setScore(cfAccounts.get(0).getBalance());
-        }else{
+        } else {
             cfUser.setScore(new BigDecimal(0.00));
         }
         return new ResponseResult(CommonCode.SUCCESS, cfUser, authToken, 0);
@@ -160,11 +178,11 @@ public class AuthController implements AuthSwagger {
         String jwt = HttpHearderUtils.getAuthorization(request);
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(jwt);
         Object deleteResult = null;
-        if(type.equals("all")){
+        if (type.equals("all")) {
             deleteResult = stringRedisTemplate.delete("user:" + userBasicInfo.getUsername());
-        }else if(type.equals("current")){
+        } else if (type.equals("current")) {
             deleteResult = stringRedisTemplate.boundSetOps("user:" + userBasicInfo.getUsername()).remove(jwt);
-        }else{
+        } else {
             return new ResponseResult(CommonCode.FAIL, null, "invalid typ");
         }
         return new ResponseResult(CommonCode.SUCCESS, deleteResult);
@@ -184,7 +202,7 @@ public class AuthController implements AuthSwagger {
                 "&scope=snsapi_userinfo" +
                 "&state=STATE#wechat_redirect";
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:"+url);
+        modelAndView.setViewName("redirect:" + url);
         return modelAndView;
     }
 
@@ -194,12 +212,12 @@ public class AuthController implements AuthSwagger {
         Map<String, String> params = getLoginParams();
         String paramUri = params.get("paramUri");
         List<CfWeixinConfig> cfWeixinConfigs = getWeiXinLoginConfigragtion("h5_login");
-        if(StringUtils.isEmpty(appid)){
+        if (StringUtils.isEmpty(appid)) {
             //获取默认的为微信公众号appid
             appid = getWeiXinConfigragtionByEnName("h5_appid", cfWeixinConfigs);
         }
         CfThirdPartyPlatformApplication cfThirdPartyPlatformApplication = cfThirdPartyPlatformApplicationService.findByAppId(appid, false);
-        String loginSuccessRedirectUrl = params.get("url")!=null ? params.get("url") : getWeiXinConfigragtionByEnName("h5_login_success_redirect_url", cfWeixinConfigs);
+        String loginSuccessRedirectUrl = params.get("url") != null ? params.get("url") : getWeiXinConfigragtionByEnName("h5_login_success_redirect_url", cfWeixinConfigs);
 
         // 第二步：通过code换取网页授权access_token
         String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid +
@@ -213,8 +231,8 @@ public class AuthController implements AuthSwagger {
                 "&openid=" + jsonObject.getString("openid") +
                 "&lang=zh_CN";
         JSONObject userInfoJson = HttpClient.doGet(url);
-        if(userInfoJson.get("errcode")!=null){
-            ExceptionCast.cast(AuthCode.WECHAT_LOGIN_FAILED, userInfoJson.get("errmsg")+"");
+        if (userInfoJson.get("errcode") != null) {
+            ExceptionCast.cast(AuthCode.WECHAT_LOGIN_FAILED, userInfoJson.get("errmsg") + "");
             return null;
         }
 
@@ -230,26 +248,24 @@ public class AuthController implements AuthSwagger {
         AuthToken authToken = authService.createJwtToken(userBasicInfo);
 
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:"+loginSuccessRedirectUrl+paramUri+"&jwt_token="+
-                URLEncoder.encode(JSONObject.toJSONString(authToken),"UTF-8") +
-                "&userInfo="+URLEncoder.encode(JSONObject.toJSONString(cfUser),"UTF-8"));
+        modelAndView.setViewName("redirect:" + loginSuccessRedirectUrl + paramUri + "&jwt_token=" + URLEncoder.encode(JSONObject.toJSONString(authToken), "UTF-8") + "&userInfo=" + URLEncoder.encode(JSONObject.toJSONString(cfUser), "UTF-8"));
         return modelAndView;
     }
 
     @Override
     @RequestMapping(value = "createJumpToWxMinData", method = RequestMethod.GET)
     public ResponseResult createJumpToWxMinData(String url, String appid) throws Exception {
-        if(StringUtils.isEmpty(appid)){
+        if (StringUtils.isEmpty(appid)) {
             //获取默认微信公众号appid
             List<CfWeixinConfig> cfWeixinConfigs = getWeiXinLoginConfigragtion("h5_login");
             appid = getWeiXinConfigragtionByEnName("h5_appid", cfWeixinConfigs);
         }
         CfThirdPartyPlatformApplication cfThirdPartyPlatformApplication = cfAccessTokenManageService.maintainWeiXinAccessToken(ThirdPartyPlatformType.WX_WB, appid);
 
-        JSONObject ticketInfoJson = HttpClient.doGet("https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token="+cfThirdPartyPlatformApplication.getTokenValue()+"&type=jsapi");
+        JSONObject ticketInfoJson = HttpClient.doGet("https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + cfThirdPartyPlatformApplication.getTokenValue() + "&type=jsapi");
         Map<String, String> jumpData = new HashMap<>();
-        jumpData.put("timestamp", LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"))+"");
-        jumpData.put("noncestr", StringTools.getRandomString("",16));
+        jumpData.put("timestamp", LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8")) + "");
+        jumpData.put("noncestr", StringTools.getRandomString("", 16));
         jumpData.put("appId", appid);
         String sha1Hex = DigestUtils.sha1Hex("jsapi_ticket=" + ticketInfoJson.getString("ticket") + "&noncestr=" + jumpData.get("noncestr") + "&timestamp=" +
                 jumpData.get("timestamp") + "&url=" + url);
@@ -262,11 +278,11 @@ public class AuthController implements AuthSwagger {
     @RequestMapping(value = "getAliBaseUserInfoByCode", method = RequestMethod.GET)
     public ModelAndView getAliBaseUserInfoByCode(String auth_code, String appid) throws Exception {
 
-        if(StringUtils.isEmpty(auth_code)){
+        if (StringUtils.isEmpty(auth_code)) {
             return null;
         }
         List<CfWeixinConfig> cfWeixinConfigs = null;
-        if(StringUtils.isEmpty(appid)){
+        if (StringUtils.isEmpty(appid)) {
             cfWeixinConfigs = getWeiXinLoginConfigragtion("ali_h5_login");
             appid = getWeiXinConfigragtionByEnName("ali_h5_appid", cfWeixinConfigs);
         }
@@ -275,41 +291,41 @@ public class AuthController implements AuthSwagger {
         CfThirdPartyPlatformApplication cfThirdPartyPlatformApplication = cfThirdPartyPlatformApplicationService.findByAppId(appid, false);
 
         String url = params.get("url");
-        if(StringUtils.isEmpty(url)){
-            if(cfWeixinConfigs==null){
+        if (StringUtils.isEmpty(url)) {
+            if (cfWeixinConfigs == null) {
                 cfWeixinConfigs = getWeiXinLoginConfigragtion("ali_h5_login");
             }
             url = getWeiXinConfigragtionByEnName("ali_h5_login_success_redirect_url", cfWeixinConfigs);
         }
 
-        DefaultAlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", appid, cfThirdPartyPlatformApplication.getPrivateKey(),"json","UTF-8",cfThirdPartyPlatformApplication.getPublicKey(),"RSA2");
+        DefaultAlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", appid, cfThirdPartyPlatformApplication.getPrivateKey(), "json", "UTF-8", cfThirdPartyPlatformApplication.getPublicKey(), "RSA2");
         // 通过authCode获取accessToken
         AlipaySystemOauthTokenRequest oauthTokenRequest = new AlipaySystemOauthTokenRequest();
         oauthTokenRequest.setCode(auth_code);
         oauthTokenRequest.setGrantType("authorization_code");
         AlipaySystemOauthTokenResponse oauthTokenResponse = alipayClient.execute(oauthTokenRequest);
         String accessToken = oauthTokenResponse.getAccessToken();
-        if(StringUtils.isEmpty(accessToken)){
-            ExceptionCast.cast(UcenterCode.UCENTER_LOGIN_ERROR,"支付获取accessToken为空");
+        if (StringUtils.isEmpty(accessToken)) {
+            ExceptionCast.cast(UcenterCode.UCENTER_LOGIN_ERROR, "支付获取accessToken为空");
         }
 
         // 根据accessToken获取用户信息
         AlipayUserInfoShareResponse userInfoResponse = alipayClient.execute(new AlipayUserInfoShareRequest(), accessToken);
-        if (!userInfoResponse.isSuccess()){
-            ExceptionCast.cast(UcenterCode.UCENTER_LOGIN_ERROR,"支付获取用户信息失败");
+        if (!userInfoResponse.isSuccess()) {
+            ExceptionCast.cast(UcenterCode.UCENTER_LOGIN_ERROR, "支付获取用户信息失败");
         }
         WxUser wxUser = new WxUser();
         wxUser.setUnionid(userInfoResponse.getUserId());
         wxUser.setOpenid(userInfoResponse.getUserId());
         wxUser.setSex(2);
-        if(StringUtils.isEmpty(userInfoResponse.getNickName())){
+        if (StringUtils.isEmpty(userInfoResponse.getNickName())) {
             wxUser.setNickname("暂无昵称");
-        }else{
+        } else {
             wxUser.setNickname(userInfoResponse.getNickName());
         }
-        if(StringUtils.isEmpty(userInfoResponse.getAvatar())){
+        if (StringUtils.isEmpty(userInfoResponse.getAvatar())) {
             wxUser.setHeadimgurl("");
-        }else{
+        } else {
             wxUser.setHeadimgurl(userInfoResponse.getAvatar());
         }
         wxUser.setAppid(appid);
@@ -323,22 +339,19 @@ public class AuthController implements AuthSwagger {
         AuthToken authToken = authService.createJwtToken(userBasicInfo);
 
 
-
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:"+url+paramUri+"&jwt_token="+
-                URLEncoder.encode(JSONObject.toJSONString(authToken),"UTF-8") +
-                "&userInfo="+URLEncoder.encode(JSONObject.toJSONString(cfUser),"UTF-8"));
+        modelAndView.setViewName("redirect:" + url + paramUri + "&jwt_token=" + URLEncoder.encode(JSONObject.toJSONString(authToken), "UTF-8") + "&userInfo=" + URLEncoder.encode(JSONObject.toJSONString(cfUser), "UTF-8"));
         return modelAndView;
     }
 
     @Override
     @RequestMapping(value = "getAliMinBaseUserInfoByCode", method = RequestMethod.GET)
     public ResponseResult getAliMinBaseUserInfoByCode(String auth_code, String appid) throws Exception {
-        if(StringUtils.isEmpty(auth_code)){
+        if (StringUtils.isEmpty(auth_code)) {
             return null;
         }
 
-        if(StringUtils.isEmpty(appid)){
+        if (StringUtils.isEmpty(appid)) {
             //获取默认的支付宝小程序appid
             List<CfWeixinConfig> cfWeixinConfigs = getWeiXinLoginConfigragtion("ali_h5_login");
             appid = getWeiXinConfigragtionByEnName("ali_min_appid", cfWeixinConfigs);
@@ -352,27 +365,27 @@ public class AuthController implements AuthSwagger {
         oauthTokenRequest.setGrantType("authorization_code");
         AlipaySystemOauthTokenResponse oauthTokenResponse = alipayClient.execute(oauthTokenRequest);
         String accessToken = oauthTokenResponse.getAccessToken();
-        if(StringUtils.isEmpty(accessToken)){
-            ExceptionCast.cast(UcenterCode.UCENTER_LOGIN_ERROR,oauthTokenResponse.getSubMsg());
+        if (StringUtils.isEmpty(accessToken)) {
+            ExceptionCast.cast(UcenterCode.UCENTER_LOGIN_ERROR, oauthTokenResponse.getSubMsg());
         }
 
         // 根据accessToken获取用户信息
         AlipayUserInfoShareResponse userInfoResponse = alipayClient.execute(new AlipayUserInfoShareRequest(), accessToken);
-        if (!userInfoResponse.isSuccess()){
-            ExceptionCast.cast(UcenterCode.UCENTER_LOGIN_ERROR,"支付获取用户信息失败");
+        if (!userInfoResponse.isSuccess()) {
+            ExceptionCast.cast(UcenterCode.UCENTER_LOGIN_ERROR, "支付获取用户信息失败");
         }
         WxUser wxUser = new WxUser();
         wxUser.setUnionid(userInfoResponse.getUserId());
         wxUser.setOpenid(userInfoResponse.getUserId());
         wxUser.setSex(2);
-        if(StringUtils.isEmpty(userInfoResponse.getNickName())){
+        if (StringUtils.isEmpty(userInfoResponse.getNickName())) {
             wxUser.setNickname("暂无昵称");
-        }else{
+        } else {
             wxUser.setNickname(userInfoResponse.getNickName());
         }
-        if(StringUtils.isEmpty(userInfoResponse.getAvatar())){
+        if (StringUtils.isEmpty(userInfoResponse.getAvatar())) {
             wxUser.setHeadimgurl("");
-        }else{
+        } else {
             wxUser.setHeadimgurl(userInfoResponse.getAvatar());
         }
         wxUser.setAppid(appid);
@@ -390,51 +403,49 @@ public class AuthController implements AuthSwagger {
 
     @Override
     @RequestMapping(value = "getWxBaseUserInfoByCodeAndLoginType", method = RequestMethod.GET)
-    public ResponseResult getWxBaseUserInfoByCodeAndLoginType(String code,@Pattern(regexp = "^[mp|app]$", message = "请提供登录方式(mp-小程序|app-手机应用)") String loginType, String encryptedData, String iv, String url, String appid) throws Exception {
-        if(StringUtils.isEmpty(appid)){
+    public ResponseResult getWxBaseUserInfoByCodeAndLoginType(String code, @Pattern(regexp = "^[mp|app]$", message = "请提供登录方式(mp-小程序|app-手机应用)") String loginType, String encryptedData, String iv, String url, String appid) throws Exception {
+        if (StringUtils.isEmpty(appid)) {
             //获取默认的微信应用appid
-            if(loginType.equals("mp")){
+            if (loginType.equals("mp")) {
                 List<CfWeixinConfig> cfWeixinConfigs = getWeiXinLoginConfigragtion("mp_login");
                 appid = getWeiXinConfigragtionByEnName("mp_appid", cfWeixinConfigs);
-            }else if(loginType.equals("app")){
+            } else if (loginType.equals("app")) {
                 List<CfWeixinConfig> cfWeixinConfigs = getWeiXinLoginConfigragtion("app_login");
                 appid = getWeiXinConfigragtionByEnName("app_appid", cfWeixinConfigs);
-            }else{
+            } else {
                 ExceptionCast.cast(CommonCode.FAIL, "Login method is not currently supported");
             }
         }
 
         CfThirdPartyPlatformApplication cfThirdPartyPlatformApplication = cfThirdPartyPlatformApplicationService.findByAppId(appid, false);
 
-        if(loginType.equals("mp")){
-            url = StringUtils.isNotEmpty(url) ? url : "https://api.weixin.qq.com/sns/jscode2session?appid=" + appid +
-                    "&secret=" + cfThirdPartyPlatformApplication.getPublicKey() + "&js_code="+code+"&grant_type=authorization_code";
-        }else if(loginType.equals("app")){
-            url = StringUtils.isNotEmpty(url) ? url : "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid +
-                    "&secret=" + cfThirdPartyPlatformApplication.getPublicKey() + "&code="+code+"&grant_type=authorization_code";
-        }else{
+        if (loginType.equals("mp")) {
+            url = StringUtils.isNotEmpty(url) ? url : "https://api.weixin.qq.com/sns/jscode2session?appid=" + appid + "&secret=" + cfThirdPartyPlatformApplication.getPublicKey() + "&js_code=" + code + "&grant_type=authorization_code";
+        } else if (loginType.equals("app")) {
+            url = StringUtils.isNotEmpty(url) ? url : "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + appid + "&secret=" + cfThirdPartyPlatformApplication.getPublicKey() + "&code=" + code + "&grant_type=authorization_code";
+        } else {
             ExceptionCast.cast(CommonCode.FAIL, "Login method is not currently supported");
         }
 
         JSONObject userInfoJson1 = HttpClient.doGet(url);
         JSONObject userInfoJson = null;
-        if(userInfoJson1.get("errcode")!=null){
-            ExceptionCast.cast(AuthCode.WECHAT_LOGIN_FAILED, userInfoJson1.get("errmsg")+"");
+        if (userInfoJson1.get("errcode") != null) {
+            ExceptionCast.cast(AuthCode.WECHAT_LOGIN_FAILED, userInfoJson1.get("errmsg") + "");
             return null;
         }
 
-        if(loginType.equals("mp")){
-            userInfoJson = getEncryptedData(encryptedData,userInfoJson1.getString("session_key"),iv);
-            if(userInfoJson.get("openid")==null){
-                userInfoJson.put("openid",userInfoJson1.get("openid"));
+        if (loginType.equals("mp")) {
+            userInfoJson = getEncryptedData(encryptedData, userInfoJson1.getString("session_key"), iv);
+            if (userInfoJson.get("openid") == null) {
+                userInfoJson.put("openid", userInfoJson1.get("openid"));
             }
-            if(userInfoJson.get("unionid")==null){
-                userInfoJson.put("unionid",userInfoJson1.get("unionid"));
+            if (userInfoJson.get("unionid") == null) {
+                userInfoJson.put("unionid", userInfoJson1.get("unionid"));
             }
-        }else if(loginType.equals("app")){
+        } else if (loginType.equals("app")) {
             String accessToken = cfAccessTokenManageService.getWeiXinAccessToken(ThirdPartyPlatformType.WX_APP, appid);
             userInfoJson = getWeiXinUserInfoByAccessToken(accessToken, userInfoJson.getString("openid"));
-        }else{
+        } else {
             ExceptionCast.cast(AuthCode.WECHAT_LOGIN_FAILED, "Login method is not currently supported");
         }
 
@@ -446,16 +457,16 @@ public class AuthController implements AuthSwagger {
         cfAccountQuery.setUid(cfUser.getId());
         cfAccountQuery.setScoreType("common_use");
         List<CfAccount> cfAccounts = cfAccountService.getListByQuery(cfAccountQuery);
-        if(cfAccounts!=null && cfAccounts.size()>0){
+        if (cfAccounts != null && cfAccounts.size() > 0) {
             cfUser.setScore(cfAccounts.get(0).getBalance());
-        }else{
+        } else {
             cfUser.setScore(new BigDecimal(0.00));
         }
 
         UserBasicInfo userBasicInfo = new UserBasicInfo();
         userBasicInfo.setRoles(new ArrayList<String>());
-        if(cfUser.getCfRoles()!=null && cfUser.getCfRoles().size()>0){
-            for (CfRole cfRole: cfUser.getCfRoles()){
+        if (cfUser.getCfRoles() != null && cfUser.getCfRoles().size() > 0) {
+            for (CfRole cfRole : cfUser.getCfRoles()) {
                 userBasicInfo.getRoles().add(cfRole.getFlagKey());
             }
         }
@@ -471,28 +482,28 @@ public class AuthController implements AuthSwagger {
     @RequestMapping(value = "getUserPhonenumberByCodeAndLoginType", method = RequestMethod.GET)
     public ResponseResult getUserPhonenumberByCodeAndLoginType(String code, String loginType, String encryptedData, String iv, String appid) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        if(loginType.equals(ThirdPartyPlatformType.WX_MP)){
-            if(StringUtils.isEmpty(appid)){
+        if (loginType.equals(ThirdPartyPlatformType.WX_MP)) {
+            if (StringUtils.isEmpty(appid)) {
                 //获取系统默认的appid
                 List<CfWeixinConfig> cfWeixinConfigs = getWeiXinLoginConfigragtion("mp_login");
                 appid = getWeiXinConfigragtionByEnName("mp_appid", cfWeixinConfigs);
             }
             String accessToken = cfAccessTokenManageService.getWeiXinAccessToken(ThirdPartyPlatformType.WX_MP, appid);
             JSONObject body = new JSONObject();
-            body.put("code",code);
+            body.put("code", code);
             JSONObject result = (JSONObject) HttpClient.doPost(body, "https://api.weixin.qq.com/wxa/business/getuserphonenumber?access_token=" + accessToken, new HashMap<>(), true);
-            if(result.getInteger("errcode")==0){
+            if (result.getInteger("errcode") == 0) {
                 JSONObject phoneInfonfo = (JSONObject) result.get("phone_info");
                 //判断该手机号是否已经绑定
                 CfUser oldUser = cfUserService.findByPhone(phoneInfonfo.getString("purePhoneNumber"));
                 CfUser cfUser = cfUserService.checkUserExistByUid(userBasicInfo.getId(), false);
-                if(oldUser!=null){
+                if (oldUser != null) {
                     CfThirdPartyLoginQuery cfThirdPartyLoginQuery = new CfThirdPartyLoginQuery();
                     cfThirdPartyLoginQuery.setUid(oldUser.getId());
                     cfThirdPartyLoginQuery.setAppid(appid);
                     cfThirdPartyLoginQuery.setPlatform(ThirdPartyPlatformType.WX_MP);
                     List<CfThirdPartyLogin> cfThirdPartyLoginList = cfThirdPartyLoginService.getListByQuery(cfThirdPartyLoginQuery);
-                    if(cfThirdPartyLoginList!=null && cfThirdPartyLoginList.size()>0){
+                    if (cfThirdPartyLoginList != null && cfThirdPartyLoginList.size() > 0) {
                         //如果原来已经有了微信登录数据，清除原有用户的手机绑定。更新当前用户的手机绑定
                         CfUser user = new CfUser();
                         user.setId(oldUser.getId());
@@ -503,7 +514,7 @@ public class AuthController implements AuthSwagger {
                         user.setId(userBasicInfo.getId());
                         user.setPhone(phoneInfonfo.getString("purePhoneNumber"));
                         cfUserService.updateByPrimaryKeySelective(user);
-                    }else{
+                    } else {
                         cfThirdPartyLoginQuery.setUid(userBasicInfo.getId());
                         cfThirdPartyLoginQuery.setAppid(appid);
                         cfThirdPartyLoginQuery.setPlatform(ThirdPartyPlatformType.WX_MP);
@@ -512,7 +523,7 @@ public class AuthController implements AuthSwagger {
                         updateCfThirdPartyLogin.setUid(oldUser.getId());
                         cfThirdPartyLoginService.updateByQuery(updateCfThirdPartyLogin, cfThirdPartyLoginQuery);
                     }
-                }else{
+                } else {
                     //更新用户手机号
                     CfUser user = new CfUser();
                     user.setId(userBasicInfo.getId());
@@ -526,11 +537,11 @@ public class AuthController implements AuthSwagger {
                 CfCouponActivityQuery cfCouponActivityQuery = new CfCouponActivityQuery();
                 cfCouponActivityQuery.setPhone(phoneInfonfo.getString("purePhoneNumber"));
                 List<CfCouponActivity> cfCouponActivities = cfCouponActivityService.getListByQuery(cfCouponActivityQuery);
-                if(cfCouponActivities!=null && cfCouponActivities.size()>0 && StringUtils.isEmpty(cfCouponActivities.get(0).getMainBodyId())){
+                if (cfCouponActivities != null && cfCouponActivities.size() > 0 && StringUtils.isEmpty(cfCouponActivities.get(0).getMainBodyId())) {
                     cfCouponActivities.get(0).setMainBodyId(cfUser.getId());
                     cfCouponActivityService.update(cfCouponActivities.get(0));
                     //设置该用户为商家
-                    cfUserRoleService.addByUidAndRoleKey(userBasicInfo.getId(),"merchant");
+                    cfUserRoleService.addByUidAndRoleKey(userBasicInfo.getId(), "merchant");
                 }
 
                 //临时使用，后期此处代码删除  判断该手机号是否有套餐，如果有将对应套餐绑定到该用户名下
@@ -541,10 +552,10 @@ public class AuthController implements AuthSwagger {
                 cfCarParkPackage.setUid(cfUser.getId());
                 cfCarParkPackageService.batchBindUserByPhone(cfUser.getId(), phoneInfonfo.getString("purePhoneNumber"));
                 return new ResponseResult(CommonCode.SUCCESS, cfUser, 1);
-            }else{
+            } else {
                 return new ResponseResult(CommonCode.FAIL, result, result.getString("errmsg"));
             }
-        }else if(loginType.equals(ThirdPartyPlatformType.ALI_MP)){
+        } else if (loginType.equals(ThirdPartyPlatformType.ALI_MP)) {
             String response = code;
 
             //1. 获取验签和解密所需要的参数
@@ -576,7 +587,7 @@ public class AuthController implements AuthSwagger {
             } catch (AlipayApiException e) {
                 // 验签异常, 日志
             }
-            if(!signCheckPass) {
+            if (!signCheckPass) {
                 // 验签不通过（异常或者报文被篡改），终止流程（不需要做解密）
                 throw new Exception("验签失败");
             }
@@ -598,7 +609,7 @@ public class AuthController implements AuthSwagger {
         return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
     }
 
-    private Map<String, String> getLoginParams() throws Exception{
+    private Map<String, String> getLoginParams() throws Exception {
 
         Map<String, String> returnParams = new HashMap<>();
         String paramUri = "";
@@ -606,96 +617,95 @@ public class AuthController implements AuthSwagger {
         Map<String, String> param = getAllRequestParam(request);
         Set<Map.Entry<String, String>> entries = param.entrySet();
         int i = 0;
-        for(Map.Entry<String, String> entrie: entries){
-            if(entrie.getKey().equals("datas") && StringUtils.isNotEmpty(entrie.getValue())){
+        for (Map.Entry<String, String> entrie : entries) {
+            if (entrie.getKey().equals("datas") && StringUtils.isNotEmpty(entrie.getValue())) {
                 Map<String, String> datas = JSONObject.parseObject(entrie.getValue(), new TypeReference<Map<String, String>>() {
                 });
                 Set<Map.Entry<String, String>> entries2 = datas.entrySet();
                 String qrCodeId = null;
-                for(Map.Entry<String, String> entrie2: entries2){
-                    if(entrie2.getKey().equals("url")){
-                        returnParams.put("url",entrie2.getValue());
+                for (Map.Entry<String, String> entrie2 : entries2) {
+                    if (entrie2.getKey().equals("url")) {
+                        returnParams.put("url", entrie2.getValue());
                         continue;
                     }
-                    if(i==0){
-                        paramUri += "?"+entrie2.getKey()+"="+entrie2.getValue();
-                    }else{
-                        paramUri += "&"+entrie2.getKey()+"="+entrie2.getValue();
+                    if (i == 0) {
+                        paramUri += "?" + entrie2.getKey() + "=" + entrie2.getValue();
+                    } else {
+                        paramUri += "&" + entrie2.getKey() + "=" + entrie2.getValue();
                     }
                     i++;
-                    if(entrie2.getKey().equals("qrCodeId")){
+                    if (entrie2.getKey().equals("qrCodeId")) {
                         qrCodeId = entrie2.getValue();
                     }
                 }
 
-                if(qrCodeId!=null){
-                    paramUri = "/getCoupons"+paramUri;
+                if (qrCodeId != null) {
+                    paramUri = "/getCoupons" + paramUri;
                 }
                 continue;
-            }else{
-                if(i==0){
-                    paramUri += "?"+entrie.getKey()+"="+entrie.getValue();
-                }else{
-                    paramUri += "&"+entrie.getKey()+"="+entrie.getValue();
+            } else {
+                if (i == 0) {
+                    paramUri += "?" + entrie.getKey() + "=" + entrie.getValue();
+                } else {
+                    paramUri += "&" + entrie.getKey() + "=" + entrie.getValue();
                 }
                 i++;
             }
 
 
         }
-        returnParams.put("paramUri",paramUri);
+        returnParams.put("paramUri", paramUri);
         return returnParams;
     }
 
-    private WxUser getWxUserByUserInfoJson(JSONObject userInfoJson)
-    {
+    private WxUser getWxUserByUserInfoJson(JSONObject userInfoJson) {
         WxUser wxUser = new WxUser();
-        if(StringUtils.isNotEmpty(userInfoJson.getString("city"))){
+        if (StringUtils.isNotEmpty(userInfoJson.getString("city"))) {
             wxUser.setCity(userInfoJson.getString("city"));
-        }else {
+        } else {
             wxUser.setCity("");
         }
-        if(StringUtils.isNotEmpty(userInfoJson.getString("country"))){
+        if (StringUtils.isNotEmpty(userInfoJson.getString("country"))) {
             wxUser.setCountry(userInfoJson.getString("country"));
-        }else {
+        } else {
             wxUser.setCountry("");
         }
-        if(StringUtils.isNotEmpty(userInfoJson.getString("avatarUrl"))){
+        if (StringUtils.isNotEmpty(userInfoJson.getString("avatarUrl"))) {
             wxUser.setHeadimgurl(userInfoJson.getString("avatarUrl"));
-        }else if(StringUtils.isNotEmpty(userInfoJson.getString("headimgurl"))){
+        } else if (StringUtils.isNotEmpty(userInfoJson.getString("headimgurl"))) {
             wxUser.setHeadimgurl(userInfoJson.getString("headimgurl"));
-        }else {
+        } else {
             wxUser.setHeadimgurl("");
         }
-        if(StringUtils.isNotEmpty(userInfoJson.getString("nickName"))){
+        if (StringUtils.isNotEmpty(userInfoJson.getString("nickName"))) {
             wxUser.setNickname(userInfoJson.getString("nickName"));
-        }else if(StringUtils.isNotEmpty(userInfoJson.getString("nickname"))){
+        } else if (StringUtils.isNotEmpty(userInfoJson.getString("nickname"))) {
             wxUser.setNickname(userInfoJson.getString("nickname"));
-        }else {
+        } else {
             wxUser.setNickname("");
         }
-        if(StringUtils.isNotEmpty(userInfoJson.getString("province"))){
+        if (StringUtils.isNotEmpty(userInfoJson.getString("province"))) {
             wxUser.setProvince(userInfoJson.getString("province"));
-        }else {
+        } else {
             wxUser.setProvince("");
         }
-        if(StringUtils.isNotEmpty(userInfoJson.getString("openId"))){
+        if (StringUtils.isNotEmpty(userInfoJson.getString("openId"))) {
             wxUser.setOpenid(userInfoJson.getString("openId"));
-        }else if(StringUtils.isNotEmpty(userInfoJson.getString("openid"))){
+        } else if (StringUtils.isNotEmpty(userInfoJson.getString("openid"))) {
             wxUser.setOpenid(userInfoJson.getString("openid"));
         }
         wxUser.setUnionid("");
-        if(StringUtils.isNotEmpty(userInfoJson.getString("unionid"))){
+        if (StringUtils.isNotEmpty(userInfoJson.getString("unionid"))) {
             wxUser.setUnionid(userInfoJson.getString("unionid"));
         }
-        if(StringUtils.isNotEmpty(userInfoJson.getString("unionId"))){
+        if (StringUtils.isNotEmpty(userInfoJson.getString("unionId"))) {
             wxUser.setUnionid(userInfoJson.getString("unionId"));
         }
-        if(StringUtils.isNotEmpty(userInfoJson.getString("gender"))){
+        if (StringUtils.isNotEmpty(userInfoJson.getString("gender"))) {
             wxUser.setSex(Integer.parseInt(userInfoJson.getString("gender")));
-        }else if(StringUtils.isNotEmpty(userInfoJson.getString("sex"))){
+        } else if (StringUtils.isNotEmpty(userInfoJson.getString("sex"))) {
             wxUser.setSex(Integer.parseInt(userInfoJson.getString("sex")));
-        }else {
+        } else {
             wxUser.setSex(0);
         }
         return wxUser;
@@ -731,51 +741,48 @@ public class AuthController implements AuthSwagger {
                 return JSONObject.parseObject(result);
             }
         } catch (Exception e) {
-            System.out.println("encryptedData="+encryptedData+",sessionkey="+sessionkey+",iv="+iv);
+            System.out.println("encryptedData=" + encryptedData + ",sessionkey=" + sessionkey + ",iv=" + iv);
             e.printStackTrace();
             ExceptionCast.cast(AuthCode.WECHAT_LOGIN_FAILED, "weixin userInfo decode fail");
         }
         return null;
     }
 
-    private JSONObject getWeiXinUserInfoByAccessToken(String accessToken, String openId) throws Exception
-    {
-        JSONObject userInfoJson = HttpClient.doGet("https://api.weixin.qq.com/sns/userinfo?access_token="+accessToken+"&openid="+openId);
-        if(userInfoJson.get("errcode")!=null){
-            ExceptionCast.cast(AuthCode.WECHAT_LOGIN_FAILED, userInfoJson.get("errmsg")+"");
+    private JSONObject getWeiXinUserInfoByAccessToken(String accessToken, String openId) throws Exception {
+        JSONObject userInfoJson = HttpClient.doGet("https://api.weixin.qq.com/sns/userinfo?access_token=" + accessToken + "&openid=" + openId);
+        if (userInfoJson.get("errcode") != null) {
+            ExceptionCast.cast(AuthCode.WECHAT_LOGIN_FAILED, userInfoJson.get("errmsg") + "");
             return null;
         }
         return userInfoJson;
     }
 
-    private List<CfWeixinConfig> getWeiXinLoginConfigragtion(String scenes)
-    {
+    private List<CfWeixinConfig> getWeiXinLoginConfigragtion(String scenes) {
         CfWeixinConfigQuery cfWeixinConfigQuery = new CfWeixinConfigQuery();
         cfWeixinConfigQuery.setUseScenes(scenes);
         List<CfWeixinConfig> cfWeixinConfigs = cfWeixinConfigService.getListByQuery(cfWeixinConfigQuery);
-        if(cfWeixinConfigs.size()==0){
+        if (cfWeixinConfigs.size() == 0) {
             ExceptionCast.cast(UcenterCode.MISSING_WECHAT_CONFIGURATION, "database miss weixin login configragtion data");
         }
         return cfWeixinConfigs;
     }
 
-    private String getWeiXinConfigragtionByEnName(String enName, List<CfWeixinConfig> cfWeixinConfigs)
-    {
+    private String getWeiXinConfigragtionByEnName(String enName, List<CfWeixinConfig> cfWeixinConfigs) {
         String value = null;
-        for(CfWeixinConfig cfWeixinConfig: cfWeixinConfigs){
-            if(cfWeixinConfig.getEnName().equals(enName)){
+        for (CfWeixinConfig cfWeixinConfig : cfWeixinConfigs) {
+            if (cfWeixinConfig.getEnName().equals(enName)) {
                 value = cfWeixinConfig.getValue();
                 break;
             }
         }
-        if(value==null){
-            ExceptionCast.cast(UcenterCode.WECHAT_CONFIGURATION_DOES_NOT_EXIST, "miss configragtion: "+enName);
+        if (value == null) {
+            ExceptionCast.cast(UcenterCode.WECHAT_CONFIGURATION_DOES_NOT_EXIST, "miss configragtion: " + enName);
         }
         return value;
     }
 
     @RequestMapping(value = "testWxin", method = RequestMethod.GET)
-    public JSONObject testWxin(HttpServletRequest request, HttpServletResponse response) throws Exception{
+    public JSONObject testWxin(HttpServletRequest request, HttpServletResponse response) throws Exception {
         return HttpClient.doGet(cfWeixinConfigService.returnGetIpUrl());
     }
 
@@ -785,7 +792,7 @@ public class AuthController implements AuthSwagger {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         cfAccountQuery.setUid(userBasicInfo.getId());
         List<CfAccount> cfAccounts = cfAccountService.getListByQuery(cfAccountQuery);
-        if(cfAccounts==null || cfAccounts.size()==0){
+        if (cfAccounts == null || cfAccounts.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfAccounts);
@@ -794,7 +801,7 @@ public class AuthController implements AuthSwagger {
     private Map<String, String> getAllRequestParam(final HttpServletRequest request) throws Exception {
         String sb = getHttpData(request);
         Map res = (JSONObject.parseObject(sb));
-        if(res==null){
+        if (res == null) {
             res = new HashMap();
         }
         Enumeration<?> temp = request.getParameterNames();
@@ -812,7 +819,7 @@ public class AuthController implements AuthSwagger {
         BufferedReader bufferedReader = null;
         InputStream inputStream = null;
         StringBuffer sb = null;
-        try{
+        try {
             inputStream = httpServletRequest.getInputStream();
             bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             sb = new StringBuffer();
@@ -820,13 +827,13 @@ public class AuthController implements AuthSwagger {
             while ((line = bufferedReader.readLine()) != null) {
                 sb.append(line);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             throw e;
-        }finally {
-            try{
+        } finally {
+            try {
                 bufferedReader.close();
                 inputStream.close();
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw e;
             }
 

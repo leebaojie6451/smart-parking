@@ -32,6 +32,7 @@ public interface CfUserPaymentAgencyMapper {
 
     /**
      * 根据条件查询用户支付账户数据列表
+     *
      * @param conditions
      * @return
      */
@@ -39,6 +40,7 @@ public interface CfUserPaymentAgencyMapper {
 
     /**
      * 根据条件查询用户支付账户数据列表数
+     *
      * @param conditions
      * @return
      */
@@ -46,6 +48,7 @@ public interface CfUserPaymentAgencyMapper {
 
     /**
      * 根据停车场id和支付机构简称查询支付数据(联停车支付相关表)
+     *
      * @param carParkId
      * @param paymentAgencyShortName
      * @return
@@ -54,6 +57,7 @@ public interface CfUserPaymentAgencyMapper {
 
     /**
      * 根据停车场和支付场景获取停车场的支付数据
+     *
      * @param carParkId
      * @return
      */

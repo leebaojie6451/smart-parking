@@ -62,13 +62,13 @@ public class CfLogisticsStorehouseCargoTypeServiceImpl implements CfLogisticsSto
     public CfLogisticsStorehouseCargoTypeExample getExampleByQuery(CfLogisticsStorehouseCargoTypeQuery cfLogisticsStorehouseCargoTypeQuery) {
         CfLogisticsStorehouseCargoTypeExample cfLogisticsStorehouseCargoTypeExample = new CfLogisticsStorehouseCargoTypeExample();
         CfLogisticsStorehouseCargoTypeExample.Criteria criteria = cfLogisticsStorehouseCargoTypeExample.createCriteria();
-        if(cfLogisticsStorehouseCargoTypeQuery.getLogisticsStorehouseId()!=null){
+        if (cfLogisticsStorehouseCargoTypeQuery.getLogisticsStorehouseId() != null) {
             criteria.andLogisticsStorehouseIdEqualTo(cfLogisticsStorehouseCargoTypeQuery.getLogisticsStorehouseId());
         }
-        if(StringUtils.isNotEmpty(cfLogisticsStorehouseCargoTypeQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfLogisticsStorehouseCargoTypeQuery.getOrderBy())) {
             cfLogisticsStorehouseCargoTypeExample.setOrderByClause(cfLogisticsStorehouseCargoTypeQuery.getOrderBy());
         }
-        if(cfLogisticsStorehouseCargoTypeQuery.getPage()!=null && cfLogisticsStorehouseCargoTypeQuery.getSize()!=null){
+        if (cfLogisticsStorehouseCargoTypeQuery.getPage() != null && cfLogisticsStorehouseCargoTypeQuery.getSize() != null) {
             PageHelper.startPage(cfLogisticsStorehouseCargoTypeQuery.getPage(), cfLogisticsStorehouseCargoTypeQuery.getSize());
         }
         return cfLogisticsStorehouseCargoTypeExample;

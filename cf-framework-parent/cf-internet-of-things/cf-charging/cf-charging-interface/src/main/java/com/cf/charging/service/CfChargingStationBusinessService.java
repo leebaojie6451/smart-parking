@@ -14,6 +14,7 @@ public interface CfChargingStationBusinessService {
 
     /**
      * 处理连接
+     *
      * @param ctx
      * @param msg
      * @return
@@ -22,6 +23,7 @@ public interface CfChargingStationBusinessService {
 
     /**
      * 开始充电
+     *
      * @param cfChargingStationDeviceForm
      * @return
      */
@@ -29,6 +31,7 @@ public interface CfChargingStationBusinessService {
 
     /**
      * 停止充电(管理人员专用)
+     *
      * @param cfChargingStationDeviceForm
      * @return
      */
@@ -36,6 +39,7 @@ public interface CfChargingStationBusinessService {
 
     /**
      * 停止充电(普通用户专用)
+     *
      * @param cfChargingStationDeviceForm
      * @return
      * @throws Exception
@@ -44,6 +48,7 @@ public interface CfChargingStationBusinessService {
 
     /**
      * 充电配置
+     *
      * @param cfChargingStationDeviceForm
      * @return
      */
@@ -51,6 +56,7 @@ public interface CfChargingStationBusinessService {
 
     /**
      * 获取充电口实时数据
+     *
      * @param cfChargingStationDeviceForm
      * @return
      */
@@ -58,12 +64,14 @@ public interface CfChargingStationBusinessService {
 
     /**
      * 完成充电
+     *
      * @param cfChargingState
      */
     void finishCharing(CfChargingState cfChargingState);
 
     /**
      * 检查当前设备是否在本机
+     *
      * @param serialNumber
      */
     String checkSameServer(String serialNumber) throws Exception;
@@ -72,6 +80,7 @@ public interface CfChargingStationBusinessService {
 
     /**
      * 开始正式充电，扣费
+     *
      * @param cfChargingUseLog
      * @return
      */
@@ -79,6 +88,7 @@ public interface CfChargingStationBusinessService {
 
     /**
      * 发送消息
+     *
      * @param messageContents
      * @param uid
      * @param messageType

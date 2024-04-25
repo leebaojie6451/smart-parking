@@ -12,18 +12,18 @@ import com.cf.framework.domain.response.ResultCode;
  **/
 public enum SmsCode implements ResultCode {
 
-    SMS_SEND_FREQUENTLY(false,80001,"频繁发送！"),
-    SMS_CODE_INVALID(false,80002,"无效的短信验证码！"),
-    CHECKING_TOO_FREQUENTLY(false,80003,"校验太频繁，请稍后再试！"),
-    PHONE_NUMBER_MISSING(false,80004,"缺少手机号！")
-    ;
+    SMS_SEND_FREQUENTLY(false, 80001, "频繁发送！"),
+    SMS_CODE_INVALID(false, 80002, "无效的短信验证码！"),
+    CHECKING_TOO_FREQUENTLY(false, 80003, "校验太频繁，请稍后再试！"),
+    PHONE_NUMBER_MISSING(false, 80004, "缺少手机号！");
     //操作代码
     boolean success;
     //操作代码
     int code;
     //提示信息
     String message;
-    private SmsCode(boolean success, int code, String message){
+
+    private SmsCode(boolean success, int code, String message) {
         this.success = success;
         this.code = code;
         this.message = message;
@@ -50,6 +50,7 @@ public enum SmsCode implements ResultCode {
     }
 
     String mixMessage;
+
     @Override
     public String mixMessage() {
         return mixMessage;

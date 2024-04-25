@@ -26,6 +26,7 @@ public interface CfUserDriverLicenseService {
 
     /**
      * 通过证件号排查该证件是否已经被绑定过
+     *
      * @param cfUserDriverLicense
      */
     void checkRepeatByLicenseNumber(CfUserDriverLicense cfUserDriverLicense);
@@ -35,6 +36,6 @@ public interface CfUserDriverLicenseService {
     /**
      * 同步TMS物流系统司机信息
      */
-    List<CfUserDriverLicense> synchronizeTmsDriver()throws Exception;
-    
+    List<CfUserDriverLicense> synchronizeTmsDriver() throws Exception;
+
 }

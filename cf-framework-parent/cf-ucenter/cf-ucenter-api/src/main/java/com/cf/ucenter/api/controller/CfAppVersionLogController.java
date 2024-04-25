@@ -23,7 +23,7 @@ public class CfAppVersionLogController implements CfAppVersionLogSwagger {
     @RequestMapping(value = "checkVersion", method = RequestMethod.GET)
     public ResponseResult checkVersion(String platform, String versionNumber) {
         CfAppVersionLog cfAppVersionLog = cfAppVersionLogService.checkVersion(platform, versionNumber);
-        if(cfAppVersionLog==null){
+        if (cfAppVersionLog == null) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfAppVersionLog);

@@ -12,6 +12,7 @@ public interface CfCouponActivityCouponTypeService {
 
     /**
      * 店主添加优惠券活动优惠券类型(设置发券时的 金额,有效期)
+     *
      * @param shopkeeperId
      * @param cfCouponActivityCouponType
      * @return
@@ -26,6 +27,7 @@ public interface CfCouponActivityCouponTypeService {
 
     /**
      * 店主更新优惠券活动优惠券类型(设置发券时的 金额,有效期)
+     *
      * @param shopkeeperId
      * @param cfCouponActivityCouponType
      * @return
@@ -36,6 +38,7 @@ public interface CfCouponActivityCouponTypeService {
 
     /**
      * 店主删除优惠券活动优惠券类型(设置发券时的 金额,有效期)
+     *
      * @param shopkeeperId
      * @param id
      * @return

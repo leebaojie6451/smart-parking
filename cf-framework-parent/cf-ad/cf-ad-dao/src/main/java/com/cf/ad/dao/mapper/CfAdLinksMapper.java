@@ -33,6 +33,7 @@ public interface CfAdLinksMapper {
 
     /**
      * 批量插入
+     *
      * @param cfAdLinksList
      * @return
      */
@@ -42,6 +43,7 @@ public interface CfAdLinksMapper {
 
     /**
      * 广告统计
+     *
      * @param adCounts
      * @return
      */

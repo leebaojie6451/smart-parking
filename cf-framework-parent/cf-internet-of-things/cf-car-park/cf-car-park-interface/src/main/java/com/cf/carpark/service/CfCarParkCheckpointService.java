@@ -23,6 +23,7 @@ public interface CfCarParkCheckpointService {
 
     /**
      * 根据条件获取出入口数据列表
+     *
      * @param cfCarParkCheckpointQuery
      * @return
      */
@@ -32,6 +33,7 @@ public interface CfCarParkCheckpointService {
 
     /**
      * 原生sql条件查询
+     *
      * @param cfCarParkCheckpointQuery
      * @return
      */
@@ -50,6 +52,7 @@ public interface CfCarParkCheckpointService {
 
     /**
      * 查询附近的停车场(可以指定停车场查询)
+     *
      * @param cfCarParkCheckpointQuery
      * @return
      */
@@ -57,6 +60,7 @@ public interface CfCarParkCheckpointService {
 
     /**
      * 解除指定用户的所有岗亭通道值班
+     *
      * @param uid
      * @return
      */
@@ -64,6 +68,7 @@ public interface CfCarParkCheckpointService {
 
     /**
      * 检查指定用户是否有指定通道的权限
+     *
      * @param userBasicInfo
      * @param checkPointId
      */

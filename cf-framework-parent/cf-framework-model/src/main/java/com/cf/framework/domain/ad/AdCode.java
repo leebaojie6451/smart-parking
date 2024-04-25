@@ -12,15 +12,15 @@ import com.cf.framework.domain.response.ResultCode;
  **/
 public enum AdCode implements ResultCode {
 
-    AD_NOT_EXIST(false,31000,"指定的广告不存在！")
-    ;
+    AD_NOT_EXIST(false, 31000, "指定的广告不存在！");
     //操作代码
     boolean success;
     //操作代码
     int code;
     //提示信息
     String message;
-    private AdCode(boolean success, int code, String message){
+
+    private AdCode(boolean success, int code, String message) {
         this.success = success;
         this.code = code;
         this.message = message;
@@ -47,6 +47,7 @@ public enum AdCode implements ResultCode {
     }
 
     String mixMessage;
+
     @Override
     public String mixMessage() {
         return mixMessage;

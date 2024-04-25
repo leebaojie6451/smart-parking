@@ -46,7 +46,7 @@ public class CfChargingStationController implements CfChargingStationSwagger {
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseResult add(@Validated @RequestBody CfChargingStationForm cfChargingStationForm) throws Exception {
         CfChargingStation cfChargingStation = new CfChargingStation();
-        BeanUtils.copyProperties(cfChargingStationForm,cfChargingStation);
+        BeanUtils.copyProperties(cfChargingStationForm, cfChargingStation);
         CfChargingStation lastCfChargingStation = cfChargingStationService.add(cfChargingStation);
         return new ResponseResult(CommonCode.SUCCESS, lastCfChargingStation);
     }
@@ -56,7 +56,7 @@ public class CfChargingStationController implements CfChargingStationSwagger {
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public ResponseResult update(@Validated @RequestBody CfChargingStationForm cfChargingStationForm) {
         CfChargingStation cfChargingStation = new CfChargingStation();
-        BeanUtils.copyProperties(cfChargingStationForm,cfChargingStation);
+        BeanUtils.copyProperties(cfChargingStationForm, cfChargingStation);
         CfChargingStation update = cfChargingStationService.update(cfChargingStation);
         return new ResponseResult(CommonCode.SUCCESS, update);
     }
@@ -66,7 +66,7 @@ public class CfChargingStationController implements CfChargingStationSwagger {
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(String id) {
         Integer delete = cfChargingStationService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS, delete):new ResponseResult(CommonCode.FAIL, null);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS, delete) : new ResponseResult(CommonCode.FAIL, null);
     }
 
     @PreAuthorize("hasAuthority('charging-CfChargingStationController-selectListByCondition')")
@@ -90,37 +90,37 @@ public class CfChargingStationController implements CfChargingStationSwagger {
         allowFileds.add("order");
         allowFileds.add("limit");
         Map<String, String> allowFiledsMap = new HashMap<String, String>();
-        allowFiledsMap.put("id","cst");
-        allowFiledsMap.put("station_name","cst");
-        allowFiledsMap.put("status","cst");
-        allowFiledsMap.put("country_id","cst");
-        allowFiledsMap.put("province_id","cst");
-        allowFiledsMap.put("state_or_city_id","cst");
-        allowFiledsMap.put("zone_or_county_id","cst");
-        allowFiledsMap.put("id$in","cst");
-        allowFiledsMap.put("like","");
-        allowFiledsMap.put("group","");
-        allowFiledsMap.put("order","");
-        allowFiledsMap.put("limit","");
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0 && StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "finance")<0){
+        allowFiledsMap.put("id", "cst");
+        allowFiledsMap.put("station_name", "cst");
+        allowFiledsMap.put("status", "cst");
+        allowFiledsMap.put("country_id", "cst");
+        allowFiledsMap.put("province_id", "cst");
+        allowFiledsMap.put("state_or_city_id", "cst");
+        allowFiledsMap.put("zone_or_county_id", "cst");
+        allowFiledsMap.put("id$in", "cst");
+        allowFiledsMap.put("like", "");
+        allowFiledsMap.put("group", "");
+        allowFiledsMap.put("order", "");
+        allowFiledsMap.put("limit", "");
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0 && StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "finance") < 0) {
             CfChargingStationLinkUserQuery cfChargingStationLinkUserQuery = new CfChargingStationLinkUserQuery();
             cfChargingStationLinkUserQuery.setUid(userBasicInfo.getId());
             List<CfChargingStationLinkUser> cfChargingStationLinkUsers = cfChargingStationLinkUserService.getListByQuery(cfChargingStationLinkUserQuery);
-            if(cfChargingStationLinkUsers==null || cfChargingStationLinkUsers.size()==0){
+            if (cfChargingStationLinkUsers == null || cfChargingStationLinkUsers.size() == 0) {
                 return new ResponseResult(CommonCode.NO_MORE_DATAS);
             }
             String chargingStationIds = "";
-            for (CfChargingStationLinkUser cfChargingStationLinkUser: cfChargingStationLinkUsers){
-                chargingStationIds += ",'"+cfChargingStationLinkUser.getChargingStationId()+"'";
+            for (CfChargingStationLinkUser cfChargingStationLinkUser : cfChargingStationLinkUsers) {
+                chargingStationIds += ",'" + cfChargingStationLinkUser.getChargingStationId() + "'";
             }
             HashMap<String, String> valueMap = new HashMap<>();
-            valueMap.put("operator","in");
-            valueMap.put("value",chargingStationIds.substring(1));
+            valueMap.put("operator", "in");
+            valueMap.put("value", chargingStationIds.substring(1));
             conditionsMap.put("id$in", valueMap);
         }
-        List<CfChargingStation> cfChargingStations = cfChargingStationService.selectListByCondition(conditionsMap, allowFiledsMap,allowFileds);
+        List<CfChargingStation> cfChargingStations = cfChargingStationService.selectListByCondition(conditionsMap, allowFiledsMap, allowFileds);
         Integer counts = cfChargingStationService.selectListByConditionCounts(conditionsMap, allowFiledsMap, allowFileds);
-        if(cfChargingStations!=null && cfChargingStations.size()>0){
+        if (cfChargingStations != null && cfChargingStations.size() > 0) {
             return new ResponseResult(CommonCode.SUCCESS, cfChargingStations, null, counts);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);
@@ -131,7 +131,7 @@ public class CfChargingStationController implements CfChargingStationSwagger {
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(CfChargingStationQuery cfChargingStationQuery) throws Exception {
         List<CfChargingStation> cfChargingStations = cfChargingStationService.getListByQuery(cfChargingStationQuery);
-        if(cfChargingStations==null || cfChargingStations.size()==0){
+        if (cfChargingStations == null || cfChargingStations.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfChargingStations);

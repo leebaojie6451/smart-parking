@@ -58,7 +58,8 @@ public class BxDataPack {
     // crc
     public short crc;
 
-    private BxDataPack() {}
+    private BxDataPack() {
+    }
 
     public BxDataPack(byte[] data) {
         this.data = data;
@@ -73,6 +74,7 @@ public class BxDataPack {
 
     /**
      * 对数据进行转义
+     *
      * @param src
      * @return
      */
@@ -83,8 +85,8 @@ public class BxDataPack {
 
         len = src.length;
 
-        for(byte d : src) {
-            if((d == (byte)0xa5) || (d == (byte)0x5a) || (d == (byte)0xa6) || (d == (byte)0x5b)) {
+        for (byte d : src) {
+            if ((d == (byte) 0xa5) || (d == (byte) 0x5a) || (d == (byte) 0xa6) || (d == (byte) 0x5b)) {
                 len++;
             }
         }
@@ -106,35 +108,31 @@ public class BxDataPack {
 
         //
         // 帧头
-        for(int i=0; i<WRAP_A5_NUM; i++){
+        for (int i = 0; i < WRAP_A5_NUM; i++) {
             dst[offset++] = (byte) 0xa5;
         }
 
 
-        for(byte data : src) {
-            if(data == (byte)0xa5) {
+        for (byte data : src) {
+            if (data == (byte) 0xa5) {
                 dst[offset++] = (byte) 0xa6;
                 dst[offset++] = 0x02;
-            }
-            else if(data == (byte)0xa6) {
+            } else if (data == (byte) 0xa6) {
                 dst[offset++] = (byte) 0xa6;
                 dst[offset++] = 0x01;
-            }
-            else if(data == 0x5a) {
+            } else if (data == 0x5a) {
                 dst[offset++] = 0x5b;
                 dst[offset++] = 0x02;
-            }
-            else if(data == 0x5b) {
+            } else if (data == 0x5b) {
                 dst[offset++] = 0x5b;
                 dst[offset++] = 0x01;
-            }
-            else{
+            } else {
                 dst[offset++] = data;
             }
         }
 
         // 帧尾
-        for(int i=0; i<WRAP_5A_NUM; i++){
+        for (int i = 0; i < WRAP_5A_NUM; i++) {
             dst[offset++] = 0x5a;
         }
 
@@ -145,7 +143,8 @@ public class BxDataPack {
 
     /**
      * 对数据进行封装，生成字节流
-     * @return  数据帧的字节流
+     *
+     * @return 数据帧的字节流
      */
     public byte[] pack() {
 
@@ -197,10 +196,10 @@ public class BxDataPack {
         //
         byte[] origin = bytes.build();
         int originLen = origin.length;
-        crc = BxUtils.CRC16(origin, 0, originLen-2);
+        crc = BxUtils.CRC16(origin, 0, originLen - 2);
 
-        origin[originLen-2] = (byte)(crc & 0xff);
-        origin[originLen-1] = (byte)(crc>>8);
+        origin[originLen - 2] = (byte) (crc & 0xff);
+        origin[originLen - 1] = (byte) (crc >> 8);
 
 
         //
@@ -214,6 +213,7 @@ public class BxDataPack {
 
     /**
      * 将BYTE数组解析成 BxDataPack
+     *
      * @param src
      * @return
      */
@@ -222,18 +222,17 @@ public class BxDataPack {
         //
         // 反转义
         byte[] dst = unwrap(src, length);
-        if(dst == null) {
+        if (dst == null) {
             return null;
-        }
-        else {
+        } else {
 
             //
             // check crc
             //if(BxUtils.CRC16())
-            short crcCalculated = BxUtils.CRC16(dst, 0, dst.length-2);
-            short crcGot = BxUtils.bytesToShort(dst, dst.length-2, BxUtils.ENDIAN.LITTLE);
+            short crcCalculated = BxUtils.CRC16(dst, 0, dst.length - 2);
+            short crcGot = BxUtils.bytesToShort(dst, dst.length - 2, BxUtils.ENDIAN.LITTLE);
 
-            if(crcCalculated != crcGot)
+            if (crcCalculated != crcGot)
                 return null;
 
 
@@ -285,7 +284,7 @@ public class BxDataPack {
             //
             // 数据
             //pack.data = new byte[pack.dataLen];
-            pack.data = Arrays.copyOfRange(dst, offset, offset+pack.dataLen);
+            pack.data = Arrays.copyOfRange(dst, offset, offset + pack.dataLen);
             offset += pack.dataLen;
 
             //
@@ -301,6 +300,7 @@ public class BxDataPack {
 
     /**
      * 去除数据转义
+     *
      * @param src
      * @param length
      * @return
@@ -309,19 +309,19 @@ public class BxDataPack {
 
         int len = 0;
 
-        if(length == 0)
+        if (length == 0)
             len = 0;
 
-        if(src[0] != (byte)0xa5)
+        if (src[0] != (byte) 0xa5)
             len = 0;
 
-        if(src[length-1] != (byte)0x5a)
+        if (src[length - 1] != (byte) 0x5a)
             len = 0;
 
         len = length;
 
-        for(byte d : src) {
-            if((d == (byte)0xa5) || (d == (byte)0x5a) || (d == (byte)0xa6) || (d == (byte)0x5b)) {
+        for (byte d : src) {
+            if ((d == (byte) 0xa5) || (d == (byte) 0x5a) || (d == (byte) 0xa6) || (d == (byte) 0x5b)) {
                 len--;
             }
         }
@@ -330,44 +330,35 @@ public class BxDataPack {
 
         //
         // 如果计算的帧长度为0，说明数据不正确
-        if(len == 0)
+        if (len == 0)
             return null;
 
         dst = new byte[len];
 
         int offset = 0;
-        for(int i=0; i<length; ) {
+        for (int i = 0; i < length; ) {
 
-            if((src[i] == (byte)0xa5) || (src[i] == 0x5a)) {
+            if ((src[i] == (byte) 0xa5) || (src[i] == 0x5a)) {
                 i++;
-            }
-            else if(src[i] == (byte)0xa6) {
-                if(src[i+1] == 0x01) {
-                    dst[offset++] = (byte)0xa6;
-                    i = i+2;
-                }
-                else if(src[i+1] == 0x02) {
-                    dst[offset++] = (byte)0xa5;
-                    i = i+2;
-                }
-                else
+            } else if (src[i] == (byte) 0xa6) {
+                if (src[i + 1] == 0x01) {
+                    dst[offset++] = (byte) 0xa6;
+                    i = i + 2;
+                } else if (src[i + 1] == 0x02) {
+                    dst[offset++] = (byte) 0xa5;
+                    i = i + 2;
+                } else
                     return null;
-            }
-
-            else if(src[i] == 0x5b) {
-                if(src[i+1] == 0x01) {
-                    dst[offset++] = (byte)0x5b;
-                    i = i+2;
-                }
-                else if(src[i+1] == 0x02) {
-                    dst[offset++] = (byte)0x5a;
-                    i = i+2;
-                }
-                else
+            } else if (src[i] == 0x5b) {
+                if (src[i + 1] == 0x01) {
+                    dst[offset++] = (byte) 0x5b;
+                    i = i + 2;
+                } else if (src[i + 1] == 0x02) {
+                    dst[offset++] = (byte) 0x5a;
+                    i = i + 2;
+                } else
                     return null;
-            }
-
-            else {
+            } else {
                 dst[offset++] = src[i++];
             }
         }

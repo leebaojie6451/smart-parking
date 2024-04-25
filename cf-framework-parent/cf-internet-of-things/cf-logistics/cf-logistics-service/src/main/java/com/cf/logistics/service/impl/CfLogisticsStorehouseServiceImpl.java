@@ -27,7 +27,7 @@ public class CfLogisticsStorehouseServiceImpl implements CfLogisticsStorehouseSe
 
     @Override
     public CfLogisticsStorehouse add(CfLogisticsStorehouse cfLogisticsStorehouse) {
-        if(cfLogisticsStorehouse.getId()==null){
+        if (cfLogisticsStorehouse.getId() == null) {
             cfLogisticsStorehouse.setId(idWorker.nextLongId());
         }
         cfLogisticsStorehouseMapper.insertSelective(cfLogisticsStorehouse);
@@ -42,7 +42,7 @@ public class CfLogisticsStorehouseServiceImpl implements CfLogisticsStorehouseSe
 
     @Override
     public int updateByQuery(CfLogisticsStorehouse cfLogisticsStorehouse, CfLogisticsStorehouseQuery cfLogisticsStorehouseQuery) {
-        return cfLogisticsStorehouseMapper.updateByExampleSelective(cfLogisticsStorehouse,getExampleByQuery(cfLogisticsStorehouseQuery));
+        return cfLogisticsStorehouseMapper.updateByExampleSelective(cfLogisticsStorehouse, getExampleByQuery(cfLogisticsStorehouseQuery));
     }
 
     @Override
@@ -58,11 +58,11 @@ public class CfLogisticsStorehouseServiceImpl implements CfLogisticsStorehouseSe
     @Override
     public CfLogisticsStorehouse findById(Long id, boolean expectEmpty) {
         CfLogisticsStorehouse cfLogisticsStorehouse = findById(id);
-        if(expectEmpty && cfLogisticsStorehouse!=null){
+        if (expectEmpty && cfLogisticsStorehouse != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpty && cfLogisticsStorehouse==null){
-            ExceptionCast.cast(CommonCode.NO_MORE_DATAS,"指定的物流仓库不存在");
+        if (!expectEmpty && cfLogisticsStorehouse == null) {
+            ExceptionCast.cast(CommonCode.NO_MORE_DATAS, "指定的物流仓库不存在");
         }
         return cfLogisticsStorehouse;
     }
@@ -84,32 +84,32 @@ public class CfLogisticsStorehouseServiceImpl implements CfLogisticsStorehouseSe
         CfLogisticsStorehouseExample cfLogisticsStorehouseExample = new CfLogisticsStorehouseExample();
         CfLogisticsStorehouseExample.Criteria criteria = cfLogisticsStorehouseExample.createCriteria();
 
-        if(cfLogisticsStorehouseQuery.getIds()!=null && cfLogisticsStorehouseQuery.getIds().size()>0){
+        if (cfLogisticsStorehouseQuery.getIds() != null && cfLogisticsStorehouseQuery.getIds().size() > 0) {
             criteria.andIdIn(cfLogisticsStorehouseQuery.getIds());
         }
-        if(StringUtils.isNotEmpty(cfLogisticsStorehouseQuery.getStorehouseName())){
-            criteria.andStorehouseNameLike("%"+cfLogisticsStorehouseQuery.getStorehouseName()+"%");
+        if (StringUtils.isNotEmpty(cfLogisticsStorehouseQuery.getStorehouseName())) {
+            criteria.andStorehouseNameLike("%" + cfLogisticsStorehouseQuery.getStorehouseName() + "%");
         }
-        if(cfLogisticsStorehouseQuery.getCountryId()!=null){
+        if (cfLogisticsStorehouseQuery.getCountryId() != null) {
             criteria.andCountryIdEqualTo(cfLogisticsStorehouseQuery.getCountryId());
         }
-        if(cfLogisticsStorehouseQuery.getProvinceId()!=null){
+        if (cfLogisticsStorehouseQuery.getProvinceId() != null) {
             criteria.andProvinceIdEqualTo(cfLogisticsStorehouseQuery.getProvinceId());
         }
-        if(cfLogisticsStorehouseQuery.getStateOrCityId()!=null){
+        if (cfLogisticsStorehouseQuery.getStateOrCityId() != null) {
             criteria.andStateOrCityIdEqualTo(cfLogisticsStorehouseQuery.getStateOrCityId());
         }
-        if(cfLogisticsStorehouseQuery.getZoneOrCountyId()!=null){
+        if (cfLogisticsStorehouseQuery.getZoneOrCountyId() != null) {
             criteria.andZoneOrCountyIdEqualTo(cfLogisticsStorehouseQuery.getZoneOrCountyId());
         }
-        if(cfLogisticsStorehouseQuery.getFactoryId()!=null){
+        if (cfLogisticsStorehouseQuery.getFactoryId() != null) {
             criteria.andFactoryIdEqualTo(cfLogisticsStorehouseQuery.getFactoryId());
         }
 
-        if(StringUtils.isNotEmpty(cfLogisticsStorehouseQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfLogisticsStorehouseQuery.getOrderBy())) {
             cfLogisticsStorehouseExample.setOrderByClause(cfLogisticsStorehouseQuery.getOrderBy());
         }
-        if(cfLogisticsStorehouseQuery.getPage()!=null && cfLogisticsStorehouseQuery.getSize()!=null){
+        if (cfLogisticsStorehouseQuery.getPage() != null && cfLogisticsStorehouseQuery.getSize() != null) {
             PageHelper.startPage(cfLogisticsStorehouseQuery.getPage(), cfLogisticsStorehouseQuery.getSize());
         }
         return cfLogisticsStorehouseExample;

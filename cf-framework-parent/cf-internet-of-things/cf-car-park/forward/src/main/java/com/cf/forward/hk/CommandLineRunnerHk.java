@@ -15,18 +15,18 @@ public class CommandLineRunnerHk implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
 
-       new Thread(() ->{
+        new Thread(() -> {
 
-           while (true){
-               HkHelperInterface hkHelper = SpringContextUtil.getBean(HkHelperInterface.class);
-               hkHelper.ledOutFree();
+            while (true) {
+                HkHelperInterface hkHelper = SpringContextUtil.getBean(HkHelperInterface.class);
+                hkHelper.ledOutFree();
 //               log.info("=====");
-               try {
-                   Thread.sleep(500);
-               } catch (InterruptedException e) {
-                   e.printStackTrace();
-               }
-           }
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }).start();
 
     }

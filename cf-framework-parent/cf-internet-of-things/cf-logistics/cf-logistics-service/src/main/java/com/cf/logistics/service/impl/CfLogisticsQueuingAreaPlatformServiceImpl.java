@@ -51,10 +51,10 @@ public class CfLogisticsQueuingAreaPlatformServiceImpl implements CfLogisticsQue
     @Override
     public CfLogisticsQueuingAreaPlatform findById(Long id, boolean expectEmpty) {
         CfLogisticsQueuingAreaPlatform cfLogisticsQueuingAreaPlatform = findById(id);
-        if(expectEmpty && cfLogisticsQueuingAreaPlatform!=null){
+        if (expectEmpty && cfLogisticsQueuingAreaPlatform != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpty && cfLogisticsQueuingAreaPlatform==null){
+        if (!expectEmpty && cfLogisticsQueuingAreaPlatform == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfLogisticsQueuingAreaPlatform;
@@ -65,13 +65,13 @@ public class CfLogisticsQueuingAreaPlatformServiceImpl implements CfLogisticsQue
         CfLogisticsQueuingAreaPlatformExample cfLogisticsQueuingAreaPlatformExample = new CfLogisticsQueuingAreaPlatformExample();
         CfLogisticsQueuingAreaPlatformExample.Criteria criteria = cfLogisticsQueuingAreaPlatformExample.createCriteria();
 
-        if(cfLogisticsQueuingAreaPlatformQuery.getLogisticsStorehousePlatformIds()!=null && cfLogisticsQueuingAreaPlatformQuery.getLogisticsStorehousePlatformIds().size()>0){
+        if (cfLogisticsQueuingAreaPlatformQuery.getLogisticsStorehousePlatformIds() != null && cfLogisticsQueuingAreaPlatformQuery.getLogisticsStorehousePlatformIds().size() > 0) {
             criteria.andLogisticsStorehousePlatformIdIn(cfLogisticsQueuingAreaPlatformQuery.getLogisticsStorehousePlatformIds());
         }
-        if(StringUtils.isNotEmpty(cfLogisticsQueuingAreaPlatformQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfLogisticsQueuingAreaPlatformQuery.getOrderBy())) {
             cfLogisticsQueuingAreaPlatformExample.setOrderByClause(cfLogisticsQueuingAreaPlatformQuery.getOrderBy());
         }
-        if(cfLogisticsQueuingAreaPlatformQuery.getPage()!=null && cfLogisticsQueuingAreaPlatformQuery.getSize()!=null){
+        if (cfLogisticsQueuingAreaPlatformQuery.getPage() != null && cfLogisticsQueuingAreaPlatformQuery.getSize() != null) {
             PageHelper.startPage(cfLogisticsQueuingAreaPlatformQuery.getPage(), cfLogisticsQueuingAreaPlatformQuery.getSize());
         }
         return cfLogisticsQueuingAreaPlatformExample;

@@ -17,7 +17,6 @@ public abstract class BxCmd {
     private byte r1 = 0x00;
 
 
-
     public BxCmd(byte group, byte cmd) {
         this.group = group;
         this.cmd = cmd;
@@ -25,6 +24,7 @@ public abstract class BxCmd {
 
     /**
      * 生成命令字节流
+     *
      * @return
      */
     public abstract byte[] build();

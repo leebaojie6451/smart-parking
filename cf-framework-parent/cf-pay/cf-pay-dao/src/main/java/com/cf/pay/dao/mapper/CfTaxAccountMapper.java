@@ -37,6 +37,7 @@ public interface CfTaxAccountMapper {
 
     /**
      * 根据条件查询支付机构数据列表
+     *
      * @param conditions
      * @return
      */
@@ -44,6 +45,7 @@ public interface CfTaxAccountMapper {
 
     /**
      * 根据条件查询支付机构数据列表数
+     *
      * @param conditions
      * @return
      */

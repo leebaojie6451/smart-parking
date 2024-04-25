@@ -62,7 +62,7 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
 //        checkLinkerUser(userBasicInfo, cfLogisticsTaskLogForm.getLogisticsStorehouseId());
 
         CfLogisticsTaskLog cfLogisticsTaskLog = new CfLogisticsTaskLog();
-        BeanUtils.copyProperties(cfLogisticsTaskLogForm,cfLogisticsTaskLog);
+        BeanUtils.copyProperties(cfLogisticsTaskLogForm, cfLogisticsTaskLog);
         CfLogisticsTaskLog lastCfLogisticsTaskLog = cfLogisticsTaskLogService.add(cfLogisticsTaskLog);
         return new ResponseResult(CommonCode.SUCCESS, lastCfLogisticsTaskLog);
     }
@@ -85,7 +85,7 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
 //        }
 
         CfLogisticsTaskLog cfLogisticsTaskLog = new CfLogisticsTaskLog();
-        BeanUtils.copyProperties(cfLogisticsTaskLogForm,cfLogisticsTaskLog);
+        BeanUtils.copyProperties(cfLogisticsTaskLogForm, cfLogisticsTaskLog);
         cfLogisticsTaskLogService.update(cfLogisticsTaskLog);
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsTaskLog);
     }
@@ -96,7 +96,7 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
     public ResponseResult delete(Long id) throws Exception {
         //检查是否有权限进行该操作
 //        UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        if(id==null){
+        if (id == null) {
             return new ResponseResult(CommonCode.INVALID_PARAM, null, "请提预约id");
         }
 //        //非超级管理员不能操作非自己名下仓库任务的的预约记录
@@ -108,7 +108,7 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
 //        }
 
         Integer delete = cfLogisticsTaskLogService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS, delete):new ResponseResult(CommonCode.FAIL, null);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS, delete) : new ResponseResult(CommonCode.FAIL, null);
     }
 
     @PreAuthorize("hasAuthority('logistics-CfLogisticsTaskLogController-selectListByQuery')")
@@ -128,7 +128,7 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
 //        }
         List<CfLogisticsTaskLog> cfLogisticsTaskLogs = cfLogisticsTaskLogService.selectListByQuery(cfLogisticsTaskLogQuery);
         Integer countByQuery = cfLogisticsTaskLogService.countByQuery(cfLogisticsTaskLogQuery);
-        if(cfLogisticsTaskLogs==null || cfLogisticsTaskLogs.size()==0){
+        if (cfLogisticsTaskLogs == null || cfLogisticsTaskLogs.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsTaskLogs, countByQuery);
@@ -150,7 +150,7 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
 //        }
         List<CfLogisticsTaskLog> cfLogisticsTaskLogs = cfLogisticsTaskLogService.selectDeliverListByQuery(cfLogisticsTaskLogQuery);
         Integer countByQuery = cfLogisticsTaskLogService.countByQuery(cfLogisticsTaskLogQuery);
-        if(cfLogisticsTaskLogs==null || cfLogisticsTaskLogs.size()==0){
+        if (cfLogisticsTaskLogs == null || cfLogisticsTaskLogs.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsTaskLogs, countByQuery);
@@ -162,14 +162,14 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
     public ResponseResult helpOthersMakeAnAppointment(@RequestBody CfLogisticsTaskLogForm cfLogisticsTaskLogForm) throws Exception {
         //检查是否有权限进行该操作
 //        UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        if(cfLogisticsTaskLogForm.getTaskId()==null){
+        if (cfLogisticsTaskLogForm.getTaskId() == null) {
             return new ResponseResult(CommonCode.INVALID_PARAM, null, "请提任务id");
         }
         //非超级管理员不能操作非自己名下仓库任务的的预约记录
 //        CfLogisticsTask logisticsTask = cfLogisticsTaskService.findById(cfLogisticsTaskLogForm.getTaskId(), false);
 //        checkLinkerUser(userBasicInfo, logisticsTask.getLogisticsStorehouseId());
 
-        if(StringUtils.isEmpty(cfLogisticsTaskLogForm.getDeliverUid())){
+        if (StringUtils.isEmpty(cfLogisticsTaskLogForm.getDeliverUid())) {
             return new ResponseResult(CommonCode.INVALID_PARAM, null, "请提供司机id");
         }
 //        checkLinkerUser(userBasicInfo, cfLogisticsTaskLogForm.getLogisticsStorehouseId());
@@ -185,8 +185,8 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
     @RequestMapping(value = "cancelAppointment", method = RequestMethod.GET)
     public ResponseResult cancelAppointment(Long taskLogId) throws Exception {
         CfLogisticsTaskLog cfLogisticsTaskLog = cfLogisticsTaskLogService.findById(taskLogId, false);
-        if(cfLogisticsTaskLog.getTaskLogStatus().byteValue()>=(byte)3){
-            return new ResponseResult(CommonCode.FAIL,null,"当前未处在已预约或排队中状态");
+        if (cfLogisticsTaskLog.getTaskLogStatus().byteValue() >= (byte) 3) {
+            return new ResponseResult(CommonCode.FAIL, null, "当前未处在已预约或排队中状态");
         }
         CfLogisticsTaskLog logisticsTaskLog = cfLogisticsTaskLogService.cancelAppointment(cfLogisticsTaskLog);
         return new ResponseResult(CommonCode.SUCCESS, logisticsTaskLog);
@@ -196,10 +196,10 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
     @Override
     @RequestMapping(value = "taskUseLogChangeDriver", method = RequestMethod.PUT)
     public ResponseResult taskUseLogChangeDriver(@RequestBody ReserveParams reserveParams) throws Exception {
-        if(StringUtils.isEmpty(reserveParams.getUid())){
+        if (StringUtils.isEmpty(reserveParams.getUid())) {
             return new ResponseResult(CommonCode.INVALID_PARAM, null, "请提供司机id");
         }
-        if(reserveParams.getTaskLogId()==null){
+        if (reserveParams.getTaskLogId() == null) {
             return new ResponseResult(CommonCode.INVALID_PARAM, null, "请提任务预约id");
         }
 
@@ -207,7 +207,7 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
 //        UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         //非超级管理员不能操作非自己名下仓库任务的的预约记录
         CfLogisticsTaskLog logisticsTaskLog = cfLogisticsTaskLogService.findById(reserveParams.getTaskLogId(), false);
-        if(logisticsTaskLog.getDeliverUid().equals(reserveParams.getUid())){
+        if (logisticsTaskLog.getDeliverUid().equals(reserveParams.getUid())) {
             return new ResponseResult(CommonCode.FAIL, null, "相同用户");
         }
 //        CfLogisticsTask logisticsTask = cfLogisticsTaskService.findById(logisticsTaskLog.getTaskId(), false);
@@ -218,13 +218,13 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
         cfLogisticsTaskLogQuery.setDeliverUid(reserveParams.getUid());
         cfLogisticsTaskLogQuery.setTaskId(logisticsTaskLog.getTaskId());
         Integer countByQuery = cfLogisticsTaskLogService.countByQuery(cfLogisticsTaskLogQuery);
-        if(countByQuery.intValue()>0){
+        if (countByQuery.intValue() > 0) {
             ExceptionCast.cast(LogisticsCode.REPEAT_APPOINTMENT);
         }
         CfLogisticsTaskLog cfLogisticsTaskLog = new CfLogisticsTaskLog();
         cfLogisticsTaskLog.setId(reserveParams.getTaskLogId());
         cfLogisticsTaskLog.setDeliverUid(reserveParams.getUid());
-        if(StringUtils.isNotEmpty(reserveParams.getNumberPlate())){
+        if (StringUtils.isNotEmpty(reserveParams.getNumberPlate())) {
             cfLogisticsTaskLog.setNumberPlate(reserveParams.getNumberPlate());
         }
         cfLogisticsTaskLogService.update(cfLogisticsTaskLog);
@@ -241,8 +241,8 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
         checkLinkerUser(userBasicInfo, cfLogisticsTaskLog.getLogisticsStorehouseId());
 
         Map<String, Object> userDocuments = cfLogisticsTaskLogService.checkUserDocumentsStatus(cfLogisticsTaskLog.getDeliverUid());
-        FileUtils.handleFileSourcePrefix(userDocuments.get("UserDriverLicense"),"","images");
-        FileUtils.handleFileSourcePrefix(userDocuments.get("UserIdCard"),"","images");
+        FileUtils.handleFileSourcePrefix(userDocuments.get("UserDriverLicense"), "", "images");
+        FileUtils.handleFileSourcePrefix(userDocuments.get("UserIdCard"), "", "images");
         return new ResponseResult(CommonCode.SUCCESS, userDocuments);
     }
 
@@ -257,16 +257,16 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
         checkLinkerUser(userBasicInfo, cfLogisticsTaskLog.getLogisticsStorehouseId());
 
         //查询仓库
-        cfLogisticsTaskLog.setCfLogisticsStorehouse(cfLogisticsStorehouseService.findById(cfLogisticsTaskLog.getLogisticsStorehouseId(),false));
+        cfLogisticsTaskLog.setCfLogisticsStorehouse(cfLogisticsStorehouseService.findById(cfLogisticsTaskLog.getLogisticsStorehouseId(), false));
         //查询月台
-        cfLogisticsTaskLog.setCfLogisticsStorehousePlatform(cfLogisticsStorehousePlatformService.findById(cfLogisticsTaskLog.getLogisticsPlatformId(),false));
+        cfLogisticsTaskLog.setCfLogisticsStorehousePlatform(cfLogisticsStorehousePlatformService.findById(cfLogisticsTaskLog.getLogisticsPlatformId(), false));
 
         Map<String, Object> userDocuments = cfLogisticsTaskLogService.checkUserDocumentsStatus(cfLogisticsTaskLog.getDeliverUid());
-        FileUtils.handleFileSourcePrefix(userDocuments.get("UserDriverLicense"),"","images");
-        FileUtils.handleFileSourcePrefix(userDocuments.get("UserIdCard"),"","images");
-        userDocuments.put("cfLogisticsTaskLog",cfLogisticsTaskLog);
+        FileUtils.handleFileSourcePrefix(userDocuments.get("UserDriverLicense"), "", "images");
+        FileUtils.handleFileSourcePrefix(userDocuments.get("UserIdCard"), "", "images");
+        userDocuments.put("cfLogisticsTaskLog", cfLogisticsTaskLog);
 
-        return new ResponseResult(CommonCode.SUCCESS,userDocuments);
+        return new ResponseResult(CommonCode.SUCCESS, userDocuments);
     }
 
     @PreAuthorize("hasAuthority('logistics-CfLogisticsTaskLogController-cargoCheck')")
@@ -278,7 +278,7 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
         //检查是否有权限进行该操作
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
 //        checkLinkerUser(userBasicInfo, cfLogisticsTaskLog.getLogisticsStorehouseId());
-        if(cfLogisticsTaskLog.getTaskLogStatus().byteValue()==(byte)0 || cfLogisticsTaskLog.getTaskLogStatus().byteValue()==(byte)5){
+        if (cfLogisticsTaskLog.getTaskLogStatus().byteValue() == (byte) 0 || cfLogisticsTaskLog.getTaskLogStatus().byteValue() == (byte) 5) {
             return new ResponseResult(LogisticsCode.NOT_IN_LINE);
         }
         cfLogisticsTaskLog.setCheckerUid(userBasicInfo.getId());
@@ -292,9 +292,9 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
     public ResponseResult confirmVehicleStorage(Long taskLogId) throws Exception {
         CfLogisticsTaskLog cfLogisticsTaskLog = new CfLogisticsTaskLog();
         cfLogisticsTaskLog.setId(taskLogId);
-        cfLogisticsTaskLog.setTaskLogStatus((byte)3);
+        cfLogisticsTaskLog.setTaskLogStatus((byte) 3);
         Integer update = cfLogisticsTaskLogService.update(cfLogisticsTaskLog);
-        return update>0 ? new ResponseResult(CommonCode.SUCCESS) : new ResponseResult(CommonCode.FAIL);
+        return update > 0 ? new ResponseResult(CommonCode.SUCCESS) : new ResponseResult(CommonCode.FAIL);
     }
 
     @PreAuthorize("hasAuthority('logistics-CfLogisticsTaskLogController-checkUserDocumentsStatusByPhone')")
@@ -302,22 +302,23 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
     @RequestMapping(value = "checkUserDocumentsStatusByPhone", method = RequestMethod.GET)
     public ResponseResult checkUserDocumentsStatusByPhone(String phone) throws Exception {
         Map<String, Object> stringObjectMap = cfLogisticsTaskLogService.checkUserDocumentsStatusByPhone(phone);
-        return new ResponseResult(CommonCode.SUCCESS,stringObjectMap);
+        return new ResponseResult(CommonCode.SUCCESS, stringObjectMap);
     }
 
     /**
      * 检查用户是否有权限操作相关物流仓库数据
+     *
      * @param userBasicInfo
      * @param logisticsStorehouseId
      * @return
      */
-    private List<CfLogisticsStorehouseLinkUser> checkLinkerUser(UserBasicInfo userBasicInfo, Long logisticsStorehouseId){
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0){
+    private List<CfLogisticsStorehouseLinkUser> checkLinkerUser(UserBasicInfo userBasicInfo, Long logisticsStorehouseId) {
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0) {
             CfLogisticsStorehouseLinkUserQuery cfLogisticsStorehouseLinkUserQuery = new CfLogisticsStorehouseLinkUserQuery();
             cfLogisticsStorehouseLinkUserQuery.setUid(userBasicInfo.getId());
             cfLogisticsStorehouseLinkUserQuery.setLogisticsStorehouseId(logisticsStorehouseId);
             List<CfLogisticsStorehouseLinkUser> cfLogisticsStorehouseLinkUsers = cfLogisticsStorehouseLinkUserService.getListByQuery(cfLogisticsStorehouseLinkUserQuery);
-            if(cfLogisticsStorehouseLinkUsers==null || cfLogisticsStorehouseLinkUsers.size()==0){
+            if (cfLogisticsStorehouseLinkUsers == null || cfLogisticsStorehouseLinkUsers.size() == 0) {
                 ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
             }
             return cfLogisticsStorehouseLinkUsers;
@@ -330,7 +331,7 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
     @RequestMapping(value = "logisticsTaskLogTop", method = RequestMethod.GET)
     public ResponseResult logisticsTaskLogTop(Long taskLogId) throws Exception {
         cfLogisticsTaskLogService.logisticsTaskLogTop(taskLogId);
-        return new ResponseResult(CommonCode.SUCCESS,null);
+        return new ResponseResult(CommonCode.SUCCESS, null);
     }
 
     @PreAuthorize("hasAuthority('logistics-CfLogisticsTaskLogController-numberOver')")
@@ -338,11 +339,11 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
     @RequestMapping(value = "numberOver", method = RequestMethod.GET)
     public ResponseResult numberOver(Long taskLogId) throws Exception {
         CfLogisticsTaskLog cfLogisticsTaskLog = cfLogisticsTaskLogService.findById(taskLogId, false);
-        if(cfLogisticsTaskLog.getTaskLogStatus().byteValue()!=(byte)1 && cfLogisticsTaskLog.getTaskLogStatus().byteValue()!=(byte)2){
+        if (cfLogisticsTaskLog.getTaskLogStatus().byteValue() != (byte) 1 && cfLogisticsTaskLog.getTaskLogStatus().byteValue() != (byte) 2) {
             return new ResponseResult(LogisticsCode.NOT_IN_LINE);
         }
         cfLogisticsTaskLogService.numberOver(cfLogisticsTaskLog, true);
-        return new ResponseResult(CommonCode.SUCCESS,null);
+        return new ResponseResult(CommonCode.SUCCESS, null);
     }
 
     @PreAuthorize("hasAuthority('logistics-CfLogisticsTaskLogController-changeQueuingArea')")
@@ -350,6 +351,6 @@ public class CfLogisticsTaskLogController implements CfLogisticsTaskLogSwagger {
     @RequestMapping(value = "changeQueuingArea", method = RequestMethod.GET)
     public ResponseResult changeQueuingArea(Long taskLogId, Long queuingAreaId) throws Exception {
         CfLogisticsTaskLog cfLogisticsTaskLog = cfLogisticsTaskLogService.changeQueuingArea(taskLogId, queuingAreaId);
-        return cfLogisticsTaskLog!=null ? new ResponseResult(CommonCode.SUCCESS, cfLogisticsTaskLog) : new ResponseResult(CommonCode.FAIL, null);
+        return cfLogisticsTaskLog != null ? new ResponseResult(CommonCode.SUCCESS, cfLogisticsTaskLog) : new ResponseResult(CommonCode.FAIL, null);
     }
 }

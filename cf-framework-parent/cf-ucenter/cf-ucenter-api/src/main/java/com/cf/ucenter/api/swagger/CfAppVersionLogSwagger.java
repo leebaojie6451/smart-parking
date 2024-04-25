@@ -17,9 +17,9 @@ public interface CfAppVersionLogSwagger {
 
     @ApiOperation(value = "app新版本检测")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="lang",value = "语言(zh-中文[默认]/en-英文...更多见官网文档)",required=false,paramType="header",dataType="string"),
-            @ApiImplicitParam(name="platform",value = "操作系统平台",required=true,paramType="query",dataType="string"),
-            @ApiImplicitParam(name="versionNumber",value = "自己当前应用版本号",required=true,paramType="query",dataType="string")
+            @ApiImplicitParam(name = "lang", value = "语言(zh-中文[默认]/en-英文...更多见官网文档)", required = false, paramType = "header", dataType = "string"),
+            @ApiImplicitParam(name = "platform", value = "操作系统平台", required = true, paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "versionNumber", value = "自己当前应用版本号", required = true, paramType = "query", dataType = "string")
     })
     public ResponseResult checkVersion(String platform, String versionNumber);
 

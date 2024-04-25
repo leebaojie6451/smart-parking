@@ -37,7 +37,7 @@ public class CfDepartmentServiceImpl implements CfDepartmentService {
     public CfDepartment add(CfDepartment cfDepartment) {
         cfDepartment.setId(idWorker.nextId());
         Integer effectRows = cfDepartmentMapper.insert(cfDepartment);
-        if(effectRows>0){
+        if (effectRows > 0) {
             return cfDepartment;
         }
         return null;
@@ -46,7 +46,7 @@ public class CfDepartmentServiceImpl implements CfDepartmentService {
     @Override
     public CfDepartment update(CfDepartment cfDepartment) {
         Integer effectRows = cfDepartmentMapper.updateByPrimaryKey(cfDepartment);
-        if(effectRows>0){
+        if (effectRows > 0) {
             return cfDepartment;
         }
         return null;

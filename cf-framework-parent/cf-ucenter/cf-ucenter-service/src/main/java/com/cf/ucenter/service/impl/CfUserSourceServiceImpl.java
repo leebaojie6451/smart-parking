@@ -28,7 +28,7 @@ public class CfUserSourceServiceImpl implements CfUserSourceService {
     @Override
     public List<CfUserSource> add(String sourceId, String sourceType, Map<String, Map<String, Byte>> uidAndAuth, String createrId) {
         ArrayList<CfUserSource> cfUserSources = new ArrayList<>();
-        for (Map.Entry<String, Map<String, Byte>> entry: uidAndAuth.entrySet()){
+        for (Map.Entry<String, Map<String, Byte>> entry : uidAndAuth.entrySet()) {
             CfUserSource cfUserSource = new CfUserSource();
             cfUserSource.setId(idWorker.nextId());
             cfUserSource.setSourceId(sourceId);
@@ -39,9 +39,9 @@ public class CfUserSourceServiceImpl implements CfUserSourceService {
             cfUserSource.setCreaterId(createrId);
             cfUserSources.add(cfUserSource);
         }
-        if(cfUserSources.size()>0){
+        if (cfUserSources.size() > 0) {
             int batchInsert = cfUserSourceMapper.batchInsert(cfUserSources);
-            if(batchInsert>0){
+            if (batchInsert > 0) {
                 return cfUserSources;
             }
         }
@@ -69,23 +69,23 @@ public class CfUserSourceServiceImpl implements CfUserSourceService {
         CfUserSourceExample cfUserSourceExample = new CfUserSourceExample();
         CfUserSourceExample.Criteria criteria = cfUserSourceExample.createCriteria();
 
-        if(StringUtils.isNotEmpty(cfUserSourceQuery.getSourceId())){
+        if (StringUtils.isNotEmpty(cfUserSourceQuery.getSourceId())) {
             criteria.andSourceIdEqualTo(cfUserSourceQuery.getSourceId());
         }
-        if(StringUtils.isNotEmpty(cfUserSourceQuery.getSourceType())){
+        if (StringUtils.isNotEmpty(cfUserSourceQuery.getSourceType())) {
             criteria.andSourceTypeEqualTo(cfUserSourceQuery.getSourceType());
         }
-        if(StringUtils.isNotEmpty(cfUserSourceQuery.getUid())){
+        if (StringUtils.isNotEmpty(cfUserSourceQuery.getUid())) {
             criteria.andUidEqualTo(cfUserSourceQuery.getUid());
         }
-        if(StringUtils.isNotEmpty(cfUserSourceQuery.getCreaterId())){
+        if (StringUtils.isNotEmpty(cfUserSourceQuery.getCreaterId())) {
             criteria.andCreaterIdEqualTo(cfUserSourceQuery.getCreaterId());
         }
 
-        if(StringUtils.isNotEmpty(cfUserSourceQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfUserSourceQuery.getOrderBy())) {
             cfUserSourceExample.setOrderByClause(cfUserSourceQuery.getOrderBy());
         }
-        if(cfUserSourceQuery.getPage()!=null && cfUserSourceQuery.getSize()!=null){
+        if (cfUserSourceQuery.getPage() != null && cfUserSourceQuery.getSize() != null) {
             PageHelper.startPage(cfUserSourceQuery.getPage(), cfUserSourceQuery.getSize());
         }
         return cfUserSourceExample;

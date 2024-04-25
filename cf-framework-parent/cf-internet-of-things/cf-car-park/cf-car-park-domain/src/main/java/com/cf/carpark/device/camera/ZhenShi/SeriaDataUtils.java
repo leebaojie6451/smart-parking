@@ -39,11 +39,11 @@ public class SeriaDataUtils {
     public static final String VALIDITYPERIOD_PERMANENT = "permanent";//内容有效期-永久
 
 
-    public static PlayRule setSerialDataZhenshiMultiple(String playRuleString , String scenes, String value, String dataType, String valueType) throws Exception{
+    public static PlayRule setSerialDataZhenshiMultiple(String playRuleString, String scenes, String value, String dataType, String valueType) throws Exception {
         Map playRuleMap = (JSONObject.parseObject(playRuleString));
         PlayRule playRule = BeanUtils.deepMapToBean(PlayRule.class.newInstance().getClass(), playRuleMap);
         ShowContent showContent = null;
-        switch (scenes){
+        switch (scenes) {
             case "approach":
                 showContent = playRule.getApproach();
                 SeriaDataUtils.handleShowContent(dataType, value, showContent, valueType);
@@ -61,29 +61,29 @@ public class SeriaDataUtils {
                 SeriaDataUtils.handleShowContent(dataType, value, showContent, valueType);
                 break;
             default:
-                ExceptionCast.cast(CommonCode.INVALID_PARAM,"传入的场景类型暂不支持");
+                ExceptionCast.cast(CommonCode.INVALID_PARAM, "传入的场景类型暂不支持");
         }
         return playRule;
     }
 
-    public static void handleShowContent(String dataType, String value, ShowContent showContent, String valueType) throws Exception{
+    public static void handleShowContent(String dataType, String value, ShowContent showContent, String valueType) throws Exception {
         String textPlayValue = null;
-        switch (dataType){
+        switch (dataType) {
             case "text":
                 Map<String, TextPlay> textPlayList = showContent.getTextPlay();
-                for (Map.Entry<String, TextPlay> item: textPlayList.entrySet()){
-                    if(textPlayValue!=null){
+                for (Map.Entry<String, TextPlay> item : textPlayList.entrySet()) {
+                    if (textPlayValue != null) {
                         continue;
                     }
                     TextPlay textPlay = null;
-                    if(!(item.getValue() instanceof TextPlay)){
+                    if (!(item.getValue() instanceof TextPlay)) {
                         textPlay = BeanUtils.deepMapToBean(TextPlay.class.newInstance().getClass(), (Map) item.getValue());
-                    }else{
+                    } else {
                         textPlay = item.getValue();
                     }
 
-                    if(textPlay.getStatus()== 0 && valueType.equals(textPlay.getType())){
-                        switch (textPlay.getType()){
+                    if (textPlay.getStatus() == 0 && valueType.equals(textPlay.getType())) {
+                        switch (textPlay.getType()) {
                             case "plaintext":
                                 textPlayValue = textPlay.getValue();
                                 textPlay.setValue(value);
@@ -104,7 +104,7 @@ public class SeriaDataUtils {
                                 textPlay.setValue(date);
                                 break;
                             default:
-                                ExceptionCast.cast(CommonCode.INVALID_PARAM,"传入的dataType类型暂不支持");
+                                ExceptionCast.cast(CommonCode.INVALID_PARAM, "传入的dataType类型暂不支持");
                         }
                         textPlay.setStatus(1);
                     }
@@ -113,18 +113,18 @@ public class SeriaDataUtils {
                 break;
             case "voice":
                 Map<Integer, VoicePlay> voicePlayList = showContent.getVoicePlay();
-                for (Map.Entry<Integer, VoicePlay> item: voicePlayList.entrySet()){
-                    if(textPlayValue!=null){
+                for (Map.Entry<Integer, VoicePlay> item : voicePlayList.entrySet()) {
+                    if (textPlayValue != null) {
                         continue;
                     }
                     VoicePlay voicePlay = null;
-                    if(!(item.getValue() instanceof VoicePlay)){
+                    if (!(item.getValue() instanceof VoicePlay)) {
                         voicePlay = BeanUtils.deepMapToBean(VoicePlay.class.newInstance().getClass(), (Map) item.getValue());
-                    }else{
+                    } else {
                         voicePlay = item.getValue();
                     }
-                    if(voicePlay.getStatus()== 0 && valueType.equals(voicePlay.getType())){
-                        switch (valueType){
+                    if (voicePlay.getStatus() == 0 && valueType.equals(voicePlay.getType())) {
+                        switch (valueType) {
                             case "plaintext":
                                 textPlayValue = voicePlay.getValue();
                                 voicePlay.setValue(value);
@@ -145,7 +145,7 @@ public class SeriaDataUtils {
                                 voicePlay.setValue(date);
                                 break;
                             default:
-                                ExceptionCast.cast(CommonCode.INVALID_PARAM,"传入的valueType类型暂不支持");
+                                ExceptionCast.cast(CommonCode.INVALID_PARAM, "传入的valueType类型暂不支持");
                         }
                         voicePlay.setStatus(1);
                     }
@@ -153,25 +153,26 @@ public class SeriaDataUtils {
                 }
                 break;
             default:
-                ExceptionCast.cast(CommonCode.INVALID_PARAM,"传入的dataType类型暂不支持");
+                ExceptionCast.cast(CommonCode.INVALID_PARAM, "传入的dataType类型暂不支持");
         }
     }
 
     /**
      * 根据播放规则进行制作 显示和播报 指令
+     *
      * @param zhenShiResponse911202002050
      * @param playRule
      * @param scenes
-     * @param validityPeriod 下发的内容有效期 默认为"临时-temporary"，permanent-永久
+     * @param validityPeriod              下发的内容有效期 默认为"临时-temporary"，permanent-永久
      * @throws Exception
      */
-    public static ZhenShiResponse911202002050 setSerialDataZhenshiByPlayRule(ZhenShiResponse911202002050 zhenShiResponse911202002050, PlayRule playRule, String scenes, String validityPeriod)throws Exception{
+    public static ZhenShiResponse911202002050 setSerialDataZhenshiByPlayRule(ZhenShiResponse911202002050 zhenShiResponse911202002050, PlayRule playRule, String scenes, String validityPeriod) throws Exception {
 
-        if(StringUtils.isEmpty(validityPeriod)){
+        if (StringUtils.isEmpty(validityPeriod)) {
             validityPeriod = SeriaDataUtils.VALIDITYPERIOD_TEMPORARY;
         }
 
-        switch (scenes){
+        switch (scenes) {
             case "approach":
                 //入场
                 ShowContent approach = playRule.getApproach();
@@ -193,22 +194,23 @@ public class SeriaDataUtils {
                 SeriaDataUtils.setSerialDataZhenshiByShowContent(zhenShiResponse911202002050, abnormalOut, validityPeriod);
                 break;
             default:
-                ExceptionCast.cast(CommonCode.INVALID_PARAM,"传入的命令场景不支持:"+scenes);
+                ExceptionCast.cast(CommonCode.INVALID_PARAM, "传入的命令场景不支持:" + scenes);
         }
         return zhenShiResponse911202002050;
     }
 
     /**
      * 根据播放规则进行制作 显示和播报 指令
-     * @param   huaXiaResponse
+     *
+     * @param huaXiaResponse
      * @param playRule
      * @param scenes
      * @param validityPeriod
      * @throws Exception
      */
-    public static void setSerialDataHuaXiaByPlayRule(HuaXiaResponse huaXiaResponse, PlayRule playRule, String scenes, String validityPeriod)throws Exception{
+    public static void setSerialDataHuaXiaByPlayRule(HuaXiaResponse huaXiaResponse, PlayRule playRule, String scenes, String validityPeriod) throws Exception {
 
-        switch (scenes){
+        switch (scenes) {
             case "approach":
                 //入场
                 ShowContent approach = playRule.getApproach();
@@ -230,101 +232,101 @@ public class SeriaDataUtils {
                 SeriaDataUtils.setSerialDataHuaXiaByShowContent(huaXiaResponse, abnormalOut, validityPeriod);
                 break;
             default:
-                ExceptionCast.cast(CommonCode.INVALID_PARAM,"传入的命令场景不支持:"+scenes);
+                ExceptionCast.cast(CommonCode.INVALID_PARAM, "传入的命令场景不支持:" + scenes);
         }
     }
 
-    public static void setSerialDataZhenshiByShowContent(ZhenShiResponse911202002050 zhenShiResponse911202002050, ShowContent showContent, String validityPeriod) throws Exception{
+    public static void setSerialDataZhenshiByShowContent(ZhenShiResponse911202002050 zhenShiResponse911202002050, ShowContent showContent, String validityPeriod) throws Exception {
         //文本
-        Map<String,TextPlay> textPlayList = showContent.getTextPlay();
+        Map<String, TextPlay> textPlayList = showContent.getTextPlay();
 
-        for (Map.Entry<String, TextPlay> item: textPlayList.entrySet()){
+        for (Map.Entry<String, TextPlay> item : textPlayList.entrySet()) {
             TextPlay textPlay = null;
-            if(!(item.getValue() instanceof TextPlay)){
+            if (!(item.getValue() instanceof TextPlay)) {
                 textPlay = BeanUtils.deepMapToBean(TextPlay.class.newInstance().getClass(), (Map) item.getValue());
-            }else{
+            } else {
                 textPlay = item.getValue();
             }
             Integer serialChannel = 0;
-            if(!(textPlay.getSerialChannel() instanceof Integer)){
-                serialChannel = Integer.parseInt(textPlay.getSerialChannel()+"");
+            if (!(textPlay.getSerialChannel() instanceof Integer)) {
+                serialChannel = Integer.parseInt(textPlay.getSerialChannel() + "");
             }
 
             Integer row = 1;
 
-                row = new Integer(item.getKey());
+            row = new Integer(item.getKey());
 
-            if(textPlay.getStatus()==1 && StringUtils.isNotEmpty(textPlay.getValue())){
-                SeriaDataUtils.setSerialDataZhenshi(zhenShiResponse911202002050,textPlay.getValue(),serialChannel,row.byteValue(),textPlay.getColor(),textPlay.getInMode(),textPlay.getOutMode(),showContent.getDeviceModel(),"text","", validityPeriod);
+            if (textPlay.getStatus() == 1 && StringUtils.isNotEmpty(textPlay.getValue())) {
+                SeriaDataUtils.setSerialDataZhenshi(zhenShiResponse911202002050, textPlay.getValue(), serialChannel, row.byteValue(), textPlay.getColor(), textPlay.getInMode(), textPlay.getOutMode(), showContent.getDeviceModel(), "text", "", validityPeriod);
             }
         }
         //语音
         Map<Integer, VoicePlay> voicePlayList = showContent.getVoicePlay();
-        for (Map.Entry<Integer, VoicePlay> item: voicePlayList.entrySet()){
+        for (Map.Entry<Integer, VoicePlay> item : voicePlayList.entrySet()) {
             VoicePlay voicePlay = null;
-            if(!(item.getValue() instanceof VoicePlay)){
+            if (!(item.getValue() instanceof VoicePlay)) {
                 voicePlay = BeanUtils.deepMapToBean(VoicePlay.class.newInstance().getClass(), (Map) item.getValue());
-            }else{
+            } else {
                 voicePlay = item.getValue();
             }
             Integer serialChannel = 0;
-            if(!(voicePlay.getSerialChannel() instanceof Integer)){
-                serialChannel = Integer.parseInt(voicePlay.getSerialChannel()+"");
+            if (!(voicePlay.getSerialChannel() instanceof Integer)) {
+                serialChannel = Integer.parseInt(voicePlay.getSerialChannel() + "");
             }
 
             Integer row = 1;
-            if(!(item.getKey() instanceof Integer)){
-                row = Integer.parseInt(item.getKey()+"");
+            if (!(item.getKey() instanceof Integer)) {
+                row = Integer.parseInt(item.getKey() + "");
             }
-            if(voicePlay.getStatus()==1 && StringUtils.isNotEmpty(voicePlay.getValue())){
-                SeriaDataUtils.setSerialDataZhenshi(zhenShiResponse911202002050,voicePlay.getValue(),serialChannel,row.byteValue(),"","","",showContent.getDeviceModel(),"voice",voicePlay.getPlayMode(), validityPeriod);
+            if (voicePlay.getStatus() == 1 && StringUtils.isNotEmpty(voicePlay.getValue())) {
+                SeriaDataUtils.setSerialDataZhenshi(zhenShiResponse911202002050, voicePlay.getValue(), serialChannel, row.byteValue(), "", "", "", showContent.getDeviceModel(), "voice", voicePlay.getPlayMode(), validityPeriod);
             }
         }
     }
 
-    public static void setSerialDataHuaXiaByShowContent(HuaXiaResponse huaXiaResponse, ShowContent showContent, String validityPeriod) throws Exception{
+    public static void setSerialDataHuaXiaByShowContent(HuaXiaResponse huaXiaResponse, ShowContent showContent, String validityPeriod) throws Exception {
         //文本
-        Map<String,TextPlay> textPlayList = showContent.getTextPlay();
+        Map<String, TextPlay> textPlayList = showContent.getTextPlay();
 
-        for (Map.Entry<String, TextPlay> item: textPlayList.entrySet()){
+        for (Map.Entry<String, TextPlay> item : textPlayList.entrySet()) {
             TextPlay textPlay = null;
-            if(!(item.getValue() instanceof TextPlay)){
+            if (!(item.getValue() instanceof TextPlay)) {
                 textPlay = BeanUtils.deepMapToBean(TextPlay.class.newInstance().getClass(), (Map) item.getValue());
-            }else{
+            } else {
                 textPlay = item.getValue();
             }
             Integer serialChannel = 0;
-            if(!(textPlay.getSerialChannel() instanceof Integer)){
-                serialChannel = Integer.parseInt(textPlay.getSerialChannel()+"");
+            if (!(textPlay.getSerialChannel() instanceof Integer)) {
+                serialChannel = Integer.parseInt(textPlay.getSerialChannel() + "");
             }
 
             Integer row = 1;
-            row = Integer.parseInt(item.getKey()+"");
+            row = Integer.parseInt(item.getKey() + "");
 
-            if(textPlay.getStatus()==1 && StringUtils.isNotEmpty(textPlay.getValue())){
-                SeriaDataUtils.setSerialDataHuaXia(huaXiaResponse,textPlay.getValue(),serialChannel,row.byteValue(),textPlay.getColor(),textPlay.getInMode(),textPlay.getOutMode(),showContent.getDeviceModel(),"text","", validityPeriod);
+            if (textPlay.getStatus() == 1 && StringUtils.isNotEmpty(textPlay.getValue())) {
+                SeriaDataUtils.setSerialDataHuaXia(huaXiaResponse, textPlay.getValue(), serialChannel, row.byteValue(), textPlay.getColor(), textPlay.getInMode(), textPlay.getOutMode(), showContent.getDeviceModel(), "text", "", validityPeriod);
             }
         }
         //语音
         Map<Integer, VoicePlay> voicePlayList = showContent.getVoicePlay();
-        for (Map.Entry<Integer, VoicePlay> item: voicePlayList.entrySet()){
+        for (Map.Entry<Integer, VoicePlay> item : voicePlayList.entrySet()) {
             VoicePlay voicePlay = null;
-            if(!(item.getValue() instanceof VoicePlay)){
+            if (!(item.getValue() instanceof VoicePlay)) {
                 voicePlay = BeanUtils.deepMapToBean(VoicePlay.class.newInstance().getClass(), (Map) item.getValue());
-            }else{
+            } else {
                 voicePlay = item.getValue();
             }
             Integer serialChannel = 0;
-            if(!(voicePlay.getSerialChannel() instanceof Integer)){
-                serialChannel = Integer.parseInt(voicePlay.getSerialChannel()+"");
+            if (!(voicePlay.getSerialChannel() instanceof Integer)) {
+                serialChannel = Integer.parseInt(voicePlay.getSerialChannel() + "");
             }
 
             Integer row = 1;
-            if(!(item.getKey() instanceof Integer)){
-                row = Integer.parseInt(item.getKey()+"");
+            if (!(item.getKey() instanceof Integer)) {
+                row = Integer.parseInt(item.getKey() + "");
             }
-            if(voicePlay.getStatus()==1 && StringUtils.isNotEmpty(voicePlay.getValue())){
-                SeriaDataUtils.setSerialDataHuaXia(huaXiaResponse,voicePlay.getValue(),serialChannel,row.byteValue(),"","","",showContent.getDeviceModel(),"voice",voicePlay.getPlayMode(),validityPeriod);
+            if (voicePlay.getStatus() == 1 && StringUtils.isNotEmpty(voicePlay.getValue())) {
+                SeriaDataUtils.setSerialDataHuaXia(huaXiaResponse, voicePlay.getValue(), serialChannel, row.byteValue(), "", "", "", showContent.getDeviceModel(), "voice", voicePlay.getPlayMode(), validityPeriod);
             }
         }
     }
@@ -332,30 +334,31 @@ public class SeriaDataUtils {
 
     /**
      * 设置臻识SerialData 文本数据
+     *
      * @param zhenShiResponse911202002050 臻识相机响应实体
-     * @param content 要显示的内容
-     * @param serialChannel 通道号
-     * @param row 行号
-     * @param color 颜色
-     * @param inMode 文本内容进入模式
-     * @param outMode 文本内容退出模式
-     * @param deviceModel 显示屏控制主板型号
-     * @param dataType 数据类型
-     * @param voicePlayMode 语音播放模式
+     * @param content                     要显示的内容
+     * @param serialChannel               通道号
+     * @param row                         行号
+     * @param color                       颜色
+     * @param inMode                      文本内容进入模式
+     * @param outMode                     文本内容退出模式
+     * @param deviceModel                 显示屏控制主板型号
+     * @param dataType                    数据类型
+     * @param voicePlayMode               语音播放模式
      * @return
      */
-    public static ZhenShiResponse911202002050 setSerialDataZhenshi(ZhenShiResponse911202002050 zhenShiResponse911202002050, String content, Integer serialChannel, byte row, String color, String inMode, String outMode, String deviceModel, String dataType, String voicePlayMode, String validityPeriod) throws Exception{
+    public static ZhenShiResponse911202002050 setSerialDataZhenshi(ZhenShiResponse911202002050 zhenShiResponse911202002050, String content, Integer serialChannel, byte row, String color, String inMode, String outMode, String deviceModel, String dataType, String voicePlayMode, String validityPeriod) throws Exception {
         byte[] data1 = SeriaDataUtils.setSerialData(content, serialChannel, row, color, inMode, outMode, deviceModel, dataType, voicePlayMode, validityPeriod);
         SerialData serialData = new SerialData();
-        String data2=new String(data1);
+        String data2 = new String(data1);
 
         serialData.setSerialChannel(serialChannel);
         serialData.setData(data2);
         serialData.setDataLen(data2.length());
-        if(zhenShiResponse911202002050.getResponse_AlarmInfoPlate()==null){
+        if (zhenShiResponse911202002050.getResponse_AlarmInfoPlate() == null) {
             zhenShiResponse911202002050.setResponse_AlarmInfoPlate(new Response_AlarmInfoPlate());
         }
-        if(zhenShiResponse911202002050.getResponse_AlarmInfoPlate().getSerialData()==null){
+        if (zhenShiResponse911202002050.getResponse_AlarmInfoPlate().getSerialData() == null) {
             ArrayList<SerialData> serialDatas = new ArrayList<>();
             zhenShiResponse911202002050.getResponse_AlarmInfoPlate().setSerialData(serialDatas);
         }
@@ -365,24 +368,25 @@ public class SeriaDataUtils {
 
     /**
      * 设置臻识SerialData 文本数据
+     *
      * @param huaXiaResponse 华夏相机响应实体
-     * @param content 要显示的内容
-     * @param serialChannel 通道号
-     * @param row 行号
-     * @param color 颜色
-     * @param inMode 文本内容进入模式
-     * @param outMode 文本内容退出模式
-     * @param deviceModel 显示屏控制主板型号
-     * @param dataType 数据类型
-     * @param voicePlayMode 语音播放模式
+     * @param content        要显示的内容
+     * @param serialChannel  通道号
+     * @param row            行号
+     * @param color          颜色
+     * @param inMode         文本内容进入模式
+     * @param outMode        文本内容退出模式
+     * @param deviceModel    显示屏控制主板型号
+     * @param dataType       数据类型
+     * @param voicePlayMode  语音播放模式
      * @return
      */
-    public static HuaXiaResponse setSerialDataHuaXia(HuaXiaResponse huaXiaResponse, String content, Integer serialChannel, byte row, String color, String inMode, String outMode, String deviceModel, String dataType, String voicePlayMode, String validityPeriod) throws Exception{
+    public static HuaXiaResponse setSerialDataHuaXia(HuaXiaResponse huaXiaResponse, String content, Integer serialChannel, byte row, String color, String inMode, String outMode, String deviceModel, String dataType, String voicePlayMode, String validityPeriod) throws Exception {
         byte[] data1 = SeriaDataUtils.setSerialData(content, serialChannel, row, color, inMode, outMode, deviceModel, dataType, voicePlayMode, validityPeriod);
         SerialData serialData = new SerialData();
-        String data2=new String(data1);
+        String data2 = new String(data1);
 
-        if(huaXiaResponse.getRs485_data()==null){
+        if (huaXiaResponse.getRs485_data() == null) {
             ArrayList<Rs485Data> serialDatas = new ArrayList<>();
             huaXiaResponse.setRs485_data(serialDatas);
         }
@@ -393,14 +397,14 @@ public class SeriaDataUtils {
         return huaXiaResponse;
     }
 
-    public static byte[] setSerialData(String content, Integer serialChannel, byte row, String color, String inMode, String outMode, String deviceModel, String dataType, String voicePlayMode, String validityPeriod) throws Exception{
-        byte[] data= null;
-        switch (deviceModel){
+    public static byte[] setSerialData(String content, Integer serialChannel, byte row, String color, String inMode, String outMode, String deviceModel, String dataType, String voicePlayMode, String validityPeriod) throws Exception {
+        byte[] data = null;
+        switch (deviceModel) {
             case "VXXX-P50H-X":
-                if(dataType.equals("text")){
+                if (dataType.equals("text")) {
                     //颜色
                     String colorString = null;
-                    switch (color){
+                    switch (color) {
                         case "red":
                             colorString = "20";
                             break;
@@ -409,7 +413,7 @@ public class SeriaDataUtils {
                     }
                     //进出模式 立即退出20  从右向左移入(出)21  向下向上移入(出)25
                     String inModeString = null;
-                    switch (inMode){
+                    switch (inMode) {
                         case "in_quit":
                             inModeString = "20";
                             break;
@@ -423,7 +427,7 @@ public class SeriaDataUtils {
                             throw new Exception("color code not support");
                     }
                     String outModeString = null;
-                    switch (outMode){
+                    switch (outMode) {
                         case "out_quit":
                             outModeString = "20";
                             break;
@@ -436,74 +440,74 @@ public class SeriaDataUtils {
                         default:
                             throw new Exception("color code not support");
                     }
-                    data = getVXXXP50HX485Data(content, "2"+row, "2"+(row-(byte)1), colorString,inModeString, outModeString);
-                }else if(dataType.equals("voice")){
+                    data = getVXXXP50HX485Data(content, "2" + row, "2" + (row - (byte) 1), colorString, inModeString, outModeString);
+                } else if (dataType.equals("voice")) {
                     data = getVXXXP50HX485VoiceData(content);
-                }else if(dataType.equals("voice_setting")){
+                } else if (dataType.equals("voice_setting")) {
                     data = getVXXXP50HX485VoiceSettingData("");
                 }
                 break;
             case "miu_new":
-                if(dataType.equals("text")){
+                if (dataType.equals("text")) {
                     //行号 00 第3行 01第4行  02第1行  03第2行
                     String rowStr = null;
-                    switch (row){
-                        case (byte)1:
+                    switch (row) {
+                        case (byte) 1:
                             rowStr = "00";
                             break;
-                        case (byte)2:
+                        case (byte) 2:
                             rowStr = "01";
                             break;
-                        case (byte)3:
+                        case (byte) 3:
                             rowStr = "02";
                             break;
-                        case (byte)4:
+                        case (byte) 4:
                             rowStr = "03";
                             break;
-                        case (byte)5:
+                        case (byte) 5:
                             rowStr = "04";
                             break;
-                        case (byte)6:
+                        case (byte) 6:
                             rowStr = "05";
                             break;
-                        case (byte)7:
+                        case (byte) 7:
                             rowStr = "06";
                             break;
-                        case (byte)8:
+                        case (byte) 8:
                             rowStr = "07";
                             break;
-                        case (byte)9:
+                        case (byte) 9:
                             rowStr = "08";
                             break;
-                        case (byte)10:
+                        case (byte) 10:
                             rowStr = "09";
                             break;
-                        case (byte)11:
+                        case (byte) 11:
                             rowStr = "0A";
                             break;
-                        case (byte)12:
+                        case (byte) 12:
                             rowStr = "0B";
                             break;
-                        case (byte)13:
+                        case (byte) 13:
                             rowStr = "0C";
                             break;
-                        case (byte)14:
+                        case (byte) 14:
                             rowStr = "0D";
                             break;
-                        case (byte)15:
+                        case (byte) 15:
                             rowStr = "0E";
                             break;
-                        case (byte)16:
+                        case (byte) 16:
                             rowStr = "0F";
                             break;
-                        case (byte)17:
+                        case (byte) 17:
                             rowStr = "10";
                             break;
                     }
                     data = getMIUNEW485Data(content, rowStr, color, inMode, outMode, validityPeriod);
-                }else if(dataType.equals("voice")){
+                } else if (dataType.equals("voice")) {
                     String voicePlayModeStr = null;
-                    switch (voicePlayMode){
+                    switch (voicePlayMode) {
                         case "only_add":    //只是添加不播放
                             voicePlayModeStr = "00";
                             break;
@@ -515,7 +519,7 @@ public class SeriaDataUtils {
                             break;
                     }
                     data = getMIUNEW485VoiceData(content, voicePlayModeStr, validityPeriod);
-                }else if(dataType.equals("voice_setting")){
+                } else if (dataType.equals("voice_setting")) {
                     data = getVXXXP50HX485VoiceSettingData("");
                 }
                 break;
@@ -527,23 +531,24 @@ public class SeriaDataUtils {
 
     /**
      * 获取VXXX-P50H-X显示屏485文字内容
-     * @param content   显示内容
-     * @param row   行号
-     * @param sector   扇区
-     * @param color 颜色
-     * @param inMode   文字显示进入模式
-     * @param outMode   文字显示退出模式
+     *
+     * @param content 显示内容
+     * @param row     行号
+     * @param sector  扇区
+     * @param color   颜色
+     * @param inMode  文字显示进入模式
+     * @param outMode 文字显示退出模式
      * @return
      */
-    public static byte[] getVXXXP50HX485Data(String content, String row, String sector,String color,String inMode, String outMode){
-        byte[] bb=null;
+    public static byte[] getVXXXP50HX485Data(String content, String row, String sector, String color, String inMode, String outMode) {
+        byte[] bb = null;
         try {
             bb = content.getBytes("GB2312");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        byte[] data=null;
-        ByteBuffer buf=ByteBuffer.allocate(1024);
+        byte[] data = null;
+        ByteBuffer buf = ByteBuffer.allocate(1024);
 
         //AB 19 02 02 20 25 FC 0C 21 20 2E 21 28 BB B6 D3 AD B9 E2 C1 D9 03 22 23 21 20 03
 
@@ -557,97 +562,106 @@ public class SeriaDataUtils {
 //        buf.put(hexStringToByteArray(yihuo));//从异或前一字节算起5字节异或校验。
 
 
-
         //485标准包头
-        buf.put((byte)0xAB);
-        buf.put((byte)0x19);
-        buf.put((byte)0x02);
-        buf.put((byte)0x02);
+        buf.put((byte) 0xAB);
+        buf.put((byte) 0x19);
+        buf.put((byte) 0x02);
+        buf.put((byte) 0x02);
 
-        buf.put((byte)0x20);//机器地址
-        buf.put((byte)0x25);//命令  文本25
+        buf.put((byte) 0x20);//机器地址
+        buf.put((byte) 0x25);//命令  文本25
         buf.put(hexStringToByteArray(sector));//扇区 0x20—0x23表示将内容下载到第0—3扇区，第一行内容保存在第0扇区，第二行内容保存在第1扇区，第三行内容保存在第2扇区，第四行内容保存在第3扇区
-        buf.put((byte)0x0C);//预留 暂时固定0C
+        buf.put((byte) 0x0C);//预留 暂时固定0C
         buf.put(hexStringToByteArray(inMode));//进入模式 立即退出20  从右向左移入21  向下向上移入25
-        buf.put((byte)0x20);//保留时间H
-        buf.put((byte)0x2E);//保留时间L
+        buf.put((byte) 0x20);//保留时间H
+        buf.put((byte) 0x2E);//保留时间L
         buf.put(hexStringToByteArray(outMode));//退出模式 立即退出20 从右向左移出21  向下向上移出25
         //数据长度
-        String bc = Integer.toHexString(bb.length+32);
+        String bc = Integer.toHexString(bb.length + 32);
         buf.put(hexStringToByteArray(bc));
         //发送内容
         buf.put(bb);
         //包尾标记
-        buf.put((byte)0x03);//帧尾
+        buf.put((byte) 0x03);//帧尾
         buf.put(hexStringToByteArray(row));//行号  显示屏行号表示(0x21~0x24)
-        buf.put((byte)0x23);//表示第一屏显示内容停留时间。0x20~0xFF代表 0~223秒
-        buf.put((byte)0x21);//表示内容移动速度。（0x20-0x27八级速度调节，数值越小速度越快）。
+        buf.put((byte) 0x23);//表示第一屏显示内容停留时间。0x20~0xFF代表 0~223秒
+        buf.put((byte) 0x21);//表示内容移动速度。（0x20-0x27八级速度调节，数值越小速度越快）。
         buf.put(hexStringToByteArray(color));//表示当前一条信息显示的颜色，从0x20开始。
         //异或校验
-        String yihuo = yihuo("03"+row+"2321"+color);
+        String yihuo = yihuo("03" + row + "2321" + color);
         buf.put(hexStringToByteArray(yihuo));//从异或前一字节算起5字节异或校验。
 
         buf.flip();
-        int len=buf.remaining();
-        data=new byte[len];
+        int len = buf.remaining();
+        data = new byte[len];
         System.arraycopy(buf.array(), 0, data, 0, len);
         return data;
     }
 
     /**
      * 获取缪总新主板显示屏485文字内容
-     * @param content   显示内容
-     * @param row   行号
-     * @param color 颜色
-     * @param inMode   文字显示进入模式
-     * @param outMode   文字显示退出模式
+     *
+     * @param content 显示内容
+     * @param row     行号
+     * @param color   颜色
+     * @param inMode  文字显示进入模式
+     * @param outMode 文字显示退出模式
      * @return
      */
-    public static byte[] getMIUNEW485Data(String content, String row,String color,String inMode, String outMode, String validityPeriod) throws Exception{
-        byte[] bb=null;
+    public static byte[] getMIUNEW485Data(String content, String row, String color, String inMode, String outMode, String validityPeriod) throws Exception {
+        byte[] bb = null;
         try {
             bb = content.getBytes("GB2312");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
-        byte[] data=null;
-        byte[] check= new byte[100];
-        ByteBuffer buf=ByteBuffer.allocate(1024);
+        byte[] data = null;
+        byte[] check = new byte[100];
+        ByteBuffer buf = ByteBuffer.allocate(1024);
         // 00 64 FF FF 62 25 00 15 01 00 02 15 01 03 00 FF 00 00 00 00 00 00 00 12 00 BB B6 D3 AD
         //B9 E2 C1 D9 C7 EB C8 EB B3 A1 CD A3 B3 B5 F4 F5
 
         //485标准包头
-        buf.put((byte)0x00);check[0] = (byte)0x00;
-        buf.put((byte)0x64);check[1] = (byte)0x64;
-        buf.put((byte)0xFF);check[2] = (byte)0xFF;
-        buf.put((byte)0xFF);check[3] = (byte)0xFF;
-        if(validityPeriod.equals("temporary")){
+        buf.put((byte) 0x00);
+        check[0] = (byte) 0x00;
+        buf.put((byte) 0x64);
+        check[1] = (byte) 0x64;
+        buf.put((byte) 0xFF);
+        check[2] = (byte) 0xFF;
+        buf.put((byte) 0xFF);
+        check[3] = (byte) 0xFF;
+        if (validityPeriod.equals("temporary")) {
             //临时内容
-            buf.put((byte)0x62);check[4] = (byte)0x62;
-        }else if(validityPeriod.equals("permanent")){
+            buf.put((byte) 0x62);
+            check[4] = (byte) 0x62;
+        } else if (validityPeriod.equals("permanent")) {
             //永久内容
-            buf.put((byte)0x67);check[4] = (byte)0x67;
+            buf.put((byte) 0x67);
+            check[4] = (byte) 0x67;
         }
 
 
-        String bc = Integer.toHexString(bb.length+19); //数据长度  19个字节+文本长度
+        String bc = Integer.toHexString(bb.length + 19); //数据长度  19个字节+文本长度
         byte[] bytes0 = hexStringToByteArray(bc);
         buf.put(hexStringToByteArray(bc));
         int index = 4;
-        for(byte byteItem: bytes0){
+        for (byte byteItem : bytes0) {
             index++;
             check[index] = byteItem;
         }
 
         index++;
-        buf.put(hexStringToByteArray(row));check[index] = hexStringToByteArray(row)[0];    //行号
+        buf.put(hexStringToByteArray(row));
+        check[index] = hexStringToByteArray(row)[0];    //行号
 
-        if(validityPeriod.equals("permanent")){
+        if (validityPeriod.equals("permanent")) {
             index++;
-            buf.put((byte)0x00);check[index] = (byte)0x00;    //为文件的 ID，用于指定操作的文本文件。取值范围为 0~1。
+            buf.put((byte) 0x00);
+            check[index] = (byte) 0x00;    //为文件的 ID，用于指定操作的文本文件。取值范围为 0~1。
             index++;
-            buf.put((byte)0x0C);check[index] = (byte)0x0C;    //为文本文件的属性标志位。目前没有用到，固定取值为 0X0C。
+            buf.put((byte) 0x0C);
+            check[index] = (byte) 0x0C;    //为文本文件的属性标志位。目前没有用到，固定取值为 0X0C。
         }
         /**
          * 0x00 立即显示
@@ -663,7 +677,7 @@ public class SeriaDataUtils {
          * 0x15 连续左移
          */
         String inModeStr = null;
-        switch (inMode){
+        switch (inMode) {
             case "show_now":
                 inModeStr = "00";
                 break;
@@ -701,7 +715,7 @@ public class SeriaDataUtils {
                 throw new Exception("direction code not support");
         }
         String outModeStr = null;
-        switch (outMode){
+        switch (outMode) {
             case "show_now":
                 outModeStr = "00";
                 break;
@@ -739,57 +753,77 @@ public class SeriaDataUtils {
                 throw new Exception("direction code not support");
         }
         index++;
-        buf.put(hexStringToByteArray(inModeStr));check[index] = hexStringToByteArray(inModeStr)[0];    //文字进入窗口的方式
+        buf.put(hexStringToByteArray(inModeStr));
+        check[index] = hexStringToByteArray(inModeStr)[0];    //文字进入窗口的方式
         index++;
-        buf.put((byte)0x01);check[index] = (byte)0x01;    //文字进入速度  1~32
+        buf.put((byte) 0x01);
+        check[index] = (byte) 0x01;    //文字进入速度  1~32
         index++;
-        buf.put((byte)0x00);check[index] = (byte)0x00;    //为文字停留的方式。目前作为保留值固定为 0。
+        buf.put((byte) 0x00);
+        check[index] = (byte) 0x00;    //为文字停留的方式。目前作为保留值固定为 0。
         index++;
-        buf.put((byte)0x02);check[index] = (byte)0x02;    //为文字停留的时间。取值范围为 0 ~255
+        buf.put((byte) 0x02);
+        check[index] = (byte) 0x02;    //为文字停留的时间。取值范围为 0 ~255
         index++;
-        buf.put(hexStringToByteArray(outModeStr));check[index] = hexStringToByteArray(outModeStr)[0];   //文字退出窗口的方式(取值参考 文字进入窗口的方式)
+        buf.put(hexStringToByteArray(outModeStr));
+        check[index] = hexStringToByteArray(outModeStr)[0];   //文字退出窗口的方式(取值参考 文字进入窗口的方式)
         index++;
-        buf.put((byte)0x01);check[index] = (byte)0x01;    //文字退出速度  1~32
+        buf.put((byte) 0x01);
+        check[index] = (byte) 0x01;    //文字退出速度  1~32
         index++;
-        buf.put((byte)0x03);check[index] = (byte)0x03;   //为文字的字体索引值,目前作为保留值固定为 3
-        if(validityPeriod.equals("temporary")){
+        buf.put((byte) 0x03);
+        check[index] = (byte) 0x03;   //为文字的字体索引值,目前作为保留值固定为 3
+        if (validityPeriod.equals("temporary")) {
             //临时内容
             index++;
-            buf.put((byte)0x0A);check[index] = (byte)0x0A;   //为显示的次数。取值范围为 0~255,当为 0 的时，表示无限循环显示
+            buf.put((byte) 0x0A);
+            check[index] = (byte) 0x0A;   //为显示的次数。取值范围为 0~255,当为 0 的时，表示无限循环显示
         }
 
         //为文字的颜色值。存储结构为 R G B A 三基色，各占 8 位，R 表示红色分量，G 表示
         //绿色分量,B 表示蓝色分量，A 目前没用使用，作为保留字。各取值范围为 0~255
-        switch (color){
+        switch (color) {
             case "red":
                 index++;
-                buf.put((byte)0xFF);check[index] = (byte)0xFF;
+                buf.put((byte) 0xFF);
+                check[index] = (byte) 0xFF;
                 index++;
-                buf.put((byte)0x00);check[index] = (byte)0x00;
+                buf.put((byte) 0x00);
+                check[index] = (byte) 0x00;
                 index++;
-                buf.put((byte)0x00);check[index] = (byte)0x00;
+                buf.put((byte) 0x00);
+                check[index] = (byte) 0x00;
                 index++;
-                buf.put((byte)0x00);check[index] = (byte)0x00;
+                buf.put((byte) 0x00);
+                check[index] = (byte) 0x00;
                 break;
             case "green":
                 index++;
-                buf.put((byte)0x00);check[index] = (byte)0x00;
+                buf.put((byte) 0x00);
+                check[index] = (byte) 0x00;
                 index++;
-                buf.put((byte)0xFF);check[index] = (byte)0xFF;
+                buf.put((byte) 0xFF);
+                check[index] = (byte) 0xFF;
                 index++;
-                buf.put((byte)0x00);check[index] = (byte)0x00;
+                buf.put((byte) 0x00);
+                check[index] = (byte) 0x00;
                 index++;
-                buf.put((byte)0x00);check[index] = (byte)0x00;
+                buf.put((byte) 0x00);
+                check[index] = (byte) 0x00;
                 break;
             case "yellow":
                 index++;
-                buf.put((byte)0xFF);check[index] = (byte)0xFF;
+                buf.put((byte) 0xFF);
+                check[index] = (byte) 0xFF;
                 index++;
-                buf.put((byte)0xFF);check[index] = (byte)0xFF;
+                buf.put((byte) 0xFF);
+                check[index] = (byte) 0xFF;
                 index++;
-                buf.put((byte)0x00);check[index] = (byte)0x00;
+                buf.put((byte) 0x00);
+                check[index] = (byte) 0x00;
                 index++;
-                buf.put((byte)0x00);check[index] = (byte)0x00;
+                buf.put((byte) 0x00);
+                check[index] = (byte) 0x00;
                 break;
             default:
                 throw new Exception("color code not support");
@@ -798,87 +832,103 @@ public class SeriaDataUtils {
         //为背景的颜色值。存储结构为 R G B A 三基色，各占 8 位，R 表示红色分量，G 表
         //示绿色分量,B 表示蓝色分量，A 目前没用使用，作为保留字。各取值范围为 0~255
         index++;
-        buf.put((byte)0x00);check[index] = (byte)0x00;
+        buf.put((byte) 0x00);
+        check[index] = (byte) 0x00;
         index++;
-        buf.put((byte)0x00);check[index] = (byte)0x00;
+        buf.put((byte) 0x00);
+        check[index] = (byte) 0x00;
         index++;
-        buf.put((byte)0x00);check[index] = (byte)0x00;
+        buf.put((byte) 0x00);
+        check[index] = (byte) 0x00;
         index++;
-        buf.put((byte)0x00);check[index] = (byte)0x00;
+        buf.put((byte) 0x00);
+        check[index] = (byte) 0x00;
 
         //文本长度
         String bc2 = lowHigh(bb.length);
         index++;
-        buf.put(hexStringToByteArray(bc2.substring(0,2)));check[index] = hexStringToByteArray(bc2.substring(0,2))[0];
+        buf.put(hexStringToByteArray(bc2.substring(0, 2)));
+        check[index] = hexStringToByteArray(bc2.substring(0, 2))[0];
         index++;
-        buf.put(hexStringToByteArray(bc2.substring(2,4)));check[index] = hexStringToByteArray(bc2.substring(2,4))[0];
+        buf.put(hexStringToByteArray(bc2.substring(2, 4)));
+        check[index] = hexStringToByteArray(bc2.substring(2, 4))[0];
 
         //发送内容
         buf.put(bb);
-        for(byte byteItem2: bb){
+        for (byte byteItem2 : bb) {
             index++;
             check[index] = byteItem2;
         }
-        byte[] check2 = new byte[index+1];
-        for(int i=0; i<=index; i++){
+        byte[] check2 = new byte[index + 1];
+        for (int i = 0; i <= index; i++) {
             check2[i] = check[i];
         }
         //数据校验
         String crc = getCRC3(check2);
-        buf.put(hexStringToByteArray(crc.substring(0,2)));
-        buf.put(hexStringToByteArray(crc.substring(2,4)));
+        buf.put(hexStringToByteArray(crc.substring(0, 2)));
+        buf.put(hexStringToByteArray(crc.substring(2, 4)));
 
         buf.flip();
-        int len=buf.remaining();
-        data=new byte[len];
+        int len = buf.remaining();
+        data = new byte[len];
         System.arraycopy(buf.array(), 0, data, 0, len);
         return data;
     }
 
     /**
      * 显示臻识相机led广告
-     * @param row 行号
+     *
+     * @param row    行号
      * @param fileId 文件id
      */
-    public static ZhenShiResponse911202002050 showZhenShiAd(ZhenShiResponse911202002050 zhenShiResponse911202002050,String row, String fileId){
-        byte[] check= new byte[100];
-        ByteBuffer buf=ByteBuffer.allocate(1024);
+    public static ZhenShiResponse911202002050 showZhenShiAd(ZhenShiResponse911202002050 zhenShiResponse911202002050, String row, String fileId) {
+        byte[] check = new byte[100];
+        ByteBuffer buf = ByteBuffer.allocate(1024);
 
         //485标准包头
-        buf.put((byte)0x00);check[0] = (byte)0x00;
-        buf.put((byte)0x64);check[1] = (byte)0x64;
-        buf.put((byte)0xFF);check[2] = (byte)0xFF;
-        buf.put((byte)0xFF);check[3] = (byte)0xFF;
-        buf.put((byte)0x68);check[4] = (byte)0x68;
-        buf.put((byte)0x02);check[5] = (byte)0x02;
-        buf.put(hexStringToByteArray(row));check[6] = hexStringToByteArray(row)[0];    //行号
-        buf.put(hexStringToByteArray(row));check[7] = hexStringToByteArray(fileId)[0];    //文件id
+        buf.put((byte) 0x00);
+        check[0] = (byte) 0x00;
+        buf.put((byte) 0x64);
+        check[1] = (byte) 0x64;
+        buf.put((byte) 0xFF);
+        check[2] = (byte) 0xFF;
+        buf.put((byte) 0xFF);
+        check[3] = (byte) 0xFF;
+        buf.put((byte) 0x68);
+        check[4] = (byte) 0x68;
+        buf.put((byte) 0x02);
+        check[5] = (byte) 0x02;
+        buf.put(hexStringToByteArray(row));
+        check[6] = hexStringToByteArray(row)[0];    //行号
+        buf.put(hexStringToByteArray(row));
+        check[7] = hexStringToByteArray(fileId)[0];    //文件id
 
         byte[] check2 = new byte[8];
-        for(int i=0; i<=7; i++){
+        for (int i = 0; i <= 7; i++) {
             check2[i] = check[i];
         }
         //数据校验
         String crc = getCRC3(check2);
-        buf.put(hexStringToByteArray(crc.substring(0,2)));
-        buf.put(hexStringToByteArray(crc.substring(2,4)));
+        buf.put(hexStringToByteArray(crc.substring(0, 2)));
+        buf.put(hexStringToByteArray(crc.substring(2, 4)));
 
         buf.flip();
-        int len=buf.remaining();
+        int len = buf.remaining();
         byte[] data = new byte[len];
         System.arraycopy(buf.array(), 0, data, 0, len);
 
         SerialData serialData = new SerialData();
 
-        String data2=new String(data,StandardCharsets.ISO_8859_1);;
+        String data2 = new String(data, StandardCharsets.ISO_8859_1);
+        ;
 
         serialData.setSerialChannel(0);
         serialData.setData(data2);
         serialData.setDataLen(data2.length());
-        if(zhenShiResponse911202002050.getResponse_AlarmInfoPlate()==null){
+        if (zhenShiResponse911202002050.getResponse_AlarmInfoPlate() == null) {
             zhenShiResponse911202002050.setResponse_AlarmInfoPlate(new Response_AlarmInfoPlate());
         }
-        if(zhenShiResponse911202002050.getResponse_AlarmInfoPlate().getSerialData()==null){
+        if (zhenShiResponse911202002050.getResponse_AlarmInfoPlate().getSerialData() == null) {
             ArrayList<SerialData> serialDatas = new ArrayList<>();
             zhenShiResponse911202002050.getResponse_AlarmInfoPlate().setSerialData(serialDatas);
         }
@@ -888,44 +938,51 @@ public class SeriaDataUtils {
 
     /**
      * 获取缪总新主板显示屏485语音内容
-     * @param content   播报内容
-     * @param palyMode   播放模式
-     * @param validityPeriod   下发的内容有效期 默认为"临时-temporary"，permanent-永久
+     *
+     * @param content        播报内容
+     * @param palyMode       播放模式
+     * @param validityPeriod 下发的内容有效期 默认为"临时-temporary"，permanent-永久
      * @return
      */
-    public static byte[] getMIUNEW485VoiceData(String content, String palyMode, String validityPeriod){
-        byte[] bb=null;
+    public static byte[] getMIUNEW485VoiceData(String content, String palyMode, String validityPeriod) {
+        byte[] bb = null;
         try {
             bb = content.getBytes("GB2312");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
-        byte[] data=null;
-        byte[] check= new byte[100];
-        ByteBuffer buf=ByteBuffer.allocate(1024);
+        byte[] data = null;
+        byte[] check = new byte[100];
+        ByteBuffer buf = ByteBuffer.allocate(1024);
         // 00 64 FF FF 62 25 00 15 01 00 02 15 01 03 00 FF 00 00 00 00 00 00 00 12 00 BB B6 D3 AD
         //B9 E2 C1 D9 C7 EB C8 EB B3 A1 CD A3 B3 B5 F4 F5
 
         //485标准包头
-        buf.put((byte)0x00);check[0] = (byte)0x00;
+        buf.put((byte) 0x00);
+        check[0] = (byte) 0x00;
         //判断内容有效期
-        if(validityPeriod.equals(SeriaDataUtils.VALIDITYPERIOD_PERMANENT)){
-            buf.put((byte)0x67);check[1] = (byte)0x67;
-        }else{
-            buf.put((byte)0x64);check[1] = (byte)0x64;
+        if (validityPeriod.equals(SeriaDataUtils.VALIDITYPERIOD_PERMANENT)) {
+            buf.put((byte) 0x67);
+            check[1] = (byte) 0x67;
+        } else {
+            buf.put((byte) 0x64);
+            check[1] = (byte) 0x64;
         }
 
-        buf.put((byte)0xFF);check[2] = (byte)0xFF;
-        buf.put((byte)0xFF);check[3] = (byte)0xFF;
-        buf.put((byte)0x30);check[4] = (byte)0x30;
+        buf.put((byte) 0xFF);
+        check[2] = (byte) 0xFF;
+        buf.put((byte) 0xFF);
+        check[3] = (byte) 0xFF;
+        buf.put((byte) 0x30);
+        check[4] = (byte) 0x30;
 
-        String bc = Integer.toHexString(bb.length+1); //数据长度  1个字节+文本长度
-        bc = bc.length()==1?"0"+bc:bc;
+        String bc = Integer.toHexString(bb.length + 1); //数据长度  1个字节+文本长度
+        bc = bc.length() == 1 ? "0" + bc : bc;
         byte[] bytes0 = hexStringToByteArray(bc);
         buf.put(hexStringToByteArray(bc));
         int index = 4;
-            for(byte byteItem: bytes0){
+        for (byte byteItem : bytes0) {
             index++;
             check[index] = byteItem;
         }
@@ -936,105 +993,109 @@ public class SeriaDataUtils {
          * 0x02 先清除队列，再添加新语音到队列，然后开始播放
          */
         index++;
-        buf.put(hexStringToByteArray(palyMode));check[index] = hexStringToByteArray(palyMode)[0];
+        buf.put(hexStringToByteArray(palyMode));
+        check[index] = hexStringToByteArray(palyMode)[0];
 
         //发送内容
         buf.put(bb);
-        for(byte byteItem2: bb){
+        for (byte byteItem2 : bb) {
             index++;
             check[index] = byteItem2;
         }
-        byte[] check2 = new byte[index+1];
-        for(int i=0; i<=index; i++){
+        byte[] check2 = new byte[index + 1];
+        for (int i = 0; i <= index; i++) {
             check2[i] = check[i];
         }
         //数据校验
         String crc = getCRC3(check2);
-        buf.put(hexStringToByteArray(crc.substring(0,2)));
-        buf.put(hexStringToByteArray(crc.substring(2,4)));
+        buf.put(hexStringToByteArray(crc.substring(0, 2)));
+        buf.put(hexStringToByteArray(crc.substring(2, 4)));
 
         buf.flip();
-        int len=buf.remaining();
-        data=new byte[len];
+        int len = buf.remaining();
+        data = new byte[len];
         System.arraycopy(buf.array(), 0, data, 0, len);
         return data;
     }
 
     /**
      * 获取VXXX-P50H-X显示屏485语音内容
-     * @param content   播报内容
+     *
+     * @param content 播报内容
      * @return
      */
-    public static byte[] getVXXXP50HX485VoiceData(String content){
+    public static byte[] getVXXXP50HX485VoiceData(String content) {
 
         //AB 10 BB 42 42 FA FA
 
-        byte[] bb=null;
+        byte[] bb = null;
         try {
             bb = content.getBytes("GB2312");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        byte[] data=null;
-        ByteBuffer buf=ByteBuffer.allocate(1024);
+        byte[] data = null;
+        ByteBuffer buf = ByteBuffer.allocate(1024);
 
         //485标准包头
-        buf.put((byte)0xAB);
-        buf.put((byte)0x10);
-        buf.put((byte)0xBB);
-        buf.put((byte)0x42);
-        buf.put((byte)0x42);
-        buf.put((byte)0xFA);
-        buf.put((byte)0xFA);
-        buf.put((byte)0x00);
+        buf.put((byte) 0xAB);
+        buf.put((byte) 0x10);
+        buf.put((byte) 0xBB);
+        buf.put((byte) 0x42);
+        buf.put((byte) 0x42);
+        buf.put((byte) 0xFA);
+        buf.put((byte) 0xFA);
+        buf.put((byte) 0x00);
 
         //数据长度
-        String bc = Integer.toHexString(bb.length+32);
+        String bc = Integer.toHexString(bb.length + 32);
         buf.put(hexStringToByteArray(bc));
         //发送内容
         buf.put(bb);
 
         buf.flip();
-        int len=buf.remaining();
-        data=new byte[len];
+        int len = buf.remaining();
+        data = new byte[len];
         System.arraycopy(buf.array(), 0, data, 0, len);
         return data;
     }
 
     /**
      * 获取VXXX-P50H-X显示屏485语音设置内容
-     * @param content   播报内容
+     *
+     * @param content 播报内容
      * @return
      */
-    public static byte[] getVXXXP50HX485VoiceSettingData(String content){
+    public static byte[] getVXXXP50HX485VoiceSettingData(String content) {
 
         //AB 0B BB 42 42 88 88 05 0A 01 E8 04 B0
 
-        byte[] bb=null;
-        byte[] data=null;
-        ByteBuffer buf=ByteBuffer.allocate(1024);
-        buf.put((byte)0xAB);
-        buf.put((byte)0x0B);
-        buf.put((byte)0xBB);
-        buf.put((byte)0x42);
-        buf.put((byte)0x42);
-        buf.put((byte)0x88);
-        buf.put((byte)0x88);
-        buf.put((byte)0x05);
-        buf.put((byte)0x0A);
-        buf.put((byte)0x01);
-        buf.put((byte)0xE8);
-        buf.put((byte)0x04);
-        buf.put((byte)0xB0);
+        byte[] bb = null;
+        byte[] data = null;
+        ByteBuffer buf = ByteBuffer.allocate(1024);
+        buf.put((byte) 0xAB);
+        buf.put((byte) 0x0B);
+        buf.put((byte) 0xBB);
+        buf.put((byte) 0x42);
+        buf.put((byte) 0x42);
+        buf.put((byte) 0x88);
+        buf.put((byte) 0x88);
+        buf.put((byte) 0x05);
+        buf.put((byte) 0x0A);
+        buf.put((byte) 0x01);
+        buf.put((byte) 0xE8);
+        buf.put((byte) 0x04);
+        buf.put((byte) 0xB0);
         buf.flip();
-        int len=buf.remaining();
-        data=new byte[len];
+        int len = buf.remaining();
+        data = new byte[len];
         System.arraycopy(buf.array(), 0, data, 0, len);
         return data;
     }
 
     /**
      * 10进制转16进制 高低转换 高前 低后   并且转2字节
+     *
      * @param var0
      * @return
      */
@@ -1044,20 +1105,20 @@ public class SeriaDataUtils {
         int var3 = var0 & 255;
         String var4 = Integer.toHexString(var2);
         String var5 = Integer.toHexString(var3);
-        if(var4.length() > 2) {
+        if (var4.length() > 2) {
             do {
-                if(var1 > 1) {
+                if (var1 > 1) {
                     var2 >>= 8;
                 }
                 var4 = Integer.toHexString(var2 >> 8);
                 var5 = var5 + Integer.toHexString(var2 & 255);
                 ++var1;
-            } while(var4.length() > 2);
+            } while (var4.length() > 2);
         }
-        if(var4.length() < 2) {
+        if (var4.length() < 2) {
             var4 = "0" + var4;
         }
-        if(var5.length() < 2) {
+        if (var5.length() < 2) {
             var5 = "0" + var5;
         }
         return var5 + var4;
@@ -1071,7 +1132,7 @@ public class SeriaDataUtils {
         for (int i = 0; i < b.length; i++) {
             a = a ^ Integer.parseInt(b[i], 16);
         }
-        if(a<10){
+        if (a < 10) {
             StringBuffer sb = new StringBuffer();
             sb.append("0");
             sb.append(a);
@@ -1094,6 +1155,7 @@ public class SeriaDataUtils {
 
     /**
      * 16进制字符串转换byte[]
+     *
      * @param s
      * @return
      */
@@ -1225,7 +1287,7 @@ public class SeriaDataUtils {
 
         crc = ((ucCRCHi & 0x00ff) << 8) | (ucCRCLo & 0x00ff) & 0xffff;
         //高低位互换，输出符合相关工具对Modbus CRC16的运算
-        crc = ( (crc & 0xFF00) >> 8) | ( (crc & 0x00FF ) << 8);
+        crc = ((crc & 0xFF00) >> 8) | ((crc & 0x00FF) << 8);
         return String.format("%04X", crc);
     }
 

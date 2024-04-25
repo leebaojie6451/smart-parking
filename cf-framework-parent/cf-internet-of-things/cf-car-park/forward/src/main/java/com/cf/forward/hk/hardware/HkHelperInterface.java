@@ -10,24 +10,22 @@ import java.util.List;
 public interface HkHelperInterface {
 
     /**
-     *
      * @param isOpen
      * @return
      */
-   boolean openAndClose(boolean isOpen);
+    boolean openAndClose(boolean isOpen);
 
     /**
-     *
-     * @param content LED 显示内容
+     * @param content  LED 显示内容
      * @param showTime 显示时间（ s ）
      */
-   void controlLED(String content, int showTime);
+    void controlLED(String content, int showTime);
 
 
     /**
      * 语音播报
      */
-    void controlVoice( String content);
+    void controlVoice(String content);
 
 
     /**
@@ -37,8 +35,9 @@ public interface HkHelperInterface {
 
     /**
      * 批量添加 黑/白 名单车牌列表
+     *
      * @param cfCarParkPackageList
-     * @param type //名单属性（黑白名单）：0- 白名单，1- 黑名单
+     * @param type                 //名单属性（黑白名单）：0- 白名单，1- 黑名单
      */
     void addCarPackageList(List<CfCarParkPackage> cfCarParkPackageList, byte type);
 

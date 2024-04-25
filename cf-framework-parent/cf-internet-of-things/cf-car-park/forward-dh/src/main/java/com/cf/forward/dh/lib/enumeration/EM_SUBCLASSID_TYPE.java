@@ -6,8 +6,8 @@ package com.cf.forward.dh.lib.enumeration;
  */
 public enum EM_SUBCLASSID_TYPE {
 
-    EM_SUBCLASSID_UNKNOWN(0,"未知"),
-    EM_SUBCLASSID_ASSISTDEVICE(1,"辅助设备 (ITSE使用)");
+    EM_SUBCLASSID_UNKNOWN(0, "未知"),
+    EM_SUBCLASSID_ASSISTDEVICE(1, "辅助设备 (ITSE使用)");
 
     private final int value;
     private final String note;

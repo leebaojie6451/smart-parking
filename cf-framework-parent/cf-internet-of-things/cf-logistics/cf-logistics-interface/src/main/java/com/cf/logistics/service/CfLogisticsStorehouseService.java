@@ -28,6 +28,7 @@ public interface CfLogisticsStorehouseService {
 
     /**
      * 获取附近的物流仓库
+     *
      * @param cfLogisticsStorehouseQuery
      * @return
      */
@@ -35,6 +36,7 @@ public interface CfLogisticsStorehouseService {
 
     /**
      * 根据Query条件查询仓库数据，会联表查询工厂数据
+     *
      * @param cfLogisticsStorehouseQuery
      * @return
      */

@@ -29,6 +29,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 添加停车记录
+     *
      * @param cfCarParkUseLog
      * @return
      */
@@ -36,6 +37,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 删除
+     *
      * @param id
      * @return
      */
@@ -43,6 +45,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 批量删除
+     *
      * @param cfCarParkUseLogQuery
      * @return
      */
@@ -50,12 +53,14 @@ public interface CfCarParkUseLogService {
 
     /**
      * 禁止重复数据添加
+     *
      * @param cfCarParkUseLog
      */
     public CfCarParkUseLog forbidRepeatLog(CfCarParkUseLog cfCarParkUseLog);
 
     /**
      * 根据条件获取数据
+     *
      * @param cfCarParkUseLogQuery
      * @return
      */
@@ -67,6 +72,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 根据传入的query条件查询(本操作不会走内置的criteria操作)，order by 条件必须后端控制，否则存在SQL注入
+     *
      * @param cfCarParkUseLogQuery
      * @return
      */
@@ -74,6 +80,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 根据传入的query条件查询(含订单数据)(本操作不会走内置的criteria操作)，order by 条件必须后端控制，否则存在SQL注入
+     *
      * @param cfCarParkUseLogQuery
      * @return
      */
@@ -83,6 +90,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 更新
+     *
      * @param cfCarParkUseLog
      * @return
      */
@@ -90,6 +98,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 只更新不为空的字段
+     *
      * @param cfCarParkUseLog
      * @return
      */
@@ -97,6 +106,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 根据id获取一条停车记录
+     *
      * @param id
      * @return
      */
@@ -104,6 +114,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 根据id获取一条停车记录
+     *
      * @param id
      * @param expectEmpty
      * @return
@@ -112,6 +123,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 判断是否为臻识相机
+     *
      * @param carLogMap
      * @return
      */
@@ -119,6 +131,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 处理华夏相机数据
+     *
      * @param carLogMap
      * @return
      */
@@ -126,6 +139,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 硬件数据转为停车记录
+     *
      * @param carLogMap
      * @return
      * @throws Exception
@@ -134,6 +148,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 上传车牌图片
+     *
      * @param base64
      * @param decoderType
      * @return
@@ -142,6 +157,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 解析停车场记录表单数据
+     *
      * @param carLogMap
      * @return
      */
@@ -149,6 +165,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 处理臻识和千熠相机开关闸
+     *
      * @param zhenShiResponse911202002050
      * @param value
      */
@@ -156,6 +173,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 处理华夏相机开关闸
+     *
      * @param huaXiaResponse
      * @param value
      */
@@ -163,6 +181,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 处理相机数据和返回相关命令
+     *
      * @param cfCarParkUseLog
      * @param carLogMap
      * @param cameraBrand
@@ -173,6 +192,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 根据显示屏的行号控制内容显示
+     *
      * @param playRule
      * @param cfCarParkDevice
      * @param scenes
@@ -182,6 +202,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 给值班人员推送消息
+     *
      * @param cfCarParkUseLog
      * @param dutyUid
      * @param messageType
@@ -191,6 +212,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 给LCD屏幕推送消息
+     *
      * @param toUid
      * @param messageType
      * @param contents
@@ -200,18 +222,20 @@ public interface CfCarParkUseLogService {
 
     /**
      * 根据硬件推送的数据处理停车记录数据
-     * @param cfCarParkUseLog   解析后得到的停车记录实体数据
-     * @param cfCarParkDevice  硬件设备数据
-     * @param inOrOutTime 进出场时间
-     * @param smallImage 小图
-     * @param bigImage 大图
+     *
+     * @param cfCarParkUseLog 解析后得到的停车记录实体数据
+     * @param cfCarParkDevice 硬件设备数据
+     * @param inOrOutTime     进出场时间
+     * @param smallImage      小图
+     * @param bigImage        大图
      * @return
      */
     public CfCarParkUseLog handleUseLogByDevicePushData(CfCarParkUseLog cfCarParkUseLog,
-     CfCarParkDevice cfCarParkDevice, Long inOrOutTime, String smallImage, String bigImage);
+                                                        CfCarParkDevice cfCarParkDevice, Long inOrOutTime, String smallImage, String bigImage);
 
     /**
      * 检查是否存在进行中的停车预定
+     *
      * @param cfCarParkUseLog
      * @return
      */
@@ -219,6 +243,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 生成基础订单
+     *
      * @param cfCarParkUseLog
      * @return
      */
@@ -226,30 +251,34 @@ public interface CfCarParkUseLogService {
 
     /**
      * 支付成功后，推送硬件显示和播报消息
+     *
      * @param cfCarParkUseLog
      */
     PlayRule paySuccessfulPushDeviceMessage(CfCarParkUseLog cfCarParkUseLog) throws Exception;
 
     /**
      * 根据条件查询停车记录数据列表
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public List<CfCarParkUseLog> selectListByCondition(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds) throws Exception;
 
     /**
      * 根据条件查询停车记录数据列表数
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public Integer selectListByConditionCounts(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);
 
     /**
      * 申请通行
+     *
      * @param uid
      * @param direction
      * @param checkPointId
@@ -261,6 +290,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 放行临时车辆
+     *
      * @param cfCarParkUseLog
      * @param direction
      * @param type
@@ -269,6 +299,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 车位预订
+     *
      * @param cfCarParkUseLog
      * @param payTypeId
      * @param ip
@@ -278,6 +309,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 统计前N天每天的停车记录数(支持传入地区或停车场)
+     *
      * @param cfCountCarParkUseLogQuery
      * @return
      */
@@ -285,6 +317,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 获取某个年份某个月数的停车数(支持传入地区或停车场)
+     *
      * @param cfCountCarParkUseLogQuery
      * @return
      */
@@ -292,6 +325,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 获取某个年份每个月份的停车数
+     *
      * @param cfCountCarParkUseLogQuery
      * @return
      */
@@ -299,6 +333,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 统计岗亭值班人员一段时间内各渠道收费情况
+     *
      * @param countPayAmountByDutyQuery
      * @return
      */
@@ -306,6 +341,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 人工主动上报停车记录(断电断网  人工手机一键快捷补录停车数据)
+     *
      * @param numberPlateImage
      * @param originalFilename
      * @param carParkCheckPointId
@@ -318,6 +354,7 @@ public interface CfCarParkUseLogService {
 
     /**
      * 统计某个字段
+     *
      * @param cfCarParkUseLogQuery
      * @return
      */
@@ -325,15 +362,17 @@ public interface CfCarParkUseLogService {
 
     /**
      * 上传停车数据到 深圳 绿景智慧建造平台
+     *
      * @param cfCarParkUseLog
-     * @param config 第三方平台账号
+     * @param config          第三方平台账号
      */
     void lVGEMSmartConstructionPlatform(CfCarParkUseLog cfCarParkUseLog, Map<String, String> config) throws Exception;
 
     /**
      * 上传停车数据到 上海市公共停车信息平台
+     *
      * @param cfCarParkUseLog
-     * @param config 第三方平台账号
+     * @param config          第三方平台账号
      */
     void ShanghaiPublicParkingInformationPlatform(CfCarParkUseLog cfCarParkUseLog, Map<String, String> config) throws Exception;
 }

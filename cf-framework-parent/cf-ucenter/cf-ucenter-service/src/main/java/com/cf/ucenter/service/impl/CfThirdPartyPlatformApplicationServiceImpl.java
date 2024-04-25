@@ -46,10 +46,10 @@ public class CfThirdPartyPlatformApplicationServiceImpl implements CfThirdPartyP
     @Override
     public CfThirdPartyPlatformApplication findByAppId(String appid, boolean expectEmpy) {
         CfThirdPartyPlatformApplication cfThirdPartyPlatformApplication = findByAppId(appid);
-        if(expectEmpy && cfThirdPartyPlatformApplication!=null){
+        if (expectEmpy && cfThirdPartyPlatformApplication != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpy && cfThirdPartyPlatformApplication==null){
+        if (!expectEmpy && cfThirdPartyPlatformApplication == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfThirdPartyPlatformApplication;
@@ -69,7 +69,7 @@ public class CfThirdPartyPlatformApplicationServiceImpl implements CfThirdPartyP
     @Override
     public CfThirdPartyPlatformApplicationExample getExampleByQuery(CfThirdPartyPlatformApplicationQuery cfThirdPartyPlatformApplicationQuery) {
         CfThirdPartyPlatformApplicationExample cfThirdPartyPlatformApplicationExample = new CfThirdPartyPlatformApplicationExample();
-        if(cfThirdPartyPlatformApplicationQuery.getPage()!=null && cfThirdPartyPlatformApplicationQuery.getSize()!=null){
+        if (cfThirdPartyPlatformApplicationQuery.getPage() != null && cfThirdPartyPlatformApplicationQuery.getSize() != null) {
             PageHelper.startPage(cfThirdPartyPlatformApplicationQuery.getPage(), cfThirdPartyPlatformApplicationQuery.getSize());
         }
         return cfThirdPartyPlatformApplicationExample;

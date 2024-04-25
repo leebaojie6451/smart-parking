@@ -32,6 +32,7 @@ public interface CfChargingUseLogMapper {
 
     /**
      * 根据query条件进行查询(会联表查询停电站信息)
+     *
      * @param cfChargingUseLogQuery
      * @return
      */
@@ -39,6 +40,7 @@ public interface CfChargingUseLogMapper {
 
     /**
      * 根据条件查询充电记录数据列表
+     *
      * @param conditions
      * @return
      */
@@ -46,6 +48,7 @@ public interface CfChargingUseLogMapper {
 
     /**
      * 根据条件查询充电记录数据列表数
+     *
      * @param conditions
      * @return
      */

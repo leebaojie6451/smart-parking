@@ -49,11 +49,11 @@ public class CfCarParkOcrServiceImpl implements CfCarParkOcrService {
 
         RecognizeLicensePlateRequest req = new RecognizeLicensePlateRequest();
         req.setImageURL(numberPlateImageURL);
-        try{
+        try {
             RecognizeLicensePlateResponse resp = getAcsResponse(req);
             return resp.getData().getPlates().get(0).getPlateNumber();
-        }catch (Exception e){
-            ExceptionCast.cast(CommonCode.FAIL,e.getMessage());
+        } catch (Exception e) {
+            ExceptionCast.cast(CommonCode.FAIL, e.getMessage());
         }
         return null;
     }
@@ -75,9 +75,9 @@ public class CfCarParkOcrServiceImpl implements CfCarParkOcrService {
         }
     }
 
-    public static void printResponse(String actionName, String requestId, AcsResponse  data) {
+    public static void printResponse(String actionName, String requestId, AcsResponse data) {
         System.out.println(String.format("actionName=%s, requestId=%s, data=%s", actionName, requestId,
-                JSON.toJSONString(data) ));
+                JSON.toJSONString(data)));
     }
 
 }

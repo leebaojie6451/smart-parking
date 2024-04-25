@@ -44,12 +44,12 @@ public class CfWeixinConfigController implements CfWeixinConfigSwagger {
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public ResponseResult list(CfWeixinConfigQuery cfWeixinConfigQuery) {
         List<CfWeixinConfig> cfWeixinConfigs = cfWeixinConfigService.getListByQuery(cfWeixinConfigQuery);
-        if(cfWeixinConfigs!=null && cfWeixinConfigs.size()>0){
-            for (CfWeixinConfig cfWeixinConfig: cfWeixinConfigs){
+        if (cfWeixinConfigs != null && cfWeixinConfigs.size() > 0) {
+            for (CfWeixinConfig cfWeixinConfig : cfWeixinConfigs) {
                 cfWeixinConfig.setValue(null);
             }
         }
-        return cfWeixinConfigs!=null && cfWeixinConfigs.size()>0?new ResponseResult(CommonCode.SUCCESS, cfWeixinConfigs):new ResponseResult(CommonCode.NO_MORE_DATAS);
+        return cfWeixinConfigs != null && cfWeixinConfigs.size() > 0 ? new ResponseResult(CommonCode.SUCCESS, cfWeixinConfigs) : new ResponseResult(CommonCode.NO_MORE_DATAS);
     }
 
     @PreAuthorize("hasAuthority('ucenter-CfWeixinConfigController-add')")
@@ -77,7 +77,7 @@ public class CfWeixinConfigController implements CfWeixinConfigSwagger {
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(String id) {
         Integer delete = cfWeixinConfigService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS):new ResponseResult(CommonCode.FAIL);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS) : new ResponseResult(CommonCode.FAIL);
     }
 
     @PreAuthorize("hasAuthority('ucenter-CfWeixinConfigController-getUnlimited')")

@@ -66,9 +66,9 @@ public class CfCarParkCarTypeServiceImpl implements CfCarParkCarTypeService {
     @Override
     public CfCarParkCarType findById(String id, boolean expectEmpty) {
         CfCarParkCarType cfCarParkCarType = findById(id);
-        if(expectEmpty && cfCarParkCarType!=null){
+        if (expectEmpty && cfCarParkCarType != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
-        }else if(!expectEmpty && cfCarParkCarType==null){
+        } else if (!expectEmpty && cfCarParkCarType == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfCarParkCarType;
@@ -79,7 +79,7 @@ public class CfCarParkCarTypeServiceImpl implements CfCarParkCarTypeService {
         CfCarParkCarTypeExample cfCarParkCarTypeExample = new CfCarParkCarTypeExample();
         cfCarParkCarTypeExample.createCriteria().andFlagKeyEqualTo(key);
         List<CfCarParkCarType> cfCarParkCarTypes = cfCarParkCarTypeMapper.selectByExample(cfCarParkCarTypeExample);
-        if(cfCarParkCarTypes!=null && cfCarParkCarTypes.size()>0){
+        if (cfCarParkCarTypes != null && cfCarParkCarTypes.size() > 0) {
             return cfCarParkCarTypes.get(0);
         }
         return null;
@@ -91,9 +91,9 @@ public class CfCarParkCarTypeServiceImpl implements CfCarParkCarTypeService {
         cfCarParkCarTypeExample.createCriteria().andFlagKeyEqualTo(key);
         List<CfCarParkCarType> cfCarParkCarTypes = cfCarParkCarTypeMapper.selectByExample(cfCarParkCarTypeExample);
 
-        if(expectEmpty && cfCarParkCarTypes!=null && cfCarParkCarTypes.size()>0){
+        if (expectEmpty && cfCarParkCarTypes != null && cfCarParkCarTypes.size() > 0) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
-        }else if(!expectEmpty && (cfCarParkCarTypes==null || cfCarParkCarTypes.size()==0)){
+        } else if (!expectEmpty && (cfCarParkCarTypes == null || cfCarParkCarTypes.size() == 0)) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfCarParkCarTypes.get(0);
@@ -103,17 +103,17 @@ public class CfCarParkCarTypeServiceImpl implements CfCarParkCarTypeService {
     public CfCarParkCarTypeExample getExampleByQuery(CfCarParkCarTypeQuery cfCarParkCarTypeQuery) {
         CfCarParkCarTypeExample cfCarParkCarTypeExample = new CfCarParkCarTypeExample();
         CfCarParkCarTypeExample.Criteria criteria = cfCarParkCarTypeExample.createCriteria();
-        if(cfCarParkCarTypeQuery.getName()!=null){
+        if (cfCarParkCarTypeQuery.getName() != null) {
             criteria.andNameLike(cfCarParkCarTypeQuery.getName());
         }
-        if(cfCarParkCarTypeQuery.getFlagKey()!=null){
+        if (cfCarParkCarTypeQuery.getFlagKey() != null) {
             criteria.andFlagKeyEqualTo(cfCarParkCarTypeQuery.getFlagKey());
         }
 
-        if(StringUtils.isNotEmpty(cfCarParkCarTypeQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfCarParkCarTypeQuery.getOrderBy())) {
             cfCarParkCarTypeExample.setOrderByClause(cfCarParkCarTypeQuery.getOrderBy());
         }
-        if(cfCarParkCarTypeQuery.getPage()!=null && cfCarParkCarTypeQuery.getSize()!=null){
+        if (cfCarParkCarTypeQuery.getPage() != null && cfCarParkCarTypeQuery.getSize() != null) {
             PageHelper.startPage(cfCarParkCarTypeQuery.getPage(), cfCarParkCarTypeQuery.getSize());
         }
 

@@ -42,7 +42,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @ClassName CfCarParkPackagePriceServiceImpl
  * @Author 隔壁小王子 981011512@qq.com
  * @Date 2020/5/28/028 7:06
@@ -102,35 +101,35 @@ public class CfCarParkPackagePriceServiceImpl implements CfCarParkPackagePriceSe
     public CfCarParkPackagePriceExample getExampleByQuery(CfCarParkPackagePriceQuery cfCarParkPackagePriceQuery) {
         CfCarParkPackagePriceExample cfCarParkPackagePriceExample = new CfCarParkPackagePriceExample();
         CfCarParkPackagePriceExample.Criteria criteria = cfCarParkPackagePriceExample.createCriteria();
-        if(cfCarParkPackagePriceQuery.getTitle()!=null){
+        if (cfCarParkPackagePriceQuery.getTitle() != null) {
             criteria.andTitleLike(cfCarParkPackagePriceQuery.getTitle());
         }
-        if(StringUtils.isNotEmpty(cfCarParkPackagePriceQuery.getId())){
+        if (StringUtils.isNotEmpty(cfCarParkPackagePriceQuery.getId())) {
             criteria.andIdEqualTo(cfCarParkPackagePriceQuery.getId());
         }
-        if(StringUtils.isNotEmpty(cfCarParkPackagePriceQuery.getCarParkId())){
+        if (StringUtils.isNotEmpty(cfCarParkPackagePriceQuery.getCarParkId())) {
             criteria.andCarParkIdEqualTo(cfCarParkPackagePriceQuery.getCarParkId());
         }
-        if(cfCarParkPackagePriceQuery.getCarParkIds()!=null && cfCarParkPackagePriceQuery.getCarParkIds().size()>0){
+        if (cfCarParkPackagePriceQuery.getCarParkIds() != null && cfCarParkPackagePriceQuery.getCarParkIds().size() > 0) {
             criteria.andCarParkIdIn(cfCarParkPackagePriceQuery.getCarParkIds());
         }
-        if(StringUtils.isNotEmpty(cfCarParkPackagePriceQuery.getFlagKey())){
+        if (StringUtils.isNotEmpty(cfCarParkPackagePriceQuery.getFlagKey())) {
             criteria.andFlagKeyEqualTo(cfCarParkPackagePriceQuery.getFlagKey());
         }
-        if(cfCarParkPackagePriceQuery.getSpecialGive()!=null){
+        if (cfCarParkPackagePriceQuery.getSpecialGive() != null) {
             criteria.andSpecialGiveEqualTo(cfCarParkPackagePriceQuery.getSpecialGive());
         }
-        if(cfCarParkPackagePriceQuery.getSpecialCarPackage()!=null){
+        if (cfCarParkPackagePriceQuery.getSpecialCarPackage() != null) {
             criteria.andSpecialCarPackageEqualTo(cfCarParkPackagePriceQuery.getSpecialCarPackage());
         }
-        if(StringUtils.isNotEmpty(cfCarParkPackagePriceQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfCarParkPackagePriceQuery.getOrderBy())) {
             cfCarParkPackagePriceExample.setOrderByClause(cfCarParkPackagePriceQuery.getOrderBy());
         }
 
-        if(StringUtils.isNotEmpty(cfCarParkPackagePriceQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfCarParkPackagePriceQuery.getOrderBy())) {
             cfCarParkPackagePriceExample.setOrderByClause(cfCarParkPackagePriceQuery.getOrderBy());
         }
-        if(cfCarParkPackagePriceQuery.getPage()!=null && cfCarParkPackagePriceQuery.getSize()!=null){
+        if (cfCarParkPackagePriceQuery.getPage() != null && cfCarParkPackagePriceQuery.getSize() != null) {
             PageHelper.startPage(cfCarParkPackagePriceQuery.getPage(), cfCarParkPackagePriceQuery.getSize());
         }
 
@@ -145,7 +144,7 @@ public class CfCarParkPackagePriceServiceImpl implements CfCarParkPackagePriceSe
         CfCarParkOrder cfCarParkOrder = null;
         try {
             cfCarParkOrder = queryCfCarParkPackageRecoverFee(cfCarParkPackagePrice, uid, numberPlate);
-        } catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -155,30 +154,30 @@ public class CfCarParkPackagePriceServiceImpl implements CfCarParkPackagePriceSe
         cfOrderQuery.setGoodsId(cfCarParkPackagePriceId);
         cfOrderQuery.setUid(uid);
         cfOrderQuery.setStatus(PayStatus.TO_BE_PAID);
-        cfOrderQuery.setMinCreateTime(System.currentTimeMillis()- PayConfig.ORDER_EXPIRATION_TIME);
+        cfOrderQuery.setMinCreateTime(System.currentTimeMillis() - PayConfig.ORDER_EXPIRATION_TIME);
         List<CfOrder> cfOrders = cfOrderService.getListByQuery(cfOrderQuery);
         CfOrder cfOrder = null;
-        if(cfOrders==null || cfOrders.size()==0){
+        if (cfOrders == null || cfOrders.size() == 0) {
             cfOrder = new CfOrder();
             cfOrder.setId(idWorker.nextId());
             cfOrder.setRandomId(idWorker.nextId());
             cfOrder.setGoodsImage(cfCarParkPackagePrice.getImage());
             cfOrder.setGoodsId(cfCarParkPackagePriceId);
-            cfOrder.setGoodsName(cfCarParkPackagePrice.getTitle()+"【套餐购买】"+numberPlate);
+            cfOrder.setGoodsName(cfCarParkPackagePrice.getTitle() + "【套餐购买】" + numberPlate);
             cfOrder.setUid(uid);
             cfOrder.setShopId(cfCarParkPackagePrice.getCarParkId());
-            cfOrder.setStatus((byte)0);
+            cfOrder.setStatus((byte) 0);
             cfOrder.setGoodsType(GoodsType.CARPARK_PAYMENT_PACKEAGE);
-            if(cfCarParkOrder!=null && cfCarParkOrder.getCfOrder()!=null && cfCarParkOrder.getCfOrder().getPayTime()==0){
+            if (cfCarParkOrder != null && cfCarParkOrder.getCfOrder() != null && cfCarParkOrder.getCfOrder().getPayTime() == 0) {
                 cfOrder.setAmountsPayable(cfCarParkPackagePrice.getCurrentPrice().add(cfCarParkOrder.getCfOrder().getAmountsPayable()));
-                cfOrder.setGoodsName(cfCarParkPackagePrice.getTitle()+"【套餐续费+车费补缴】"+numberPlate);
+                cfOrder.setGoodsName(cfCarParkPackagePrice.getTitle() + "【套餐续费+车费补缴】" + numberPlate);
                 cfOrder.setCollectionAmount(cfCarParkOrder.getCfOrder().getAmountsPayable());
                 //找到停车账单，标记该账单已被套餐账单代缴
                 CfOrder parkOrder = new CfOrder();
                 parkOrder.setId(cfCarParkOrder.getCfOrder().getId());
                 parkOrder.setCollectionOrderId(cfOrder.getId());
                 cfOrderService.updateByPrimaryKeySelective(parkOrder);
-            }else{
+            } else {
                 cfOrder.setAmountsPayable(cfCarParkPackagePrice.getCurrentPrice());
             }
             cfOrder.setPaymentAgencyShortName(cfUserPaymentAgency.getPaymentAgencyShortName());
@@ -187,12 +186,12 @@ public class CfCarParkPackagePriceServiceImpl implements CfCarParkPackagePriceSe
             cfOrder.setUserPaymentAgencyId(payTypeId);
             cfOrder.setAmountActuallyPaid(new BigDecimal(0.00));
             cfOrder = cfOrderService.add(cfOrder);
-        }else{
+        } else {
             cfOrder = cfOrders.get(0);
             cfOrder.setUserPaymentAgencyId(payTypeId);
-            if(cfCarParkOrder!=null && cfCarParkOrder.getCfOrder()!=null && cfCarParkOrder.getCfOrder().getPayTime()==0){
+            if (cfCarParkOrder != null && cfCarParkOrder.getCfOrder() != null && cfCarParkOrder.getCfOrder().getPayTime() == 0) {
                 cfOrder.setAmountsPayable(cfCarParkPackagePrice.getCurrentPrice().add(cfCarParkOrder.getCfOrder().getAmountsPayable()));
-                cfOrder.setGoodsName(cfCarParkPackagePrice.getTitle()+"【套餐续费+车费补缴】"+numberPlate);
+                cfOrder.setGoodsName(cfCarParkPackagePrice.getTitle() + "【套餐续费+车费补缴】" + numberPlate);
                 cfOrder.setCollectionAmount(cfCarParkOrder.getCfOrder().getAmountsPayable());
                 //找到停车账单，标记该账单已被套餐账单代缴
                 CfOrder parkOrder = new CfOrder();
@@ -210,14 +209,14 @@ public class CfCarParkPackagePriceServiceImpl implements CfCarParkPackagePriceSe
 
         //如果车辆对应的套餐已经过期
         CfCarParkPackageQuery cfCarParkPackageQuery = new CfCarParkPackageQuery();
-        if(cfCarParkPackageQuery.getUid()!=null){
+        if (cfCarParkPackageQuery.getUid() != null) {
             cfCarParkPackageQuery.setUid(uid);
         }
         cfCarParkPackageQuery.setPackagePriceId(cfCarParkPackagePrice.getId());
         cfCarParkPackageQuery.setNumberPlate(numberPlate);
         cfCarParkPackageQuery.setOrderBy("end_time desc");
         List<CfCarParkPackage> cfCarParkPackages = cfCarParkPackageService.getListByQuery(cfCarParkPackageQuery);
-        if(cfCarParkPackages!=null && cfCarParkPackages.size()>0 && cfCarParkPackages.get(0).getEndTime()<System.currentTimeMillis()){
+        if (cfCarParkPackages != null && cfCarParkPackages.size() > 0 && cfCarParkPackages.get(0).getEndTime() < System.currentTimeMillis()) {
             List<String> carParkIdList = new ArrayList<>();
             carParkIdList.add(cfCarParkPackages.get(0).getCarParkId());
             //找到该套餐的所有跨区车场
@@ -227,8 +226,8 @@ public class CfCarParkPackagePriceServiceImpl implements CfCarParkPackagePriceSe
             cfCarParkPackageQuery.setOrderBy(null);
             cfCarParkPackageQuery.setParentId(cfCarParkPackages.get(0).getId());
             List<CfCarParkPackage> childCfCarParkPackageList = cfCarParkPackageService.getListByQuery(cfCarParkPackageQuery);
-            if(childCfCarParkPackageList!=null && childCfCarParkPackageList.size()>0){
-                for (CfCarParkPackage childCfCarParkPackage: childCfCarParkPackageList){
+            if (childCfCarParkPackageList != null && childCfCarParkPackageList.size() > 0) {
+                for (CfCarParkPackage childCfCarParkPackage : childCfCarParkPackageList) {
                     carParkIdList.add(childCfCarParkPackage.getCarParkId());
                 }
             }
@@ -240,15 +239,15 @@ public class CfCarParkPackagePriceServiceImpl implements CfCarParkPackagePriceSe
             cfCarParkUseLogQuery.setSize(1);
             cfCarParkUseLogQuery.setOrderBy("in_time desc");
             List<CfCarParkUseLog> cfCarParkUseLogList = cfCarParkUseLogService.getListByQuery(cfCarParkUseLogQuery);
-            if(cfCarParkUseLogList!=null && cfCarParkUseLogList.size()>0){
-                if(cfCarParkUseLogList.get(0).getPayTime()==0){
+            if (cfCarParkUseLogList != null && cfCarParkUseLogList.size() > 0) {
+                if (cfCarParkUseLogList.get(0).getPayTime() == 0) {
                     //说明正在续费过期套餐时，该车辆存在临停费
-                    if(cfCarParkPackagePrice.getGracePeriod()+cfCarParkPackages.get(0).getEndTime()<System.currentTimeMillis()){
+                    if (cfCarParkPackagePrice.getGracePeriod() + cfCarParkPackages.get(0).getEndTime() < System.currentTimeMillis()) {
                         try {
                             cfCarParkUseLogList.get(0).setUid(uid);
                             cfCarParkOrder = cfCarParkChargingRulesService.calculateTheAmounPayable(cfCarParkUseLogList.get(0), uid, FeeQueryMode.QUERY_MODE_QUERY_ONLY);
-                        } catch (CustomException e){
-                            if(e.getResultCode().code()!=12006){
+                        } catch (CustomException e) {
+                            if (e.getResultCode().code() != 12006) {
                                 throw e;
                             }
                         }
@@ -268,9 +267,9 @@ public class CfCarParkPackagePriceServiceImpl implements CfCarParkPackagePriceSe
     @Override
     public CfCarParkPackagePrice findById(String id, boolean expectEmpty) {
         CfCarParkPackagePrice cfCarParkPackagePrice = findById(id);
-        if(!expectEmpty && cfCarParkPackagePrice==null){
+        if (!expectEmpty && cfCarParkPackagePrice == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
-        }else if(expectEmpty && cfCarParkPackagePrice!=null){
+        } else if (expectEmpty && cfCarParkPackagePrice != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
         return cfCarParkPackagePrice;

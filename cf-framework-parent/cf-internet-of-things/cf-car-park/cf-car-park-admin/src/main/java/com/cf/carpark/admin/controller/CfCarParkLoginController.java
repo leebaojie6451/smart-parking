@@ -58,7 +58,7 @@ public class CfCarParkLoginController implements CfCarParkLoginSwagger {
 
     @Override
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    public ResponseResult login(String username,String password,String code) throws Exception {
+    public ResponseResult login(String username, String password, String code) throws Exception {
         AuthToken authToken = authService.login(username, password, clientId, clientSecret);
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(authToken.getJwt_token());
         CfUser cfUser = cfUserService.getUserByUid(userBasicInfo.getId(), true);
@@ -67,32 +67,32 @@ public class CfCarParkLoginController implements CfCarParkLoginSwagger {
         CfCarParkLinkUserQuery cfCarParkLinkUserQuery = new CfCarParkLinkUserQuery();
         cfCarParkLinkUserQuery.setUid(userBasicInfo.getId());
         List<CfCarParkLinkUser> cfCarParkLinkUsers = cfCarParkLinkUserService.getListByQuery(cfCarParkLinkUserQuery);
-        if(cfCarParkLinkUsers!=null && cfCarParkLinkUsers.size()>0){
+        if (cfCarParkLinkUsers != null && cfCarParkLinkUsers.size() > 0) {
             //自动值班
-            for(CfCarParkLinkUser cfCarParkLinkUser: cfCarParkLinkUsers){
-                if(StringUtils.isNotEmpty(cfCarParkLinkUser.getCheckPointIds())){
+            for (CfCarParkLinkUser cfCarParkLinkUser : cfCarParkLinkUsers) {
+                if (StringUtils.isNotEmpty(cfCarParkLinkUser.getCheckPointIds())) {
                     CfCarParkCheckpointQuery cfCarParkCheckpointQuery = new CfCarParkCheckpointQuery();
                     String[] checkPointIds = cfCarParkLinkUser.getCheckPointIds().split(",");
                     cfCarParkCheckpointQuery.setIds(new ArrayList<>());
-                    for(int i=0;i<checkPointIds.length;i++){
+                    for (int i = 0; i < checkPointIds.length; i++) {
                         cfCarParkCheckpointQuery.getIds().add(checkPointIds[i]);
                     }
 //                    cfCarParkCheckpointQuery.setDutyUid("");
                     List<CfCarParkCheckpoint> cfCarParkCheckpoints = cfCarParkCheckpointService.getListByQuery(cfCarParkCheckpointQuery);
-                    if(cfCarParkCheckpoints!=null && cfCarParkCheckpoints.size()>0){
+                    if (cfCarParkCheckpoints != null && cfCarParkCheckpoints.size() > 0) {
                         cfCarParkCheckpointQuery.setIds(new ArrayList<>());
-                        for (CfCarParkCheckpoint cfCarParkCheckpoint: cfCarParkCheckpoints){
+                        for (CfCarParkCheckpoint cfCarParkCheckpoint : cfCarParkCheckpoints) {
                             cfCarParkCheckpointQuery.getIds().add(cfCarParkCheckpoint.getId());
                         }
                         cfCarParkCheckpointQuery.setDutyUid(null);
                         CfCarParkCheckpoint cfCarParkCheckpoint = new CfCarParkCheckpoint();
                         cfCarParkCheckpoint.setDutyUid(userBasicInfo.getId());
-                        cfCarParkCheckpointService.updateByQuery(cfCarParkCheckpoint,cfCarParkCheckpointQuery);
+                        cfCarParkCheckpointService.updateByQuery(cfCarParkCheckpoint, cfCarParkCheckpointQuery);
                     }
                 }
             }
             //智能记录其开始有效值班时间，若11小时内有值班记录，按最早一次算开始值班时间，否则本次登录时间算开始值班时间
-            if(System.currentTimeMillis()-cfCarParkLinkUsers.get(0).getStartDutyTime()>39600000){
+            if (System.currentTimeMillis() - cfCarParkLinkUsers.get(0).getStartDutyTime() > 39600000) {
                 CfCarParkLinkUser cfCarParkLinkUser = new CfCarParkLinkUser();
                 cfCarParkLinkUser.setStartDutyTime(System.currentTimeMillis());
                 cfCarParkLinkUserService.updateByQuery(cfCarParkLinkUser, cfCarParkLinkUserQuery);
@@ -108,11 +108,11 @@ public class CfCarParkLoginController implements CfCarParkLoginSwagger {
         String jwt = HttpHearderUtils.getAuthorization(request);
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(jwt);
         Object deleteResult = null;
-        if(type.equals("all")){
+        if (type.equals("all")) {
             deleteResult = stringRedisTemplate.delete("user:" + userBasicInfo.getUsername());
-        }else if(type.equals("current")){
+        } else if (type.equals("current")) {
             deleteResult = stringRedisTemplate.boundSetOps("user:" + userBasicInfo.getUsername()).remove(jwt);
-        }else{
+        } else {
             return new ResponseResult(CommonCode.FAIL, null, "invalid typ");
         }
         //自动脱班(解除岗亭值班)
@@ -122,7 +122,7 @@ public class CfCarParkLoginController implements CfCarParkLoginSwagger {
         CfCarParkCheckpoint cfCarParkCheckpoint = new CfCarParkCheckpoint();
         cfCarParkCheckpoint.setDutyUid("");
 
-        cfCarParkCheckpointService.updateByQuery(cfCarParkCheckpoint,cfCarParkCheckpointQuery);
+        cfCarParkCheckpointService.updateByQuery(cfCarParkCheckpoint, cfCarParkCheckpointQuery);
         return new ResponseResult(CommonCode.SUCCESS, deleteResult);
     }
 }

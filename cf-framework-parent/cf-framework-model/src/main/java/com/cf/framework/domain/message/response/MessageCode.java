@@ -12,10 +12,10 @@ import com.cf.framework.domain.response.ResultCode;
  **/
 public enum MessageCode implements ResultCode {
 
-    MESSAGE_NOT_EXISTSNAME(false,60001,"指定的消息记录不存在！"),
-    NO_AUTH_UPDATE_MESSAGE(false,60002,"您无权操作此条消息数据！"),
-    MESSAGE_UID_NOT_MATCH(false,60003,"消息发送者id与当前用户id不匹配！"),
-    ILLEGAL_TO_NOTIFICATIONS_MESSAGE_TYPE(false,60004,"不合法订阅通知消息类型！"),
+    MESSAGE_NOT_EXISTSNAME(false, 60001, "指定的消息记录不存在！"),
+    NO_AUTH_UPDATE_MESSAGE(false, 60002, "您无权操作此条消息数据！"),
+    MESSAGE_UID_NOT_MATCH(false, 60003, "消息发送者id与当前用户id不匹配！"),
+    ILLEGAL_TO_NOTIFICATIONS_MESSAGE_TYPE(false, 60004, "不合法订阅通知消息类型！"),
     ;
     //操作代码
     boolean success;
@@ -23,7 +23,8 @@ public enum MessageCode implements ResultCode {
     int code;
     //提示信息
     String message;
-    private MessageCode(boolean success, int code, String message){
+
+    private MessageCode(boolean success, int code, String message) {
         this.success = success;
         this.code = code;
         this.message = message;
@@ -50,6 +51,7 @@ public enum MessageCode implements ResultCode {
     }
 
     String mixMessage;
+
     @Override
     public String mixMessage() {
         return mixMessage;

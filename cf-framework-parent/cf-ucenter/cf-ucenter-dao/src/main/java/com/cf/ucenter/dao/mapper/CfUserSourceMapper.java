@@ -31,6 +31,7 @@ public interface CfUserSourceMapper {
 
     /**
      * 批量插入
+     *
      * @param list
      * @return
      */

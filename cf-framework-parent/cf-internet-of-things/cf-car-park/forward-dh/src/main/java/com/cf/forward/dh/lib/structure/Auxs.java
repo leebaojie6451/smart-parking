@@ -16,5 +16,5 @@ import static com.cf.forward.dh.lib.constant.SDKStructureFieldLenth.CFG_COMMON_S
  * @date 2020/11/9
  */
 public class Auxs extends NetSDKLib.SdkStructure {
-    public byte[] auxs=new byte[CFG_COMMON_STRING_32];
+    public byte[] auxs = new byte[CFG_COMMON_STRING_32];
 }

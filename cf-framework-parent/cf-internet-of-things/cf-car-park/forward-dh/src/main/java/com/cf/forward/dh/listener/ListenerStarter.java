@@ -1,4 +1,3 @@
-
 package com.cf.forward.dh.listener;
 
 import com.cf.forward.dh.config.CameraConfig;
@@ -39,9 +38,9 @@ public class ListenerStarter implements ApplicationListener<ContextRefreshedEven
             List<CameraInfo> cameraInfoes = properties.getCameraInfoes();
             propertiesCache = properties;
             ListenerStarter.coding = properties.getCoding();
-            if(cameraInfoes!=null && cameraInfoes.size()>0){
+            if (cameraInfoes != null && cameraInfoes.size() > 0) {
                 //创建大华连接
-                for(CameraInfo cameraInfo: cameraInfoes){
+                for (CameraInfo cameraInfo : cameraInfoes) {
                     String path = "E:/java/cf/cf-internet-of-things/cf-car-park/forward-dh/libs/";
                     CameraConfig.setDllPath(path);
                     cameraInfo.setPort(37777);
@@ -51,15 +50,15 @@ public class ListenerStarter implements ApplicationListener<ContextRefreshedEven
                     start(cameraInfo);
                     Thread.sleep(3000); //延时3秒
                 }
-            }else{
+            } else {
                 System.out.println("没有可接入的设备");
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void start(CameraInfo cameraInfo){
+    private void start(CameraInfo cameraInfo) {
         Runnable runnable = () -> {
             try {
                 new AlarmListener().start(cameraInfo);
@@ -70,11 +69,11 @@ public class ListenerStarter implements ApplicationListener<ContextRefreshedEven
         new Thread(runnable).start();
     }
 
-    public static void systemOutLog(File file){
+    public static void systemOutLog(File file) {
         try {
             FileOutputStream fos = new FileOutputStream(file);//f:生成的文件路径
             //we will want to print in standard "System.out" and in "file"
-            TeeOutputStream myOut=new TeeOutputStream(System.out, fos);
+            TeeOutputStream myOut = new TeeOutputStream(System.out, fos);
             PrintStream ps = new PrintStream(myOut, true); //true - auto-flush after println
             System.setOut(ps);
         } catch (Exception e) {

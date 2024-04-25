@@ -16,13 +16,13 @@ public class CfCarParkForm implements Serializable {
     private String image;
 
     @ApiModelProperty(value = "经度", example = "123.521457412475", required = true, notes = "保留12位小数")
-    @Digits(integer = 4,fraction = 12, message = "经度最多保留12位小数")
+    @Digits(integer = 4, fraction = 12, message = "经度最多保留12位小数")
     @Min(value = -180, message = "经度最小值-180")
     @Max(value = 180, message = "经度最大值180")
     private BigDecimal positionX;
 
     @ApiModelProperty(value = "纬度", example = "56.587451245896", required = true, notes = "保留12位小数")
-    @Digits(integer = 3,fraction = 12, message = "纬度最多保留12位小数")
+    @Digits(integer = 3, fraction = 12, message = "纬度最多保留12位小数")
     @Min(value = -90, message = "纬度最小值-90")
     @Max(value = 90, message = "纬度最大值90")
     private BigDecimal positionY;

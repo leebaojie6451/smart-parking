@@ -15,9 +15,9 @@ import javax.crypto.spec.SecretKeySpec;
  * 加密工具
  */
 public class AES {
-    private static final String AES_ALG         = "AES";
+    private static final String AES_ALG = "AES";
     private static final String AES_CBC_PCK_ALG = "AES/CBC/PKCS5Padding";
-    private static final byte[] AES_IV          = initIV();
+    private static final byte[] AES_IV = initIV();
 
     /**
      * AES加密

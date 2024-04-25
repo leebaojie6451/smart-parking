@@ -63,8 +63,8 @@ public class FileSystemServiceImpl implements FileSystemService {
     }
 
     @Override
-    public FileSystem upload(byte[] fileByte , String originalFilename, String contentType, String filetag, String businesskey, String metadata, String platform) throws Exception {
-        if(fileByte ==null){
+    public FileSystem upload(byte[] fileByte, String originalFilename, String contentType, String filetag, String businesskey, String metadata, String platform) throws Exception {
+        if (fileByte == null) {
             ExceptionCast.cast(FileSystemCode.FS_UPLOADFILE_FILEISNULL);
         }
         String fileId = null;
@@ -72,11 +72,11 @@ public class FileSystemServiceImpl implements FileSystemService {
         CfSystemConfigQuery cfSystemConfigQuery = new CfSystemConfigQuery();
         cfSystemConfigQuery.setEnName("file_upload_platform");
         List<CfSystemConfig> cfSystemConfigs = cfSystemConfigService.getListByQuery(cfSystemConfigQuery);
-        if(cfSystemConfigs!=null && cfSystemConfigs.size()>0){
+        if (cfSystemConfigs != null && cfSystemConfigs.size() > 0) {
             platform = cfSystemConfigs.get(0).getValue();
         }
 
-        switch (platform){
+        switch (platform) {
             case "fastdfs":
                 //第一步：将文件上传到fastDFS中，得到一个文件id
                 fileId = fdfs_upload(fileByte, originalFilename);
@@ -89,7 +89,7 @@ public class FileSystemServiceImpl implements FileSystemService {
                 ExceptionCast.cast(FileSystemCode.FILE_PLATFORM_INVALID);
         }
 
-        if(StringUtils.isEmpty(fileId)){
+        if (StringUtils.isEmpty(fileId)) {
             ExceptionCast.cast(FileSystemCode.FS_UPLOADFILE_SERVERFAIL);
         }
 
@@ -101,7 +101,7 @@ public class FileSystemServiceImpl implements FileSystemService {
         fileSystem.setBusinesskey(businesskey);
         fileSystem.setFileName(originalFilename);
         fileSystem.setFileType(contentType);
-        if(StringUtils.isNotEmpty(metadata)){
+        if (StringUtils.isNotEmpty(metadata)) {
             try {
                 Map map = JSON.parseObject(metadata, Map.class);
                 fileSystem.setMetadata(map);
@@ -123,22 +123,22 @@ public class FileSystemServiceImpl implements FileSystemService {
         CfSystemConfigQuery cfSystemConfigQuery = new CfSystemConfigQuery();
         cfSystemConfigQuery.setEnName("file_source_address");
         List<CfSystemConfig> cfSystemConfigs = cfSystemConfigService.getListByQuery(cfSystemConfigQuery);
-        if(cfSystemConfigs!=null && cfSystemConfigs.size()>0){
+        if (cfSystemConfigs != null && cfSystemConfigs.size() > 0) {
             fileSourceAddress = cfSystemConfigs.get(0).getValue();
         }
 
-        if(filePrefixHandler.getSourceList()!=null && filePrefixHandler.getSourceList().size()>0){
-            for (Object object: filePrefixHandler.getSourceList()){
-                if(filePrefixHandler.getSourceFields()!=null && filePrefixHandler.getSourceFields().size()>0){
-                    for (String sourceField: filePrefixHandler.getSourceFields()){
+        if (filePrefixHandler.getSourceList() != null && filePrefixHandler.getSourceList().size() > 0) {
+            for (Object object : filePrefixHandler.getSourceList()) {
+                if (filePrefixHandler.getSourceFields() != null && filePrefixHandler.getSourceFields().size() > 0) {
+                    for (String sourceField : filePrefixHandler.getSourceFields()) {
                         FileUtils.handleFileSourcePrefix(object, fileSourceAddress, sourceField);
                     }
                 }
             }
             return filePrefixHandler.getSourceList();
-        }else if(filePrefixHandler.getSource()!=null){
-            if(filePrefixHandler.getSourceFields()!=null && filePrefixHandler.getSourceFields().size()>0){
-                for (String sourceField: filePrefixHandler.getSourceFields()){
+        } else if (filePrefixHandler.getSource() != null) {
+            if (filePrefixHandler.getSourceFields() != null && filePrefixHandler.getSourceFields().size() > 0) {
+                for (String sourceField : filePrefixHandler.getSourceFields()) {
                     FileUtils.handleFileSourcePrefix(filePrefixHandler.getSource(), fileSourceAddress, sourceField);
                 }
             }
@@ -148,12 +148,11 @@ public class FileSystemServiceImpl implements FileSystemService {
     }
 
     /**
-     *
      * @param bytes
      * @param originalFilename
      * @return
      */
-    private String fdfs_upload(byte[] bytes, String originalFilename){
+    private String fdfs_upload(byte[] bytes, String originalFilename) {
         //初始化fastDFS的环境
         initFdfsConfig();
         //创建trackerClient
@@ -164,7 +163,7 @@ public class FileSystemServiceImpl implements FileSystemService {
 
             StorageServer storeStorage = trackerClient.getStoreStorage(trackerServer);
             //创建storageClient来上传文件
-            StorageClient1 storageClient1 = new StorageClient1(trackerServer,storeStorage);
+            StorageClient1 storageClient1 = new StorageClient1(trackerServer, storeStorage);
             //上传文件
             //得到文件扩展名
             String ext = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
@@ -177,7 +176,7 @@ public class FileSystemServiceImpl implements FileSystemService {
     }
 
     //初始化fastDFS环境
-    private void initFdfsConfig(){
+    private void initFdfsConfig() {
         //获取配置
         List<CfWeixinConfig> cfWeixinConfigs = cfWeixinConfigService.getWeiXinLoginConfigragtion("fastdfs");
         String trackerServers = WeiXinConfigUtils.getWeiXinConfigragtionByEnName("tracker_servers", cfWeixinConfigs);
@@ -198,7 +197,7 @@ public class FileSystemServiceImpl implements FileSystemService {
     }
 
     //初始化阿里oss
-    private void initAliOssConfig(){
+    private void initAliOssConfig() {
 
         List<CfWeixinConfig> cfWeixinConfigs = cfWeixinConfigService.getWeiXinLoginConfigragtion("ali_oss");
         endpoint = WeiXinConfigUtils.getWeiXinConfigragtionByEnName("endpoint", cfWeixinConfigs);
@@ -207,7 +206,7 @@ public class FileSystemServiceImpl implements FileSystemService {
         bucketName = WeiXinConfigUtils.getWeiXinConfigragtionByEnName("bucket_name", cfWeixinConfigs);
     }
 
-    private String aliOssUpload(byte[] bytes, String originalFilename) throws Exception{
+    private String aliOssUpload(byte[] bytes, String originalFilename) throws Exception {
 
         initAliOssConfig();
 
@@ -224,9 +223,9 @@ public class FileSystemServiceImpl implements FileSystemService {
 
         String filename = null;
         String[] split = originalFilename.split("\\.");
-        if(split.length==0){
+        if (split.length == 0) {
             ExceptionCast.cast(FileSystemCode.FILE_NAME_INVALID);
-        }else{
+        } else {
             filename = idWorker.nextId() + "." + split[split.length - 1];
         }
 

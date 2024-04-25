@@ -33,7 +33,7 @@ public class CfLogisticsVehicleController implements CfLogisticsVehicleSwagger {
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseResult add(@Validated @RequestBody CfLogisticsVehicleForm cfLogisticsVehicleForm) throws Exception {
         CfLogisticsVehicle cfLogisticsVehicle = new CfLogisticsVehicle();
-        BeanUtils.copyProperties(cfLogisticsVehicleForm,cfLogisticsVehicle);
+        BeanUtils.copyProperties(cfLogisticsVehicleForm, cfLogisticsVehicle);
         CfLogisticsVehicle lastCfLogisticsVehicle = cfLogisticsVehicleService.add(cfLogisticsVehicle);
         return new ResponseResult(CommonCode.SUCCESS, lastCfLogisticsVehicle);
     }
@@ -43,7 +43,7 @@ public class CfLogisticsVehicleController implements CfLogisticsVehicleSwagger {
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public ResponseResult update(@Validated @RequestBody CfLogisticsVehicleForm cfLogisticsVehicleForm) {
         CfLogisticsVehicle cfLogisticsVehicle = new CfLogisticsVehicle();
-        BeanUtils.copyProperties(cfLogisticsVehicleForm,cfLogisticsVehicle);
+        BeanUtils.copyProperties(cfLogisticsVehicleForm, cfLogisticsVehicle);
         CfLogisticsVehicle update = cfLogisticsVehicleService.update(cfLogisticsVehicle);
         return new ResponseResult(CommonCode.SUCCESS, update);
     }
@@ -53,7 +53,7 @@ public class CfLogisticsVehicleController implements CfLogisticsVehicleSwagger {
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(Long id) {
         Integer delete = cfLogisticsVehicleService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS, delete):new ResponseResult(CommonCode.FAIL, null);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS, delete) : new ResponseResult(CommonCode.FAIL, null);
     }
 
     @PreAuthorize("hasAuthority('logistics-CfLogisticsVehicleController-getListByQuery')")
@@ -62,7 +62,7 @@ public class CfLogisticsVehicleController implements CfLogisticsVehicleSwagger {
     public ResponseResult getListByQuery(CfLogisticsVehicleQuery cfLogisticsVehicleQuery) throws Exception {
         List<CfLogisticsVehicle> cfLogisticsVehicles = cfLogisticsVehicleService.getListByQuery(cfLogisticsVehicleQuery);
         Integer countByQuery = cfLogisticsVehicleService.countByQuery(cfLogisticsVehicleQuery);
-        if(cfLogisticsVehicles==null || cfLogisticsVehicles.size()==0){
+        if (cfLogisticsVehicles == null || cfLogisticsVehicles.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsVehicles, countByQuery);

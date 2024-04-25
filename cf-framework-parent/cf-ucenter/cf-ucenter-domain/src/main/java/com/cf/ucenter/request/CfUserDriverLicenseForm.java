@@ -12,7 +12,7 @@ public class CfUserDriverLicenseForm implements Serializable {
     @ApiModelProperty(value = "", example = "无需提供，系统会自动维护", required = false)
     private String uid;
     @ApiModelProperty(value = "", example = "用户姓名", required = true)
-    @Size(min=2, max=20, message = "用户姓名长度2-20位数")
+    @Size(min = 2, max = 20, message = "用户姓名长度2-20位数")
     private String userName;
     @ApiModelProperty(value = "", example = "性别0-女/1-男/2-未知", required = false)
     @Min(value = 0, message = "性别最小值0")
@@ -47,19 +47,19 @@ public class CfUserDriverLicenseForm implements Serializable {
     @Max(value = 31, message = "日期最大值31号")
     private Byte firstIssueDay;
     @ApiModelProperty(value = "", example = "准驾车型", required = true)
-    @Size(min=2, max=30, message = "准驾车型长度2-30位数")
+    @Size(min = 2, max = 30, message = "准驾车型长度2-30位数")
     private String carClass;
     @ApiModelProperty(value = "", example = "证件生效时间", required = false)
     private Long startTime;
     @ApiModelProperty(value = "", example = "证件到期时间", required = false)
     private Long endTime;
     @ApiModelProperty(value = "", example = "身份证号", required = true)
-    @Size(min=16, max=20, message = "身份证号长度16-20位数")
+    @Size(min = 16, max = 20, message = "身份证号长度16-20位数")
     private String certificateNumber;
     @ApiModelProperty(value = "", example = "签发机关", required = false)
     private String issuingAuthority;
     @ApiModelProperty(value = "", example = "档案编号", required = false)
-    @Size(min=0, max=20, message = "档案编号长度10-20位数")
+    @Size(min = 0, max = 20, message = "档案编号长度10-20位数")
     private String fileNumber;
     @ApiModelProperty(value = "", example = "实习期截至", required = false)
     private Long internshipPeriodEnds;

@@ -44,7 +44,7 @@ public class CfChargingStationDeviceController implements CfChargingStationDevic
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseResult add(@Validated @RequestBody CfChargingStationDeviceForm cfChargingStationDeviceForm) throws Exception {
         CfChargingStationDevice cfChargingStationDevice = new CfChargingStationDevice();
-        BeanUtils.copyProperties(cfChargingStationDeviceForm,cfChargingStationDevice);
+        BeanUtils.copyProperties(cfChargingStationDeviceForm, cfChargingStationDevice);
         CfChargingStationDevice lastCfChargingStationDevice = cfChargingStationDeviceService.add(cfChargingStationDevice);
         return new ResponseResult(CommonCode.SUCCESS, lastCfChargingStationDevice);
     }
@@ -54,7 +54,7 @@ public class CfChargingStationDeviceController implements CfChargingStationDevic
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public ResponseResult update(@Validated @RequestBody CfChargingStationDeviceForm cfChargingStationDeviceForm) {
         CfChargingStationDevice cfChargingStationDevice = new CfChargingStationDevice();
-        BeanUtils.copyProperties(cfChargingStationDeviceForm,cfChargingStationDevice);
+        BeanUtils.copyProperties(cfChargingStationDeviceForm, cfChargingStationDevice);
         CfChargingStationDevice lastCfChargingStationDevice = cfChargingStationDeviceService.update(cfChargingStationDevice);
         return new ResponseResult(CommonCode.SUCCESS, lastCfChargingStationDevice);
     }
@@ -64,7 +64,7 @@ public class CfChargingStationDeviceController implements CfChargingStationDevic
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(CfChargingStationDeviceQuery cfChargingStationDeviceQuery) throws Exception {
         List<CfChargingStationDevice> cfChargingStationDeviceList = cfChargingStationDeviceService.getListByQuery(cfChargingStationDeviceQuery);
-        if(cfChargingStationDeviceList==null || cfChargingStationDeviceList.size()==0){
+        if (cfChargingStationDeviceList == null || cfChargingStationDeviceList.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfChargingStationDeviceList);
@@ -75,7 +75,7 @@ public class CfChargingStationDeviceController implements CfChargingStationDevic
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(String id) throws Exception {
         Integer delete = cfChargingStationDeviceService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS, delete):new ResponseResult(CommonCode.FAIL, null);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS, delete) : new ResponseResult(CommonCode.FAIL, null);
     }
 
     @PreAuthorize("hasAuthority('charging-CfChargingStationDeviceController-chargingSettiong')")
@@ -98,16 +98,16 @@ public class CfChargingStationDeviceController implements CfChargingStationDevic
     @Override
     @RequestMapping(value = "counts", method = RequestMethod.GET)
     public ResponseResult counts() throws Exception {
-        Map<String,Integer> result = new HashMap<>();
+        Map<String, Integer> result = new HashMap<>();
         CfChargingStationDeviceQuery cfChargingStationDeviceQuery = new CfChargingStationDeviceQuery();
         cfChargingStationDeviceQuery.setType(ChargingDeviceType.CHARGING_DEVICE);
         Integer count = cfChargingStationDeviceService.countByQuery(cfChargingStationDeviceQuery);
-        result.put("charging_device",count);
+        result.put("charging_device", count);
 
         cfChargingStationDeviceQuery.setType(ChargingDeviceType.CHARGING_DEVICE);
-        cfChargingStationDeviceQuery.setStatus((byte)1);
+        cfChargingStationDeviceQuery.setStatus((byte) 1);
         count = cfChargingStationDeviceService.countByQuery(cfChargingStationDeviceQuery);
-        result.put("charging_device_online",count);
-        return new ResponseResult(CommonCode.SUCCESS,result);
+        result.put("charging_device_online", count);
+        return new ResponseResult(CommonCode.SUCCESS, result);
     }
 }

@@ -58,10 +58,9 @@ public class BxCmdSendDynamicArea extends BxCmd {
 
         //
         // delete area ids
-        if(delAreaIds == null) {
-            array.add((byte)0x00);
-        }
-        else {
+        if (delAreaIds == null) {
+            array.add((byte) 0x00);
+        } else {
             byte delIdNum = (byte) delAreaIds.length;
             array.add(delIdNum);
             array.add(delAreaIds);
@@ -69,13 +68,12 @@ public class BxCmdSendDynamicArea extends BxCmd {
 
         //
         // area data
-        if(areas != null) {
-            if(areas.size() == 0) {
-                array.add((byte)0x00);
-            }
-            else {
-                array.add((byte)areas.size());
-                for(BxArea area:areas) {
+        if (areas != null) {
+            if (areas.size() == 0) {
+                array.add((byte) 0x00);
+            } else {
+                array.add((byte) areas.size());
+                for (BxArea area : areas) {
                     byte[] areaData = area.build();
                     short dataLen = (short) areaData.length;
 
@@ -83,9 +81,8 @@ public class BxCmdSendDynamicArea extends BxCmd {
                     array.add(areaData);
                 }
             }
-        }
-        else {
-            array.add((byte)0x00);
+        } else {
+            array.add((byte) 0x00);
         }
 
 

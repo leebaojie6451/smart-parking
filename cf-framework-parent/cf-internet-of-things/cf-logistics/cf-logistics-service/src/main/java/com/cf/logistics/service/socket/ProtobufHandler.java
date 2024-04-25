@@ -8,6 +8,6 @@ public class ProtobufHandler extends SimpleChannelInboundHandler<DeviceMessage.H
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, DeviceMessage.HeartbeatRequest heartbeatRequest) throws Exception {
         String deviceId = heartbeatRequest.getDeviceId();
-        System.out.println("接收到设备ID:"+deviceId);
+        System.out.println("接收到设备ID:" + deviceId);
     }
 }

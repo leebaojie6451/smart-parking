@@ -7,6 +7,7 @@ public interface CfCarParkOcrService {
 
     /**
      * 阿里云车牌识别服务
+     *
      * @param numberPlateImageURL
      * @return
      */

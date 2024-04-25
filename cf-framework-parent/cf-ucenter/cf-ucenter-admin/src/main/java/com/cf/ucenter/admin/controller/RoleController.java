@@ -37,7 +37,7 @@ public class RoleController implements RoleSwagger {
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public ResponseResult list() {
         List<CfRole> list = cfRoleService.list();
-        if(list!=null){
+        if (list != null) {
             return new ResponseResult(CommonCode.SUCCESS, list);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);
@@ -49,12 +49,12 @@ public class RoleController implements RoleSwagger {
     public ResponseResult add(@Validated @RequestBody CfRoleForm cfRoleForm) {
         CfRole cfRole = new CfRole();
         BeanUtils.copyProperties(cfRoleForm, cfRole);
-        if(cfRole.getIcon()==null){
+        if (cfRole.getIcon() == null) {
             cfRole.setIcon("");
         }
 
         CfRole role = cfRoleService.add(cfRole);
-        if(role!=null){
+        if (role != null) {
             return new ResponseResult(CommonCode.SUCCESS, cfRole);
         }
         return new ResponseResult(CommonCode.FAIL);
@@ -65,7 +65,7 @@ public class RoleController implements RoleSwagger {
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public ResponseResult update(@Validated @RequestBody CfRoleForm cfRoleForm) {
         CfRole cfRole = cfRoleService.update(cfRoleForm);
-        if(cfRole!=null){
+        if (cfRole != null) {
             return new ResponseResult(CommonCode.SUCCESS, cfRole);
         }
         return new ResponseResult(CommonCode.FAIL);

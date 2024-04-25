@@ -28,11 +28,11 @@ public class CfChargingPortController implements CfChargingPortSwagger {
     @Override
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(CfChargingPortQuery cfChargingPortQuery) throws Exception {
-        if(StringUtils.isEmpty(cfChargingPortQuery.getChargingDeviceId())){
+        if (StringUtils.isEmpty(cfChargingPortQuery.getChargingDeviceId())) {
             return new ResponseResult(CommonCode.INVALID_PARAM, null, "请提供充电桩id");
         }
         List<CfChargingPort> cfChargingPortList = cfChargingPortService.getListByQuery(cfChargingPortQuery);
-        if(cfChargingPortList==null || cfChargingPortList.size()==0){
+        if (cfChargingPortList == null || cfChargingPortList.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfChargingPortList);

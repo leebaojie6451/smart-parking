@@ -99,50 +99,50 @@ public class CfCarParkReleaseLogController implements CfCarParkReleaseLogSwagger
         allowFileds.add("order");
         allowFileds.add("limit");
         Map<String, String> allowFiledsMap = new HashMap<String, String>();
-        allowFiledsMap.put("id","cprl");
-        allowFiledsMap.put("carpark_id","cprl");
-        allowFiledsMap.put("carpark_use_log_id","cprl");
-        allowFiledsMap.put("uid","cprl");
-        allowFiledsMap.put("device_serial_number","cprl");
-        allowFiledsMap.put("number_plate","cprl");
-        allowFiledsMap.put("application_time","cprl");
-        allowFiledsMap.put("execution_time","cprl");
-        allowFiledsMap.put("status","cprl");
-        allowFiledsMap.put("carpark_id$in","cpdv");
-        allowFiledsMap.put("like","");
-        allowFiledsMap.put("order","");
-        allowFiledsMap.put("limit","");
+        allowFiledsMap.put("id", "cprl");
+        allowFiledsMap.put("carpark_id", "cprl");
+        allowFiledsMap.put("carpark_use_log_id", "cprl");
+        allowFiledsMap.put("uid", "cprl");
+        allowFiledsMap.put("device_serial_number", "cprl");
+        allowFiledsMap.put("number_plate", "cprl");
+        allowFiledsMap.put("application_time", "cprl");
+        allowFiledsMap.put("execution_time", "cprl");
+        allowFiledsMap.put("status", "cprl");
+        allowFiledsMap.put("carpark_id$in", "cpdv");
+        allowFiledsMap.put("like", "");
+        allowFiledsMap.put("order", "");
+        allowFiledsMap.put("limit", "");
 
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0){
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0) {
             CfCarParkDeviceLinkUserQuery cfCarParkDeviceLinkUserQuery = new CfCarParkDeviceLinkUserQuery();
             cfCarParkDeviceLinkUserQuery.setUid(userBasicInfo.getId());
             List<CfCarParkDeviceLinkUser> cfCarParkDeviceLinkUserList = cfCarParkDeviceLinkUserService.getListByQuery(cfCarParkDeviceLinkUserQuery);
-            if(cfCarParkDeviceLinkUserList==null || cfCarParkDeviceLinkUserList.size()==0){
+            if (cfCarParkDeviceLinkUserList == null || cfCarParkDeviceLinkUserList.size() == 0) {
                 ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
             }
             String carParkIds = "";
-            for (CfCarParkDeviceLinkUser cfCarParkDeviceLinkUser: cfCarParkDeviceLinkUserList){
-                if(StringUtils.isEmpty(cfCarParkDeviceLinkUser.getCarParkId())){
+            for (CfCarParkDeviceLinkUser cfCarParkDeviceLinkUser : cfCarParkDeviceLinkUserList) {
+                if (StringUtils.isEmpty(cfCarParkDeviceLinkUser.getCarParkId())) {
                     continue;
                 }
-                carParkIds += ",'"+cfCarParkDeviceLinkUser.getCarParkId()+"'";
+                carParkIds += ",'" + cfCarParkDeviceLinkUser.getCarParkId() + "'";
             }
-            if(StringUtils.isNotEmpty(carParkIds)){
+            if (StringUtils.isNotEmpty(carParkIds)) {
                 carParkIds = carParkIds.substring(1);
             }
-            if(StringUtils.isNotEmpty(carParkIds)){
+            if (StringUtils.isNotEmpty(carParkIds)) {
                 HashMap<String, String> valueMap = new HashMap<>();
-                valueMap.put("operator","in");
-                valueMap.put("value",carParkIds);
+                valueMap.put("operator", "in");
+                valueMap.put("value", carParkIds);
                 conditionsMap.put("carpark_id$in", valueMap);
-            }else{
+            } else {
                 return new ResponseResult(CommonCode.NO_MORE_DATAS);
             }
         }
 
-        List<CfCarParkUseLog> cfCarParks = cfCarParkReleaseLogService.selectListByCondition(conditionsMap, allowFiledsMap,allowFileds);
+        List<CfCarParkUseLog> cfCarParks = cfCarParkReleaseLogService.selectListByCondition(conditionsMap, allowFiledsMap, allowFileds);
         Integer counts = cfCarParkReleaseLogService.selectListByConditionCounts(conditionsMap, allowFiledsMap, allowFileds);
-        if(cfCarParks!=null && cfCarParks.size()>0){
+        if (cfCarParks != null && cfCarParks.size() > 0) {
             return new ResponseResult(CommonCode.SUCCESS, cfCarParks, null, counts);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);
@@ -159,13 +159,13 @@ public class CfCarParkReleaseLogController implements CfCarParkReleaseLogSwagger
     @PreAuthorize("hasAuthority('carpark-CfCarParkReleaseLogController-releaseByCheckPointId')")
     @Override
     @RequestMapping(value = "releaseByCheckPointId", method = RequestMethod.POST)
-    public ResponseResult releaseOrOffByCheckPointId(@RequestBody @Validated OpenDoor openDoor)throws Exception {
+    public ResponseResult releaseOrOffByCheckPointId(@RequestBody @Validated OpenDoor openDoor) throws Exception {
 
         //限制手动开闸频率3秒一次
         long currentTimeMillis = System.currentTimeMillis();
-        if(!checkPointOpenDoorLimit.containsKey(openDoor.getCheckPointId()) || (currentTimeMillis-checkPointOpenDoorLimit.get(openDoor.getCheckPointId()))>3000 ){
+        if (!checkPointOpenDoorLimit.containsKey(openDoor.getCheckPointId()) || (currentTimeMillis - checkPointOpenDoorLimit.get(openDoor.getCheckPointId())) > 3000) {
             checkPointOpenDoorLimit.put(openDoor.getCheckPointId(), currentTimeMillis);
-        }else{
+        } else {
             checkPointOpenDoorLimit.put(openDoor.getCheckPointId(), currentTimeMillis);
             return new ResponseResult(CommonCode.FREQUENT_OPERATION);
         }
@@ -177,11 +177,11 @@ public class CfCarParkReleaseLogController implements CfCarParkReleaseLogSwagger
 
         CfCarParkReleaseLog cfCarParkReleaseLog = new CfCarParkReleaseLog();
         cfCarParkReleaseLog.setCarparkId(cfCarParkCheckpoint.getCarParkId());
-        if(StringUtils.isEmpty(openDoor.getCarParkUseLogId())){
+        if (StringUtils.isEmpty(openDoor.getCarParkUseLogId())) {
             cfCarParkReleaseLog.setCarparkUseLogId("");
-        }else{
+        } else {
             cfCarParkReleaseLog.setCarparkUseLogId(openDoor.getCarParkUseLogId());
-            if(StringUtils.isNotEmpty(openDoor.getRemarks())){
+            if (StringUtils.isNotEmpty(openDoor.getRemarks())) {
                 CfCarParkUseLog cfCarParkUseLog = new CfCarParkUseLog();
                 cfCarParkUseLog.setRemarks(openDoor.getRemarks());
                 cfCarParkUseLog.setId(openDoor.getCarParkUseLogId());
@@ -194,32 +194,32 @@ public class CfCarParkReleaseLogController implements CfCarParkReleaseLogSwagger
         //获取设备
         CfCarParkDeviceQuery cfCarParkDeviceQuery = new CfCarParkDeviceQuery();
         cfCarParkDeviceQuery.setCheckpointId(openDoor.getCheckPointId());
-        cfCarParkDeviceQuery.setType((byte)2);
+        cfCarParkDeviceQuery.setType((byte) 2);
 //        cfCarParkDeviceQuery.setDirection("out");
         List<CfCarParkDevice> cfCarParkDevices = cfCarParkDeviceService.getListByQuery(cfCarParkDeviceQuery);
-        if(cfCarParkDevices==null || cfCarParkDevices.size()==0){
+        if (cfCarParkDevices == null || cfCarParkDevices.size() == 0) {
             ExceptionCast.cast(CarParkCode.DEVICE_IS_NOT_REGISTERED);
         }
         cfCarParkReleaseLog.setDeviceSerialNumber(cfCarParkDevices.get(0).getBarCode());
         cfCarParkReleaseLog.setApplicationTime(System.currentTimeMillis());
         cfCarParkReleaseLog.setApplicationReason(openDoor.getApplicationReason());
         cfCarParkReleaseLog.setExecutionTime(System.currentTimeMillis());
-        cfCarParkReleaseLog.setStatus((byte)0);
+        cfCarParkReleaseLog.setStatus((byte) 0);
         cfCarParkReleaseLog.setType(openDoor.getType());
         cfCarParkReleaseLog.setCfCarParkDevice(cfCarParkDevices.get(0));
         CfCarParkReleaseLog carParkReleaseLog = cfCarParkReleaseLogService.add(cfCarParkReleaseLog, openDoor.getRedisPreFix());
-        return new ResponseResult(CommonCode.SUCCESS,carParkReleaseLog);
+        return new ResponseResult(CommonCode.SUCCESS, carParkReleaseLog);
     }
 
     @PreAuthorize("hasAuthority('carpark-CfCarParkReleaseLogController-countByQuery')")
     @Override
     @RequestMapping(value = "countByQuery", method = RequestMethod.GET)
-    public ResponseResult countByQuery(CfCarParkReleaseLogQuery cfCarParkReleaseLogQuery)throws Exception {
+    public ResponseResult countByQuery(CfCarParkReleaseLogQuery cfCarParkReleaseLogQuery) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        if(cfCarParkReleaseLogQuery.getMinApplicationTime()==null || cfCarParkReleaseLogQuery.getMinApplicationTime()<=0){
+        if (cfCarParkReleaseLogQuery.getMinApplicationTime() == null || cfCarParkReleaseLogQuery.getMinApplicationTime() <= 0) {
             cfCarParkReleaseLogQuery.setMinApplicationTime(DateUtil.minMillisecondBaseOnTheDayToTimestamp(System.currentTimeMillis()));
         }
-        if(cfCarParkReleaseLogQuery.getMaxApplicationTime()==null || cfCarParkReleaseLogQuery.getMaxApplicationTime()<=0){
+        if (cfCarParkReleaseLogQuery.getMaxApplicationTime() == null || cfCarParkReleaseLogQuery.getMaxApplicationTime() <= 0) {
             cfCarParkReleaseLogQuery.setMinApplicationTime(DateUtil.maxMillisecondBaseOnTheDayToTimestamp(System.currentTimeMillis()));
         }
         cfCarParkReleaseLogQuery.setUid(userBasicInfo.getId());
@@ -234,9 +234,9 @@ public class CfCarParkReleaseLogController implements CfCarParkReleaseLogSwagger
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         List<CfCarParkLinkUser> linkUsers = carParkController.getLinkUsersAndCheck(userBasicInfo);
         List<String> carParkIds = null;
-        if(linkUsers!=null && linkUsers.size()>0){
+        if (linkUsers != null && linkUsers.size() > 0) {
             carParkIds = new ArrayList<>();
-            for (CfCarParkLinkUser cfCarParkLinkUser: linkUsers){
+            for (CfCarParkLinkUser cfCarParkLinkUser : linkUsers) {
                 carParkIds.add(cfCarParkLinkUser.getCarParkId());
             }
         }

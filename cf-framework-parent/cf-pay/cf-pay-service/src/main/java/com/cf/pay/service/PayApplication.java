@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @Version 1.0
  **/
 @EnableAutoConfiguration()
-@ComponentScan(basePackages = {"com.cf.pay.service","com.cf.pay.dao","com.cf.framework"})
+@ComponentScan(basePackages = {"com.cf.pay.service", "com.cf.pay.dao", "com.cf.framework"})
 @MapperScan("com.cf.pay.dao.mapper")
 public class PayApplication {
     public static void main(String[] args) {

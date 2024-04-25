@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- *
  * @ClassName CfPaymentAgencyController
  * @Author 隔壁小王子 981011512@qq.com
  * @Date 2020/5/29/029 7:36
@@ -38,7 +37,7 @@ public class CfPaymentAgencyController implements CfPaymentAgencySwagger {
     @RequestMapping(value = "getPaymentAgencyListByCarParkId", method = RequestMethod.GET)
     public ResponseResult getPaymentAgencyListByCarParkId(String carParkId, String useScenes) {
         List<CfPaymentAgency> cfPaymentAgencies = cfPaymentAgencyService.getPaymentAgencyListByCarParkId(carParkId, useScenes);
-        if(cfPaymentAgencies==null || cfPaymentAgencies.size()==0){
+        if (cfPaymentAgencies == null || cfPaymentAgencies.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfPaymentAgencies);
@@ -48,7 +47,7 @@ public class CfPaymentAgencyController implements CfPaymentAgencySwagger {
     @RequestMapping(value = "getPaymentAgencyListByQuery", method = RequestMethod.GET)
     public ResponseResult getPaymentAgencyListByQuery(CfPaymentAgencyQuery cfPaymentAgencyQuery) {
         List<CfPaymentAgency> cfPaymentAgencies = cfPaymentAgencyService.getListByQuery(cfPaymentAgencyQuery);
-        if(cfPaymentAgencies==null || cfPaymentAgencies.size()==0){
+        if (cfPaymentAgencies == null || cfPaymentAgencies.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfPaymentAgencies);
@@ -58,10 +57,10 @@ public class CfPaymentAgencyController implements CfPaymentAgencySwagger {
     @RequestMapping(value = "getUserPaymentAgencyListByQuery", method = RequestMethod.GET)
     public ResponseResult getUserPaymentAgencyListByQuery(CfUserPaymentAgencyQuery cfUserPaymentAgencyQuery) {
         List<CfUserPaymentAgency> cfUserPaymentAgencies = cfUserPaymentAgencyService.getListByQuery(cfUserPaymentAgencyQuery);
-        if(cfUserPaymentAgencies==null || cfUserPaymentAgencies.size()==0){
+        if (cfUserPaymentAgencies == null || cfUserPaymentAgencies.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
-        for (CfUserPaymentAgency cfUserPaymentAgency: cfUserPaymentAgencies){
+        for (CfUserPaymentAgency cfUserPaymentAgency : cfUserPaymentAgencies) {
             cfUserPaymentAgency.setAppid("");
             cfUserPaymentAgency.setCertPath("");
             cfUserPaymentAgency.setMchId("");

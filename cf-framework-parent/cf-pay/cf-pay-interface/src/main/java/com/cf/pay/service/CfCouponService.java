@@ -11,6 +11,7 @@ public interface CfCouponService {
 
     /**
      * 根据条件查询优惠券列表
+     *
      * @param cfCouponQuery
      * @return
      */
@@ -34,24 +35,27 @@ public interface CfCouponService {
 
     /**
      * 根据条件查询优惠券数据列表
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public List<CfCoupon> selectListByCondition(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);
 
     /**
      * 根据条件查询优惠券数据列表数
-     * @param conditions example {"字段名":"表别名"}
+     *
+     * @param conditions     example {"字段名":"表别名"}
      * @param allowFiledsMap example {"字段名":"表别名"}
-     * @param allowFileds example {"字段名"}
+     * @param allowFileds    example {"字段名"}
      * @return
      */
     public Integer selectListByConditionCounts(Map<String, Map<String, Object>> conditions, Map<String, String> allowFiledsMap, List<String> allowFileds);
 
     /**
      * 添加优惠券和其关联的店铺数据
+     *
      * @param cfCoupon
      * @param shopIds
      * @param scene
@@ -61,6 +65,7 @@ public interface CfCouponService {
 
     /**
      * 获取车牌或用户指定店铺指定类型的可用优惠券数据列表
+     *
      * @param nowTime
      * @param shopId
      * @param scenes
@@ -72,6 +77,7 @@ public interface CfCouponService {
 
     /**
      * 获取指定店铺和绑定车辆人，车牌号的可用优惠券数据列表
+     *
      * @param nowTime
      * @param shopId
      * @param scenes

@@ -96,11 +96,11 @@ public class CfCarParkDeviceServiceImpl implements CfCarParkDeviceService, Appli
     @Override
     public CfCarParkDevice findById(String id, Boolean expectEmpty) {
         CfCarParkDevice cfCarParkDevice = findById(id);
-        if(expectEmpty && cfCarParkDevice!=null){
+        if (expectEmpty && cfCarParkDevice != null) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpty && cfCarParkDevice==null){
-            System.out.println("未找到指定设备数据，传入数据id为："+id);
+        if (!expectEmpty && cfCarParkDevice == null) {
+            System.out.println("未找到指定设备数据，传入数据id为：" + id);
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfCarParkDevice;
@@ -112,10 +112,10 @@ public class CfCarParkDeviceServiceImpl implements CfCarParkDeviceService, Appli
         CfCarParkDeviceExample.Criteria criteria = cfCarParkDeviceExample.createCriteria();
         criteria.andBarCodeEqualTo(barCode);
         List<CfCarParkDevice> cfCarParkDevices = cfCarParkDeviceMapper.selectByExample(cfCarParkDeviceExample);
-        if(expectEmpty && cfCarParkDevices.size()>0){
+        if (expectEmpty && cfCarParkDevices.size() > 0) {
             ExceptionCast.cast(CommonCode.DUPLICATE_DATA);
         }
-        if(!expectEmpty && cfCarParkDevices.size()==0){
+        if (!expectEmpty && cfCarParkDevices.size() == 0) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         return cfCarParkDevices.get(0);
@@ -148,11 +148,11 @@ public class CfCarParkDeviceServiceImpl implements CfCarParkDeviceService, Appli
     @Override
     public CfCarParkDevice add(CfCarParkDevice cfCarParkDevice) {
         cfCarParkDevice.setId(idWorker.nextId());
-        if(StringUtils.isEmpty(cfCarParkDevice.getPlayContents())){
+        if (StringUtils.isEmpty(cfCarParkDevice.getPlayContents())) {
             cfCarParkDevice.setPlayContents("{\"approach\":{\"textPlay\":{\"1\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"green\",\"inMode\":\"right_to_left\",\"outMode\":\"right_to_left\",\"status\":0,\"serialChannel\":0},\"2\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"yellow\",\"inMode\":\"buttom_to_top\",\"outMode\":\"buttom_to_top\",\"status\":0,\"serialChannel\":0},\"3\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"red\",\"inMode\":\"top_to_buttom\",\"outMode\":\"top_to_buttom\",\"status\":0,\"serialChannel\":0},\"4\":{\"type\":\"plaintext\",\"value\":\"欢迎光临,请减速慢行\",\"color\":\"green\",\"inMode\":\"right_to_left\",\"outMode\":\"right_to_left\",\"status\":1,\"serialChannel\":0}},\"voicePlay\":{\"1\":{\"value\":\"\",\"playMode\":\"only_add\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"},\"2\":{\"value\":\"\",\"playMode\":\"only_add\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"},\"3\":{\"value\":\"\",\"playMode\":\"add_and_play\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"}},\"imagePlay\":\"\",\"videoPlay\":\"\",\"deviceModel\":\"miu_new\"},\"freeOut\":{\"textPlay\":{\"1\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"green\",\"inMode\":\"right_to_left\",\"outMode\":\"right_to_left\",\"status\":0,\"serialChannel\":0},\"2\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"yellow\",\"inMode\":\"buttom_to_top\",\"outMode\":\"buttom_to_top\",\"status\":0,\"serialChannel\":0},\"3\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"red\",\"inMode\":\"top_to_buttom\",\"outMode\":\"top_to_buttom\",\"status\":0,\"serialChannel\":0},\"4\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"green\",\"inMode\":\"right_to_left\",\"outMode\":\"right_to_left\",\"status\":0,\"serialChannel\":0}},\"voicePlay\":{\"1\":{\"value\":\"\",\"playMode\":\"only_add\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"},\"2\":{\"value\":\"\",\"playMode\":\"only_add\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"},\"3\":{\"value\":\"\",\"playMode\":\"add_and_play\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"}},\"imagePlay\":\"\",\"videoPlay\":\"\",\"deviceModel\":\"miu_new\"},\"payOut\":{\"textPlay\":{\"1\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"green\",\"inMode\":\"right_to_left\",\"outMode\":\"right_to_left\",\"status\":0,\"serialChannel\":0},\"2\":{\"type\":\"fee\",\"value\":\"请缴费{$fee}元\",\"color\":\"red\",\"inMode\":\"right_to_left\",\"outMode\":\"right_to_left\",\"status\":0,\"serialChannel\":0},\"3\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"yellow\",\"inMode\":\"buttom_to_top\",\"outMode\":\"buttom_to_top\",\"status\":0,\"serialChannel\":0},\"4\":{\"type\":\"duration\",\"value\":\"停车时长{$duration}\",\"color\":\"green\",\"inMode\":\"right_to_left\",\"outMode\":\"right_to_left\",\"status\":0,\"serialChannel\":0}},\"voicePlay\":{\"1\":{\"value\":\"\",\"playMode\":\"only_add\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"},\"2\":{\"value\":\"\",\"playMode\":\"only_add\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"},\"3\":{\"value\":\"请缴费{$fee}元\",\"playMode\":\"add_and_play\",\"status\":0,\"serialChannel\":0,\"type\":\"fee\"}},\"imagePlay\":\"\",\"videoPlay\":\"\",\"deviceModel\":\"miu_new\"},\"abnormalOut\":{\"textPlay\":{\"1\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"green\",\"inMode\":\"right_to_left\",\"outMode\":\"right_to_left\",\"status\":0,\"serialChannel\":0},\"2\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"yellow\",\"inMode\":\"buttom_to_top\",\"outMode\":\"buttom_to_top\",\"status\":0,\"serialChannel\":0},\"3\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"red\",\"inMode\":\"top_to_buttom\",\"outMode\":\"top_to_buttom\",\"status\":0,\"serialChannel\":0},\"4\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"green\",\"inMode\":\"right_to_left\",\"outMode\":\"right_to_left\",\"status\":0,\"serialChannel\":0}},\"voicePlay\":{\"1\":{\"value\":\"\",\"playMode\":\"only_add\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"},\"2\":{\"value\":\"\",\"playMode\":\"only_add\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"},\"3\":{\"value\":\"\",\"playMode\":\"add_and_play\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"}},\"imagePlay\":\"\",\"videoPlay\":\"\",\"deviceModel\":\"miu_new\"}}");
         }
-        if(cfCarParkDevice.getNoticed()==null){
-            cfCarParkDevice.setNoticed((byte)0);
+        if (cfCarParkDevice.getNoticed() == null) {
+            cfCarParkDevice.setNoticed((byte) 0);
         }
         cfCarParkDeviceMapper.insertSelective(cfCarParkDevice);
         return cfCarParkDevice;
@@ -170,7 +170,7 @@ public class CfCarParkDeviceServiceImpl implements CfCarParkDeviceService, Appli
 
     @Override
     public CfCarParkDevice update(CfCarParkDevice cfCarParkDevice) {
-        if(StringUtils.isEmpty(cfCarParkDevice.getPlayContents())){
+        if (StringUtils.isEmpty(cfCarParkDevice.getPlayContents())) {
             cfCarParkDevice.setPlayContents("{\"approach\":{\"textPlay\":{\"1\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"green\",\"inMode\":\"right_to_left\",\"outMode\":\"right_to_left\",\"status\":0,\"serialChannel\":0},\"2\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"yellow\",\"inMode\":\"buttom_to_top\",\"outMode\":\"buttom_to_top\",\"status\":0,\"serialChannel\":0},\"3\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"red\",\"inMode\":\"top_to_buttom\",\"outMode\":\"top_to_buttom\",\"status\":0,\"serialChannel\":0},\"4\":{\"type\":\"plaintext\",\"value\":\"欢迎光临,请减速慢行\",\"color\":\"green\",\"inMode\":\"right_to_left\",\"outMode\":\"right_to_left\",\"status\":1,\"serialChannel\":0}},\"voicePlay\":{\"1\":{\"value\":\"\",\"playMode\":\"only_add\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"},\"2\":{\"value\":\"\",\"playMode\":\"only_add\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"},\"3\":{\"value\":\"\",\"playMode\":\"add_and_play\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"}},\"imagePlay\":\"\",\"videoPlay\":\"\",\"deviceModel\":\"miu_new\"},\"freeOut\":{\"textPlay\":{\"1\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"green\",\"inMode\":\"right_to_left\",\"outMode\":\"right_to_left\",\"status\":0,\"serialChannel\":0},\"2\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"yellow\",\"inMode\":\"buttom_to_top\",\"outMode\":\"buttom_to_top\",\"status\":0,\"serialChannel\":0},\"3\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"red\",\"inMode\":\"top_to_buttom\",\"outMode\":\"top_to_buttom\",\"status\":0,\"serialChannel\":0},\"4\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"green\",\"inMode\":\"right_to_left\",\"outMode\":\"right_to_left\",\"status\":0,\"serialChannel\":0}},\"voicePlay\":{\"1\":{\"value\":\"\",\"playMode\":\"only_add\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"},\"2\":{\"value\":\"\",\"playMode\":\"only_add\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"},\"3\":{\"value\":\"\",\"playMode\":\"add_and_play\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"}},\"imagePlay\":\"\",\"videoPlay\":\"\",\"deviceModel\":\"miu_new\"},\"payOut\":{\"textPlay\":{\"1\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"green\",\"inMode\":\"right_to_left\",\"outMode\":\"right_to_left\",\"status\":0,\"serialChannel\":0},\"2\":{\"type\":\"fee\",\"value\":\"请缴费{$fee}元\",\"color\":\"red\",\"inMode\":\"right_to_left\",\"outMode\":\"right_to_left\",\"status\":0,\"serialChannel\":0},\"3\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"yellow\",\"inMode\":\"buttom_to_top\",\"outMode\":\"buttom_to_top\",\"status\":0,\"serialChannel\":0},\"4\":{\"type\":\"duration\",\"value\":\"停车时长{$duration}\",\"color\":\"green\",\"inMode\":\"right_to_left\",\"outMode\":\"right_to_left\",\"status\":0,\"serialChannel\":0}},\"voicePlay\":{\"1\":{\"value\":\"\",\"playMode\":\"only_add\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"},\"2\":{\"value\":\"\",\"playMode\":\"only_add\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"},\"3\":{\"value\":\"请缴费{$fee}元\",\"playMode\":\"add_and_play\",\"status\":0,\"serialChannel\":0,\"type\":\"fee\"}},\"imagePlay\":\"\",\"videoPlay\":\"\",\"deviceModel\":\"miu_new\"},\"abnormalOut\":{\"textPlay\":{\"1\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"green\",\"inMode\":\"right_to_left\",\"outMode\":\"right_to_left\",\"status\":0,\"serialChannel\":0},\"2\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"yellow\",\"inMode\":\"buttom_to_top\",\"outMode\":\"buttom_to_top\",\"status\":0,\"serialChannel\":0},\"3\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"red\",\"inMode\":\"top_to_buttom\",\"outMode\":\"top_to_buttom\",\"status\":0,\"serialChannel\":0},\"4\":{\"type\":\"plaintext\",\"value\":\"\",\"color\":\"green\",\"inMode\":\"right_to_left\",\"outMode\":\"right_to_left\",\"status\":0,\"serialChannel\":0}},\"voicePlay\":{\"1\":{\"value\":\"\",\"playMode\":\"only_add\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"},\"2\":{\"value\":\"\",\"playMode\":\"only_add\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"},\"3\":{\"value\":\"\",\"playMode\":\"add_and_play\",\"status\":0,\"serialChannel\":0,\"type\":\"plaintext\"}},\"imagePlay\":\"\",\"videoPlay\":\"\",\"deviceModel\":\"miu_new\"}}");
         }
         cfCarParkDeviceMapper.updateByPrimaryKey(cfCarParkDevice);
@@ -192,70 +192,70 @@ public class CfCarParkDeviceServiceImpl implements CfCarParkDeviceService, Appli
     public CfCarParkDeviceExample getExampleByQuery(CfCarParkDeviceQuery cfCarParkDeviceQuery) {
         CfCarParkDeviceExample cfCarParkDeviceExample = new CfCarParkDeviceExample();
         CfCarParkDeviceExample.Criteria criteria = cfCarParkDeviceExample.createCriteria();
-        if(cfCarParkDeviceQuery.getIds()!=null && cfCarParkDeviceQuery.getIds().size()>0){
+        if (cfCarParkDeviceQuery.getIds() != null && cfCarParkDeviceQuery.getIds().size() > 0) {
             criteria.andIdIn(cfCarParkDeviceQuery.getIds());
         }
-        if(cfCarParkDeviceQuery.getCarParkId()!=null){
+        if (cfCarParkDeviceQuery.getCarParkId() != null) {
             criteria.andCarParkIdEqualTo(cfCarParkDeviceQuery.getCarParkId());
         }
-        if(cfCarParkDeviceQuery.getBarCode()!=null){
+        if (cfCarParkDeviceQuery.getBarCode() != null) {
             criteria.andBarCodeEqualTo(cfCarParkDeviceQuery.getBarCode());
         }
-        if(cfCarParkDeviceQuery.getBarCodes()!=null && cfCarParkDeviceQuery.getBarCodes().size()>0){
+        if (cfCarParkDeviceQuery.getBarCodes() != null && cfCarParkDeviceQuery.getBarCodes().size() > 0) {
             criteria.andBarCodeIn(cfCarParkDeviceQuery.getBarCodes());
         }
-        if(cfCarParkDeviceQuery.getNoticed()!=null){
+        if (cfCarParkDeviceQuery.getNoticed() != null) {
             criteria.andNoticedEqualTo(cfCarParkDeviceQuery.getNoticed());
         }
-        if(cfCarParkDeviceQuery.getModel()!=null){
+        if (cfCarParkDeviceQuery.getModel() != null) {
             criteria.andModelEqualTo(cfCarParkDeviceQuery.getModel());
         }
-        if(cfCarParkDeviceQuery.getBrand()!=null){
+        if (cfCarParkDeviceQuery.getBrand() != null) {
             criteria.andBrandEqualTo(cfCarParkDeviceQuery.getBrand());
         }
-        if(cfCarParkDeviceQuery.getStatus()!=null){
+        if (cfCarParkDeviceQuery.getStatus() != null) {
             criteria.andStatusEqualTo(cfCarParkDeviceQuery.getStatus());
         }
-        if(cfCarParkDeviceQuery.getMinLastOnlineTime()!=null){
+        if (cfCarParkDeviceQuery.getMinLastOnlineTime() != null) {
             criteria.andLastOnlineTimeGreaterThanOrEqualTo(cfCarParkDeviceQuery.getMinLastOnlineTime());
         }
-        if(cfCarParkDeviceQuery.getMaxLastOnlineTime()!=null){
+        if (cfCarParkDeviceQuery.getMaxLastOnlineTime() != null) {
             criteria.andLastOnlineTimeLessThanOrEqualTo(cfCarParkDeviceQuery.getMaxLastOnlineTime());
         }
-        if(StringUtils.isNotEmpty(cfCarParkDeviceQuery.getLinkMode())){
+        if (StringUtils.isNotEmpty(cfCarParkDeviceQuery.getLinkMode())) {
             criteria.andLinkModeEqualTo(cfCarParkDeviceQuery.getLinkMode());
         }
-        if(cfCarParkDeviceQuery.getType()!=null){
+        if (cfCarParkDeviceQuery.getType() != null) {
             criteria.andTypeEqualTo(cfCarParkDeviceQuery.getType());
         }
-        if(StringUtils.isNotEmpty(cfCarParkDeviceQuery.getCheckpointId())){
+        if (StringUtils.isNotEmpty(cfCarParkDeviceQuery.getCheckpointId())) {
             criteria.andCheckpointIdEqualTo(cfCarParkDeviceQuery.getCheckpointId());
         }
-        if(cfCarParkDeviceQuery.getCheckpointIds()!=null && cfCarParkDeviceQuery.getCheckpointIds().size()>0){
+        if (cfCarParkDeviceQuery.getCheckpointIds() != null && cfCarParkDeviceQuery.getCheckpointIds().size() > 0) {
             criteria.andCheckpointIdIn(cfCarParkDeviceQuery.getCheckpointIds());
         }
-        if(StringUtils.isNotEmpty(cfCarParkDeviceQuery.getProductId())){
+        if (StringUtils.isNotEmpty(cfCarParkDeviceQuery.getProductId())) {
             criteria.andProductIdEqualTo(cfCarParkDeviceQuery.getProductId());
         }
-        if(cfCarParkDeviceQuery.getDirection()!=null){
+        if (cfCarParkDeviceQuery.getDirection() != null) {
             criteria.andDirectionEqualTo(cfCarParkDeviceQuery.getDirection());
         }
-        if(cfCarParkDeviceQuery.getUsername()!=null){
+        if (cfCarParkDeviceQuery.getUsername() != null) {
             criteria.andUsernameEqualTo(cfCarParkDeviceQuery.getUsername());
         }
-        if(cfCarParkDeviceQuery.getPassword()!=null){
+        if (cfCarParkDeviceQuery.getPassword() != null) {
             criteria.andPasswordEqualTo(cfCarParkDeviceQuery.getPassword());
         }
-        if(cfCarParkDeviceQuery.getMacAddress()!=null){
+        if (cfCarParkDeviceQuery.getMacAddress() != null) {
             criteria.andMacAddressEqualTo(cfCarParkDeviceQuery.getMacAddress());
         }
-        if(cfCarParkDeviceQuery.getDeviceNo()!=null){
+        if (cfCarParkDeviceQuery.getDeviceNo() != null) {
             criteria.andDeviceNoEqualTo(cfCarParkDeviceQuery.getDeviceNo());
         }
-        if(StringUtils.isNotEmpty(cfCarParkDeviceQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfCarParkDeviceQuery.getOrderBy())) {
             cfCarParkDeviceExample.setOrderByClause(cfCarParkDeviceQuery.getOrderBy());
         }
-        if(cfCarParkDeviceQuery.getPage()!=null && cfCarParkDeviceQuery.getSize()!=null){
+        if (cfCarParkDeviceQuery.getPage() != null && cfCarParkDeviceQuery.getSize() != null) {
             PageHelper.startPage(cfCarParkDeviceQuery.getPage(), cfCarParkDeviceQuery.getSize());
         }
         return cfCarParkDeviceExample;
@@ -282,16 +282,16 @@ public class CfCarParkDeviceServiceImpl implements CfCarParkDeviceService, Appli
         //实时更新数据
         CfCarParkDevice carParkDevice = new CfCarParkDevice();
         carParkDevice.setLastOnlineTime(System.currentTimeMillis());
-        carParkDevice.setNoticed((byte)0);
+        carParkDevice.setNoticed((byte) 0);
         CfCarParkDeviceQuery carParkDeviceQuery = new CfCarParkDeviceQuery();
         carParkDeviceQuery.setBarCode(deviceSerialNumber);
         updateByQuery(carParkDevice, carParkDeviceQuery);
         //判断是否满足条件通知设备已恢复正常
-        if(carParkDevices!=null && carParkDevices.size()>0 && carParkDevices.get(0).getNoticed()==(byte)1 && (System.currentTimeMillis()-carParkDevices.get(0).getLastOnlineTime()>=5000)){
+        if (carParkDevices != null && carParkDevices.size() > 0 && carParkDevices.get(0).getNoticed() == (byte) 1 && (System.currentTimeMillis() - carParkDevices.get(0).getLastOnlineTime() >= 5000)) {
             //通知相关管理员该设备已恢复正常状态
             List<CfCarParkDevice> cfCarParkDevices = getListByQuery(carParkDeviceQuery);
-            if(cfCarParkDevices!=null && cfCarParkDevices.size()>0){
-                sendMessage(cfCarParkDevices, "设备上线通知", "您序列号为"+deviceSerialNumber+"设备网络已恢复正常，您可以点击详情查看具体信息，同时建议您关注线下设备情况", false);
+            if (cfCarParkDevices != null && cfCarParkDevices.size() > 0) {
+                sendMessage(cfCarParkDevices, "设备上线通知", "您序列号为" + deviceSerialNumber + "设备网络已恢复正常，您可以点击详情查看具体信息，同时建议您关注线下设备情况", false);
             }
         }
 
@@ -299,29 +299,29 @@ public class CfCarParkDeviceServiceImpl implements CfCarParkDeviceService, Appli
 
     @Override
     public void monitorDeviceStatus() {
-        if(ClientCache.channels.size()>0){
+        if (ClientCache.channels.size() > 0) {
             CfCarParkDeviceQuery cfCarParkDeviceQuery = new CfCarParkDeviceQuery();
-            cfCarParkDeviceQuery.setNoticed((byte)0);
+            cfCarParkDeviceQuery.setNoticed((byte) 0);
             cfCarParkDeviceQuery.setBarCodes(new ArrayList<>());
             ConcurrentHashMap<String, ClientDTO> channels = ClientCache.channels;
             long currentTimeMillis = System.currentTimeMillis();
             List<Channel> offLineChanell = new ArrayList<>();
-            for (Map.Entry<String, ClientDTO> channelEntry: channels.entrySet()) {
+            for (Map.Entry<String, ClientDTO> channelEntry : channels.entrySet()) {
                 ClientDTO clientDTO = channelEntry.getValue();
                 //3分钟内没数据上传或者心跳，表示已经断线
-                if(clientDTO.getLastOnLineTime()!=null && currentTimeMillis-clientDTO.getLastOnLineTime()>180000){
+                if (clientDTO.getLastOnLineTime() != null && currentTimeMillis - clientDTO.getLastOnLineTime() > 180000) {
                     //标记掉线设备
                     offLineChanell.add(clientDTO.getChannel());
                     cfCarParkDeviceQuery.getBarCodes().add(channelEntry.getValue().getFlagKey());
-                    System.out.println(DateUtil.stampToDate(currentTimeMillis,"yyyy-MM-dd HH:mm:ss") +"设备掉线："+channelEntry.getValue().getFlagKey());
+                    System.out.println(DateUtil.stampToDate(currentTimeMillis, "yyyy-MM-dd HH:mm:ss") + "设备掉线：" + channelEntry.getValue().getFlagKey());
                     break;
                 }
             }
-            if(offLineChanell.size()>0){
-                for(Channel channel: offLineChanell){
+            if (offLineChanell.size() > 0) {
+                for (Channel channel : offLineChanell) {
                 }
                 List<CfCarParkDevice> cfCarParkDevices = getListByQuery(cfCarParkDeviceQuery);
-                if(cfCarParkDevices!=null && cfCarParkDevices.size()>0){
+                if (cfCarParkDevices != null && cfCarParkDevices.size() > 0) {
                     sendMessage(cfCarParkDevices, "设备掉线通知", "您有新增掉线的设备，请点击详情查看和及时处理", true);
                 }
             }
@@ -329,10 +329,10 @@ public class CfCarParkDeviceServiceImpl implements CfCarParkDeviceService, Appli
         }
     }
 
-    private void sendMessage(List<CfCarParkDevice> cfCarParkDevices, String messageTitle, String messageContents, boolean remarkNoticed){
+    private void sendMessage(List<CfCarParkDevice> cfCarParkDevices, String messageTitle, String messageContents, boolean remarkNoticed) {
         List<String> deviceIds = new ArrayList<>();
-        if(cfCarParkDevices!=null && cfCarParkDevices.size()>0){
-            for (CfCarParkDevice cfCarParkDevice: cfCarParkDevices){
+        if (cfCarParkDevices != null && cfCarParkDevices.size() > 0) {
+            for (CfCarParkDevice cfCarParkDevice : cfCarParkDevices) {
                 deviceIds.add(cfCarParkDevice.getId());
             }
 
@@ -342,15 +342,15 @@ public class CfCarParkDeviceServiceImpl implements CfCarParkDeviceService, Appli
 
             List<CfCarParkDeviceLinkUser> cfCarParkDeviceLinkUsers = cfCarParkDeviceLinkUserService.getListByQuery(cfCarParkDeviceLinkUserQuery);
 
-            if(cfCarParkDeviceLinkUsers!=null && cfCarParkDeviceLinkUsers.size()>0){
+            if (cfCarParkDeviceLinkUsers != null && cfCarParkDeviceLinkUsers.size() > 0) {
                 //开始给用户发送硬件掉线消息通知
                 CfUserMessage cfUserMessage = new CfUserMessage();
                 Map<String, Object> message = new HashMap<>();
 
-                for(CfCarParkDeviceLinkUser cfCarParkDeviceLinkUser: cfCarParkDeviceLinkUsers){
-                    message.put("title",messageTitle);
-                    message.put("contents",messageContents);
-                    message.put("data",cfCarParkDeviceLinkUser);
+                for (CfCarParkDeviceLinkUser cfCarParkDeviceLinkUser : cfCarParkDeviceLinkUsers) {
+                    message.put("title", messageTitle);
+                    message.put("contents", messageContents);
+                    message.put("data", cfCarParkDeviceLinkUser);
                     cfUserMessage.setFromUid("0");
                     cfUserMessage.setToUid(cfCarParkDeviceLinkUser.getUid());
                     cfUserMessage.setGroupId("");
@@ -359,16 +359,16 @@ public class CfCarParkDeviceServiceImpl implements CfCarParkDeviceService, Appli
                     cfUserMessage.setIp("");
                     try {
                         cfUserMessageService.sendMessage(cfUserMessage);
-                    } catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
                 }
 
                 //是否标记该设备已被通知
-                if(remarkNoticed){
+                if (remarkNoticed) {
                     CfCarParkDevice carParkDevice = new CfCarParkDevice();
-                    carParkDevice.setNoticed((byte)1);
+                    carParkDevice.setNoticed((byte) 1);
                     CfCarParkDeviceQuery carParkDeviceQuery = new CfCarParkDeviceQuery();
                     carParkDeviceQuery.setIds(deviceIds);
                     updateByQuery(carParkDevice, carParkDeviceQuery);
@@ -385,13 +385,13 @@ public class CfCarParkDeviceServiceImpl implements CfCarParkDeviceService, Appli
             buf.readBytes(data);
             String bytesToString = new String(data, StandardCharsets.ISO_8859_1);
 
-            System.out.println("parking tcp data:"+bytesToString);
+            System.out.println("parking tcp data:" + bytesToString);
 
-            if(bytesToString.indexOf("1ACF")==0){
+            if (bytesToString.indexOf("1ACF") == 0) {
                 //地锁
 
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             //调用此方法，避免没有调用release()方法，最终导致gc问题
             ctx.channel().writeAndFlush(new TextWebSocketFrame("FF"));
             throw e;
@@ -408,11 +408,11 @@ public class CfCarParkDeviceServiceImpl implements CfCarParkDeviceService, Appli
     public String checkSameServer(String serialNumber) throws Exception {
 
         String deviceLinkIp = redisTemplate.boundValueOps(CfCarParkDeviceServiceImpl.DEVICE_LINK_IP + serialNumber).get();
-        if(StringUtils.isEmpty(deviceLinkIp)){
+        if (StringUtils.isEmpty(deviceLinkIp)) {
             //设备未注册到系统中
             ExceptionCast.cast(ChargingCode.DEVICE_OFFLINE);
         }
-        if(InetAddress.getLocalHost().getHostAddress().equals(deviceLinkIp)){
+        if (InetAddress.getLocalHost().getHostAddress().equals(deviceLinkIp)) {
             //说明设备的确已经掉线，不在任何服务器中连接
             return null;
         }
@@ -431,34 +431,34 @@ public class CfCarParkDeviceServiceImpl implements CfCarParkDeviceService, Appli
 
         Object object = null;
 
-        if(adList!=null && adList.size()>0){
+        if (adList != null && adList.size() > 0) {
             PlayRule playRule = null;
             int index = 0;
-            for (String contents: adList){
-                String showString = index==0 ? cfCarParkDevice.getPlayContents() : JSONObject.toJSONString(playRule);
+            for (String contents : adList) {
+                String showString = index == 0 ? cfCarParkDevice.getPlayContents() : JSONObject.toJSONString(playRule);
                 playRule = SeriaDataUtils.setSerialDataZhenshiMultiple(showString, SeriaDataUtils.APPROACH, contents, "text", "plaintext");
                 index++;
             }
-            if(cfCarParkDevice.getBrand().equals(DeviceBrand.ZHEN_SHI) || cfCarParkDevice.getBrand().equals(DeviceBrand.QIAN_YI)){
+            if (cfCarParkDevice.getBrand().equals(DeviceBrand.ZHEN_SHI) || cfCarParkDevice.getBrand().equals(DeviceBrand.QIAN_YI)) {
                 //臻识/千熠
                 ZhenShiResponse911202002050 zhenShiResponse911202002050 = new ZhenShiResponse911202002050();
                 cfCarParkUseLogService.setCameraOpenOrClose(zhenShiResponse911202002050, "on");
                 cfCarParkUseLogService.showByDeviceRows(playRule, cfCarParkDevice, SeriaDataUtils.APPROACH);
-                SeriaDataUtils.setSerialDataZhenshiByPlayRule(zhenShiResponse911202002050, playRule, SeriaDataUtils.APPROACH,"permanent");
-                SeriaDataUtils.showZhenShiAd(zhenShiResponse911202002050, "00","00");
+                SeriaDataUtils.setSerialDataZhenshiByPlayRule(zhenShiResponse911202002050, playRule, SeriaDataUtils.APPROACH, "permanent");
+                SeriaDataUtils.showZhenShiAd(zhenShiResponse911202002050, "00", "00");
                 object = zhenShiResponse911202002050;
-            }else if(cfCarParkDevice.getBrand().equals(DeviceBrand.HUA_XIA)){
+            } else if (cfCarParkDevice.getBrand().equals(DeviceBrand.HUA_XIA)) {
                 //华夏
                 HuaXiaResponse huaXiaResponse = new HuaXiaResponse();
                 cfCarParkUseLogService.setCameraOpenOrClose(huaXiaResponse, "off");
-                SeriaDataUtils.setSerialDataHuaXiaByPlayRule(huaXiaResponse, playRule, SeriaDataUtils.APPROACH,validityPeriod);
+                SeriaDataUtils.setSerialDataHuaXiaByPlayRule(huaXiaResponse, playRule, SeriaDataUtils.APPROACH, validityPeriod);
                 object = huaXiaResponse;
-            }else if(cfCarParkDevice.getBrand().equals(DeviceBrand.HK) || cfCarParkDevice.getBrand().equals(DeviceBrand.DH)){
+            } else if (cfCarParkDevice.getBrand().equals(DeviceBrand.HK) || cfCarParkDevice.getBrand().equals(DeviceBrand.DH)) {
                 //不做任何操作
-            }else{
+            } else {
                 ExceptionCast.cast(CarParkCode.BRAND_DEVICES_THAT_IS_NOT_CURRENTLY_SUPPORTED);
             }
-            iMqttDataService.pushTopics(serialNumber, JSON.toJSONString(object),"/device/" + serialNumber + "/command");
+            iMqttDataService.pushTopics(serialNumber, JSON.toJSONString(object), "/device/" + serialNumber + "/command");
         }
     }
 }

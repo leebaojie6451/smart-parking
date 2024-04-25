@@ -20,6 +20,7 @@ public interface CfCarParkPaymentAgencyService {
 
     /**
      * 根据停车场id和用户与支付机构关联表id查询停车场对应的支付配置数据
+     *
      * @param carParkId
      * @param userPaymentAgencyId
      * @return
@@ -48,6 +49,7 @@ public interface CfCarParkPaymentAgencyService {
 
     /**
      * 根据停车场id和支付机构简称获取支付配置信息
+     *
      * @param carParkId
      * @param paymentAgency
      * @return
@@ -56,6 +58,7 @@ public interface CfCarParkPaymentAgencyService {
 
     /**
      * 检查重复数据
+     *
      * @param cfCarParkPaymentAgency
      */
     void checkRepeatData(CfCarParkPaymentAgency cfCarParkPaymentAgency);

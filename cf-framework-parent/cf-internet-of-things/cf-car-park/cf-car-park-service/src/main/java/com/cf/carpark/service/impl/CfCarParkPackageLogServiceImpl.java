@@ -50,10 +50,10 @@ public class CfCarParkPackageLogServiceImpl implements CfCarParkPackageLogServic
     public CfCarParkPackageLogExample getExampleByQuery(CfCarParkPackageLogQuery cfCarParkPackageLogQuery) {
         CfCarParkPackageLogExample cfCarParkPackageLogExample = new CfCarParkPackageLogExample();
         CfCarParkPackageLogExample.Criteria criteria = cfCarParkPackageLogExample.createCriteria();
-        if(cfCarParkPackageLogQuery.getPackageId()!=null){
+        if (cfCarParkPackageLogQuery.getPackageId() != null) {
             criteria.andPackageIdEqualTo(cfCarParkPackageLogQuery.getPackageId());
         }
-        if(cfCarParkPackageLogQuery.getPage()!=null && cfCarParkPackageLogQuery.getSize()!=null){
+        if (cfCarParkPackageLogQuery.getPage() != null && cfCarParkPackageLogQuery.getSize() != null) {
             PageHelper.startPage(cfCarParkPackageLogQuery.getPage(), cfCarParkPackageLogQuery.getSize());
         }
         return cfCarParkPackageLogExample;

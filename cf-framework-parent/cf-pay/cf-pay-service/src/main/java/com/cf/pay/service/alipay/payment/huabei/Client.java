@@ -13,11 +13,11 @@ public class Client extends BaseClient {
     public AlipayTradeCreateResponse create(String subject, String outTradeNo, String totalAmount, String buyerId, HuabeiConfig extendParams) throws Exception {
         TeaModel.validateParams(extendParams, "extendParams");
         java.util.Map<String, Object> runtime_ = TeaConverter.buildMap(
-            new TeaPair("connectTimeout", 15000),
-            new TeaPair("readTimeout", 15000),
-            new TeaPair("retry", TeaConverter.buildMap(
-                new TeaPair("maxAttempts", 0)
-            ))
+                new TeaPair("connectTimeout", 15000),
+                new TeaPair("readTimeout", 15000),
+                new TeaPair("retry", TeaConverter.buildMap(
+                        new TeaPair("maxAttempts", 0)
+                ))
         );
 
         TeaRequest _lastRequest = null;
@@ -34,38 +34,38 @@ public class Client extends BaseClient {
             try {
                 TeaRequest request_ = new TeaRequest();
                 java.util.Map<String, String> systemParams = TeaConverter.buildMap(
-                    new TeaPair("method", "alipay.trade.create"),
-                    new TeaPair("app_id", _getConfig("appId")),
-                    new TeaPair("timestamp", _getTimestamp()),
-                    new TeaPair("format", "json"),
-                    new TeaPair("version", "1.0"),
-                    new TeaPair("alipay_sdk", _getSdkVersion()),
-                    new TeaPair("charset", "UTF-8"),
-                    new TeaPair("sign_type", _getConfig("signType")),
-                    new TeaPair("app_cert_sn", _getMerchantCertSN()),
-                    new TeaPair("alipay_root_cert_sn", _getAlipayRootCertSN())
+                        new TeaPair("method", "alipay.trade.create"),
+                        new TeaPair("app_id", _getConfig("appId")),
+                        new TeaPair("timestamp", _getTimestamp()),
+                        new TeaPair("format", "json"),
+                        new TeaPair("version", "1.0"),
+                        new TeaPair("alipay_sdk", _getSdkVersion()),
+                        new TeaPair("charset", "UTF-8"),
+                        new TeaPair("sign_type", _getConfig("signType")),
+                        new TeaPair("app_cert_sn", _getMerchantCertSN()),
+                        new TeaPair("alipay_root_cert_sn", _getAlipayRootCertSN())
                 );
                 java.util.Map<String, Object> bizParams = TeaConverter.buildMap(
-                    new TeaPair("subject", subject),
-                    new TeaPair("out_trade_no", outTradeNo),
-                    new TeaPair("total_amount", totalAmount),
-                    new TeaPair("buyer_id", buyerId),
-                    new TeaPair("extend_params", extendParams)
+                        new TeaPair("subject", subject),
+                        new TeaPair("out_trade_no", outTradeNo),
+                        new TeaPair("total_amount", totalAmount),
+                        new TeaPair("buyer_id", buyerId),
+                        new TeaPair("extend_params", extendParams)
                 );
                 java.util.Map<String, String> textParams = new java.util.HashMap<>();
                 request_.protocol = _getConfig("protocol");
                 request_.method = "POST";
                 request_.pathname = "/gateway.do";
                 request_.headers = TeaConverter.buildMap(
-                    new TeaPair("host", _getConfig("gatewayHost")),
-                    new TeaPair("content-type", "application/x-www-form-urlencoded;charset=utf-8")
+                        new TeaPair("host", _getConfig("gatewayHost")),
+                        new TeaPair("content-type", "application/x-www-form-urlencoded;charset=utf-8")
                 );
                 request_.query = TeaConverter.merge(String.class,
-                    TeaConverter.buildMap(
-                        new TeaPair("sign", _sign(systemParams, bizParams, textParams, _getConfig("merchantPrivateKey")))
-                    ),
-                    systemParams,
-                    textParams
+                        TeaConverter.buildMap(
+                                new TeaPair("sign", _sign(systemParams, bizParams, textParams, _getConfig("merchantPrivateKey")))
+                        ),
+                        systemParams,
+                        textParams
                 );
                 request_.body = Tea.toReadable(_toUrlEncodedRequestBody(bizParams));
                 _lastRequest = request_;
@@ -85,7 +85,7 @@ public class Client extends BaseClient {
                 }
 
                 throw new TeaException(TeaConverter.buildMap(
-                    new TeaPair("message", "验签失败，请检查支付宝公钥设置是否正确。")
+                        new TeaPair("message", "验签失败，请检查支付宝公钥设置是否正确。")
                 ));
             } catch (Exception e) {
                 if (Tea.isRetryable(e)) {

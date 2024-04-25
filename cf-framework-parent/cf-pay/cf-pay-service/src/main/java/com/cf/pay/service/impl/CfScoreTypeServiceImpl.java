@@ -43,10 +43,10 @@ public class CfScoreTypeServiceImpl implements CfScoreTypeService {
     public CfScoreTypeExample getExampleByQuery(CfScoreTypeQuery cfScoreTypeQuery) {
         CfScoreTypeExample cfScoreTypeExample = new CfScoreTypeExample();
         CfScoreTypeExample.Criteria criteria = cfScoreTypeExample.createCriteria();
-        if(cfScoreTypeQuery.getId()!=null){
+        if (cfScoreTypeQuery.getId() != null) {
             criteria.andIdEqualTo(cfScoreTypeQuery.getId());
         }
-        if(cfScoreTypeQuery.getKeyFlag()!=null){
+        if (cfScoreTypeQuery.getKeyFlag() != null) {
             criteria.andKeyFlagEqualTo(cfScoreTypeQuery.getKeyFlag());
         }
         return cfScoreTypeExample;

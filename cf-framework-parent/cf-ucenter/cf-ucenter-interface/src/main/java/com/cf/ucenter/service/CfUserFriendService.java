@@ -15,6 +15,7 @@ public interface CfUserFriendService {
 
     /**
      * 添加好友
+     *
      * @param cfUserFriend
      * @return
      */
@@ -22,6 +23,7 @@ public interface CfUserFriendService {
 
     /**
      * 获取我的好友列表
+     *
      * @param uid
      * @param page
      * @param limit
@@ -31,6 +33,7 @@ public interface CfUserFriendService {
 
     /**
      * 根据用户id和朋友获取数据
+     *
      * @param uid
      * @return
      */
@@ -38,10 +41,11 @@ public interface CfUserFriendService {
 
     /**
      * 判断两个用户是否为好友关系
+     *
      * @param uid
      * @param friendId
      * @param expectEmpty 期望数据为空(true-若数据存在抛出已存在异常/false-若数据不存在则抛出数据不存在异常)
      */
-    public CfUserFriend checkFriendship(String uid,String friendId, Boolean expectEmpty);
+    public CfUserFriend checkFriendship(String uid, String friendId, Boolean expectEmpty);
 
 }

@@ -14,7 +14,6 @@ import com.cf.pay.service.CfStaffCouponSettingService;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,7 +61,7 @@ public class CfStaffCouponSettingController implements CfStaffCouponSettingSwagg
     @RequestMapping(value = "getStaffCouponSettingByQuery", method = RequestMethod.GET)
     public ResponseResult getStaffCouponSettingByQuery(CfStaffCouponSettingQuery cfStaffCouponSettingQuery) throws Exception {
         List<CfStaffCouponSetting> staffCouponSettingServiceListByQuery = cfStaffCouponSettingService.getListByQuery(cfStaffCouponSettingQuery);
-        if(staffCouponSettingServiceListByQuery==null || staffCouponSettingServiceListByQuery.size()==0){
+        if (staffCouponSettingServiceListByQuery == null || staffCouponSettingServiceListByQuery.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, staffCouponSettingServiceListByQuery);

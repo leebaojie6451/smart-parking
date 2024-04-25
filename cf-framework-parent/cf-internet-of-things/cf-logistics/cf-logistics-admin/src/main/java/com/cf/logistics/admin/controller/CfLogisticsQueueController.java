@@ -44,7 +44,7 @@ public class CfLogisticsQueueController implements CfLogisticsQueueSwagger {
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public ResponseResult add(@Validated @RequestBody CfLogisticsQueueForm cfLogisticsQueueForm) throws Exception {
         CfLogisticsQueue cfLogisticsQueue = new CfLogisticsQueue();
-        BeanUtils.copyProperties(cfLogisticsQueueForm,cfLogisticsQueue);
+        BeanUtils.copyProperties(cfLogisticsQueueForm, cfLogisticsQueue);
         CfLogisticsQueue lastCfLogisticsQueue = cfLogisticsQueueService.add(cfLogisticsQueue);
         return new ResponseResult(CommonCode.SUCCESS, lastCfLogisticsQueue);
     }
@@ -55,9 +55,9 @@ public class CfLogisticsQueueController implements CfLogisticsQueueSwagger {
     public ResponseResult update(@Validated @RequestBody CfLogisticsQueueForm cfLogisticsQueueForm) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         CfLogisticsQueue cfLogisticsQueue = new CfLogisticsQueue();
-        BeanUtils.copyProperties(cfLogisticsQueueForm,cfLogisticsQueue);
+        BeanUtils.copyProperties(cfLogisticsQueueForm, cfLogisticsQueue);
         CfLogisticsQueue logisticsQueue = cfLogisticsQueueService.findById(cfLogisticsQueueForm.getId(), false);
-        checkLinkerUser(userBasicInfo,logisticsQueue.getLogisticsStorehouseId());
+        checkLinkerUser(userBasicInfo, logisticsQueue.getLogisticsStorehouseId());
         CfLogisticsQueue update = cfLogisticsQueueService.update(cfLogisticsQueue);
         return new ResponseResult(CommonCode.SUCCESS, update);
     }
@@ -68,9 +68,9 @@ public class CfLogisticsQueueController implements CfLogisticsQueueSwagger {
     public ResponseResult delete(Long id) throws Exception {
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         CfLogisticsQueue logisticsQueue = cfLogisticsQueueService.findById(id, false);
-        checkLinkerUser(userBasicInfo,logisticsQueue.getLogisticsStorehouseId());
+        checkLinkerUser(userBasicInfo, logisticsQueue.getLogisticsStorehouseId());
         Integer delete = cfLogisticsQueueService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS, delete):new ResponseResult(CommonCode.FAIL, null);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS, delete) : new ResponseResult(CommonCode.FAIL, null);
     }
 
     @PreAuthorize("hasAuthority('logistics-CfLogisticsQueueController-getListByQuery')")
@@ -81,16 +81,16 @@ public class CfLogisticsQueueController implements CfLogisticsQueueSwagger {
         //检查是否有权限进行该操作
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
         List<CfLogisticsStorehouseLinkUser> cfLogisticsStorehouseLinkUsers = checkLinkerUser(userBasicInfo, null);
-        if(cfLogisticsStorehouseLinkUsers!=null && cfLogisticsStorehouseLinkUsers.size()>0){
+        if (cfLogisticsStorehouseLinkUsers != null && cfLogisticsStorehouseLinkUsers.size() > 0) {
             cfLogisticsQueueQuery.setLogisticsStorehouseIds(new ArrayList<>());
-            for (CfLogisticsStorehouseLinkUser cfLogisticsStorehouseLinkUser: cfLogisticsStorehouseLinkUsers){
+            for (CfLogisticsStorehouseLinkUser cfLogisticsStorehouseLinkUser : cfLogisticsStorehouseLinkUsers) {
                 cfLogisticsQueueQuery.getLogisticsStorehouseIds().add(cfLogisticsStorehouseLinkUser.getLogisticsStorehouseId());
             }
         }
 
         List<CfLogisticsQueue> cfLogisticsQueues = cfLogisticsQueueService.getListByQuery(cfLogisticsQueueQuery);
         Integer countByQuery = cfLogisticsQueueService.countByQuery(cfLogisticsQueueQuery);
-        if(cfLogisticsQueues==null || cfLogisticsQueues.size()==0){
+        if (cfLogisticsQueues == null || cfLogisticsQueues.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsQueues, countByQuery);
@@ -98,17 +98,18 @@ public class CfLogisticsQueueController implements CfLogisticsQueueSwagger {
 
     /**
      * 检查用户是否有权限操作相关物流仓库数据
+     *
      * @param userBasicInfo
      * @param logisticsStorehouseId
      * @return
      */
-    private List<CfLogisticsStorehouseLinkUser> checkLinkerUser(UserBasicInfo userBasicInfo, Long logisticsStorehouseId){
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0){
+    private List<CfLogisticsStorehouseLinkUser> checkLinkerUser(UserBasicInfo userBasicInfo, Long logisticsStorehouseId) {
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0) {
             CfLogisticsStorehouseLinkUserQuery cfLogisticsStorehouseLinkUserQuery = new CfLogisticsStorehouseLinkUserQuery();
             cfLogisticsStorehouseLinkUserQuery.setUid(userBasicInfo.getId());
             cfLogisticsStorehouseLinkUserQuery.setLogisticsStorehouseId(logisticsStorehouseId);
             List<CfLogisticsStorehouseLinkUser> cfLogisticsStorehouseLinkUsers = cfLogisticsStorehouseLinkUserService.getListByQuery(cfLogisticsStorehouseLinkUserQuery);
-            if(cfLogisticsStorehouseLinkUsers==null || cfLogisticsStorehouseLinkUsers.size()==0){
+            if (cfLogisticsStorehouseLinkUsers == null || cfLogisticsStorehouseLinkUsers.size() == 0) {
                 ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
             }
             return cfLogisticsStorehouseLinkUsers;

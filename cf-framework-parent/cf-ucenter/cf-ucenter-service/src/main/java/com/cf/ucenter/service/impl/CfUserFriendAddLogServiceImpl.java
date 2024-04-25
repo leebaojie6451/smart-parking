@@ -51,18 +51,18 @@ public class CfUserFriendAddLogServiceImpl implements CfUserFriendAddLogService 
     @Override
     public ResponseResult applyAddFriend(String fromUid, String toUid, String remark) {
 
-        cfUserService.checkUserExistByUid(toUid,false);
-        cfUserFriendService.checkFriendship(fromUid,toUid,true);
+        cfUserService.checkUserExistByUid(toUid, false);
+        cfUserFriendService.checkFriendship(fromUid, toUid, true);
         List<CfUserFriendAddLog> cfUserFriendAddLogs = cfUserFriendAddLogMapper.getFriendRequestsByFidAndTidAndStatus(fromUid, toUid, 0, 0, 1);
-        if(cfUserFriendAddLogs!=null && cfUserFriendAddLogs.size()>0){
-            cfUserFriendAddLogMapper.updateCreateTime(cfUserFriendAddLogs.get(0).getId(),System.currentTimeMillis());
+        if (cfUserFriendAddLogs != null && cfUserFriendAddLogs.size() > 0) {
+            cfUserFriendAddLogMapper.updateCreateTime(cfUserFriendAddLogs.get(0).getId(), System.currentTimeMillis());
             return new ResponseResult(CommonCode.SUCCESS);
         }
-        if(fromUid.equals(toUid)){
+        if (fromUid.equals(toUid)) {
             ExceptionCast.cast(FriendsCode.FRIENDS_CAN_NOT_ADD_SELF);
         }
-        int insert = cfUserFriendAddLogMapper.insert(new CfUserFriendAddLog(idWorker.nextId(),fromUid,toUid,"",System.currentTimeMillis(),0,remark,1));
-        if(insert>0){
+        int insert = cfUserFriendAddLogMapper.insert(new CfUserFriendAddLog(idWorker.nextId(), fromUid, toUid, "", System.currentTimeMillis(), 0, remark, 1));
+        if (insert > 0) {
             return new ResponseResult(CommonCode.SUCCESS);
         }
         return new ResponseResult(CommonCode.FAIL);
@@ -71,10 +71,10 @@ public class CfUserFriendAddLogServiceImpl implements CfUserFriendAddLogService 
     @Override
     public ResponseResult applyAddGroup(String fromUid, String groupId, String remark) {
         CfUserGroup cfUserGroup = cfUserGroupService.checkGroupExistById(groupId, false);
-        cfUserGroupService.checkUserInTheGroup(fromUid,groupId,true);
+        cfUserGroupService.checkUserInTheGroup(fromUid, groupId, true);
         List<CfUserFriendAddLog> cfUserFriendAddLogs = cfUserFriendAddLogMapper.getFriendRequestsByFidAndGidAndStatus(fromUid, groupId, 0, 0, 1);
-        if(cfUserFriendAddLogs!=null && cfUserFriendAddLogs.size()>0){
-            cfUserFriendAddLogMapper.updateCreateTime(cfUserFriendAddLogs.get(0).getId(),System.currentTimeMillis());
+        if (cfUserFriendAddLogs != null && cfUserFriendAddLogs.size() > 0) {
+            cfUserFriendAddLogMapper.updateCreateTime(cfUserFriendAddLogs.get(0).getId(), System.currentTimeMillis());
             return new ResponseResult(CommonCode.SUCCESS);
         }
         noticeLordAndAdministratorAddGroupMessage(cfUserGroup, new CfUserFriendAddLog(null, fromUid, "", groupId, System.currentTimeMillis(), 0, remark, 1));
@@ -83,9 +83,9 @@ public class CfUserFriendAddLogServiceImpl implements CfUserFriendAddLogService 
 
     @Override
     public ResponseResult getFriendRequestsByUid(String uid, Integer page, Integer limit) {
-        List<CfUserFriendAddLog> cfUserFriendAddLogs = cfUserFriendAddLogMapper.getFriendRequestsByUid(uid,(page-1)*limit,limit);
-        if(cfUserFriendAddLogs!=null && cfUserFriendAddLogs.size()>0){
-            return new ResponseResult(CommonCode.SUCCESS,cfUserFriendAddLogs);
+        List<CfUserFriendAddLog> cfUserFriendAddLogs = cfUserFriendAddLogMapper.getFriendRequestsByUid(uid, (page - 1) * limit, limit);
+        if (cfUserFriendAddLogs != null && cfUserFriendAddLogs.size() > 0) {
+            return new ResponseResult(CommonCode.SUCCESS, cfUserFriendAddLogs);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);
     }
@@ -93,13 +93,13 @@ public class CfUserFriendAddLogServiceImpl implements CfUserFriendAddLogService 
     @Override
     public ResponseResult handleFriendsRequests(String addLogId, String uid, Integer status) throws Exception {
         CfUserFriendAddLog cfUserFriendAddLog = cfUserFriendAddLogMapper.selectByPrimaryKey(addLogId);
-        if(cfUserFriendAddLog==null){
+        if (cfUserFriendAddLog == null) {
             ExceptionCast.cast(FriendsCode.FRIENDS_ADD_LOG_NOT_EXIST);
         }
-        if(cfUserFriendAddLog.getStatus()!=0){
+        if (cfUserFriendAddLog.getStatus() != 0) {
             ExceptionCast.cast(FriendsCode.FRIENDS_ADD_LOG_STATUS_CHANGED);
         }
-        if(!cfUserFriendAddLog.getToUid().equals(uid)){
+        if (!cfUserFriendAddLog.getToUid().equals(uid)) {
             ExceptionCast.cast(FriendsCode.FRIENDS_ADD_LOG_UID_NO_MATCH);
         }
         if (status == 1 && StringUtils.isEmpty(cfUserFriendAddLog.getGroupId())) {
@@ -121,7 +121,7 @@ public class CfUserFriendAddLogServiceImpl implements CfUserFriendAddLogService 
             cfUserMessageService.sendMessage(new CfUserMessage(idWorker.nextId(), "", cfUserFriendAddLog.getFromUid(),
                     cfUserFriendAddLog.getGroupId(), 0, "欢迎加入本群，给大家打个招呼吧", 0, "", "", System.currentTimeMillis(), 0L));
         }
-        cfUserFriendAddLogMapper.updateStatus(addLogId,status);
+        cfUserFriendAddLogMapper.updateStatus(addLogId, status);
         return new ResponseResult(CommonCode.SUCCESS);
     }
 
@@ -134,8 +134,8 @@ public class CfUserFriendAddLogServiceImpl implements CfUserFriendAddLogService 
         CfUserGroupMemberExample cfUserGroupMemberExample = new CfUserGroupMemberExample();
         cfUserGroupMemberExample.createCriteria().andGroupIdEqualTo(cfUserGroup.getId()).andLevelEqualTo(1).andStatusEqualTo(1);
         List<CfUserGroupMember> cfUserGroupMembers = cfUserGroupMemberMapper.selectByExample(cfUserGroupMemberExample);
-        if(cfUserGroupMembers!=null){
-            for(CfUserGroupMember cfUserGroupMember: cfUserGroupMembers){
+        if (cfUserGroupMembers != null) {
+            for (CfUserGroupMember cfUserGroupMember : cfUserGroupMembers) {
                 cfUserFriendAddLog.setId(idWorker.nextId());
                 cfUserFriendAddLog.setToUid(cfUserGroupMember.getUid());
                 cfUserFriendAddLogMapper.insert(cfUserFriendAddLog);

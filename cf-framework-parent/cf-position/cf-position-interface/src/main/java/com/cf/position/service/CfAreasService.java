@@ -16,6 +16,7 @@ public interface CfAreasService {
 
     /**
      * 获取所有地区数据
+     *
      * @param recursive 是否递归查询
      * @return
      */
@@ -23,6 +24,7 @@ public interface CfAreasService {
 
     /**
      * 根据层级和父级id查询
+     *
      * @param level
      * @param parentId
      * @param maxLevel

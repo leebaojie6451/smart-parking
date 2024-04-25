@@ -57,7 +57,7 @@ public class SocketHandler extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
-        if(byteBuf.readableBytes() > 8){
+        if (byteBuf.readableBytes() > 8) {
             list.add(byteBuf.readLong());
         }
     }

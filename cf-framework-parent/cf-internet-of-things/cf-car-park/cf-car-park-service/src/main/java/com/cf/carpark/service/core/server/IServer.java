@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * 服务接口
+ *
  * @author gebilaowang
  * @date 2021/3/10 17:35
  */
@@ -22,7 +23,7 @@ public interface IServer {
      * @author gebilaowang
      * @date 2021/3/11 10:21
      */
-    IServer run ();
+    IServer run();
 
     /**
      * 运行状态
@@ -38,12 +39,15 @@ public interface IServer {
 
     /**
      * 根据flagKey和主题发送消息
+     *
      * @param
      * @return
      * @author laowang
      * @date 2021/3/11 10:22
      */
-    void sendByFlageKey(String flageKey, String topic, String sendMessage) throws Exception;/**
+    void sendByFlageKey(String flageKey, String topic, String sendMessage) throws Exception;
+
+    /**
      * 根据主题发送消息
      *
      * @param

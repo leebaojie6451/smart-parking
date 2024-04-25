@@ -12,6 +12,7 @@ public interface CfLogisticsTaskService {
 
     /**
      * 自动预约，添加任务时，传入的司机相关信息，会自动一键帮对应司机预约对应的物流货物装卸任务
+     *
      * @param cfLogisticsTask
      */
     void automaticReservationData(CfLogisticsTask cfLogisticsTask) throws Exception;
@@ -22,6 +23,7 @@ public interface CfLogisticsTaskService {
 
     /**
      * 更新子任务数
+     *
      * @param cfLogisticsTask
      * @return
      */
@@ -39,6 +41,7 @@ public interface CfLogisticsTaskService {
 
     /**
      * 获取query条件查询任务，会联表查询仓库
+     *
      * @param cfLogisticsTaskQuery
      * @return
      */
@@ -50,6 +53,7 @@ public interface CfLogisticsTaskService {
 
     /**
      * 更新已经预约车辆数
+     *
      * @param id
      * @param value
      * @return
@@ -58,9 +62,10 @@ public interface CfLogisticsTaskService {
 
     /**
      * 切换任务排序顺序，只能切换排队和排队前的数据
+     *
      * @param taskId
      * @param sortIndex
      */
     void changeSortIndex(Long taskId, Integer sortIndex) throws Exception;
-    
+
 }

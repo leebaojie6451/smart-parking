@@ -32,6 +32,7 @@ public interface CfCarParkCarMapper {
 
     /**
      * 根据条件查询用户车辆数据列表
+     *
      * @param conditions
      * @return
      */
@@ -39,6 +40,7 @@ public interface CfCarParkCarMapper {
 
     /**
      * 根据条件查询用户车辆数据列表数
+     *
      * @param conditions
      * @return
      */
@@ -46,6 +48,7 @@ public interface CfCarParkCarMapper {
 
     /**
      * 查询某个用户的车辆数
+     *
      * @param uid
      * @return
      */
@@ -53,6 +56,7 @@ public interface CfCarParkCarMapper {
 
     /**
      * 根据条件查询(自定义原生sql)
+     *
      * @param cfCarParkCarQuery
      * @return
      */

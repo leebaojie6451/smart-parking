@@ -12,16 +12,16 @@ import com.cf.framework.domain.response.ResultCode;
  **/
 public enum CouponCode implements ResultCode {
 
-    COUPON_TYPE_NOT_EXIST(false,29000,"指定的优惠券类型不存在！"),
-    COUPON_TYPE_EXIST_EXISTED(false,29001,"指定的优惠券类型已经存在！")
-    ;
+    COUPON_TYPE_NOT_EXIST(false, 29000, "指定的优惠券类型不存在！"),
+    COUPON_TYPE_EXIST_EXISTED(false, 29001, "指定的优惠券类型已经存在！");
     //操作代码
     boolean success;
     //操作代码
     int code;
     //提示信息
     String message;
-    private CouponCode(boolean success, int code, String message){
+
+    private CouponCode(boolean success, int code, String message) {
         this.success = success;
         this.code = code;
         this.message = message;
@@ -48,6 +48,7 @@ public enum CouponCode implements ResultCode {
     }
 
     String mixMessage;
+
     @Override
     public String mixMessage() {
         return mixMessage;

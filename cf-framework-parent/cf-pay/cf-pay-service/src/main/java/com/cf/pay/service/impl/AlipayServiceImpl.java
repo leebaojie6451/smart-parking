@@ -50,9 +50,10 @@ public class AlipayServiceImpl implements AlipayService {
     @Autowired
     private CfOrderService cfOrderService;
 
-    public AlipayServiceImpl(){}
+    public AlipayServiceImpl() {
+    }
 
-    public Object initAlipayConfig(CfUserPaymentAgency cfUserPaymentAgency) throws Exception{
+    public Object initAlipayConfig(CfUserPaymentAgency cfUserPaymentAgency) throws Exception {
         AlipayConfig alipayConfig = new AlipayConfig();
         alipayConfig.setAppId(cfUserPaymentAgency.getAppid());
         alipayConfig.setSubAppId(cfUserPaymentAgency.getSubAppid());
@@ -66,9 +67,9 @@ public class AlipayServiceImpl implements AlipayService {
     }
 
     @Override
-    public ResultMap doPay(CfOrder cfOrder, String buyerId, Object _alipayConfig) throws Exception{
+    public ResultMap doPay(CfOrder cfOrder, String buyerId, Object _alipayConfig) throws Exception {
 
-        AlipayConfig alipayConfig = (AlipayConfig)_alipayConfig;
+        AlipayConfig alipayConfig = (AlipayConfig) _alipayConfig;
 
         //处理支付宝预支付数据
         return null;
@@ -77,27 +78,27 @@ public class AlipayServiceImpl implements AlipayService {
     @Override
     public boolean rsaCertCheck(Map<String, String> params) throws Exception {
         CfOrder cfOrder = cfOrderService.findById(params.get("out_trade_no"), false);
-        if(cfOrder.getStatus()== PayStatus.PAID){
+        if (cfOrder.getStatus() == PayStatus.PAID) {
             return true;    //直接结束订单后续操作
         }
         CfUserPaymentAgency cfUserPaymentAgency = cfUserPaymentAgencyService.findById(cfOrder.getUserPaymentAgencyId(), false);
         boolean rsaCertCheckV2 = AlipaySignature.rsaCheckV1(params, cfUserPaymentAgency.getSecret(), "utf-8", "RSA2");
-        if(rsaCertCheckV2){
+        if (rsaCertCheckV2) {
 
             //判断支付宝支付状体
-            if(!params.get("trade_status").equals("TRADE_SUCCESS")){
+            if (!params.get("trade_status").equals("TRADE_SUCCESS")) {
                 return true;
             }
 
             cfOrder.setThirdPartyOrderId(params.get("trade_no"));
-            cfOrder.setPayTime(DateUtil.dateToStamp(params.get("gmt_payment"),"yyyy-MM-dd HH:mm:ss"));
-            cfOrderService.paySuccessAndupdateOrder(cfOrder,new BigDecimal(params.get("receipt_amount")));
+            cfOrder.setPayTime(DateUtil.dateToStamp(params.get("gmt_payment"), "yyyy-MM-dd HH:mm:ss"));
+            cfOrderService.paySuccessAndupdateOrder(cfOrder, new BigDecimal(params.get("receipt_amount")));
         }
         //如果支付方式为套餐，设置为支付宝支付
-        if(cfOrder.getPaymentAgencyShortName().equals("package")){
-            if(cfUserPaymentAgency!=null){
+        if (cfOrder.getPaymentAgencyShortName().equals("package")) {
+            if (cfUserPaymentAgency != null) {
                 cfOrder.setPaymentAgencyShortName(cfUserPaymentAgency.getPaymentAgencyShortName());
-            }else{
+            } else {
                 cfOrder.setPaymentAgencyShortName("ali_h5_pay_cny");
             }
         }

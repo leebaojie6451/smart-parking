@@ -54,18 +54,18 @@ public class CfPaymentAgencyController implements CfPaymentAgencySwagger {
         allowFileds.add("order");
         allowFileds.add("limit");
         Map<String, String> allowFiledsMap = new HashMap<String, String>();
-        allowFiledsMap.put("id","pmt");
-        allowFiledsMap.put("name","pmt");
-        allowFiledsMap.put("short_name","pmt");
-        allowFiledsMap.put("sort_index","pmt");
-        allowFiledsMap.put("score_type","pmt");
-        allowFiledsMap.put("like","");
-        allowFiledsMap.put("group","");
-        allowFiledsMap.put("order","");
-        allowFiledsMap.put("limit","");
+        allowFiledsMap.put("id", "pmt");
+        allowFiledsMap.put("name", "pmt");
+        allowFiledsMap.put("short_name", "pmt");
+        allowFiledsMap.put("sort_index", "pmt");
+        allowFiledsMap.put("score_type", "pmt");
+        allowFiledsMap.put("like", "");
+        allowFiledsMap.put("group", "");
+        allowFiledsMap.put("order", "");
+        allowFiledsMap.put("limit", "");
         List<CfPaymentAgency> cfPaymentAgencies = cfPaymentAgencyService.selectListByCondition(conditionsMap, allowFiledsMap, allowFileds);
         Integer counts = cfPaymentAgencyService.selectListByConditionCounts(conditionsMap, allowFiledsMap, allowFileds);
-        if(cfPaymentAgencies!=null && cfPaymentAgencies.size()>0){
+        if (cfPaymentAgencies != null && cfPaymentAgencies.size() > 0) {
             return new ResponseResult(CommonCode.SUCCESS, cfPaymentAgencies, null, counts);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);
@@ -76,7 +76,7 @@ public class CfPaymentAgencyController implements CfPaymentAgencySwagger {
     @RequestMapping(value = "selectListByQuery", method = RequestMethod.GET)
     public ResponseResult selectListByQuery(CfPaymentAgencyQuery cfPaymentAgencyQuery) {
         List<CfPaymentAgency> cfPaymentAgencies = cfPaymentAgencyService.getListByQuery(cfPaymentAgencyQuery);
-        if(cfPaymentAgencies==null || cfPaymentAgencies.size()==0){
+        if (cfPaymentAgencies == null || cfPaymentAgencies.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfPaymentAgencies);
@@ -107,7 +107,7 @@ public class CfPaymentAgencyController implements CfPaymentAgencySwagger {
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(String id) {
         Integer delete = cfPaymentAgencyService.delete(id);
-        if(delete==0){
+        if (delete == 0) {
             return new ResponseResult(CommonCode.FAIL);
         }
         return new ResponseResult(CommonCode.SUCCESS);

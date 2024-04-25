@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- *
  * @ClassName CfCarParkUseLogController
  * @Author 隔壁小王子 981011512@qq.com
  * @Date 2020/4/28/028 8:55
@@ -44,7 +43,7 @@ public class CfAdLinksController implements CfAdLinkersSwagger {
     @RequestMapping(value = "getListByQuery", method = RequestMethod.GET)
     public ResponseResult getListByQuery(CfAdLinksQuery cfAdLinksQuery) throws Exception {
         List<CfAdLinks> cfAdLinks = cfAdLinksService.getListByQuery(cfAdLinksQuery);
-        if(cfAdLinks==null || cfAdLinks.size()==0){
+        if (cfAdLinks == null || cfAdLinks.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         Integer integer = cfAdLinksService.countByQuery(cfAdLinksQuery);
@@ -55,15 +54,15 @@ public class CfAdLinksController implements CfAdLinkersSwagger {
     @RequestMapping(value = "selectContainAdByQuery", method = RequestMethod.GET)
     public ResponseResult selectContainAdByQuery(CfAdLinksQuery cfAdLinksQuery) throws Exception {
         List<CfAdLinks> cfAdLinks = cfAdLinksService.selectContainAdByQuery(cfAdLinksQuery);
-        if(cfAdLinks==null || cfAdLinks.size()==0){
+        if (cfAdLinks == null || cfAdLinks.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS);
         }
         Integer integer = cfAdLinksService.countByQuery(cfAdLinksQuery);
 
         String fileSourceAddress = cfSystemConfigService.getValueByKey("file_source_address", "http://file.cfeng.wang/");
 
-        for (CfAdLinks adLinks: cfAdLinks){
-            if(adLinks.getCfAd()!=null && StringUtils.isNotEmpty(adLinks.getCfAd().getCover())){
+        for (CfAdLinks adLinks : cfAdLinks) {
+            if (adLinks.getCfAd() != null && StringUtils.isNotEmpty(adLinks.getCfAd().getCover())) {
                 FileUtils.handleFileSourcePrefix(adLinks.getCfAd(), fileSourceAddress, "cover");
             }
         }
@@ -74,6 +73,6 @@ public class CfAdLinksController implements CfAdLinkersSwagger {
     @RequestMapping(value = "adCounts", method = RequestMethod.PUT)
     public ResponseResult adCounts(@RequestBody AdCounts adCounts) throws Exception {
         Integer integer = cfAdLinksService.adCounts(adCounts);
-        return integer>0 ? new ResponseResult(CommonCode.SUCCESS, integer) : new ResponseResult(CommonCode.FAIL, integer);
+        return integer > 0 ? new ResponseResult(CommonCode.SUCCESS, integer) : new ResponseResult(CommonCode.FAIL, integer);
     }
 }

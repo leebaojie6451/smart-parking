@@ -20,18 +20,19 @@ import java.util.List;
 public class CfUserFriendServiceImpl implements CfUserFriendService {
     @Autowired
     private CfUserFriendMapper cfUserFriendMapper;
+
     @Override
     public ResponseResult addFriend(CfUserFriend cfUserFriend) {
         checkFriendship(cfUserFriend.getUid(), cfUserFriend.getFriendId(), true);
         cfUserFriend.setCreateTime(System.currentTimeMillis());
         cfUserFriendMapper.insert(cfUserFriend);
-        return new ResponseResult(CommonCode.SUCCESS,cfUserFriend);
+        return new ResponseResult(CommonCode.SUCCESS, cfUserFriend);
     }
 
     @Override
     public ResponseResult getMyFriendList(String uid, Integer page, Integer limit) {
-        List<CfUser> cfUsers = cfUserFriendMapper.selectListByUid(uid, page-1, limit);
-        return new ResponseResult(CommonCode.SUCCESS,cfUsers);
+        List<CfUser> cfUsers = cfUserFriendMapper.selectListByUid(uid, page - 1, limit);
+        return new ResponseResult(CommonCode.SUCCESS, cfUsers);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class CfUserFriendServiceImpl implements CfUserFriendService {
         CfUserFriendExample cfUserFriendExample = new CfUserFriendExample();
         cfUserFriendExample.createCriteria().andUidEqualTo(uid).andFriendIdEqualTo(friendId);
         List<CfUserFriend> cfUserFriends = cfUserFriendMapper.selectByExample(cfUserFriendExample);
-        if(cfUserFriends==null || cfUserFriends.size()==0){
+        if (cfUserFriends == null || cfUserFriends.size() == 0) {
             return null;
         }
         return cfUserFriends.get(0);
@@ -47,11 +48,11 @@ public class CfUserFriendServiceImpl implements CfUserFriendService {
 
     @Override
     public CfUserFriend checkFriendship(String uid, String friendId, Boolean expectEmpty) {
-        CfUserFriend cfUserFriend = getFriendByUidAndFriendId(uid,friendId);
-        if(expectEmpty && cfUserFriend!=null){
+        CfUserFriend cfUserFriend = getFriendByUidAndFriendId(uid, friendId);
+        if (expectEmpty && cfUserFriend != null) {
             ExceptionCast.cast(FriendsCode.FRIENDS_EXIST);
             return null;
-        }else if(!expectEmpty && cfUserFriend==null){
+        } else if (!expectEmpty && cfUserFriend == null) {
             ExceptionCast.cast(FriendsCode.FRIENDS_NOT_EXIST);
             return null;
         }

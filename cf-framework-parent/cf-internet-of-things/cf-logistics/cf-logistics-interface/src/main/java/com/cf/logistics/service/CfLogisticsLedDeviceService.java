@@ -28,6 +28,7 @@ public interface CfLogisticsLedDeviceService {
 
     /**
      * 处理连接
+     *
      * @param ctx
      * @param msg
      * @return
@@ -36,7 +37,8 @@ public interface CfLogisticsLedDeviceService {
 
     /**
      * 制作tcp数据
-     * @param serialNumber  LED主板序列号
+     *
+     * @param serialNumber LED主板序列号
      * @param cfLinXinLed
      * @return
      * @throws Exception
@@ -45,6 +47,7 @@ public interface CfLogisticsLedDeviceService {
 
     /**
      * 发送tcp数据
+     *
      * @param serialNumber
      * @param cfLinXinLed
      */

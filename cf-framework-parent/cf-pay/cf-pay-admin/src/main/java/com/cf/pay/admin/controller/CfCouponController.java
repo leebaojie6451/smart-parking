@@ -82,126 +82,126 @@ public class CfCouponController implements CfCouponSwagger {
         allowFileds.add("order");
         allowFileds.add("limit");
         Map<String, String> allowFiledsMap = new HashMap<String, String>();
-        allowFiledsMap.put("id","cpn");
-        allowFiledsMap.put("to_uid","cpn");
-        allowFiledsMap.put("from_uid","cpn");
-        allowFiledsMap.put("scenes","cpn");
-        allowFiledsMap.put("shop_id","cpn");
-        allowFiledsMap.put("shop_id$in","cpn");
-        allowFiledsMap.put("goods_id","cpn");
-        allowFiledsMap.put("denomination","cpn");
-        allowFiledsMap.put("refund_amount","cpn");
-        allowFiledsMap.put("effective_time","cpn");
-        allowFiledsMap.put("expire_time","cpn");
-        allowFiledsMap.put("status","cpn");
-        allowFiledsMap.put("create_time","cpn");
-        allowFiledsMap.put("use_time","cpn");
-        allowFiledsMap.put("like","");
-        allowFiledsMap.put("group","");
-        allowFiledsMap.put("order","");
-        allowFiledsMap.put("limit","");
+        allowFiledsMap.put("id", "cpn");
+        allowFiledsMap.put("to_uid", "cpn");
+        allowFiledsMap.put("from_uid", "cpn");
+        allowFiledsMap.put("scenes", "cpn");
+        allowFiledsMap.put("shop_id", "cpn");
+        allowFiledsMap.put("shop_id$in", "cpn");
+        allowFiledsMap.put("goods_id", "cpn");
+        allowFiledsMap.put("denomination", "cpn");
+        allowFiledsMap.put("refund_amount", "cpn");
+        allowFiledsMap.put("effective_time", "cpn");
+        allowFiledsMap.put("expire_time", "cpn");
+        allowFiledsMap.put("status", "cpn");
+        allowFiledsMap.put("create_time", "cpn");
+        allowFiledsMap.put("use_time", "cpn");
+        allowFiledsMap.put("like", "");
+        allowFiledsMap.put("group", "");
+        allowFiledsMap.put("order", "");
+        allowFiledsMap.put("limit", "");
 
         UserBasicInfo userBasicInfo = AuthenticationInterceptor.parseJwt(HttpHearderUtils.getAuthorization(request));
-        if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0 && StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "finance")<0){
-            if(StringUtils.isEmpty(scenes)){
+        if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0 && StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "finance") < 0) {
+            if (StringUtils.isEmpty(scenes)) {
                 //如果不传入默认为停车优惠券
                 scenes = PayScenes.PARKING;
             }
-            switch (scenes){
+            switch (scenes) {
                 case PayScenes.PARKING:
                     CfCarParkLinkUserQuery cfCarParkLinkUserQuery = new CfCarParkLinkUserQuery();
                     cfCarParkLinkUserQuery.setUid(userBasicInfo.getId());
                     List<CfCarParkLinkUser> cfCarParkLinkUsers = cfCarParkLinkUserService.getListByQuery(cfCarParkLinkUserQuery);
-                    if(cfCarParkLinkUsers==null || cfCarParkLinkUsers.size()==0){
+                    if (cfCarParkLinkUsers == null || cfCarParkLinkUsers.size() == 0) {
                         return new ResponseResult(CommonCode.NO_MORE_DATAS);
                     }
                     String carParkIds = "";
                     String shopId = "";
-                    if(conditionsMap.containsKey("shop_id")){
+                    if (conditionsMap.containsKey("shop_id")) {
                         Map<String, String> shopIdMap = (Map<String, String>) conditionsMap.get("shop_id");
-                        if(StringUtils.isNotEmpty(shopIdMap.get("value"))){
+                        if (StringUtils.isNotEmpty(shopIdMap.get("value"))) {
                             shopId = shopIdMap.get("value");
                         }
                     }
-                    for (CfCarParkLinkUser cfCarParkLinkUser: cfCarParkLinkUsers){
-                        if(StringUtils.isEmpty(cfCarParkLinkUser.getCarParkId())){
+                    for (CfCarParkLinkUser cfCarParkLinkUser : cfCarParkLinkUsers) {
+                        if (StringUtils.isEmpty(cfCarParkLinkUser.getCarParkId())) {
                             continue;
                         }
-                        if(shopId.equals(cfCarParkLinkUser.getCarParkId())){
+                        if (shopId.equals(cfCarParkLinkUser.getCarParkId())) {
                             carParkIds = "";
                             break;
                         }
-                        carParkIds += ",'"+cfCarParkLinkUser.getCarParkId()+"'";
+                        carParkIds += ",'" + cfCarParkLinkUser.getCarParkId() + "'";
                     }
 
-                    if(StringUtils.isNotEmpty(shopId) && StringUtils.isNotEmpty(carParkIds)){
+                    if (StringUtils.isNotEmpty(shopId) && StringUtils.isNotEmpty(carParkIds)) {
                         //说明传入的店铺id不在当前用户的运营范围内
                         return new ResponseResult(CommonCode.NO_MORE_DATAS);
                     }
 
-                    if(StringUtils.isNotEmpty(carParkIds)){
+                    if (StringUtils.isNotEmpty(carParkIds)) {
                         carParkIds = carParkIds.substring(1);
                     }
 
-                    if(StringUtils.isNotEmpty(carParkIds)){
+                    if (StringUtils.isNotEmpty(carParkIds)) {
                         HashMap<String, String> valueMap = new HashMap<>();
-                        valueMap.put("operator","in");
-                        valueMap.put("value",carParkIds);
+                        valueMap.put("operator", "in");
+                        valueMap.put("value", carParkIds);
                         conditionsMap.put("shop_id$in", valueMap);
-                    }else if(StringUtils.isEmpty(shopId)){
+                    } else if (StringUtils.isEmpty(shopId)) {
                         return new ResponseResult(CommonCode.NO_MORE_DATAS);
                     }
                     break;
                 case PayScenes.CHARGING:
-                    if(StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin")<0 && StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "finance")<0){
+                    if (StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "admin") < 0 && StringTools.findStringInArray(userBasicInfo.getRoleFlag().split(","), "finance") < 0) {
                         CfChargingStationLinkUserQuery cfChargingStationLinkUserQuery = new CfChargingStationLinkUserQuery();
                         cfChargingStationLinkUserQuery.setUid(userBasicInfo.getId());
                         List<CfChargingStationLinkUser> cfChargingStationLinkUsers = cfChargingStationLinkUserService.getListByQuery(cfChargingStationLinkUserQuery);
-                        if(cfChargingStationLinkUsers==null || cfChargingStationLinkUsers.size()==0){
+                        if (cfChargingStationLinkUsers == null || cfChargingStationLinkUsers.size() == 0) {
                             return new ResponseResult(CommonCode.NO_MORE_DATAS);
                         }
                         String chargingStationIds = "";
                         shopId = "";
-                        if(conditionsMap.containsKey("shop_id")){
+                        if (conditionsMap.containsKey("shop_id")) {
                             Map<String, String> shopIdMap = (Map<String, String>) conditionsMap.get("shop_id");
-                            if(StringUtils.isNotEmpty(shopIdMap.get("value"))){
+                            if (StringUtils.isNotEmpty(shopIdMap.get("value"))) {
                                 shopId = shopIdMap.get("value");
                             }
                         }
-                        for (CfChargingStationLinkUser cfChargingStationLinkUser: cfChargingStationLinkUsers){
-                            if(StringUtils.isEmpty(cfChargingStationLinkUser.getChargingStationId())){
+                        for (CfChargingStationLinkUser cfChargingStationLinkUser : cfChargingStationLinkUsers) {
+                            if (StringUtils.isEmpty(cfChargingStationLinkUser.getChargingStationId())) {
                                 continue;
                             }
-                            if(shopId.equals(cfChargingStationLinkUser.getChargingStationId())){
+                            if (shopId.equals(cfChargingStationLinkUser.getChargingStationId())) {
                                 chargingStationIds = "";
                                 break;
                             }
-                            chargingStationIds += ",'"+cfChargingStationLinkUser.getChargingStationId()+"'";
+                            chargingStationIds += ",'" + cfChargingStationLinkUser.getChargingStationId() + "'";
                         }
-                        if(StringUtils.isNotEmpty(shopId) && StringUtils.isNotEmpty(chargingStationIds)){
+                        if (StringUtils.isNotEmpty(shopId) && StringUtils.isNotEmpty(chargingStationIds)) {
                             //说明传入的店铺id不在当前用户的运营范围内
                             return new ResponseResult(CommonCode.NO_MORE_DATAS);
                         }
 
-                        if(StringUtils.isNotEmpty(chargingStationIds)){
+                        if (StringUtils.isNotEmpty(chargingStationIds)) {
                             HashMap<String, String> valueMap = new HashMap<>();
-                            valueMap.put("operator","in");
-                            valueMap.put("value",chargingStationIds.substring(1));
+                            valueMap.put("operator", "in");
+                            valueMap.put("value", chargingStationIds.substring(1));
                             conditionsMap.put("shop_id$in", valueMap);
-                        }else if(StringUtils.isEmpty(shopId)){
+                        } else if (StringUtils.isEmpty(shopId)) {
                             return new ResponseResult(CommonCode.NO_MORE_DATAS);
                         }
                     }
                     break;
                 default:
-                    return new ResponseResult(CommonCode.INVALID_PARAM,null,"不支持的场景");
+                    return new ResponseResult(CommonCode.INVALID_PARAM, null, "不支持的场景");
             }
 
         }
 
         List<CfCoupon> cfOrders = cfCouponService.selectListByCondition(conditionsMap, allowFiledsMap, allowFileds);
         Integer counts = cfCouponService.selectListByConditionCounts(conditionsMap, allowFiledsMap, allowFileds);
-        if(cfOrders!=null && cfOrders.size()>0){
+        if (cfOrders != null && cfOrders.size() > 0) {
             return new ResponseResult(CommonCode.SUCCESS, cfOrders, null, counts);
         }
         return new ResponseResult(CommonCode.NO_MORE_DATAS);
@@ -232,7 +232,7 @@ public class CfCouponController implements CfCouponSwagger {
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(String id) {
         Integer delete = cfCouponService.delete(id);
-        if(delete==0){
+        if (delete == 0) {
             return new ResponseResult(CommonCode.FAIL);
         }
         return new ResponseResult(CommonCode.SUCCESS);

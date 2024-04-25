@@ -19,6 +19,7 @@ public class DeviceChannelMap {
 
     /**
      * 添加用户id与channel的关联
+     *
      * @param userid
      * @param cfChargingClient
      */
@@ -28,6 +29,7 @@ public class DeviceChannelMap {
 
     /**
      * 根据用户id移除用户id与channel的关联
+     *
      * @param userid
      */
     public static void remove(String userid) {
@@ -36,18 +38,19 @@ public class DeviceChannelMap {
 
     /**
      * 根据通道id移除用户与channel的关联
+     *
      * @param channelId 通道的id
      */
     public static void removeByChannelId(String channelId) {
-        if(!StringUtils.isNotBlank(channelId)) {
+        if (!StringUtils.isNotBlank(channelId)) {
             return;
         }
 
         for (String s : userChannelMap.keySet()) {
             Channel channel = userChannelMap.get(s).getChannel();
-            if(channelId.equals(channel.id().asLongText())) {
+            if (channelId.equals(channel.id().asLongText())) {
                 System.out.println("客户端连接断开,取消用户" + s + "与通道" + channelId + "的关联");
-                if(channel.isActive()){
+                if (channel.isActive()) {
                     channel.close();
                 }
                 userChannelMap.remove(s);
@@ -58,6 +61,7 @@ public class DeviceChannelMap {
 
     /**
      * 根据好友id获取对应的通道
+     *
      * @param friendid 好友id
      * @return Netty通道
      */
@@ -65,11 +69,11 @@ public class DeviceChannelMap {
         return userChannelMap.get(friendid);
     }
 
-    public static void printf(){
-        for ( Map.Entry<String, CfLogisticsLedClient> entry: userChannelMap.entrySet()){
-            System.out.println(entry.getKey()+"===>"+entry.getValue().toString());
+    public static void printf() {
+        for (Map.Entry<String, CfLogisticsLedClient> entry : userChannelMap.entrySet()) {
+            System.out.println(entry.getKey() + "===>" + entry.getValue().toString());
         }
-        if(userChannelMap.size()==0){
+        if (userChannelMap.size() == 0) {
             System.out.println("当前没有任何设备接入");
         }
     }

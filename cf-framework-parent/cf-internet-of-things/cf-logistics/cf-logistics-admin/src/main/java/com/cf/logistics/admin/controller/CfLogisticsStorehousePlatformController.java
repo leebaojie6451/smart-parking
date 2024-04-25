@@ -37,7 +37,7 @@ public class CfLogisticsStorehousePlatformController implements CfLogisticsStore
     public ResponseResult add(@Validated @RequestBody CfLogisticsStorehousePlatformForm cfLogisticsStorehousePlatformForm) throws Exception {
         cfLogisticsStorehouseService.findById(cfLogisticsStorehousePlatformForm.getStorehouseId(), false);
         CfLogisticsStorehousePlatform cfLogisticsStorehousePlatform = new CfLogisticsStorehousePlatform();
-        BeanUtils.copyProperties(cfLogisticsStorehousePlatformForm,cfLogisticsStorehousePlatform);
+        BeanUtils.copyProperties(cfLogisticsStorehousePlatformForm, cfLogisticsStorehousePlatform);
         CfLogisticsStorehousePlatform lastCfLogisticsStorehousePlatform = cfLogisticsStorehousePlatformService.add(cfLogisticsStorehousePlatform);
         return new ResponseResult(CommonCode.SUCCESS, lastCfLogisticsStorehousePlatform);
     }
@@ -48,7 +48,7 @@ public class CfLogisticsStorehousePlatformController implements CfLogisticsStore
     public ResponseResult update(@Validated @RequestBody CfLogisticsStorehousePlatformForm cfLogisticsStorehousePlatformForm) {
         cfLogisticsStorehouseService.findById(cfLogisticsStorehousePlatformForm.getStorehouseId(), false);
         CfLogisticsStorehousePlatform cfLogisticsStorehousePlatform = new CfLogisticsStorehousePlatform();
-        BeanUtils.copyProperties(cfLogisticsStorehousePlatformForm,cfLogisticsStorehousePlatform);
+        BeanUtils.copyProperties(cfLogisticsStorehousePlatformForm, cfLogisticsStorehousePlatform);
         CfLogisticsStorehousePlatform update = cfLogisticsStorehousePlatformService.update(cfLogisticsStorehousePlatform);
         return new ResponseResult(CommonCode.SUCCESS, update);
     }
@@ -58,7 +58,7 @@ public class CfLogisticsStorehousePlatformController implements CfLogisticsStore
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseResult delete(Long id) {
         Integer delete = cfLogisticsStorehousePlatformService.delete(id);
-        return delete>0?new ResponseResult(CommonCode.SUCCESS, delete):new ResponseResult(CommonCode.FAIL, null);
+        return delete > 0 ? new ResponseResult(CommonCode.SUCCESS, delete) : new ResponseResult(CommonCode.FAIL, null);
     }
 
     @PreAuthorize("hasAuthority('logistics-CfLogisticsStorehousePlatformController-getListByQuery')")
@@ -67,7 +67,7 @@ public class CfLogisticsStorehousePlatformController implements CfLogisticsStore
     public ResponseResult getListByQuery(CfLogisticsStorehousePlatformQuery cfLogisticsStorehousePlatformQuery) throws Exception {
         List<CfLogisticsStorehousePlatform> cfLogisticsStorehousePlatforms = cfLogisticsStorehousePlatformService.getListByQuery(cfLogisticsStorehousePlatformQuery);
         Integer countByQuery = cfLogisticsStorehousePlatformService.countByQuery(cfLogisticsStorehousePlatformQuery);
-        if(cfLogisticsStorehousePlatforms==null || cfLogisticsStorehousePlatforms.size()==0){
+        if (cfLogisticsStorehousePlatforms == null || cfLogisticsStorehousePlatforms.size() == 0) {
             return new ResponseResult(CommonCode.NO_MORE_DATAS, null);
         }
         return new ResponseResult(CommonCode.SUCCESS, cfLogisticsStorehousePlatforms, countByQuery);

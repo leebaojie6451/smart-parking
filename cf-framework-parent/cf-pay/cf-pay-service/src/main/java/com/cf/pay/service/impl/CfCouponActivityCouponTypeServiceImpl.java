@@ -37,8 +37,8 @@ public class CfCouponActivityCouponTypeServiceImpl implements CfCouponActivityCo
 
     @Override
     public CfCouponActivityCouponType shopkeeperAddCouponType(String shopkeeperId, CfCouponActivityCouponType cfCouponActivityCouponType) {
-        if(cfCouponActivityCouponType.getCouponType()!=(byte)2){
-            ExceptionCast.cast(CommonCode.UNAUTHORISE,"该功能您只能操作金额券");
+        if (cfCouponActivityCouponType.getCouponType() != (byte) 2) {
+            ExceptionCast.cast(CommonCode.UNAUTHORISE, "该功能您只能操作金额券");
         }
         cfCouponActivityService.checkActivityAscription(shopkeeperId, cfCouponActivityCouponType.getCouponActivityId());
         return add(cfCouponActivityCouponType);
@@ -58,10 +58,10 @@ public class CfCouponActivityCouponTypeServiceImpl implements CfCouponActivityCo
     @Override
     public CfCouponActivityCouponType findById(String id, boolean expectEmpty) {
         CfCouponActivityCouponType couponActivityCouponType = findById(id);
-        if(expectEmpty && couponActivityCouponType!=null){
+        if (expectEmpty && couponActivityCouponType != null) {
             ExceptionCast.cast(CouponCode.COUPON_TYPE_EXIST_EXISTED);
         }
-        if(!expectEmpty && couponActivityCouponType==null){
+        if (!expectEmpty && couponActivityCouponType == null) {
             ExceptionCast.cast(CouponCode.COUPON_TYPE_NOT_EXIST);
         }
         return couponActivityCouponType;
@@ -69,8 +69,8 @@ public class CfCouponActivityCouponTypeServiceImpl implements CfCouponActivityCo
 
     @Override
     public CfCouponActivityCouponType shopkeeperUpdateCouponType(String shopkeeperId, CfCouponActivityCouponType cfCouponActivityCouponType) {
-        if(cfCouponActivityCouponType.getCouponType()!=(byte)2){
-            ExceptionCast.cast(CommonCode.UNAUTHORISE,"该功能您只能操作金额券");
+        if (cfCouponActivityCouponType.getCouponType() != (byte) 2) {
+            ExceptionCast.cast(CommonCode.UNAUTHORISE, "该功能您只能操作金额券");
         }
         cfCouponActivityService.checkActivityAscription(shopkeeperId, cfCouponActivityCouponType.getCouponActivityId());
         return update(cfCouponActivityCouponType);
@@ -84,7 +84,7 @@ public class CfCouponActivityCouponTypeServiceImpl implements CfCouponActivityCo
     @Override
     public Integer shopkeeperDelete(String shopkeeperId, String id) {
         CfCouponActivityCouponType cfCouponActivityCouponType = cfCouponActivityCouponTypeMapper.selectByPrimaryKey(id);
-        if(cfCouponActivityCouponType==null || cfCouponActivityCouponType.getId()==null){
+        if (cfCouponActivityCouponType == null || cfCouponActivityCouponType.getId() == null) {
             ExceptionCast.cast(CommonCode.NO_MORE_DATAS);
         }
         cfCouponActivityService.checkActivityAscription(shopkeeperId, cfCouponActivityCouponType.getCouponActivityId());
@@ -95,13 +95,13 @@ public class CfCouponActivityCouponTypeServiceImpl implements CfCouponActivityCo
     public CfCouponActivityCouponTypeExample getExampleByQuery(CfCouponActivityCouponTypeQuery cfCouponActivityCouponTypeQuery) {
         CfCouponActivityCouponTypeExample cfCouponActivityCouponTypeExample = new CfCouponActivityCouponTypeExample();
         CfCouponActivityCouponTypeExample.Criteria criteria = cfCouponActivityCouponTypeExample.createCriteria();
-        if(StringUtils.isNotEmpty(cfCouponActivityCouponTypeQuery.getCouponActivityId())){
+        if (StringUtils.isNotEmpty(cfCouponActivityCouponTypeQuery.getCouponActivityId())) {
             criteria.andCouponActivityIdEqualTo(cfCouponActivityCouponTypeQuery.getCouponActivityId());
         }
-        if(cfCouponActivityCouponTypeQuery.getCouponType()!=null){
+        if (cfCouponActivityCouponTypeQuery.getCouponType() != null) {
             criteria.andCouponTypeEqualTo(cfCouponActivityCouponTypeQuery.getCouponType());
         }
-        if(StringUtils.isNotEmpty(cfCouponActivityCouponTypeQuery.getOrderBy())){
+        if (StringUtils.isNotEmpty(cfCouponActivityCouponTypeQuery.getOrderBy())) {
             cfCouponActivityCouponTypeExample.setOrderByClause(cfCouponActivityCouponTypeQuery.getOrderBy());
         }
         return cfCouponActivityCouponTypeExample;
