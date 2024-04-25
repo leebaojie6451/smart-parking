@@ -9,11 +9,9 @@ import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.cf.framework.domain.response.CommonCode;
-import com.cf.framework.domain.response.ResponseResult;
 import com.cf.framework.domain.sms.response.SmsCode;
 import com.cf.framework.domain.ucenter.response.UcenterCode;
 import com.cf.framework.exception.ExceptionCast;
-import com.cf.framework.utils.HttpClient;
 import com.cf.framework.utils.IdWorker;
 import com.cf.sms.dao.mapper.CfSmsMapper;
 import com.cf.sms.domain.CfSms;
@@ -61,9 +59,9 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public void sendSms(String phone, Integer type) {
         checkSendFrequently(phone, type);
-        String code = (int)((Math.random()*9+1)*100000)+"";
-        cfSmsMapper.insert(new CfSms(idWorker.nextId(),phone,code,type,0,System.currentTimeMillis(),
-                System.currentTimeMillis()+CfSms.SMS_CODE_VALID_TIME));
+        String code = (int) ((Math.random() * 9 + 1) * 100000) + "";
+        cfSmsMapper.insert(new CfSms(idWorker.nextId(), phone, code, type, 0, System.currentTimeMillis(),
+                System.currentTimeMillis() + CfSms.SMS_CODE_VALID_TIME));
 
         List<CfWeixinConfig> cfWeixinConfigs = cfWeixinConfigService.getWeiXinLoginConfigragtion("ali_sms");
         String signName = WeiXinConfigUtils.getWeiXinConfigragtionByEnName("sign_name", cfWeixinConfigs);
@@ -72,13 +70,13 @@ public class SmsServiceImpl implements SmsService {
         String accessKeyId = WeiXinConfigUtils.getWeiXinConfigragtionByEnName("access_key_id", cfWeixinConfigs);
         String secret = WeiXinConfigUtils.getWeiXinConfigragtionByEnName("secret", cfWeixinConfigs);
 
-        sendSmsByAli(phone,"{\"code\":\""+code+"\"}",signName,templateCode,regionId,accessKeyId,secret,"","");
+        sendSmsByAli(phone, "{\"code\":\"" + code + "\"}", signName, templateCode, regionId, accessKeyId, secret, "", "");
     }
 
     @Override
     public void checkSendFrequently(String phone, Integer type) {
         List<CfSms> lastSendLog = cfSmsMapper.getLastSendLog(phone, type);
-        if(lastSendLog!=null && lastSendLog.size()>0 && lastSendLog.get(0).getCreateTime()+CfSms.SMS_SEND_FREQUENTLY_LIMIT_TIME>System.currentTimeMillis()){
+        if (lastSendLog != null && lastSendLog.size() > 0 && lastSendLog.get(0).getCreateTime() + CfSms.SMS_SEND_FREQUENTLY_LIMIT_TIME > System.currentTimeMillis()) {
             ExceptionCast.cast(SmsCode.SMS_SEND_FREQUENTLY);
         }
     }
@@ -95,22 +93,22 @@ public class SmsServiceImpl implements SmsService {
         request.setVersion("2017-05-25");
         request.setAction("SendSms");
         request.putQueryParameter("RegionId", regionId);
-        if(StringUtils.isNotEmpty(PhoneNumbers)){
+        if (StringUtils.isNotEmpty(PhoneNumbers)) {
             request.putQueryParameter("PhoneNumbers", PhoneNumbers);
         }
-        if(StringUtils.isNotEmpty(signName)){
+        if (StringUtils.isNotEmpty(signName)) {
             request.putQueryParameter("SignName", signName);
         }
-        if(StringUtils.isNotEmpty(templateCode)){
+        if (StringUtils.isNotEmpty(templateCode)) {
             request.putQueryParameter("TemplateCode", templateCode);
         }
-        if(StringUtils.isNotEmpty(TemplateParam)){
+        if (StringUtils.isNotEmpty(TemplateParam)) {
             request.putQueryParameter("TemplateParam", TemplateParam);
         }
-        if(StringUtils.isNotEmpty(SmsUpExtendCode)){
+        if (StringUtils.isNotEmpty(SmsUpExtendCode)) {
             request.putQueryParameter("SmsUpExtendCode", SmsUpExtendCode);
         }
-        if(StringUtils.isNotEmpty(OutId)){
+        if (StringUtils.isNotEmpty(OutId)) {
             request.putQueryParameter("OutId", OutId);
         }
 
@@ -126,25 +124,25 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public void checkCode(String phone, String code, Integer type) {
         String phoneSmsCheckCounts = null;
-        String redisKey = phone+"_"+type;
+        String redisKey = phone + "_" + type;
         try {
             phoneSmsCheckCounts = stringRedisTemplate.opsForValue().get(redisKey);
         } catch (Exception e) {
             e.printStackTrace();
             ExceptionCast.cast(CommonCode.SERVER_ERROR, e.getMessage());
         }
-        if(phoneSmsCheckCounts!=null && Integer.parseInt(phoneSmsCheckCounts)>=5){
+        if (phoneSmsCheckCounts != null && Integer.parseInt(phoneSmsCheckCounts) >= 5) {
             ExceptionCast.cast(SmsCode.CHECKING_TOO_FREQUENTLY);
         }
 
         int i = cfSmsMapper.updateLastValidSmsCodeStatus(phone, code, type, System.currentTimeMillis());
-        if(i==0){
-            if(phoneSmsCheckCounts!=null){
+        if (i == 0) {
+            if (phoneSmsCheckCounts != null) {
                 Long expire = stringRedisTemplate.getExpire(phone, TimeUnit.MILLISECONDS);
-                Long time = expire>0?expire:300000L;
-                stringRedisTemplate.boundValueOps(redisKey).set((Integer.parseInt(phoneSmsCheckCounts)+1)+"",time, TimeUnit.MILLISECONDS);
-            }else{
-                stringRedisTemplate.boundValueOps(redisKey).set("1",300000L, TimeUnit.MILLISECONDS);
+                Long time = expire > 0 ? expire : 300000L;
+                stringRedisTemplate.boundValueOps(redisKey).set((Integer.parseInt(phoneSmsCheckCounts) + 1) + "", time, TimeUnit.MILLISECONDS);
+            } else {
+                stringRedisTemplate.boundValueOps(redisKey).set("1", 300000L, TimeUnit.MILLISECONDS);
             }
             ExceptionCast.cast(SmsCode.SMS_CODE_INVALID);
         }
@@ -157,8 +155,8 @@ public class SmsServiceImpl implements SmsService {
         List<CfWeixinConfig> cfWeixinConfigs = cfWeixinConfigService.getWeiXinLoginConfigragtion("tencent_captcha");
         String secretId = WeiXinConfigUtils.getWeiXinConfigragtionByEnName("secret_id", cfWeixinConfigs);
         String secretKey = WeiXinConfigUtils.getWeiXinConfigragtionByEnName("secret_key", cfWeixinConfigs);
-        String captchaAppId = WeiXinConfigUtils.getWeiXinConfigragtionByEnName(platform+"_captcha_app_id", cfWeixinConfigs);
-        String appSecretKey = WeiXinConfigUtils.getWeiXinConfigragtionByEnName(platform+"_app_secret_key", cfWeixinConfigs);
+        String captchaAppId = WeiXinConfigUtils.getWeiXinConfigragtionByEnName(platform + "_captcha_app_id", cfWeixinConfigs);
+        String appSecretKey = WeiXinConfigUtils.getWeiXinConfigragtionByEnName(platform + "_app_secret_key", cfWeixinConfigs);
 
 
         //验证码腾讯图形验证码
@@ -172,7 +170,7 @@ public class SmsServiceImpl implements SmsService {
 
         CaptchaClient client = new CaptchaClient(cred, "", clientProfile);
 
-        if(StringUtils.isNotEmpty(randstr)){
+        if (StringUtils.isNotEmpty(randstr)) {
             DescribeCaptchaResultRequest describeCaptchaResultRequest = new DescribeCaptchaResultRequest();
             describeCaptchaResultRequest.setCaptchaType(9L);
             describeCaptchaResultRequest.setTicket(ticket);
@@ -181,10 +179,10 @@ public class SmsServiceImpl implements SmsService {
             describeCaptchaResultRequest.setAppSecretKey(appSecretKey);
             describeCaptchaResultRequest.setRandstr(randstr);
             DescribeCaptchaResultResponse describeCaptchaResultResponse = client.DescribeCaptchaResult(describeCaptchaResultRequest);
-            if(describeCaptchaResultResponse.getCaptchaCode()!=1){
+            if (describeCaptchaResultResponse.getCaptchaCode() != 1) {
                 ExceptionCast.cast(UcenterCode.CAPTCHA_NOT_MATCH);
             }
-        }else{
+        } else {
             DescribeCaptchaMiniResultRequest req = new DescribeCaptchaMiniResultRequest();
             req.setCaptchaType(9L);
             req.setTicket(ticket);
@@ -192,7 +190,7 @@ public class SmsServiceImpl implements SmsService {
             req.setCaptchaAppId(new Long(captchaAppId));
             req.setAppSecretKey(appSecretKey);
             DescribeCaptchaMiniResultResponse resp = client.DescribeCaptchaMiniResult(req);
-            if(resp.getCaptchaCode()!=1){
+            if (resp.getCaptchaCode() != 1) {
                 ExceptionCast.cast(UcenterCode.CAPTCHA_NOT_MATCH);
             }
         }

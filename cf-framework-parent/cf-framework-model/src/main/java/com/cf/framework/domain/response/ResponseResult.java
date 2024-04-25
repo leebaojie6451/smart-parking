@@ -41,28 +41,28 @@ public class ResponseResult implements Response, Serializable {
 
     private AuthToken token;
 
-    public ResponseResult(ResultCode resultCode){
+    public ResponseResult(ResultCode resultCode) {
         this.fillingCommonProperty(resultCode);
     }
 
-    public ResponseResult(ResultCode resultCode, Object _datas){
+    public ResponseResult(ResultCode resultCode, Object _datas) {
         this.fillingCommonProperty(resultCode);
         this.data = _datas;
     }
 
-    public ResponseResult(ResultCode resultCode, Object _datas, Integer _total){
+    public ResponseResult(ResultCode resultCode, Object _datas, Integer _total) {
         this.fillingCommonProperty(resultCode);
         this.data = _datas;
         this.total = _total;
     }
 
-    public ResponseResult(ResultCode resultCode, Object _datas, BigDecimal _total){
+    public ResponseResult(ResultCode resultCode, Object _datas, BigDecimal _total) {
         this.fillingCommonProperty(resultCode);
         this.data = _datas;
         this.doubleTotal = _total;
     }
 
-    public ResponseResult(ResultCode resultCode, Object _datas, String mixMessage){
+    public ResponseResult(ResultCode resultCode, Object _datas, String mixMessage) {
         resultCode.setMixMessage(mixMessage);
         this.fillingCommonProperty(resultCode);
         this.data = _datas;
@@ -83,15 +83,14 @@ public class ResponseResult implements Response, Serializable {
         this.total = _total;
     }
 
-    public void fillingCommonProperty(ResultCode resultCode)
-    {
-        try{
+    public void fillingCommonProperty(ResultCode resultCode) {
+        try {
             resultCode = I18n.getFullMessage(resultCode);
             this.mixMessage = resultCode.mixMessage();
             this.success = resultCode.success();
             this.code = resultCode.code();
             this.message = resultCode.message();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
